@@ -1,0 +1,846 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:zakadc
+LIBS:vw2500m
+LIBS:usb-b
+LIBS:uprojects-msp430
+LIBS:uprojects-maxim-integrated
+LIBS:tps79530
+LIBS:tps63001
+LIBS:tps61040dbv
+LIBS:tact_sw
+LIBS:str751fr0t6
+LIBS:stm32f103cb
+LIBS:stm32f101cbt6
+LIBS:stm32f030f4
+LIBS:stm32f20x_LQFP64
+LIBS:sn54ac04
+LIBS:smf05c
+LIBS:sim_holder
+LIBS:sim900
+LIBS:sim800c
+LIBS:reset_supervisor
+LIBS:quectel
+LIBS:psl-ecg_12md_ads1298
+LIBS:pl2303
+LIBS:pcf8563_rtc
+LIBS:opa333_sot23-5
+LIBS:nrf8001
+LIBS:ncp3020
+LIBS:mt3608
+LIBS:molex_sim_holder_47553
+LIBS:micro_usb_b
+LIBS:microsd_socket
+LIBS:md1506_gsm_ant
+LIBS:mcp73833
+LIBS:mcp73831
+LIBS:mb6s
+LIBS:max669
+LIBS:ltc4120
+LIBS:ltc3533
+LIBS:lt1370
+LIBS:lpc1313
+LIBS:lp2951
+LIBS:lm2931cdr2g
+LIBS:lm809
+LIBS:lis3dh
+LIBS:led_couple
+LIBS:l6984
+LIBS:itg3200
+LIBS:irfh9310
+LIBS:irfh5300
+LIBS:ir2110l4
+LIBS:hmc5883
+LIBS:hlk-rm04
+LIBS:hc735-oscillator
+LIBS:gl850g_usb_hub
+LIBS:esp-07
+LIBS:dpak-diode
+LIBS:cstce_crystal
+LIBS:conn15
+LIBS:cc3100mod
+LIBS:bmp180
+LIBS:ble112
+LIBS:alt_symbols
+LIBS:ads1298_ecg_adc
+LIBS:ad8542
+LIBS:ad8495
+LIBS:ad8054
+LIBS:ad8051
+LIBS:3225_4p_quartz
+LIBS:74lvc02
+LIBS:XC6206P332MR
+LIBS:STF202-22T1G
+LIBS:MCP73871
+LIBS:xmobile-cache
+EELAYER 25 0
+EELAYER END
+$Descr A3 16535 11693
+encoding utf-8
+Sheet 1 4
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L SIM800C U2
+U 1 1 59667E03
+P 9750 6625
+F 0 "U2" H 9800 7600 60  0000 C CNN
+F 1 "SIM800C" H 9100 7600 60  0000 C CNN
+F 2 "SIM800C:SIM800C" H 9575 6825 60  0000 C CNN
+F 3 "" H 9750 6625 60  0000 C CNN
+	1    9750 6625
+	1    0    0    -1  
+$EndComp
+$Comp
+L +BATT #PWR1
+U 1 1 5967CA58
+P 750 1500
+F 0 "#PWR1" H 750 1450 20  0001 C CNN
+F 1 "+BATT" H 750 1600 30  0000 C CNN
+F 2 "" H 750 1500 60  0001 C CNN
+F 3 "" H 750 1500 60  0001 C CNN
+	1    750  1500
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R1
+U 1 1 5967CB22
+P 10300 2000
+F 0 "R1" V 10380 2000 40  0000 C CNN
+F 1 "10k" V 10307 2001 40  0000 C CNN
+F 2 "" V 10230 2000 30  0000 C CNN
+F 3 "" H 10300 2000 30  0000 C CNN
+	1    10300 2000
+	0    1    1    0   
+$EndComp
+$Comp
+L INDUCTOR L1
+U 1 1 5967D1F9
+P 11325 900
+F 0 "L1" V 11275 900 40  0000 C CNN
+F 1 "120m" V 11425 900 40  0001 C CNN
+F 2 "" H 11325 900 60  0000 C CNN
+F 3 "" H 11325 900 60  0000 C CNN
+F 4 "ferrite bead" V 11450 875 60  0000 C CNN "details"
+	1    11325 900 
+	0    1    1    0   
+$EndComp
+$Comp
+L INDUCTOR L2
+U 1 1 5967D6D1
+P 8550 1575
+F 0 "L2" V 8500 1575 40  0000 C CNN
+F 1 "10mk" V 8650 1575 40  0000 C CNN
+F 2 "" H 8550 1575 60  0000 C CNN
+F 3 "" H 8550 1575 60  0000 C CNN
+	1    8550 1575
+	0    1    1    0   
+$EndComp
+$Comp
+L CP1 C11
+U 1 1 5967DC33
+P 12450 900
+F 0 "C11" H 12500 1000 50  0000 L CNN
+F 1 "10mk" H 12450 800 50  0000 L CNN
+F 2 "" H 12450 900 60  0000 C CNN
+F 3 "" H 12450 900 60  0000 C CNN
+	1    12450 900 
+	0    -1   -1   0   
+$EndComp
+$Comp
+L C C12
+U 1 1 5967DDCB
+P 12450 1350
+F 0 "C12" H 12450 1450 40  0000 L CNN
+F 1 "100n" H 12456 1265 40  0000 L CNN
+F 2 "" H 12488 1200 30  0000 C CNN
+F 3 "" H 12450 1350 60  0000 C CNN
+	1    12450 1350
+	0    1    1    0   
+$EndComp
+$Comp
+L C C5
+U 1 1 59692DF7
+P 8050 2125
+F 0 "C5" H 8050 2225 40  0000 L CNN
+F 1 "100n" H 8056 2040 40  0000 L CNN
+F 2 "" H 8088 1975 30  0000 C CNN
+F 3 "" H 8050 2125 60  0000 C CNN
+	1    8050 2125
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C4
+U 1 1 59692EA7
+P 7750 2125
+F 0 "C4" H 7750 2225 40  0000 L CNN
+F 1 "47mk" H 7756 2040 40  0000 L CNN
+F 2 "" H 7788 1975 30  0000 C CNN
+F 3 "" H 7750 2125 60  0000 C CNN
+	1    7750 2125
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C3
+U 1 1 59693752
+P 7475 2125
+F 0 "C3" H 7475 2225 40  0000 L CNN
+F 1 "1mk (ceramic)" H 7481 2040 40  0000 L CNN
+F 2 "" H 7513 1975 30  0000 C CNN
+F 3 "" H 7475 2125 60  0000 C CNN
+	1    7475 2125
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C1
+U 1 1 5969391C
+P 5575 1775
+F 0 "C1" H 5575 1875 40  0000 L CNN
+F 1 "1mk (ceramic)" H 5581 1690 40  0000 L CNN
+F 2 "" H 5613 1625 30  0000 C CNN
+F 3 "" H 5575 1775 60  0000 C CNN
+	1    5575 1775
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR2
+U 1 1 59693B40
+P 750 2200
+F 0 "#PWR2" H 750 2200 30  0001 C CNN
+F 1 "GND" H 750 2130 30  0001 C CNN
+F 2 "" H 750 2200 60  0001 C CNN
+F 3 "" H 750 2200 60  0001 C CNN
+	1    750  2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C6
+U 1 1 59695E43
+P 4025 4000
+F 0 "C6" H 4025 4100 40  0000 L CNN
+F 1 "100mk (tantal)" H 3875 3875 40  0000 L CNN
+F 2 "" H 4063 3850 30  0000 C CNN
+F 3 "" H 4025 4000 60  0000 C CNN
+	1    4025 4000
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C7
+U 1 1 59696230
+P 4500 4000
+F 0 "C7" H 4500 4100 40  0000 L CNN
+F 1 "10mk (ceramic)" H 4300 3925 40  0000 L CNN
+F 2 "" H 4538 3850 30  0000 C CNN
+F 3 "" H 4500 4000 60  0000 C CNN
+	1    4500 4000
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C8
+U 1 1 59696553
+P 4925 4000
+F 0 "C8" H 4925 4100 40  0000 L CNN
+F 1 "33p" H 4931 3915 40  0000 L CNN
+F 2 "" H 4963 3850 30  0000 C CNN
+F 3 "" H 4925 4000 60  0000 C CNN
+	1    4925 4000
+	-1   0    0    1   
+$EndComp
+$Comp
+L C C10
+U 1 1 596965AA
+P 5300 4000
+F 0 "C10" H 5300 4100 40  0000 L CNN
+F 1 "10p" H 5306 3915 40  0000 L CNN
+F 2 "" H 5338 3850 30  0000 C CNN
+F 3 "" H 5300 4000 60  0000 C CNN
+	1    5300 4000
+	-1   0    0    1   
+$EndComp
+$Comp
+L XC6206P332MR U?
+U 1 1 596A9DE0
+P 6500 1625
+F 0 "U?" H 6500 1525 50  0000 C CNN
+F 1 "XC6206P332MR" H 6500 1925 50  0000 C CNN
+F 2 "MODULE" H 6500 1625 50  0001 C CNN
+F 3 "DOCUMENTATION" H 6500 1625 50  0001 C CNN
+	1    6500 1625
+	1    0    0    -1  
+$EndComp
+Text Label 875  1675 0    60   ~ 0
+power2_3.7V
+Text Label 925  2100 0    60   ~ 0
+GND
+Text Label 5375 1425 0    60   ~ 0
+power1_3.7V
+Text Label 8700 6350 2    60   ~ 0
+GND
+Text Label 8700 6725 2    60   ~ 0
+GND
+Text Label 8700 7175 2    60   ~ 0
+GND
+Text Label 8700 7325 2    60   ~ 0
+GND
+Text Label 10400 6500 0    60   ~ 0
+GND
+Text Label 10400 6725 0    60   ~ 0
+GND
+Text Label 10400 6200 0    60   ~ 0
+GND
+Text Label 5950 3675 0    60   ~ 0
+3.7V
+Text Label 7300 1800 3    60   ~ 0
+GND
+Text Label 13100 1600 0    60   ~ 0
+GND
+Text Label 11400 4300 3    60   ~ 0
+GND
+Text Label 11500 4300 3    60   ~ 0
+GND
+Text Label 11600 4300 3    60   ~ 0
+GND
+$Comp
+L ATXMEGA128A4U-A IC1
+U 1 1 59679A74
+P 11550 3000
+F 0 "IC1" H 10850 4150 50  0000 L BNN
+F 1 "ATXMEGA128A4U-A" H 11800 1800 50  0000 L BNN
+F 2 "TQFP44" H 11000 1850 50  0001 C CNN
+F 3 "" H 11550 3000 60  0001 C CNN
+	1    11550 3000
+	1    0    0    -1  
+$EndComp
+Text Label 11700 4300 3    60   ~ 0
+GND
+Text Label 8050 2575 3    60   ~ 0
+GND
+Text Label 7750 2575 3    60   ~ 0
+GND
+Text Label 7475 2600 3    60   ~ 0
+GND
+Text Label 5575 2225 3    60   ~ 0
+GND
+Text Label 8850 1575 0    60   ~ 0
+3.3V
+Text Label 10825 900  0    60   ~ 0
+3.3V
+Text Label 11450 1700 1    60   ~ 0
+3.3V
+Text Label 11550 1700 1    60   ~ 0
+3.3V
+Text Label 11650 1700 1    60   ~ 0
+3.3V
+Text Label 3700 3675 2    60   ~ 0
+power2_3.7V
+Text Label 3700 4300 2    60   ~ 0
+GND
+Text Label 10400 6425 0    60   ~ 0
+3.7V
+Text Label 10400 6350 0    60   ~ 0
+3.7V
+Text Label 10400 6950 0    60   ~ 0
+GND
+Text Label 10400 6650 0    60   ~ 0
+GND
+Text Label 10050 2000 2    60   ~ 0
+3.3V
+$Comp
+L ZENER D?
+U 1 1 596FD520
+P 5625 4000
+F 0 "D?" H 5625 4100 50  0000 C CNN
+F 1 "ZENER" H 5625 3900 40  0000 C CNN
+F 2 "" H 5625 4000 60  0000 C CNN
+F 3 "" H 5625 4000 60  0000 C CNN
+	1    5625 4000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L CONN_8 P?
+U 1 1 5974D7B3
+P 15400 1400
+F 0 "P?" V 15350 1400 60  0000 C CNN
+F 1 "CONN_8" V 15450 1400 60  0000 C CNN
+F 2 "" H 15400 1400 60  0001 C CNN
+F 3 "" H 15400 1400 60  0001 C CNN
+F 4 "EPD display connector" V 15575 1400 60  0000 C CNN "description"
+	1    15400 1400
+	1    0    0    -1  
+$EndComp
+Text Label 15050 1050 2    60   ~ 0
+EPD_BUSY
+Text Label 15050 1150 2    60   ~ 0
+EPD_RST
+Text Label 15050 1250 2    60   ~ 0
+EPD_DC
+Text Label 15050 1350 2    60   ~ 0
+EPD_CS
+Text Label 15050 1450 2    60   ~ 0
+EPD_CLK
+Text Label 15050 1550 2    60   ~ 0
+EPD_DIN
+Text Label 15050 1650 2    60   ~ 0
+GND
+Text Label 15050 1750 2    60   ~ 0
+3.3V
+Text Label 12450 3700 0    60   ~ 0
+EPD_CS
+Text Label 12450 4000 0    60   ~ 0
+EPD_CLK
+Text Label 12450 3800 0    60   ~ 0
+EPD_DIN
+NoConn ~ 12450 3900
+Text Label 12450 2100 0    60   ~ 0
+EPD_DC
+Text Label 12450 2300 0    60   ~ 0
+EPD_BUSY
+Text Label 12450 2400 0    60   ~ 0
+EPD_RST
+Text Label 12325 7450 2    60   ~ 0
+GSM_AT_TXD
+$Comp
+L R R?
+U 1 1 5980DBE0
+P 12575 7450
+F 0 "R?" V 12655 7450 40  0000 C CNN
+F 1 "0" V 12582 7451 40  0000 C CNN
+F 2 "" V 12505 7450 30  0000 C CNN
+F 3 "" H 12575 7450 30  0000 C CNN
+	1    12575 7450
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5980DF53
+P 12950 5225
+F 0 "R?" V 13030 5225 40  0000 C CNN
+F 1 "0" V 12957 5226 40  0000 C CNN
+F 2 "" V 12880 5225 30  0000 C CNN
+F 3 "" H 12950 5225 30  0000 C CNN
+	1    12950 5225
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5980E098
+P 12850 5450
+F 0 "R?" V 12930 5450 40  0000 C CNN
+F 1 "needed?" V 12850 5450 40  0000 C CNN
+F 2 "" V 12780 5450 30  0000 C CNN
+F 3 "" H 12850 5450 30  0000 C CNN
+	1    12850 5450
+	0    1    1    0   
+$EndComp
+Text Label 13100 5450 0    60   ~ 0
+GND
+Text Label 12400 5225 2    60   ~ 0
+GSM_AT_RXD
+$Comp
+L R R?
+U 1 1 5980ECFA
+P 12875 5800
+F 0 "R?" V 12955 5800 40  0000 C CNN
+F 1 "0" V 12882 5801 40  0000 C CNN
+F 2 "" V 12805 5800 30  0000 C CNN
+F 3 "" H 12875 5800 30  0000 C CNN
+	1    12875 5800
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5980EDB4
+P 12775 6050
+F 0 "R?" V 12855 6050 40  0000 C CNN
+F 1 "needed?" V 12775 6050 40  0000 C CNN
+F 2 "" V 12705 6050 30  0000 C CNN
+F 3 "" H 12775 6050 30  0000 C CNN
+	1    12775 6050
+	0    1    1    0   
+$EndComp
+Text Label 13025 6050 0    60   ~ 0
+GND
+Text Label 12400 5800 2    60   ~ 0
+GSM_AT_RTS
+$Comp
+L R R?
+U 1 1 5980F251
+P 12600 7675
+F 0 "R?" V 12680 7675 40  0000 C CNN
+F 1 "0" V 12607 7676 40  0000 C CNN
+F 2 "" V 12530 7675 30  0000 C CNN
+F 3 "" H 12600 7675 30  0000 C CNN
+	1    12600 7675
+	0    1    1    0   
+$EndComp
+Text Label 12350 7675 2    60   ~ 0
+GSM_AT_DCD
+$Comp
+L R R?
+U 1 1 5980F44E
+P 12900 6375
+F 0 "R?" V 12825 6375 40  0000 C CNN
+F 1 "0" V 12907 6376 40  0000 C CNN
+F 2 "" V 12830 6375 30  0000 C CNN
+F 3 "" H 12900 6375 30  0000 C CNN
+	1    12900 6375
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5980FA7D
+P 12825 6625
+F 0 "R?" V 12905 6625 40  0000 C CNN
+F 1 "needed?" V 12825 6625 40  0000 C CNN
+F 2 "" V 12755 6625 30  0000 C CNN
+F 3 "" H 12825 6625 30  0000 C CNN
+	1    12825 6625
+	0    -1   -1   0   
+$EndComp
+Text Label 13075 6625 0    60   ~ 0
+GND
+Text Label 12375 6375 2    60   ~ 0
+GSM_AT_DTR
+Text Label 13250 5800 0    60   ~ 0
+XMEGA_PE0_GPIO
+Text Label 10650 2850 2    60   ~ 0
+XMEGA_PE0_GPIO
+Text Label 8700 5975 2    60   ~ 0
+GSM_AT_RTS
+Text Label 8700 5825 2    60   ~ 0
+GSM_AT_TXD
+Text Label 12825 7450 0    60   ~ 0
+XMEGA_PE2_RXD0
+Text Label 10650 3050 2    60   ~ 0
+XMEGA_PE2_RXD0
+Text Label 13200 5225 0    60   ~ 0
+XMEGA_PE3_TXD0
+Text Label 10650 3150 2    60   ~ 0
+XMEGA_PE3_TXD0
+Text Label 12850 7675 0    60   ~ 0
+XMEGA_PD2_GPIO
+Text Label 10650 3700 2    60   ~ 0
+XMEGA_PD4_GPIO
+Text Label 13150 6375 0    60   ~ 0
+XMEGA_PD3_GPIO
+Text Label 10650 3600 2    60   ~ 0
+XMEGA_PD3_GPIO
+Text Label 8700 6125 2    60   ~ 0
+GSM_AT_DCD
+Text Label 8700 5900 2    60   ~ 0
+GSM_AT_RXD
+$Comp
+L R R?
+U 1 1 5981CEE9
+P 12950 6900
+F 0 "R?" V 12875 6900 40  0000 C CNN
+F 1 "0" V 12957 6901 40  0000 C CNN
+F 2 "" V 12880 6900 30  0000 C CNN
+F 3 "" H 12950 6900 30  0000 C CNN
+	1    12950 6900
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5981CFEA
+P 12875 7125
+F 0 "R?" V 12955 7125 40  0000 C CNN
+F 1 "needed?" V 12875 7125 40  0000 C CNN
+F 2 "" V 12805 7125 30  0000 C CNN
+F 3 "" H 12875 7125 30  0000 C CNN
+	1    12875 7125
+	0    -1   -1   0   
+$EndComp
+Text Label 12400 6900 2    60   ~ 0
+GSM_AT_CTS
+Text Label 13200 6900 0    60   ~ 0
+XMEGA_PD4_GPIO
+Text Label 13125 7125 0    60   ~ 0
+GND
+$Comp
+L R R?
+U 1 1 59820A06
+P 12600 7900
+F 0 "R?" V 12680 7900 40  0000 C CNN
+F 1 "0" V 12607 7901 40  0000 C CNN
+F 2 "" V 12530 7900 30  0000 C CNN
+F 3 "" H 12600 7900 30  0000 C CNN
+	1    12600 7900
+	0    1    1    0   
+$EndComp
+Text Label 12350 7900 2    60   ~ 0
+GSM_AT_RI
+Text Label 12850 7900 0    60   ~ 0
+XMEGA_PD1_GPIO
+Text Label 8700 6050 2    60   ~ 0
+GSM_AT_CTS
+Text Label 8700 6200 2    60   ~ 0
+GSM_AT_DTR
+Text Label 8700 6275 2    60   ~ 0
+GSM_AT_RI
+Text Label 10650 3400 2    60   ~ 0
+XMEGA_PD1_GPIO
+Text Label 10650 3500 2    60   ~ 0
+XMEGA_PD2_GPIO
+$Comp
+L STF202-22T1G U?
+U 1 1 598237D5
+P 5775 6400
+F 0 "U?" H 5775 6300 50  0000 C CNN
+F 1 "STF202-22T1G" H 5775 6625 50  0000 C CNN
+F 2 "MODULE" H 5775 6400 50  0001 C CNN
+F 3 "DOCUMENTATION" H 5775 6400 50  0001 C CNN
+	1    5775 6400
+	1    0    0    -1  
+$EndComp
+Text Label 10400 7025 0    60   ~ 0
+GSM_USB_DN
+Text Label 5025 6400 2    60   ~ 0
+GSM_USB_DN
+Text Label 10400 7100 0    60   ~ 0
+GSM_USB_DP
+Text Label 5025 6500 2    60   ~ 0
+GSM_USB_DP
+$Comp
+L CONN_4 P?
+U 1 1 59824519
+P 5800 5325
+F 0 "P?" V 5750 5325 50  0000 C CNN
+F 1 "CONN_4_miniUSB" V 5850 5325 50  0000 C CNN
+F 2 "" H 5800 5325 60  0001 C CNN
+F 3 "" H 5800 5325 60  0001 C CNN
+	1    5800 5325
+	0    -1   -1   0   
+$EndComp
+Text Label 6525 6300 0    60   ~ 0
+GND
+Text Label 5950 5675 3    60   ~ 0
+GND
+$Comp
+L C C?
+U 1 1 59826142
+P 4575 5675
+F 0 "C?" H 4575 5775 40  0000 L CNN
+F 1 "C" H 4581 5590 40  0000 L CNN
+F 2 "" H 4613 5525 30  0000 C CNN
+F 3 "" H 4575 5675 60  0000 C CNN
+	1    4575 5675
+	0    1    1    0   
+$EndComp
+Text Label 4375 5675 2    60   ~ 0
+GND
+Text Label 10400 7175 0    60   ~ 0
+GSM_USB_VBUS
+Text Label 5025 6300 2    60   ~ 0
+GSM_USB_VBUS
+$Sheet
+S 2696 1000 1129 1075
+U 59D20938
+F0 "chargers" 60
+F1 "chargers.sch" 60
+F2 "OUT_SystemLoad" O R 3825 1100 60 
+F3 "SEL_InputSourcTypeSelection" I R 3825 1225 60 
+$EndSheet
+$Sheet
+S 7150 8800 1750 1600
+U 59D290BC
+F0 "charger_GSM" 60
+F1 "charger_GSM.sch" 60
+F2 "VSS" B R 8900 10275 60 
+F3 "OUT_SystemLoad" O L 7150 8925 60 
+F4 "SEL_InputSourceTypeSelection" I L 7150 9075 60 
+F5 "PROG2_USBPortCurrentRegationSet" I L 7150 9225 60 
+F6 "CE_ChargeEnable" I L 7150 9375 60 
+F7 "PG_OD_PowerGood" O R 8900 9675 60 
+F8 "STAT2_OD_ChargeStatusIndication" O R 8900 9975 60 
+F9 "LBO_OD_LowBatteryOutput" O R 8900 10125 60 
+F10 "TE_TimerEnable" I R 8900 9825 60 
+$EndSheet
+Connection ~ 11850 900 
+Wire Wire Line
+	12650 900  13100 900 
+Wire Wire Line
+	13100 900  13100 1600
+Wire Wire Line
+	12650 1350 13100 1350
+Connection ~ 13100 1350
+Wire Wire Line
+	12250 1350 11850 1350
+Connection ~ 11850 1350
+Wire Wire Line
+	10550 2000 10650 2000
+Wire Wire Line
+	11025 900  10825 900 
+Wire Wire Line
+	7250 1575 8250 1575
+Wire Wire Line
+	5375 1425 5375 1575
+Connection ~ 5575 1575
+Wire Wire Line
+	5575 2225 5575 1975
+Wire Wire Line
+	8050 2575 8050 2325
+Wire Wire Line
+	7750 2325 7750 2575
+Wire Wire Line
+	7750 1925 7750 1575
+Connection ~ 7750 1575
+Connection ~ 8050 1575
+Connection ~ 7475 1575
+Wire Wire Line
+	5375 1575 5750 1575
+Wire Wire Line
+	7250 1675 7300 1675
+Wire Wire Line
+	7300 1675 7300 1800
+Wire Wire Line
+	750  1500 750  1675
+Wire Wire Line
+	750  1675 875  1675
+Wire Wire Line
+	750  2200 750  2100
+Wire Wire Line
+	750  2100 925  2100
+Wire Wire Line
+	7475 1575 7475 1925
+Wire Wire Line
+	7475 2600 7475 2325
+Wire Wire Line
+	11625 900  12250 900 
+Wire Wire Line
+	11850 900  11850 1700
+Wire Wire Line
+	8050 1925 8050 1575
+Wire Wire Line
+	3700 3675 5950 3675
+Wire Wire Line
+	4025 4200 4025 4300
+Connection ~ 4025 4300
+Wire Wire Line
+	4500 4300 4500 4200
+Connection ~ 4500 4300
+Wire Wire Line
+	4925 4300 4925 4200
+Connection ~ 4925 4300
+Wire Wire Line
+	5300 4300 5300 4200
+Connection ~ 5300 4300
+Wire Wire Line
+	4025 3800 4025 3675
+Connection ~ 4025 3675
+Wire Wire Line
+	4500 3800 4500 3675
+Connection ~ 4500 3675
+Wire Wire Line
+	4925 3800 4925 3675
+Connection ~ 4925 3675
+Wire Wire Line
+	5300 3800 5300 3675
+Connection ~ 5300 3675
+Wire Wire Line
+	5625 3675 5625 3800
+Wire Wire Line
+	5625 4300 5625 4200
+Connection ~ 5625 4300
+Connection ~ 5625 3675
+Wire Wire Line
+	3725 4300 5625 4300
+Wire Wire Line
+	12400 5800 12625 5800
+Wire Wire Line
+	13125 5800 13250 5800
+Wire Wire Line
+	12475 6050 12525 6050
+Wire Wire Line
+	12475 6050 12475 5800
+Connection ~ 12475 5800
+Wire Wire Line
+	12400 5225 12700 5225
+Wire Wire Line
+	12600 5450 12550 5450
+Wire Wire Line
+	12550 5450 12550 5225
+Connection ~ 12550 5225
+Wire Wire Line
+	12375 6375 12650 6375
+Wire Wire Line
+	12575 6625 12500 6625
+Wire Wire Line
+	12500 6625 12500 6375
+Connection ~ 12500 6375
+Wire Wire Line
+	12400 6900 12700 6900
+Wire Wire Line
+	12625 7125 12550 7125
+Wire Wire Line
+	12550 7125 12550 6900
+Connection ~ 12550 6900
+Wire Wire Line
+	5025 5675 5025 6300
+Wire Wire Line
+	4775 5675 5650 5675
+Wire Wire Line
+	6525 6400 6800 6400
+Wire Wire Line
+	5750 6000 6800 6000
+Wire Wire Line
+	5750 6000 5750 5675
+Wire Wire Line
+	6525 6500 6900 6500
+Wire Wire Line
+	5850 5900 6900 5900
+Wire Wire Line
+	5850 5900 5850 5675
+Wire Wire Line
+	6800 6000 6800 6400
+Wire Wire Line
+	6900 5900 6900 6500
+Connection ~ 5025 5675
+$Sheet
+S 1700 3150 500  350 
+U 59D2C03F
+F0 "test" 60
+F1 "test.sch" 60
+F2 "IN" I L 1700 3275 60 
+F3 "OUT" O R 2200 3325 60 
+$EndSheet
+Text Label 1700 3275 2    60   ~ 0
+power2_3.7V
+Text Label 3825 1100 0    60   ~ 0
+power1_3.7V
+$EndSCHEMATC

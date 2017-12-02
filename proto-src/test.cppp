@@ -1,0 +1,43 @@
+//test.cpp
+
+#include "CList.h"
+#include <iostream>
+#include <stdio.h>
+
+using namespace std;
+uint8_t elem1 = 1;
+uint8_t elem2 = 2;
+
+int main() {
+  list<uint8_t> l;
+  
+  l.push_back(1);
+  l.push_back(2);
+  l.pop_back();
+  l.push_back(3);
+
+  /*uint8_t pData = l.pop_back();
+  printf("pop back: %d\n", pData);
+
+  pData = l.pop_back();
+  printf("pop back: %d\n", pData);
+  
+  pData = l.pop_back();
+  if(pData != NULL)
+    printf("pop back: %d\n", pData);
+  */
+
+  list<uint8_t>::iterator it;
+  for(it = l.begin(); it != l.end(); ++it) {
+    printf("value: %d\n", *it);
+  }
+
+  for(it = l.begin(); it != l.end(); ++it) {
+    printf("value: %d\n", *it);
+  }
+  
+  //list<uint8_t>::list_iterator<uint8_t> it = l.begin();
+  
+  printf("size: %d\n", l.size());
+  return 0;
+}
