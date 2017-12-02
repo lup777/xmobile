@@ -21,8 +21,8 @@ TaskStack::CStack stack;
 
 void setup() {
   // put your setup code here, to run once:
-  //Debug port / Arduino Serial3 Monitor
-  Serial3.begin(115200);
+  //Debug port / Arduino //Serial Monitor
+  //Serial.begin(9600);
   
   // Configure the pin directions
   pinMode(EPD_BUSY, INPUT);
@@ -97,7 +97,7 @@ void show_string(CString msg, TaskStack::CScreenTask* task, TaskStack::CPoint po
 }
 
 void loop() {
-  Serial3.println("hey!");
+  //Serial.println("hey!");
   // put your main code here, to run repeatedly:
   
   delay(3000);

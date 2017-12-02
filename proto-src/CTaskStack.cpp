@@ -102,9 +102,9 @@ namespace TaskStack
       std::cout << "image part id: "
 		<< (int)((*it).Id()) << std::endl;
 #else
-      Serial.print("image part id: "); Serial.println((int)((*it).Id()));
-      Serial.print(" x = "); Serial.println(image->Point().x());
-      Serial.print(" y = "); Serial.println(image->Point().y());
+      //Serial.print("image part id: "); //Serial.println((int)((*it).Id()));
+      //Serial.print(" x = "); //Serial.println(image->Point().x());
+      //Serial.print(" y = "); //Serial.println(image->Point().y());
 #endif
             
       SetDisplayArea(image->Point().x(),         // X start
@@ -153,7 +153,7 @@ namespace TaskStack
     , m_data_size(data_size)
     , m_image_size(image_size)
   {
-    Serial.println("CImagePart constructor");
+    //Serial.println("CImagePart constructor");
   }
 
   CImagePart::CImagePart(const CImagePart& ip)
@@ -163,15 +163,15 @@ namespace TaskStack
     , m_data_size(ip.DataSize())
     , m_image_size(ip.ImageSize())
   {
-    Serial.println("CImagePart copy constructor");
+    //Serial.println("CImagePart copy constructor");
   }
 
   CImagePart::CImagePart() {
-    Serial.println("EMPTY CImagePart CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
+    //Serial.println("EMPTY CImagePart CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
   }
 
   CImagePart::~CImagePart() {
-    Serial.println("~CImagePart");
+    //Serial.println("~CImagePart");
   }
   
   uint8_t        CImagePart::Id()   { return m_id; };

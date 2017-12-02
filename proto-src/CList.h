@@ -192,7 +192,7 @@ list<T>::list()
   , tail_(NULL)
   , size_(0) {
 #ifdef ENABLE_SERIAL
-    Serial.println("list<T>::list()");
+    //Serial.println("list<T>::list()");
 #else
     std::cout << "list<T>::list()" << std::endl;
 #endif
@@ -209,7 +209,7 @@ void list<T>::push_back(T& data) {
 
   if(p_new_elem == NULL) {
 #ifdef ENABLE_SERIAL
-    Serial.println("malloc FAILED !");
+    //Serial.println("malloc FAILED !");
 #else
     std::cout << "malloc FAILED" << std::endl;
 #endif
@@ -254,7 +254,7 @@ template <typename T>
 T list<T>::pop_back() {
   if(size_ <= 0) {
 #ifdef ENABLE_SERIAL
-    Serial.println("pop_back, but list has zero size");
+    //Serial.println("pop_back, but list has zero size");
 #else
     std::cout << "pop_back: size = " << (unsigned int)size_ << std::endl;
 #endif
@@ -274,7 +274,7 @@ T list<T>::pop_back() {
       
     if(tail_->prev() == NULL) {
 #ifdef ENABLE_SERIAL
-      Serial.println("ERROR: pop_back: tail_->prev() == NULL");
+      //Serial.println("ERROR: pop_back: tail_->prev() == NULL");
 #else
       std::cout << "ERROR: pop_back: tail_->prev() == NULL" << std::endl;
 #endif

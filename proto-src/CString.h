@@ -51,49 +51,49 @@ void show_string(uint8_t* msg, TaskStack::CScreenTask* task, uint8_t x, uint8_t 
 	  for(; data16_[len_] != 0; ++len_) {}
 
 	  for(size_t i = 0; i < len_; ++i) {
-	    Serial.print(" ");
-	    Serial.print(data16_[i], HEX);
+	    //Serial.print(" ");
+	    //Serial.print(data16_[i], HEX);
 	  }
 	  break;
 	case enc_8_bit:
 	  for(; data8_[len_] != 0; ++len_) {}
 	  
 	  for(size_t i = 0; i < len_; ++i) {
-	    Serial.print(" ");
-	    Serial.print(data8_[i]);
+	    //Serial.print(" ");
+	    //Serial.print(data8_[i]);
 	  }
 	  break;
 	default:
-	  Serial.println("ERROR: this string encodig can not be handled");
+	  //Serial.println("ERROR: this string encodig can not be handled");
 	  break;
 	}
-	Serial.print(" String len: ");
-	Serial.println(len_);
+	//Serial.print(" String len: ");
+	//Serial.println(len_);
       }
     /*
       void AddToScreenTask(TaskStack::CScreenTask* task, uint8_t x, uint8_t y) {
       uint8_t i;
 
       if(encoding_ == 1) {
-      Serial.print("TEXT TO SHOW: ");
+      //Serial.print("TEXT TO SHOW: ");
       for(int i = 0; i < size_; ++i) {
-      Serial.print(str_[i]);
-      Serial.print(" ");
+      //Serial.print(str_[i]);
+      //Serial.print(" ");
       }
       }
       else if(encoding_ == 2) {
       
-      Serial.print("TEXT TO SHOW: ");
+      //Serial.print("TEXT TO SHOW: ");
       for(int i = 0; i < size_; ++i) {
-      Serial.print(str16_[i]);
-      Serial.print(" ");
+      //Serial.print(str16_[i]);
+      //Serial.print(" ");
       }
       }
       else {
-      Serial.println("!! ERROR ENCODING INVALID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      //Serial.println("!! ERROR ENCODING INVALID!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       }
     
-      Serial.println("");
+      //Serial.println("");
       
       for(i = 0; i < size_; ++i) {
 

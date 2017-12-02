@@ -739,9 +739,9 @@ namespace Fonts {
 
       
     default:
-      Serial.println("default");
-      Serial.print("char: ");
-      Serial.println(code, HEX);
+      //Serial.println("default");
+      //Serial.print("char: ");
+      //Serial.println(code, HEX);
       return (Fonts::PtMonoBlod::Ru::ch53);
     } //switch(code)
   }

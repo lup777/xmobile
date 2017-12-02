@@ -97,7 +97,7 @@ namespace TaskStack
 	, y_(p.y()) {};
 
       CPoint() {
-	Serial.println("EMPTY CPoint CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
+	//Serial.println("EMPTY CPoint CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
       };
 
       uint8_t x() { return x_; };
@@ -124,7 +124,7 @@ namespace TaskStack
 	, h_(s.h()) {};
 
       CSize() {
-	Serial.println("EMPTY CSize CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
+	//Serial.println("EMPTY CSize CONTSTRUCTOR. THIS SHOULD NEVER HAPPEND");
       }
       
       uint8_t w() { return w_; };
