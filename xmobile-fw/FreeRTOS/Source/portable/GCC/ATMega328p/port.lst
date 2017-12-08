@@ -1,0 +1,961 @@
+   1               		.file	"port.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 180               	.global	pxPortInitialiseStack
+ 182               	pxPortInitialiseStack:
+ 183               		.stabd	46,0,0
+   1:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*
+   2:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * FreeRTOS Kernel V10.0.0
+   3:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *
+   5:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * this software and associated documentation files (the "Software"), to deal in
+   7:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * the Software without restriction, including without limitation the rights to
+   8:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * subject to the following conditions:
+  11:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *
+  12:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * The above copyright notice and this permission notice shall be included in all
+  13:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * copies or substantial portions of the Software. If you wish to use our Amazon
+  14:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+  15:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *
+  16:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  17:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  18:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  19:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  20:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  21:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  22:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *
+  23:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * http://www.FreeRTOS.org
+  24:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * http://aws.amazon.com/freertos
+  25:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *
+  26:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * 1 tab == 4 spaces!
+  27:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+  28:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  29:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* 
+  30:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  31:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** Changes from V2.6.0
+  32:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  33:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	+ AVR port - Replaced the inb() and outb() functions with direct memory
+  34:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	  access.  This allows the port to be built with the 20050414 build of
+  35:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	  WinAVR.
+  36:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** */
+  37:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  38:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #include <stdlib.h>
+  39:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #include <avr/interrupt.h>
+  40:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  41:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #include "FreeRTOS.h"
+  42:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #include "task.h"
+  43:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  44:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------
+  45:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Implementation of functions defined in portable.h for the AVR port.
+  46:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  *----------------------------------------------------------*/
+  47:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  48:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* Start tasks with interrupts enables. */
+  49:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portFLAGS_INT_ENABLED					( ( StackType_t ) 0x80 )
+  50:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  51:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* Hardware constants for timer 1. */
+  52:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portCLEAR_COUNTER_ON_MATCH				( ( uint8_t ) 0x08 ) // TCCR1B | WGM12 (ATmega323 TCCR1B)
+  53:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portPRESCALE_64							( ( uint8_t ) 0x03 ) // TCCR1B (ATmega323 TCCR1B)
+  54:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portCLOCK_PRESCALER						( ( uint32_t ) 64 )  // OCR1AL (ATmega323 OCR1AL)
+  55:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portCOMPARE_MATCH_A_INTERRUPT_ENABLE	( ( uint8_t ) 0x02 ) // TIMSK1 (TIMSK ATmega323 = 0x10
+  56:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  57:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+  58:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  59:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* We require the address of the pxCurrentTCB variable, but don't want to know
+  60:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** any details of its type. */
+  61:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** typedef void TCB_t;
+  62:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** extern volatile TCB_t * volatile pxCurrentTCB;
+  63:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  64:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+  65:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  66:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* 
+  67:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Macro to save all the general purpose registers, the save the stack pointer
+  68:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * into the TCB.  
+  69:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * 
+  70:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * The first thing we do is save the flags then disable interrupts.  This is to 
+  71:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * guard our stack against having a context switch interrupt after we have already 
+  72:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * pushed the registers onto the stack - causing the 32 registers to be on the 
+  73:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * stack twice. 
+  74:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * 
+  75:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * r1 is set to zero as the compiler expects it to be thus, however some
+  76:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * of the math routines make use of R1. 
+  77:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * 
+  78:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * The interrupts will have been disabled during the call to portSAVE_CONTEXT()
+  79:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * so we need not worry about reading/writing to the stack pointer. 
+  80:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+  81:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+  82:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portSAVE_CONTEXT()									\
+  83:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	asm volatile (	"push	r0						\n\t"	\
+  84:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"in		r0, __SREG__			\n\t"	\
+  85:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"cli							\n\t"	\
+  86:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r0						\n\t"	\
+  87:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r1						\n\t"	\
+  88:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"clr	r1						\n\t"	\
+  89:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r2						\n\t"	\
+  90:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r3						\n\t"	\
+  91:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r4						\n\t"	\
+  92:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r5						\n\t"	\
+  93:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r6						\n\t"	\
+  94:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r7						\n\t"	\
+  95:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r8						\n\t"	\
+  96:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r9						\n\t"	\
+  97:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r10						\n\t"	\
+  98:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r11						\n\t"	\
+  99:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r12						\n\t"	\
+ 100:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r13						\n\t"	\
+ 101:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r14						\n\t"	\
+ 102:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r15						\n\t"	\
+ 103:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r16						\n\t"	\
+ 104:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r17						\n\t"	\
+ 105:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r18						\n\t"	\
+ 106:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r19						\n\t"	\
+ 107:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r20						\n\t"	\
+ 108:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r21						\n\t"	\
+ 109:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r22						\n\t"	\
+ 110:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r23						\n\t"	\
+ 111:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r24						\n\t"	\
+ 112:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r25						\n\t"	\
+ 113:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r26						\n\t"	\
+ 114:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r27						\n\t"	\
+ 115:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r28						\n\t"	\
+ 116:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r29						\n\t"	\
+ 117:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r30						\n\t"	\
+ 118:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"push	r31						\n\t"	\
+ 119:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"lds	r26, pxCurrentTCB		\n\t"	\
+ 120:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"lds	r27, pxCurrentTCB + 1	\n\t"	\
+ 121:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"in		r0, 0x3d				\n\t"	\
+ 122:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"st		x+, r0					\n\t"	\
+ 123:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"in		r0, 0x3e				\n\t"	\
+ 124:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"st		x+, r0					\n\t"	\
+ 125:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 				);
+ 126:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 127:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* 
+ 128:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Opposite to portSAVE_CONTEXT().  Interrupts will have been disabled during
+ 129:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * the context save so we can write to the stack pointer. 
+ 130:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 131:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 132:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #define portRESTORE_CONTEXT()								\
+ 133:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	asm volatile (	"lds	r26, pxCurrentTCB		\n\t"	\
+ 134:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"lds	r27, pxCurrentTCB + 1	\n\t"	\
+ 135:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"ld		r28, x+					\n\t"	\
+ 136:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"out	__SP_L__, r28			\n\t"	\
+ 137:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"ld		r29, x+					\n\t"	\
+ 138:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"out	__SP_H__, r29			\n\t"	\
+ 139:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r31						\n\t"	\
+ 140:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r30						\n\t"	\
+ 141:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r29						\n\t"	\
+ 142:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r28						\n\t"	\
+ 143:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r27						\n\t"	\
+ 144:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r26						\n\t"	\
+ 145:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r25						\n\t"	\
+ 146:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r24						\n\t"	\
+ 147:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r23						\n\t"	\
+ 148:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r22						\n\t"	\
+ 149:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r21						\n\t"	\
+ 150:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r20						\n\t"	\
+ 151:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r19						\n\t"	\
+ 152:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r18						\n\t"	\
+ 153:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r17						\n\t"	\
+ 154:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r16						\n\t"	\
+ 155:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r15						\n\t"	\
+ 156:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r14						\n\t"	\
+ 157:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r13						\n\t"	\
+ 158:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r12						\n\t"	\
+ 159:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r11						\n\t"	\
+ 160:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r10						\n\t"	\
+ 161:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r9						\n\t"	\
+ 162:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r8						\n\t"	\
+ 163:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r7						\n\t"	\
+ 164:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r6						\n\t"	\
+ 165:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r5						\n\t"	\
+ 166:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r4						\n\t"	\
+ 167:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r3						\n\t"	\
+ 168:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r2						\n\t"	\
+ 169:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r1						\n\t"	\
+ 170:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r0						\n\t"	\
+ 171:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"out	__SREG__, r0			\n\t"	\
+ 172:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 					"pop	r0						\n\t"	\
+ 173:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 				);
+ 174:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 175:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 176:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 177:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*
+ 178:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Perform hardware setup to enable ticks from timer 1, compare match A.
+ 179:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 180:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** static void prvSetupTimerInterrupt( void );
+ 181:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 182:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 183:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /* 
+ 184:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * See header file for description. 
+ 185:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 186:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** StackType_t *pxPortInitialiseStack( StackType_t *pxTopOfStack, TaskFunction_t pxCode, void *pvParam
+ 187:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 185               	.LM0:
+ 186               	.LFBB1:
+ 187               	/* prologue: function */
+ 188               	/* frame size = 0 */
+ 189               	/* stack size = 0 */
+ 190               	.L__stack_usage = 0
+ 188:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** uint16_t usAddress;
+ 189:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 190:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Place a few bytes of known values on the bottom of the stack. 
+ 191:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	This is just useful for debugging. */
+ 192:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 193:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = 0x11;
+ 192               	.LM1:
+ 193 0000 31E1      		ldi r19,lo8(17)
+ 194 0002 FC01      		movw r30,r24
+ 195 0004 3083      		st Z,r19
+ 194:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 195:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = 0x22;
+ 197               	.LM2:
+ 198 0006 3197      		sbiw r30,1
+ 199 0008 22E2      		ldi r18,lo8(34)
+ 200 000a 2083      		st Z,r18
+ 196:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 197:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = 0x33;
+ 202               	.LM3:
+ 203 000c 3197      		sbiw r30,1
+ 204 000e A3E3      		ldi r26,lo8(51)
+ 205 0010 A083      		st Z,r26
+ 198:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 199:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 200:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Simulate how the stack would look after a call to vPortYield() generated by 
+ 201:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	the compiler. */
+ 202:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 203:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/*lint -e950 -e611 -e923 Lint doesn't like this much - but nothing I can do about it. */
+ 204:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 205:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* The start of the task code will be popped off the stack last, so place
+ 206:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	it on first. */
+ 207:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	usAddress = ( uint16_t ) pxCode;
+ 208:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x00ff );
+ 207               	.LM4:
+ 208 0012 3197      		sbiw r30,1
+ 209 0014 6083      		st Z,r22
+ 209:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 210:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 211:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	usAddress >>= 8;
+ 212:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x00ff );
+ 211               	.LM5:
+ 212 0016 3197      		sbiw r30,1
+ 213 0018 7083      		st Z,r23
+ 213:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 214:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 215:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Next simulate the stack as if after a call to portSAVE_CONTEXT().  
+ 216:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portSAVE_CONTEXT places the flags on the stack immediately after r0
+ 217:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	to ensure the interrupts get disabled as soon as possible, and so ensuring
+ 218:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	the stack use is minimal should a context switch interrupt occur. */
+ 219:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x00;	/* R0 */
+ 215               	.LM6:
+ 216 001a 3197      		sbiw r30,1
+ 217 001c 1082      		st Z,__zero_reg__
+ 220:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 221:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = portFLAGS_INT_ENABLED;
+ 219               	.LM7:
+ 220 001e 3197      		sbiw r30,1
+ 221 0020 60E8      		ldi r22,lo8(-128)
+ 222 0022 6083      		st Z,r22
+ 222:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 223:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 224:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 225:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Now the remaining registers.   The compiler expects R1 to be 0. */
+ 226:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x00;	/* R1 */
+ 224               	.LM8:
+ 225 0024 3197      		sbiw r30,1
+ 226 0026 1082      		st Z,__zero_reg__
+ 227:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 228:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x02;	/* R2 */
+ 228               	.LM9:
+ 229 0028 3197      		sbiw r30,1
+ 230 002a 62E0      		ldi r22,lo8(2)
+ 231 002c 6083      		st Z,r22
+ 229:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 230:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x03;	/* R3 */
+ 233               	.LM10:
+ 234 002e 3197      		sbiw r30,1
+ 235 0030 63E0      		ldi r22,lo8(3)
+ 236 0032 6083      		st Z,r22
+ 231:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 232:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x04;	/* R4 */
+ 238               	.LM11:
+ 239 0034 3197      		sbiw r30,1
+ 240 0036 64E0      		ldi r22,lo8(4)
+ 241 0038 6083      		st Z,r22
+ 233:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 234:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x05;	/* R5 */
+ 243               	.LM12:
+ 244 003a 3197      		sbiw r30,1
+ 245 003c 65E0      		ldi r22,lo8(5)
+ 246 003e 6083      		st Z,r22
+ 235:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 236:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x06;	/* R6 */
+ 248               	.LM13:
+ 249 0040 3197      		sbiw r30,1
+ 250 0042 66E0      		ldi r22,lo8(6)
+ 251 0044 6083      		st Z,r22
+ 237:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 238:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x07;	/* R7 */
+ 253               	.LM14:
+ 254 0046 3197      		sbiw r30,1
+ 255 0048 67E0      		ldi r22,lo8(7)
+ 256 004a 6083      		st Z,r22
+ 239:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 240:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x08;	/* R8 */
+ 258               	.LM15:
+ 259 004c 3197      		sbiw r30,1
+ 260 004e 68E0      		ldi r22,lo8(8)
+ 261 0050 6083      		st Z,r22
+ 241:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 242:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x09;	/* R9 */
+ 263               	.LM16:
+ 264 0052 3197      		sbiw r30,1
+ 265 0054 69E0      		ldi r22,lo8(9)
+ 266 0056 6083      		st Z,r22
+ 243:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 244:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x10;	/* R10 */
+ 268               	.LM17:
+ 269 0058 3197      		sbiw r30,1
+ 270 005a 60E1      		ldi r22,lo8(16)
+ 271 005c 6083      		st Z,r22
+ 245:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 246:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x11;	/* R11 */
+ 273               	.LM18:
+ 274 005e 3197      		sbiw r30,1
+ 275 0060 3083      		st Z,r19
+ 247:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 248:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x12;	/* R12 */
+ 277               	.LM19:
+ 278 0062 3197      		sbiw r30,1
+ 279 0064 32E1      		ldi r19,lo8(18)
+ 280 0066 3083      		st Z,r19
+ 249:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 250:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x13;	/* R13 */
+ 282               	.LM20:
+ 283 0068 3197      		sbiw r30,1
+ 284 006a 33E1      		ldi r19,lo8(19)
+ 285 006c 3083      		st Z,r19
+ 251:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 252:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x14;	/* R14 */
+ 287               	.LM21:
+ 288 006e 3197      		sbiw r30,1
+ 289 0070 34E1      		ldi r19,lo8(20)
+ 290 0072 3083      		st Z,r19
+ 253:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 254:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x15;	/* R15 */
+ 292               	.LM22:
+ 293 0074 3197      		sbiw r30,1
+ 294 0076 35E1      		ldi r19,lo8(21)
+ 295 0078 3083      		st Z,r19
+ 255:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 256:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x16;	/* R16 */
+ 297               	.LM23:
+ 298 007a 3197      		sbiw r30,1
+ 299 007c 36E1      		ldi r19,lo8(22)
+ 300 007e 3083      		st Z,r19
+ 257:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 258:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x17;	/* R17 */
+ 302               	.LM24:
+ 303 0080 3197      		sbiw r30,1
+ 304 0082 37E1      		ldi r19,lo8(23)
+ 305 0084 3083      		st Z,r19
+ 259:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 260:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x18;	/* R18 */
+ 307               	.LM25:
+ 308 0086 3197      		sbiw r30,1
+ 309 0088 38E1      		ldi r19,lo8(24)
+ 310 008a 3083      		st Z,r19
+ 261:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 262:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x19;	/* R19 */
+ 312               	.LM26:
+ 313 008c 3197      		sbiw r30,1
+ 314 008e 39E1      		ldi r19,lo8(25)
+ 315 0090 3083      		st Z,r19
+ 263:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 264:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x20;	/* R20 */
+ 317               	.LM27:
+ 318 0092 3197      		sbiw r30,1
+ 319 0094 30E2      		ldi r19,lo8(32)
+ 320 0096 3083      		st Z,r19
+ 265:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 266:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x21;	/* R21 */
+ 322               	.LM28:
+ 323 0098 3197      		sbiw r30,1
+ 324 009a 31E2      		ldi r19,lo8(33)
+ 325 009c 3083      		st Z,r19
+ 267:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 268:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x22;	/* R22 */
+ 327               	.LM29:
+ 328 009e 3197      		sbiw r30,1
+ 329 00a0 2083      		st Z,r18
+ 269:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 270:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x23;	/* R23 */
+ 331               	.LM30:
+ 332 00a2 3197      		sbiw r30,1
+ 333 00a4 23E2      		ldi r18,lo8(35)
+ 334 00a6 2083      		st Z,r18
+ 271:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 272:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 273:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Place the parameter on the stack in the expected location. */
+ 274:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	usAddress = ( uint16_t ) pvParameters;
+ 275:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x00ff );
+ 336               	.LM31:
+ 337 00a8 3197      		sbiw r30,1
+ 338 00aa 4083      		st Z,r20
+ 276:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 277:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 278:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	usAddress >>= 8;
+ 279:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x00ff );
+ 340               	.LM32:
+ 341 00ac 3197      		sbiw r30,1
+ 342 00ae 5083      		st Z,r21
+ 280:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 281:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 282:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x26;	/* R26 X */
+ 344               	.LM33:
+ 345 00b0 3197      		sbiw r30,1
+ 346 00b2 26E2      		ldi r18,lo8(38)
+ 347 00b4 2083      		st Z,r18
+ 283:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 284:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x27;	/* R27 */
+ 349               	.LM34:
+ 350 00b6 3197      		sbiw r30,1
+ 351 00b8 27E2      		ldi r18,lo8(39)
+ 352 00ba 2083      		st Z,r18
+ 285:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 286:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x28;	/* R28 Y */
+ 354               	.LM35:
+ 355 00bc 3197      		sbiw r30,1
+ 356 00be 28E2      		ldi r18,lo8(40)
+ 357 00c0 2083      		st Z,r18
+ 287:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 288:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x29;	/* R29 */
+ 359               	.LM36:
+ 360 00c2 3197      		sbiw r30,1
+ 361 00c4 29E2      		ldi r18,lo8(41)
+ 362 00c6 2083      		st Z,r18
+ 289:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 290:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x30;	/* R30 Z */
+ 364               	.LM37:
+ 365 00c8 3197      		sbiw r30,1
+ 366 00ca 20E3      		ldi r18,lo8(48)
+ 367 00cc 2083      		st Z,r18
+ 291:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 292:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	*pxTopOfStack = ( StackType_t ) 0x031;	/* R31 */
+ 369               	.LM38:
+ 370 00ce 3197      		sbiw r30,1
+ 371 00d0 21E3      		ldi r18,lo8(49)
+ 372 00d2 2083      		st Z,r18
+ 293:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	pxTopOfStack--;
+ 294:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 295:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/*lint +e950 +e611 +e923 */
+ 296:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 297:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	return pxTopOfStack;
+ 298:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 374               	.LM39:
+ 375 00d4 8697      		sbiw r24,38
+ 376 00d6 0895      		ret
+ 378               	.Lscope1:
+ 380               		.stabd	78,0,0
+ 382               	.global	xPortStartScheduler
+ 384               	xPortStartScheduler:
+ 385               		.stabd	46,0,0
+ 299:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 300:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 301:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** BaseType_t xPortStartScheduler( void )
+ 302:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 387               	.LM40:
+ 388               	.LFBB2:
+ 389               	/* prologue: function */
+ 390               	/* frame size = 0 */
+ 391               	/* stack size = 0 */
+ 392               	.L__stack_usage = 0
+ 393               	.LBB4:
+ 394               	.LBB5:
+ 303:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Setup the hardware to generate the tick. */
+ 304:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	prvSetupTimerInterrupt();
+ 305:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 306:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Restore the context of the first task that is going to run. */
+ 307:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portRESTORE_CONTEXT();
+ 308:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 309:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Simulate a function call end as generated by the compiler.  We will now
+ 310:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	jump to the start of the task the context of which we have just restored. */
+ 311:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	asm volatile ( "ret" );
+ 312:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 313:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Should not get here. */
+ 314:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	return pdTRUE;
+ 315:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 316:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 317:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 318:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** void vPortEndScheduler( void )
+ 319:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 320:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* It is unlikely that the AVR port will get stopped.  If required simply
+ 321:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	disable the tick interrupt here. */
+ 322:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 323:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 324:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 325:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*
+ 326:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Manual context switch.  The first thing we do is save the registers so we
+ 327:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * can use a naked attribute.
+ 328:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 329:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** void vPortYield( void ) __attribute__ ( ( naked ) );
+ 330:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** void vPortYield( void )
+ 331:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 332:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portSAVE_CONTEXT();
+ 333:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	vTaskSwitchContext();
+ 334:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portRESTORE_CONTEXT();
+ 335:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 336:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	asm volatile ( "ret" );
+ 337:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 338:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 339:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 340:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*
+ 341:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Context switch function used by the tick.  This must be identical to 
+ 342:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * vPortYield() from the call to vTaskSwitchContext() onwards.  The only
+ 343:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * difference from vPortYield() is the tick count is incremented as the
+ 344:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * call comes from the tick ISR.
+ 345:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 346:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** void vPortYieldFromTick( void ) __attribute__ ( ( naked ) );
+ 347:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** void vPortYieldFromTick( void )
+ 348:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 349:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portSAVE_CONTEXT();
+ 350:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	if( xTaskIncrementTick() != pdFALSE )
+ 351:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	{
+ 352:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 		vTaskSwitchContext();
+ 353:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	}
+ 354:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portRESTORE_CONTEXT();
+ 355:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 356:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	asm volatile ( "ret" );
+ 357:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 358:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 359:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 360:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*
+ 361:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  * Setup timer 1 compare match A to generate a tick interrupt.
+ 362:FreeRTOS/Source/portable/GCC/ATMega328p/port.c ****  */
+ 363:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** static void prvSetupTimerInterrupt( void )
+ 364:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** {
+ 365:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** uint32_t ulCompareMatch;
+ 366:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** uint8_t ucHighByte, ucLowByte;
+ 367:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 368:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Using 16bit timer 1 to generate the tick.  Correct fuses must be
+ 369:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	selected for the configCPU_CLOCK_HZ clock. */
+ 370:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 371:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ulCompareMatch = configCPU_CLOCK_HZ / configTICK_RATE_HZ;
+ 372:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 373:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* We only have 16 bits so have to scale to get our required tick rate. */
+ 374:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ulCompareMatch /= portCLOCK_PRESCALER;
+ 375:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 376:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Adjust for correct value. */
+ 377:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ulCompareMatch -= ( uint32_t ) 1;
+ 378:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 379:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Setup compare match value for compare match A.  Interrupts are disabled 
+ 380:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	before this is called so we need not worry here. */
+ 381:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ucLowByte = ( uint8_t ) ( ulCompareMatch & ( uint32_t ) 0xff );
+ 382:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ulCompareMatch >>= 8;
+ 383:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ucHighByte = ( uint8_t ) ( ulCompareMatch & ( uint32_t ) 0xff );
+ 384:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	OCR1AH = ucHighByte;
+ 396               	.LM41:
+ 397 00d8 1092 8900 		sts 137,__zero_reg__
+ 385:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	OCR1AL = ucLowByte;
+ 399               	.LM42:
+ 400 00dc 8CE7      		ldi r24,lo8(124)
+ 401 00de 8093 8800 		sts 136,r24
+ 386:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 387:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Setup clock source and compare match behaviour. */
+ 388:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ucLowByte = portCLEAR_COUNTER_ON_MATCH | portPRESCALE_64;
+ 389:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	TCCR1B = ucLowByte;
+ 403               	.LM43:
+ 404 00e2 8BE0      		ldi r24,lo8(11)
+ 405 00e4 8093 8100 		sts 129,r24
+ 390:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 391:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* Enable the interrupt - this is okay as interrupt are currently globally
+ 392:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	disabled. */
+ 393:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ucLowByte = TIMSK1;
+ 407               	.LM44:
+ 408 00e8 EFE6      		ldi r30,lo8(111)
+ 409 00ea F0E0      		ldi r31,0
+ 410 00ec 8081      		ld r24,Z
+ 394:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	ucLowByte |= portCOMPARE_MATCH_A_INTERRUPT_ENABLE;
+ 412               	.LM45:
+ 413 00ee 8260      		ori r24,lo8(2)
+ 395:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	TIMSK1 = ucLowByte;
+ 415               	.LM46:
+ 416 00f0 8083      		st Z,r24
+ 417               	.LBE5:
+ 418               	.LBE4:
+ 307:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 420               	.LM47:
+ 421               	/* #APP */
+ 422               	 ;  307 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 423 00f2 A091 0000 		lds	r26, pxCurrentTCB		
+ 424 00f6 B091 0000 		lds	r27, pxCurrentTCB + 1	
+ 425 00fa CD91      		ld		r28, x+					
+ 426 00fc CDBF      		out	__SP_L__, r28			
+ 427 00fe DD91      		ld		r29, x+					
+ 428 0100 DEBF      		out	__SP_H__, r29			
+ 429 0102 FF91      		pop	r31						
+ 430 0104 EF91      		pop	r30						
+ 431 0106 DF91      		pop	r29						
+ 432 0108 CF91      		pop	r28						
+ 433 010a BF91      		pop	r27						
+ 434 010c AF91      		pop	r26						
+ 435 010e 9F91      		pop	r25						
+ 436 0110 8F91      		pop	r24						
+ 437 0112 7F91      		pop	r23						
+ 438 0114 6F91      		pop	r22						
+ 439 0116 5F91      		pop	r21						
+ 440 0118 4F91      		pop	r20						
+ 441 011a 3F91      		pop	r19						
+ 442 011c 2F91      		pop	r18						
+ 443 011e 1F91      		pop	r17						
+ 444 0120 0F91      		pop	r16						
+ 445 0122 FF90      		pop	r15						
+ 446 0124 EF90      		pop	r14						
+ 447 0126 DF90      		pop	r13						
+ 448 0128 CF90      		pop	r12						
+ 449 012a BF90      		pop	r11						
+ 450 012c AF90      		pop	r10						
+ 451 012e 9F90      		pop	r9						
+ 452 0130 8F90      		pop	r8						
+ 453 0132 7F90      		pop	r7						
+ 454 0134 6F90      		pop	r6						
+ 455 0136 5F90      		pop	r5						
+ 456 0138 4F90      		pop	r4						
+ 457 013a 3F90      		pop	r3						
+ 458 013c 2F90      		pop	r2						
+ 459 013e 1F90      		pop	r1						
+ 460 0140 0F90      		pop	r0						
+ 461 0142 0FBE      		out	__SREG__, r0			
+ 462 0144 0F90      		pop	r0						
+ 463               		
+ 464               	 ;  0 "" 2
+ 311:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 466               	.LM48:
+ 467               	 ;  311 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 468 0146 0895      		ret
+ 469               	 ;  0 "" 2
+ 315:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 471               	.LM49:
+ 472               	/* #NOAPP */
+ 473 0148 81E0      		ldi r24,lo8(1)
+ 474 014a 0895      		ret
+ 476               	.Lscope2:
+ 478               		.stabd	78,0,0
+ 480               	.global	vPortEndScheduler
+ 482               	vPortEndScheduler:
+ 483               		.stabd	46,0,0
+ 319:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/* It is unlikely that the AVR port will get stopped.  If required simply
+ 485               	.LM50:
+ 486               	.LFBB3:
+ 487               	/* prologue: function */
+ 488               	/* frame size = 0 */
+ 489               	/* stack size = 0 */
+ 490               	.L__stack_usage = 0
+ 491 014c 0895      		ret
+ 493               	.Lscope3:
+ 495               		.stabd	78,0,0
+ 497               	.global	vPortYield
+ 499               	vPortYield:
+ 500               		.stabd	46,0,0
+ 331:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portSAVE_CONTEXT();
+ 502               	.LM51:
+ 503               	.LFBB4:
+ 504               	/* prologue: naked */
+ 505               	/* frame size = 0 */
+ 506               	/* stack size = 0 */
+ 507               	.L__stack_usage = 0
+ 332:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	vTaskSwitchContext();
+ 509               	.LM52:
+ 510               	/* #APP */
+ 511               	 ;  332 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 512 014e 0F92      		push	r0						
+ 513 0150 0FB6      		in		r0, __SREG__			
+ 514 0152 F894      		cli							
+ 515 0154 0F92      		push	r0						
+ 516 0156 1F92      		push	r1						
+ 517 0158 1124      		clr	r1						
+ 518 015a 2F92      		push	r2						
+ 519 015c 3F92      		push	r3						
+ 520 015e 4F92      		push	r4						
+ 521 0160 5F92      		push	r5						
+ 522 0162 6F92      		push	r6						
+ 523 0164 7F92      		push	r7						
+ 524 0166 8F92      		push	r8						
+ 525 0168 9F92      		push	r9						
+ 526 016a AF92      		push	r10						
+ 527 016c BF92      		push	r11						
+ 528 016e CF92      		push	r12						
+ 529 0170 DF92      		push	r13						
+ 530 0172 EF92      		push	r14						
+ 531 0174 FF92      		push	r15						
+ 532 0176 0F93      		push	r16						
+ 533 0178 1F93      		push	r17						
+ 534 017a 2F93      		push	r18						
+ 535 017c 3F93      		push	r19						
+ 536 017e 4F93      		push	r20						
+ 537 0180 5F93      		push	r21						
+ 538 0182 6F93      		push	r22						
+ 539 0184 7F93      		push	r23						
+ 540 0186 8F93      		push	r24						
+ 541 0188 9F93      		push	r25						
+ 542 018a AF93      		push	r26						
+ 543 018c BF93      		push	r27						
+ 544 018e CF93      		push	r28						
+ 545 0190 DF93      		push	r29						
+ 546 0192 EF93      		push	r30						
+ 547 0194 FF93      		push	r31						
+ 548 0196 A091 0000 		lds	r26, pxCurrentTCB		
+ 549 019a B091 0000 		lds	r27, pxCurrentTCB + 1	
+ 550 019e 0DB6      		in		r0, 0x3d				
+ 551 01a0 0D92      		st		x+, r0					
+ 552 01a2 0EB6      		in		r0, 0x3e				
+ 553 01a4 0D92      		st		x+, r0					
+ 554               		
+ 555               	 ;  0 "" 2
+ 333:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portRESTORE_CONTEXT();
+ 557               	.LM53:
+ 558               	/* #NOAPP */
+ 559 01a6 0E94 0000 		call vTaskSwitchContext
+ 334:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 561               	.LM54:
+ 562               	/* #APP */
+ 563               	 ;  334 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 564 01aa A091 0000 		lds	r26, pxCurrentTCB		
+ 565 01ae B091 0000 		lds	r27, pxCurrentTCB + 1	
+ 566 01b2 CD91      		ld		r28, x+					
+ 567 01b4 CDBF      		out	__SP_L__, r28			
+ 568 01b6 DD91      		ld		r29, x+					
+ 569 01b8 DEBF      		out	__SP_H__, r29			
+ 570 01ba FF91      		pop	r31						
+ 571 01bc EF91      		pop	r30						
+ 572 01be DF91      		pop	r29						
+ 573 01c0 CF91      		pop	r28						
+ 574 01c2 BF91      		pop	r27						
+ 575 01c4 AF91      		pop	r26						
+ 576 01c6 9F91      		pop	r25						
+ 577 01c8 8F91      		pop	r24						
+ 578 01ca 7F91      		pop	r23						
+ 579 01cc 6F91      		pop	r22						
+ 580 01ce 5F91      		pop	r21						
+ 581 01d0 4F91      		pop	r20						
+ 582 01d2 3F91      		pop	r19						
+ 583 01d4 2F91      		pop	r18						
+ 584 01d6 1F91      		pop	r17						
+ 585 01d8 0F91      		pop	r16						
+ 586 01da FF90      		pop	r15						
+ 587 01dc EF90      		pop	r14						
+ 588 01de DF90      		pop	r13						
+ 589 01e0 CF90      		pop	r12						
+ 590 01e2 BF90      		pop	r11						
+ 591 01e4 AF90      		pop	r10						
+ 592 01e6 9F90      		pop	r9						
+ 593 01e8 8F90      		pop	r8						
+ 594 01ea 7F90      		pop	r7						
+ 595 01ec 6F90      		pop	r6						
+ 596 01ee 5F90      		pop	r5						
+ 597 01f0 4F90      		pop	r4						
+ 598 01f2 3F90      		pop	r3						
+ 599 01f4 2F90      		pop	r2						
+ 600 01f6 1F90      		pop	r1						
+ 601 01f8 0F90      		pop	r0						
+ 602 01fa 0FBE      		out	__SREG__, r0			
+ 603 01fc 0F90      		pop	r0						
+ 604               		
+ 605               	 ;  0 "" 2
+ 336:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 607               	.LM55:
+ 608               	 ;  336 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 609 01fe 0895      		ret
+ 610               	 ;  0 "" 2
+ 611               	/* epilogue start */
+ 337:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 613               	.LM56:
+ 614               	/* #NOAPP */
+ 616               	.Lscope4:
+ 618               		.stabd	78,0,0
+ 620               	.global	vPortYieldFromTick
+ 622               	vPortYieldFromTick:
+ 623               		.stabd	46,0,0
+ 348:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	portSAVE_CONTEXT();
+ 625               	.LM57:
+ 626               	.LFBB5:
+ 627               	/* prologue: naked */
+ 628               	/* frame size = 0 */
+ 629               	/* stack size = 0 */
+ 630               	.L__stack_usage = 0
+ 349:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	if( xTaskIncrementTick() != pdFALSE )
+ 632               	.LM58:
+ 633               	/* #APP */
+ 634               	 ;  349 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 635 0200 0F92      		push	r0						
+ 636 0202 0FB6      		in		r0, __SREG__			
+ 637 0204 F894      		cli							
+ 638 0206 0F92      		push	r0						
+ 639 0208 1F92      		push	r1						
+ 640 020a 1124      		clr	r1						
+ 641 020c 2F92      		push	r2						
+ 642 020e 3F92      		push	r3						
+ 643 0210 4F92      		push	r4						
+ 644 0212 5F92      		push	r5						
+ 645 0214 6F92      		push	r6						
+ 646 0216 7F92      		push	r7						
+ 647 0218 8F92      		push	r8						
+ 648 021a 9F92      		push	r9						
+ 649 021c AF92      		push	r10						
+ 650 021e BF92      		push	r11						
+ 651 0220 CF92      		push	r12						
+ 652 0222 DF92      		push	r13						
+ 653 0224 EF92      		push	r14						
+ 654 0226 FF92      		push	r15						
+ 655 0228 0F93      		push	r16						
+ 656 022a 1F93      		push	r17						
+ 657 022c 2F93      		push	r18						
+ 658 022e 3F93      		push	r19						
+ 659 0230 4F93      		push	r20						
+ 660 0232 5F93      		push	r21						
+ 661 0234 6F93      		push	r22						
+ 662 0236 7F93      		push	r23						
+ 663 0238 8F93      		push	r24						
+ 664 023a 9F93      		push	r25						
+ 665 023c AF93      		push	r26						
+ 666 023e BF93      		push	r27						
+ 667 0240 CF93      		push	r28						
+ 668 0242 DF93      		push	r29						
+ 669 0244 EF93      		push	r30						
+ 670 0246 FF93      		push	r31						
+ 671 0248 A091 0000 		lds	r26, pxCurrentTCB		
+ 672 024c B091 0000 		lds	r27, pxCurrentTCB + 1	
+ 673 0250 0DB6      		in		r0, 0x3d				
+ 674 0252 0D92      		st		x+, r0					
+ 675 0254 0EB6      		in		r0, 0x3e				
+ 676 0256 0D92      		st		x+, r0					
+ 677               		
+ 678               	 ;  0 "" 2
+ 350:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	{
+ 680               	.LM59:
+ 681               	/* #NOAPP */
+ 682 0258 0E94 0000 		call xTaskIncrementTick
+ 683 025c 8111      		cpse r24,__zero_reg__
+ 352:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	}
+ 685               	.LM60:
+ 686 025e 0E94 0000 		call vTaskSwitchContext
+ 687               	.L6:
+ 354:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 689               	.LM61:
+ 690               	/* #APP */
+ 691               	 ;  354 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 692 0262 A091 0000 		lds	r26, pxCurrentTCB		
+ 693 0266 B091 0000 		lds	r27, pxCurrentTCB + 1	
+ 694 026a CD91      		ld		r28, x+					
+ 695 026c CDBF      		out	__SP_L__, r28			
+ 696 026e DD91      		ld		r29, x+					
+ 697 0270 DEBF      		out	__SP_H__, r29			
+ 698 0272 FF91      		pop	r31						
+ 699 0274 EF91      		pop	r30						
+ 700 0276 DF91      		pop	r29						
+ 701 0278 CF91      		pop	r28						
+ 702 027a BF91      		pop	r27						
+ 703 027c AF91      		pop	r26						
+ 704 027e 9F91      		pop	r25						
+ 705 0280 8F91      		pop	r24						
+ 706 0282 7F91      		pop	r23						
+ 707 0284 6F91      		pop	r22						
+ 708 0286 5F91      		pop	r21						
+ 709 0288 4F91      		pop	r20						
+ 710 028a 3F91      		pop	r19						
+ 711 028c 2F91      		pop	r18						
+ 712 028e 1F91      		pop	r17						
+ 713 0290 0F91      		pop	r16						
+ 714 0292 FF90      		pop	r15						
+ 715 0294 EF90      		pop	r14						
+ 716 0296 DF90      		pop	r13						
+ 717 0298 CF90      		pop	r12						
+ 718 029a BF90      		pop	r11						
+ 719 029c AF90      		pop	r10						
+ 720 029e 9F90      		pop	r9						
+ 721 02a0 8F90      		pop	r8						
+ 722 02a2 7F90      		pop	r7						
+ 723 02a4 6F90      		pop	r6						
+ 724 02a6 5F90      		pop	r5						
+ 725 02a8 4F90      		pop	r4						
+ 726 02aa 3F90      		pop	r3						
+ 727 02ac 2F90      		pop	r2						
+ 728 02ae 1F90      		pop	r1						
+ 729 02b0 0F90      		pop	r0						
+ 730 02b2 0FBE      		out	__SREG__, r0			
+ 731 02b4 0F90      		pop	r0						
+ 732               		
+ 733               	 ;  0 "" 2
+ 356:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 735               	.LM62:
+ 736               	 ;  356 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 737 02b6 0895      		ret
+ 738               	 ;  0 "" 2
+ 739               	/* epilogue start */
+ 357:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 741               	.LM63:
+ 742               	/* #NOAPP */
+ 744               	.Lscope5:
+ 746               		.stabd	78,0,0
+ 748               	.global	__vector_11
+ 750               	__vector_11:
+ 751               		.stabd	46,0,0
+ 396:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** }
+ 397:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** /*-----------------------------------------------------------*/
+ 398:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 399:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** #if configUSE_PREEMPTION == 1
+ 400:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 
+ 401:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	/*
+ 402:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	 * Tick ISR for preemptive scheduler.  We can use a naked attribute as
+ 403:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	 * the context is saved at the start of vPortYieldFromTick().  The tick
+ 404:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	 * count is incremented after the context is saved.
+ 405:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	 */
+ 406:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	void TIMER1_COMPA_vect( void ) __attribute__ ( ( signal, naked ) );
+ 407:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	void TIMER1_COMPA_vect( void )
+ 408:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	{
+ 753               	.LM64:
+ 754               	.LFBB6:
+ 755               	/* prologue: naked */
+ 756               	/* frame size = 0 */
+ 757               	/* stack size = 0 */
+ 758               	.L__stack_usage = 0
+ 409:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 		vPortYieldFromTick();
+ 760               	.LM65:
+ 761 02b8 0E94 0000 		call vPortYieldFromTick
+ 410:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 		asm volatile ( "reti" );
+ 763               	.LM66:
+ 764               	/* #APP */
+ 765               	 ;  410 "FreeRTOS/Source/portable/GCC/ATMega328p/port.c" 1
+ 766 02bc 1895      		reti
+ 767               	 ;  0 "" 2
+ 768               	/* epilogue start */
+ 411:FreeRTOS/Source/portable/GCC/ATMega328p/port.c **** 	}
+ 770               	.LM67:
+ 771               	/* #NOAPP */
+ 773               	.Lscope6:
+ 775               		.stabd	78,0,0
+ 777               	.Letext0:
+ 778               		.ident	"GCC: (GNU) 4.9.2"
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 port.c
+     /tmp/ccor2GUf.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccor2GUf.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccor2GUf.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccor2GUf.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccor2GUf.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccor2GUf.s:182    .text:0000000000000000 pxPortInitialiseStack
+     /tmp/ccor2GUf.s:384    .text:00000000000000d8 xPortStartScheduler
+     /tmp/ccor2GUf.s:482    .text:000000000000014c vPortEndScheduler
+     /tmp/ccor2GUf.s:499    .text:000000000000014e vPortYield
+     /tmp/ccor2GUf.s:622    .text:0000000000000200 vPortYieldFromTick
+     /tmp/ccor2GUf.s:750    .text:00000000000002b8 __vector_11
+
+UNDEFINED SYMBOLS
+pxCurrentTCB
+vTaskSwitchContext
+xTaskIncrementTick

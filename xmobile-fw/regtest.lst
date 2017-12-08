@@ -1,0 +1,1553 @@
+   1               		.file	"regtest.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 173               	prvRegisterCheck1:
+ 174               		.stabd	46,0,0
+   1:regtest.c     **** /*
+   2:regtest.c     ****  * FreeRTOS Kernel V10.0.0
+   3:regtest.c     ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+   4:regtest.c     ****  *
+   5:regtest.c     ****  * Permission is hereby granted, free of charge, to any person obtaining a copy of
+   6:regtest.c     ****  * this software and associated documentation files (the "Software"), to deal in
+   7:regtest.c     ****  * the Software without restriction, including without limitation the rights to
+   8:regtest.c     ****  * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+   9:regtest.c     ****  * the Software, and to permit persons to whom the Software is furnished to do so,
+  10:regtest.c     ****  * subject to the following conditions:
+  11:regtest.c     ****  *
+  12:regtest.c     ****  * The above copyright notice and this permission notice shall be included in all
+  13:regtest.c     ****  * copies or substantial portions of the Software. If you wish to use our Amazon
+  14:regtest.c     ****  * FreeRTOS name, please do so in a fair use way that does not cause confusion.
+  15:regtest.c     ****  *
+  16:regtest.c     ****  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  17:regtest.c     ****  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+  18:regtest.c     ****  * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+  19:regtest.c     ****  * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+  20:regtest.c     ****  * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  21:regtest.c     ****  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  22:regtest.c     ****  *
+  23:regtest.c     ****  * http://www.FreeRTOS.org
+  24:regtest.c     ****  * http://aws.amazon.com/freertos
+  25:regtest.c     ****  *
+  26:regtest.c     ****  * 1 tab == 4 spaces!
+  27:regtest.c     ****  */
+  28:regtest.c     **** 
+  29:regtest.c     **** /* Scheduler include files. */
+  30:regtest.c     **** #include "FreeRTOS.h"
+  31:regtest.c     **** #include "task.h"
+  32:regtest.c     **** 
+  33:regtest.c     **** /* Demo file headers. */
+  34:regtest.c     **** #include "regtest.h"
+  35:regtest.c     **** 
+  36:regtest.c     **** /*
+  37:regtest.c     ****  * Test tasks that sets registers to known values, then checks to ensure the
+  38:regtest.c     ****  * values remain as expected.  Test 1 and test 2 use different values.
+  39:regtest.c     ****  */
+  40:regtest.c     **** static void prvRegisterCheck1( void *pvParameters );
+  41:regtest.c     **** static void prvRegisterCheck2( void *pvParameters );
+  42:regtest.c     **** 
+  43:regtest.c     **** /* Set to a non zero value should an error be found. */
+  44:regtest.c     **** portBASE_TYPE xRegTestError = pdFALSE;
+  45:regtest.c     **** 
+  46:regtest.c     **** /*-----------------------------------------------------------*/
+  47:regtest.c     **** 
+  48:regtest.c     **** void vStartRegTestTasks( void )
+  49:regtest.c     **** {
+  50:regtest.c     **** 	xTaskCreate( prvRegisterCheck1, "Reg1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+  51:regtest.c     **** 	xTaskCreate( prvRegisterCheck2, "Reg2", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+  52:regtest.c     **** }
+  53:regtest.c     **** /*-----------------------------------------------------------*/
+  54:regtest.c     **** 
+  55:regtest.c     **** portBASE_TYPE xAreRegTestTasksStillRunning( void )
+  56:regtest.c     **** {
+  57:regtest.c     **** portBASE_TYPE xReturn;
+  58:regtest.c     **** 
+  59:regtest.c     **** 	/* If a register was found to contain an unexpected value then the
+  60:regtest.c     **** 	xRegTestError variable would have been set to a non zero value. */
+  61:regtest.c     **** 	if( xRegTestError == pdFALSE )
+  62:regtest.c     **** 	{
+  63:regtest.c     **** 		xReturn = pdTRUE;
+  64:regtest.c     **** 	}
+  65:regtest.c     **** 	else
+  66:regtest.c     **** 	{
+  67:regtest.c     **** 		xReturn = pdFALSE;
+  68:regtest.c     **** 	}
+  69:regtest.c     **** 
+  70:regtest.c     **** 	return xReturn;
+  71:regtest.c     **** }
+  72:regtest.c     **** /*-----------------------------------------------------------*/
+  73:regtest.c     **** 
+  74:regtest.c     **** static void prvRegisterCheck1( void *pvParameters )
+  75:regtest.c     **** {
+ 176               	.LM0:
+ 177               	.LFBB1:
+ 178               	/* prologue: function */
+ 179               	/* frame size = 0 */
+ 180               	/* stack size = 0 */
+ 181               	.L__stack_usage = 0
+ 182               	.L2:
+  76:regtest.c     **** 	( void ) pvParameters;
+  77:regtest.c     **** 
+  78:regtest.c     **** 	for( ;; )
+  79:regtest.c     **** 	{
+  80:regtest.c     **** 		asm(	"LDI	r31,	5"		);
+ 184               	.LM1:
+ 185               	/* #APP */
+ 186               	 ;  80 "regtest.c" 1
+ 187 0000 F5E0      		LDI	r31,	5
+ 188               	 ;  0 "" 2
+  81:regtest.c     **** 		asm( 	"MOV	r0,		r31"	);
+ 190               	.LM2:
+ 191               	 ;  81 "regtest.c" 1
+ 192 0002 0F2E      		MOV	r0,		r31
+ 193               	 ;  0 "" 2
+  82:regtest.c     **** 		asm(	"LDI	r31,	6"		);
+ 195               	.LM3:
+ 196               	 ;  82 "regtest.c" 1
+ 197 0004 F6E0      		LDI	r31,	6
+ 198               	 ;  0 "" 2
+  83:regtest.c     **** 		asm( 	"MOV	r1,		r31"	);
+ 200               	.LM4:
+ 201               	 ;  83 "regtest.c" 1
+ 202 0006 1F2E      		MOV	r1,		r31
+ 203               	 ;  0 "" 2
+  84:regtest.c     **** 		asm(	"LDI	r31,	7"		);
+ 205               	.LM5:
+ 206               	 ;  84 "regtest.c" 1
+ 207 0008 F7E0      		LDI	r31,	7
+ 208               	 ;  0 "" 2
+  85:regtest.c     **** 		asm( 	"MOV	r2,		r31"	);
+ 210               	.LM6:
+ 211               	 ;  85 "regtest.c" 1
+ 212 000a 2F2E      		MOV	r2,		r31
+ 213               	 ;  0 "" 2
+  86:regtest.c     **** 		asm(	"LDI	r31,	8"		);
+ 215               	.LM7:
+ 216               	 ;  86 "regtest.c" 1
+ 217 000c F8E0      		LDI	r31,	8
+ 218               	 ;  0 "" 2
+  87:regtest.c     **** 		asm( 	"MOV	r3,		r31"	);
+ 220               	.LM8:
+ 221               	 ;  87 "regtest.c" 1
+ 222 000e 3F2E      		MOV	r3,		r31
+ 223               	 ;  0 "" 2
+  88:regtest.c     **** 		asm(	"LDI	r31,	9"		);
+ 225               	.LM9:
+ 226               	 ;  88 "regtest.c" 1
+ 227 0010 F9E0      		LDI	r31,	9
+ 228               	 ;  0 "" 2
+  89:regtest.c     **** 		asm( 	"MOV	r4,		r31"	);
+ 230               	.LM10:
+ 231               	 ;  89 "regtest.c" 1
+ 232 0012 4F2E      		MOV	r4,		r31
+ 233               	 ;  0 "" 2
+  90:regtest.c     **** 		asm(	"LDI	r31,	10"		);
+ 235               	.LM11:
+ 236               	 ;  90 "regtest.c" 1
+ 237 0014 FAE0      		LDI	r31,	10
+ 238               	 ;  0 "" 2
+  91:regtest.c     **** 		asm( 	"MOV	r5,		r31"	);
+ 240               	.LM12:
+ 241               	 ;  91 "regtest.c" 1
+ 242 0016 5F2E      		MOV	r5,		r31
+ 243               	 ;  0 "" 2
+  92:regtest.c     **** 		asm(	"LDI	r31,	11"		);
+ 245               	.LM13:
+ 246               	 ;  92 "regtest.c" 1
+ 247 0018 FBE0      		LDI	r31,	11
+ 248               	 ;  0 "" 2
+  93:regtest.c     **** 		asm( 	"MOV	r6,		r31"	);
+ 250               	.LM14:
+ 251               	 ;  93 "regtest.c" 1
+ 252 001a 6F2E      		MOV	r6,		r31
+ 253               	 ;  0 "" 2
+  94:regtest.c     **** 		asm(	"LDI	r31,	12"		);
+ 255               	.LM15:
+ 256               	 ;  94 "regtest.c" 1
+ 257 001c FCE0      		LDI	r31,	12
+ 258               	 ;  0 "" 2
+  95:regtest.c     **** 		asm( 	"MOV	r7,		r31"	);
+ 260               	.LM16:
+ 261               	 ;  95 "regtest.c" 1
+ 262 001e 7F2E      		MOV	r7,		r31
+ 263               	 ;  0 "" 2
+  96:regtest.c     **** 		asm(	"LDI	r31,	13"		);
+ 265               	.LM17:
+ 266               	 ;  96 "regtest.c" 1
+ 267 0020 FDE0      		LDI	r31,	13
+ 268               	 ;  0 "" 2
+  97:regtest.c     **** 		asm( 	"MOV	r8,		r31"	);
+ 270               	.LM18:
+ 271               	 ;  97 "regtest.c" 1
+ 272 0022 8F2E      		MOV	r8,		r31
+ 273               	 ;  0 "" 2
+  98:regtest.c     **** 		asm(	"LDI	r31,	14"		);
+ 275               	.LM19:
+ 276               	 ;  98 "regtest.c" 1
+ 277 0024 FEE0      		LDI	r31,	14
+ 278               	 ;  0 "" 2
+  99:regtest.c     **** 		asm( 	"MOV	r9,		r31"	);
+ 280               	.LM20:
+ 281               	 ;  99 "regtest.c" 1
+ 282 0026 9F2E      		MOV	r9,		r31
+ 283               	 ;  0 "" 2
+ 100:regtest.c     **** 		asm(	"LDI	r31,	15"		);
+ 285               	.LM21:
+ 286               	 ;  100 "regtest.c" 1
+ 287 0028 FFE0      		LDI	r31,	15
+ 288               	 ;  0 "" 2
+ 101:regtest.c     **** 		asm( 	"MOV	r10,	r31"	);
+ 290               	.LM22:
+ 291               	 ;  101 "regtest.c" 1
+ 292 002a AF2E      		MOV	r10,	r31
+ 293               	 ;  0 "" 2
+ 102:regtest.c     **** 		asm(	"LDI	r31,	16"		);
+ 295               	.LM23:
+ 296               	 ;  102 "regtest.c" 1
+ 297 002c F0E1      		LDI	r31,	16
+ 298               	 ;  0 "" 2
+ 103:regtest.c     **** 		asm( 	"MOV	r11,	r31"	);
+ 300               	.LM24:
+ 301               	 ;  103 "regtest.c" 1
+ 302 002e BF2E      		MOV	r11,	r31
+ 303               	 ;  0 "" 2
+ 104:regtest.c     **** 		asm(	"LDI	r31,	17"		);
+ 305               	.LM25:
+ 306               	 ;  104 "regtest.c" 1
+ 307 0030 F1E1      		LDI	r31,	17
+ 308               	 ;  0 "" 2
+ 105:regtest.c     **** 		asm( 	"MOV	r12,	r31"	);
+ 310               	.LM26:
+ 311               	 ;  105 "regtest.c" 1
+ 312 0032 CF2E      		MOV	r12,	r31
+ 313               	 ;  0 "" 2
+ 106:regtest.c     **** 		asm(	"LDI	r31,	18"		);
+ 315               	.LM27:
+ 316               	 ;  106 "regtest.c" 1
+ 317 0034 F2E1      		LDI	r31,	18
+ 318               	 ;  0 "" 2
+ 107:regtest.c     **** 		asm( 	"MOV	r13,	r31"	);
+ 320               	.LM28:
+ 321               	 ;  107 "regtest.c" 1
+ 322 0036 DF2E      		MOV	r13,	r31
+ 323               	 ;  0 "" 2
+ 108:regtest.c     **** 		asm(	"LDI	r31,	19"		);
+ 325               	.LM29:
+ 326               	 ;  108 "regtest.c" 1
+ 327 0038 F3E1      		LDI	r31,	19
+ 328               	 ;  0 "" 2
+ 109:regtest.c     **** 		asm( 	"MOV	r14,	r31"	);
+ 330               	.LM30:
+ 331               	 ;  109 "regtest.c" 1
+ 332 003a EF2E      		MOV	r14,	r31
+ 333               	 ;  0 "" 2
+ 110:regtest.c     **** 		asm(	"LDI	r31,	20"		);
+ 335               	.LM31:
+ 336               	 ;  110 "regtest.c" 1
+ 337 003c F4E1      		LDI	r31,	20
+ 338               	 ;  0 "" 2
+ 111:regtest.c     **** 		asm( 	"MOV	r15,	r31"	);
+ 340               	.LM32:
+ 341               	 ;  111 "regtest.c" 1
+ 342 003e FF2E      		MOV	r15,	r31
+ 343               	 ;  0 "" 2
+ 112:regtest.c     **** 		asm(	"LDI	r16,	21"		);
+ 345               	.LM33:
+ 346               	 ;  112 "regtest.c" 1
+ 347 0040 05E1      		LDI	r16,	21
+ 348               	 ;  0 "" 2
+ 113:regtest.c     **** 		asm(	"LDI	r17,	22"		);
+ 350               	.LM34:
+ 351               	 ;  113 "regtest.c" 1
+ 352 0042 16E1      		LDI	r17,	22
+ 353               	 ;  0 "" 2
+ 114:regtest.c     **** 		asm(	"LDI	r18,	23"		);
+ 355               	.LM35:
+ 356               	 ;  114 "regtest.c" 1
+ 357 0044 27E1      		LDI	r18,	23
+ 358               	 ;  0 "" 2
+ 115:regtest.c     **** 		asm(	"LDI	r19,	24"		);
+ 360               	.LM36:
+ 361               	 ;  115 "regtest.c" 1
+ 362 0046 38E1      		LDI	r19,	24
+ 363               	 ;  0 "" 2
+ 116:regtest.c     **** 		asm(	"LDI	r20,	25"		);
+ 365               	.LM37:
+ 366               	 ;  116 "regtest.c" 1
+ 367 0048 49E1      		LDI	r20,	25
+ 368               	 ;  0 "" 2
+ 117:regtest.c     **** 		asm(	"LDI	r21,	26"		);
+ 370               	.LM38:
+ 371               	 ;  117 "regtest.c" 1
+ 372 004a 5AE1      		LDI	r21,	26
+ 373               	 ;  0 "" 2
+ 118:regtest.c     **** 		asm(	"LDI	r22,	27"		);
+ 375               	.LM39:
+ 376               	 ;  118 "regtest.c" 1
+ 377 004c 6BE1      		LDI	r22,	27
+ 378               	 ;  0 "" 2
+ 119:regtest.c     **** 		asm(	"LDI	r23,	28"		);
+ 380               	.LM40:
+ 381               	 ;  119 "regtest.c" 1
+ 382 004e 7CE1      		LDI	r23,	28
+ 383               	 ;  0 "" 2
+ 120:regtest.c     **** 		asm(	"LDI	r24,	29"		);
+ 385               	.LM41:
+ 386               	 ;  120 "regtest.c" 1
+ 387 0050 8DE1      		LDI	r24,	29
+ 388               	 ;  0 "" 2
+ 121:regtest.c     **** 		asm(	"LDI	r25,	30"		);
+ 390               	.LM42:
+ 391               	 ;  121 "regtest.c" 1
+ 392 0052 9EE1      		LDI	r25,	30
+ 393               	 ;  0 "" 2
+ 122:regtest.c     **** 		asm(	"LDI	r26,	31"		);
+ 395               	.LM43:
+ 396               	 ;  122 "regtest.c" 1
+ 397 0054 AFE1      		LDI	r26,	31
+ 398               	 ;  0 "" 2
+ 123:regtest.c     **** 		asm(	"LDI	r27,	32"		);
+ 400               	.LM44:
+ 401               	 ;  123 "regtest.c" 1
+ 402 0056 B0E2      		LDI	r27,	32
+ 403               	 ;  0 "" 2
+ 124:regtest.c     **** 		asm(	"LDI	r30,	33"		);
+ 405               	.LM45:
+ 406               	 ;  124 "regtest.c" 1
+ 407 0058 E1E2      		LDI	r30,	33
+ 408               	 ;  0 "" 2
+ 125:regtest.c     **** 
+ 126:regtest.c     **** 		asm(	"LDI	r31,	5"			);
+ 410               	.LM46:
+ 411               	 ;  126 "regtest.c" 1
+ 412 005a F5E0      		LDI	r31,	5
+ 413               	 ;  0 "" 2
+ 127:regtest.c     **** 		asm(	"CPSE	r31,	r0"			);
+ 415               	.LM47:
+ 416               	 ;  127 "regtest.c" 1
+ 417 005c F011      		CPSE	r31,	r0
+ 418               	 ;  0 "" 2
+ 128:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 420               	.LM48:
+ 421               	 ;  128 "regtest.c" 1
+ 422 005e 0092 0000 		STS	xRegTestError, r0
+ 423               	 ;  0 "" 2
+ 129:regtest.c     **** 		asm(	"LDI	r31,	6"			);
+ 425               	.LM49:
+ 426               	 ;  129 "regtest.c" 1
+ 427 0062 F6E0      		LDI	r31,	6
+ 428               	 ;  0 "" 2
+ 130:regtest.c     **** 		asm(	"CPSE	r31,	r1"			);
+ 430               	.LM50:
+ 431               	 ;  130 "regtest.c" 1
+ 432 0064 F111      		CPSE	r31,	r1
+ 433               	 ;  0 "" 2
+ 131:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 435               	.LM51:
+ 436               	 ;  131 "regtest.c" 1
+ 437 0066 0092 0000 		STS	xRegTestError, r0
+ 438               	 ;  0 "" 2
+ 132:regtest.c     **** 		asm(	"LDI	r31,	7"			);
+ 440               	.LM52:
+ 441               	 ;  132 "regtest.c" 1
+ 442 006a F7E0      		LDI	r31,	7
+ 443               	 ;  0 "" 2
+ 133:regtest.c     **** 		asm(	"CPSE	r31,	r2"			);
+ 445               	.LM53:
+ 446               	 ;  133 "regtest.c" 1
+ 447 006c F211      		CPSE	r31,	r2
+ 448               	 ;  0 "" 2
+ 134:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 450               	.LM54:
+ 451               	 ;  134 "regtest.c" 1
+ 452 006e 0092 0000 		STS	xRegTestError, r0
+ 453               	 ;  0 "" 2
+ 135:regtest.c     **** 		asm(	"LDI	r31,	8"			);
+ 455               	.LM55:
+ 456               	 ;  135 "regtest.c" 1
+ 457 0072 F8E0      		LDI	r31,	8
+ 458               	 ;  0 "" 2
+ 136:regtest.c     **** 		asm(	"CPSE	r31,	r3"			);
+ 460               	.LM56:
+ 461               	 ;  136 "regtest.c" 1
+ 462 0074 F311      		CPSE	r31,	r3
+ 463               	 ;  0 "" 2
+ 137:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 465               	.LM57:
+ 466               	 ;  137 "regtest.c" 1
+ 467 0076 0092 0000 		STS	xRegTestError, r0
+ 468               	 ;  0 "" 2
+ 138:regtest.c     **** 		asm(	"LDI	r31,	9"			);
+ 470               	.LM58:
+ 471               	 ;  138 "regtest.c" 1
+ 472 007a F9E0      		LDI	r31,	9
+ 473               	 ;  0 "" 2
+ 139:regtest.c     **** 		asm(	"CPSE	r31,	r4"			);
+ 475               	.LM59:
+ 476               	 ;  139 "regtest.c" 1
+ 477 007c F411      		CPSE	r31,	r4
+ 478               	 ;  0 "" 2
+ 140:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 480               	.LM60:
+ 481               	 ;  140 "regtest.c" 1
+ 482 007e 0092 0000 		STS	xRegTestError, r0
+ 483               	 ;  0 "" 2
+ 141:regtest.c     **** 		asm(	"LDI	r31,	10"			);
+ 485               	.LM61:
+ 486               	 ;  141 "regtest.c" 1
+ 487 0082 FAE0      		LDI	r31,	10
+ 488               	 ;  0 "" 2
+ 142:regtest.c     **** 		asm(	"CPSE	r31,	r5"			);
+ 490               	.LM62:
+ 491               	 ;  142 "regtest.c" 1
+ 492 0084 F511      		CPSE	r31,	r5
+ 493               	 ;  0 "" 2
+ 143:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 495               	.LM63:
+ 496               	 ;  143 "regtest.c" 1
+ 497 0086 0092 0000 		STS	xRegTestError, r0
+ 498               	 ;  0 "" 2
+ 144:regtest.c     **** 		asm(	"LDI	r31,	11"			);
+ 500               	.LM64:
+ 501               	 ;  144 "regtest.c" 1
+ 502 008a FBE0      		LDI	r31,	11
+ 503               	 ;  0 "" 2
+ 145:regtest.c     **** 		asm(	"CPSE	r31,	r6"			);
+ 505               	.LM65:
+ 506               	 ;  145 "regtest.c" 1
+ 507 008c F611      		CPSE	r31,	r6
+ 508               	 ;  0 "" 2
+ 146:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 510               	.LM66:
+ 511               	 ;  146 "regtest.c" 1
+ 512 008e 0092 0000 		STS	xRegTestError, r0
+ 513               	 ;  0 "" 2
+ 147:regtest.c     **** 		asm(	"LDI	r31,	12"			);
+ 515               	.LM67:
+ 516               	 ;  147 "regtest.c" 1
+ 517 0092 FCE0      		LDI	r31,	12
+ 518               	 ;  0 "" 2
+ 148:regtest.c     **** 		asm(	"CPSE	r31,	r7"			);
+ 520               	.LM68:
+ 521               	 ;  148 "regtest.c" 1
+ 522 0094 F711      		CPSE	r31,	r7
+ 523               	 ;  0 "" 2
+ 149:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 525               	.LM69:
+ 526               	 ;  149 "regtest.c" 1
+ 527 0096 0092 0000 		STS	xRegTestError, r0
+ 528               	 ;  0 "" 2
+ 150:regtest.c     **** 		asm(	"LDI	r31,	13"			);
+ 530               	.LM70:
+ 531               	 ;  150 "regtest.c" 1
+ 532 009a FDE0      		LDI	r31,	13
+ 533               	 ;  0 "" 2
+ 151:regtest.c     **** 		asm(	"CPSE	r31,	r8"			);
+ 535               	.LM71:
+ 536               	 ;  151 "regtest.c" 1
+ 537 009c F811      		CPSE	r31,	r8
+ 538               	 ;  0 "" 2
+ 152:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 540               	.LM72:
+ 541               	 ;  152 "regtest.c" 1
+ 542 009e 0092 0000 		STS	xRegTestError, r0
+ 543               	 ;  0 "" 2
+ 153:regtest.c     **** 		asm(	"LDI	r31,	14"			);
+ 545               	.LM73:
+ 546               	 ;  153 "regtest.c" 1
+ 547 00a2 FEE0      		LDI	r31,	14
+ 548               	 ;  0 "" 2
+ 154:regtest.c     **** 		asm(	"CPSE	r31,	r9"			);
+ 550               	.LM74:
+ 551               	 ;  154 "regtest.c" 1
+ 552 00a4 F911      		CPSE	r31,	r9
+ 553               	 ;  0 "" 2
+ 155:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 555               	.LM75:
+ 556               	 ;  155 "regtest.c" 1
+ 557 00a6 0092 0000 		STS	xRegTestError, r0
+ 558               	 ;  0 "" 2
+ 156:regtest.c     **** 		asm(	"LDI	r31,	15"			);
+ 560               	.LM76:
+ 561               	 ;  156 "regtest.c" 1
+ 562 00aa FFE0      		LDI	r31,	15
+ 563               	 ;  0 "" 2
+ 157:regtest.c     **** 		asm(	"CPSE	r31,	r10"		);
+ 565               	.LM77:
+ 566               	 ;  157 "regtest.c" 1
+ 567 00ac FA11      		CPSE	r31,	r10
+ 568               	 ;  0 "" 2
+ 158:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 570               	.LM78:
+ 571               	 ;  158 "regtest.c" 1
+ 572 00ae 0092 0000 		STS	xRegTestError, r0
+ 573               	 ;  0 "" 2
+ 159:regtest.c     **** 		asm(	"LDI	r31,	16"			);
+ 575               	.LM79:
+ 576               	 ;  159 "regtest.c" 1
+ 577 00b2 F0E1      		LDI	r31,	16
+ 578               	 ;  0 "" 2
+ 160:regtest.c     **** 		asm(	"CPSE	r31,	r11"		);
+ 580               	.LM80:
+ 581               	 ;  160 "regtest.c" 1
+ 582 00b4 FB11      		CPSE	r31,	r11
+ 583               	 ;  0 "" 2
+ 161:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 585               	.LM81:
+ 586               	 ;  161 "regtest.c" 1
+ 587 00b6 0092 0000 		STS	xRegTestError, r0
+ 588               	 ;  0 "" 2
+ 162:regtest.c     **** 		asm(	"LDI	r31,	17"			);
+ 590               	.LM82:
+ 591               	 ;  162 "regtest.c" 1
+ 592 00ba F1E1      		LDI	r31,	17
+ 593               	 ;  0 "" 2
+ 163:regtest.c     **** 		asm(	"CPSE	r31,	r12"		);
+ 595               	.LM83:
+ 596               	 ;  163 "regtest.c" 1
+ 597 00bc FC11      		CPSE	r31,	r12
+ 598               	 ;  0 "" 2
+ 164:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 600               	.LM84:
+ 601               	 ;  164 "regtest.c" 1
+ 602 00be 0092 0000 		STS	xRegTestError, r0
+ 603               	 ;  0 "" 2
+ 165:regtest.c     **** 		asm(	"LDI	r31,	18"			);
+ 605               	.LM85:
+ 606               	 ;  165 "regtest.c" 1
+ 607 00c2 F2E1      		LDI	r31,	18
+ 608               	 ;  0 "" 2
+ 166:regtest.c     **** 		asm(	"CPSE	r31,	r13"		);
+ 610               	.LM86:
+ 611               	 ;  166 "regtest.c" 1
+ 612 00c4 FD11      		CPSE	r31,	r13
+ 613               	 ;  0 "" 2
+ 167:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 615               	.LM87:
+ 616               	 ;  167 "regtest.c" 1
+ 617 00c6 0092 0000 		STS	xRegTestError, r0
+ 618               	 ;  0 "" 2
+ 168:regtest.c     **** 		asm(	"LDI	r31,	19"			);
+ 620               	.LM88:
+ 621               	 ;  168 "regtest.c" 1
+ 622 00ca F3E1      		LDI	r31,	19
+ 623               	 ;  0 "" 2
+ 169:regtest.c     **** 		asm(	"CPSE	r31,	r14"		);
+ 625               	.LM89:
+ 626               	 ;  169 "regtest.c" 1
+ 627 00cc FE11      		CPSE	r31,	r14
+ 628               	 ;  0 "" 2
+ 170:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 630               	.LM90:
+ 631               	 ;  170 "regtest.c" 1
+ 632 00ce 0092 0000 		STS	xRegTestError, r0
+ 633               	 ;  0 "" 2
+ 171:regtest.c     **** 		asm(	"LDI	r31,	20"			);
+ 635               	.LM91:
+ 636               	 ;  171 "regtest.c" 1
+ 637 00d2 F4E1      		LDI	r31,	20
+ 638               	 ;  0 "" 2
+ 172:regtest.c     **** 		asm(	"CPSE	r31,	r15"		);
+ 640               	.LM92:
+ 641               	 ;  172 "regtest.c" 1
+ 642 00d4 FF11      		CPSE	r31,	r15
+ 643               	 ;  0 "" 2
+ 173:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 645               	.LM93:
+ 646               	 ;  173 "regtest.c" 1
+ 647 00d6 0092 0000 		STS	xRegTestError, r0
+ 648               	 ;  0 "" 2
+ 174:regtest.c     **** 		asm(	"LDI	r31,	21"			);
+ 650               	.LM94:
+ 651               	 ;  174 "regtest.c" 1
+ 652 00da F5E1      		LDI	r31,	21
+ 653               	 ;  0 "" 2
+ 175:regtest.c     **** 		asm(	"CPSE	r31,	r16"		);
+ 655               	.LM95:
+ 656               	 ;  175 "regtest.c" 1
+ 657 00dc F013      		CPSE	r31,	r16
+ 658               	 ;  0 "" 2
+ 176:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 660               	.LM96:
+ 661               	 ;  176 "regtest.c" 1
+ 662 00de 0092 0000 		STS	xRegTestError, r0
+ 663               	 ;  0 "" 2
+ 177:regtest.c     **** 		asm(	"LDI	r31,	22"			);
+ 665               	.LM97:
+ 666               	 ;  177 "regtest.c" 1
+ 667 00e2 F6E1      		LDI	r31,	22
+ 668               	 ;  0 "" 2
+ 178:regtest.c     **** 		asm(	"CPSE	r31,	r17"		);
+ 670               	.LM98:
+ 671               	 ;  178 "regtest.c" 1
+ 672 00e4 F113      		CPSE	r31,	r17
+ 673               	 ;  0 "" 2
+ 179:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 675               	.LM99:
+ 676               	 ;  179 "regtest.c" 1
+ 677 00e6 0092 0000 		STS	xRegTestError, r0
+ 678               	 ;  0 "" 2
+ 180:regtest.c     **** 		asm(	"LDI	r31,	23"			);
+ 680               	.LM100:
+ 681               	 ;  180 "regtest.c" 1
+ 682 00ea F7E1      		LDI	r31,	23
+ 683               	 ;  0 "" 2
+ 181:regtest.c     **** 		asm(	"CPSE	r31,	r18"		);
+ 685               	.LM101:
+ 686               	 ;  181 "regtest.c" 1
+ 687 00ec F213      		CPSE	r31,	r18
+ 688               	 ;  0 "" 2
+ 182:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 690               	.LM102:
+ 691               	 ;  182 "regtest.c" 1
+ 692 00ee 0092 0000 		STS	xRegTestError, r0
+ 693               	 ;  0 "" 2
+ 183:regtest.c     **** 		asm(	"LDI	r31,	24"			);
+ 695               	.LM103:
+ 696               	 ;  183 "regtest.c" 1
+ 697 00f2 F8E1      		LDI	r31,	24
+ 698               	 ;  0 "" 2
+ 184:regtest.c     **** 		asm(	"CPSE	r31,	r19"		);
+ 700               	.LM104:
+ 701               	 ;  184 "regtest.c" 1
+ 702 00f4 F313      		CPSE	r31,	r19
+ 703               	 ;  0 "" 2
+ 185:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 705               	.LM105:
+ 706               	 ;  185 "regtest.c" 1
+ 707 00f6 0092 0000 		STS	xRegTestError, r0
+ 708               	 ;  0 "" 2
+ 186:regtest.c     **** 		asm(	"LDI	r31,	25"			);
+ 710               	.LM106:
+ 711               	 ;  186 "regtest.c" 1
+ 712 00fa F9E1      		LDI	r31,	25
+ 713               	 ;  0 "" 2
+ 187:regtest.c     **** 		asm(	"CPSE	r31,	r20"		);
+ 715               	.LM107:
+ 716               	 ;  187 "regtest.c" 1
+ 717 00fc F413      		CPSE	r31,	r20
+ 718               	 ;  0 "" 2
+ 188:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 720               	.LM108:
+ 721               	 ;  188 "regtest.c" 1
+ 722 00fe 0092 0000 		STS	xRegTestError, r0
+ 723               	 ;  0 "" 2
+ 189:regtest.c     **** 		asm(	"LDI	r31,	26"			);
+ 725               	.LM109:
+ 726               	 ;  189 "regtest.c" 1
+ 727 0102 FAE1      		LDI	r31,	26
+ 728               	 ;  0 "" 2
+ 190:regtest.c     **** 		asm(	"CPSE	r31,	r21"		);
+ 730               	.LM110:
+ 731               	 ;  190 "regtest.c" 1
+ 732 0104 F513      		CPSE	r31,	r21
+ 733               	 ;  0 "" 2
+ 191:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 735               	.LM111:
+ 736               	 ;  191 "regtest.c" 1
+ 737 0106 0092 0000 		STS	xRegTestError, r0
+ 738               	 ;  0 "" 2
+ 192:regtest.c     **** 		asm(	"LDI	r31,	27"			);
+ 740               	.LM112:
+ 741               	 ;  192 "regtest.c" 1
+ 742 010a FBE1      		LDI	r31,	27
+ 743               	 ;  0 "" 2
+ 193:regtest.c     **** 		asm(	"CPSE	r31,	r22"		);
+ 745               	.LM113:
+ 746               	 ;  193 "regtest.c" 1
+ 747 010c F613      		CPSE	r31,	r22
+ 748               	 ;  0 "" 2
+ 194:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 750               	.LM114:
+ 751               	 ;  194 "regtest.c" 1
+ 752 010e 0092 0000 		STS	xRegTestError, r0
+ 753               	 ;  0 "" 2
+ 195:regtest.c     **** 		asm(	"LDI	r31,	28"			);
+ 755               	.LM115:
+ 756               	 ;  195 "regtest.c" 1
+ 757 0112 FCE1      		LDI	r31,	28
+ 758               	 ;  0 "" 2
+ 196:regtest.c     **** 		asm(	"CPSE	r31,	r23"		);
+ 760               	.LM116:
+ 761               	 ;  196 "regtest.c" 1
+ 762 0114 F713      		CPSE	r31,	r23
+ 763               	 ;  0 "" 2
+ 197:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 765               	.LM117:
+ 766               	 ;  197 "regtest.c" 1
+ 767 0116 0092 0000 		STS	xRegTestError, r0
+ 768               	 ;  0 "" 2
+ 198:regtest.c     **** 		asm(	"LDI	r31,	29"			);
+ 770               	.LM118:
+ 771               	 ;  198 "regtest.c" 1
+ 772 011a FDE1      		LDI	r31,	29
+ 773               	 ;  0 "" 2
+ 199:regtest.c     **** 		asm(	"CPSE	r31,	r24"		);
+ 775               	.LM119:
+ 776               	 ;  199 "regtest.c" 1
+ 777 011c F813      		CPSE	r31,	r24
+ 778               	 ;  0 "" 2
+ 200:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 780               	.LM120:
+ 781               	 ;  200 "regtest.c" 1
+ 782 011e 0092 0000 		STS	xRegTestError, r0
+ 783               	 ;  0 "" 2
+ 201:regtest.c     **** 		asm(	"LDI	r31,	30"			);
+ 785               	.LM121:
+ 786               	 ;  201 "regtest.c" 1
+ 787 0122 FEE1      		LDI	r31,	30
+ 788               	 ;  0 "" 2
+ 202:regtest.c     **** 		asm(	"CPSE	r31,	r25"		);
+ 790               	.LM122:
+ 791               	 ;  202 "regtest.c" 1
+ 792 0124 F913      		CPSE	r31,	r25
+ 793               	 ;  0 "" 2
+ 203:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 795               	.LM123:
+ 796               	 ;  203 "regtest.c" 1
+ 797 0126 0092 0000 		STS	xRegTestError, r0
+ 798               	 ;  0 "" 2
+ 204:regtest.c     **** 		asm(	"LDI	r31,	31"			);
+ 800               	.LM124:
+ 801               	 ;  204 "regtest.c" 1
+ 802 012a FFE1      		LDI	r31,	31
+ 803               	 ;  0 "" 2
+ 205:regtest.c     **** 		asm(	"CPSE	r31,	r26"		);
+ 805               	.LM125:
+ 806               	 ;  205 "regtest.c" 1
+ 807 012c FA13      		CPSE	r31,	r26
+ 808               	 ;  0 "" 2
+ 206:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 810               	.LM126:
+ 811               	 ;  206 "regtest.c" 1
+ 812 012e 0092 0000 		STS	xRegTestError, r0
+ 813               	 ;  0 "" 2
+ 207:regtest.c     **** 		asm(	"LDI	r31,	32"			);
+ 815               	.LM127:
+ 816               	 ;  207 "regtest.c" 1
+ 817 0132 F0E2      		LDI	r31,	32
+ 818               	 ;  0 "" 2
+ 208:regtest.c     **** 		asm(	"CPSE	r31,	r27"		);
+ 820               	.LM128:
+ 821               	 ;  208 "regtest.c" 1
+ 822 0134 FB13      		CPSE	r31,	r27
+ 823               	 ;  0 "" 2
+ 209:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 825               	.LM129:
+ 826               	 ;  209 "regtest.c" 1
+ 827 0136 0092 0000 		STS	xRegTestError, r0
+ 828               	 ;  0 "" 2
+ 210:regtest.c     **** 		asm(	"LDI	r31,	33"			);
+ 830               	.LM130:
+ 831               	 ;  210 "regtest.c" 1
+ 832 013a F1E2      		LDI	r31,	33
+ 833               	 ;  0 "" 2
+ 211:regtest.c     **** 		asm(	"CPSE	r31,	r30"		);
+ 835               	.LM131:
+ 836               	 ;  211 "regtest.c" 1
+ 837 013c FE13      		CPSE	r31,	r30
+ 838               	 ;  0 "" 2
+ 212:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 840               	.LM132:
+ 841               	 ;  212 "regtest.c" 1
+ 842 013e 0092 0000 		STS	xRegTestError, r0
+ 843               	 ;  0 "" 2
+ 213:regtest.c     **** 	}
+ 845               	.LM133:
+ 846               	/* #NOAPP */
+ 847 0142 00C0      		rjmp .L2
+ 849               	.Lscope1:
+ 851               		.stabd	78,0,0
+ 855               	prvRegisterCheck2:
+ 856               		.stabd	46,0,0
+ 214:regtest.c     **** }
+ 215:regtest.c     **** /*-----------------------------------------------------------*/
+ 216:regtest.c     **** 
+ 217:regtest.c     **** static void prvRegisterCheck2( void *pvParameters )
+ 218:regtest.c     **** {
+ 858               	.LM134:
+ 859               	.LFBB2:
+ 860               	/* prologue: function */
+ 861               	/* frame size = 0 */
+ 862               	/* stack size = 0 */
+ 863               	.L__stack_usage = 0
+ 864               	.L4:
+ 219:regtest.c     **** 	( void ) pvParameters;
+ 220:regtest.c     **** 
+ 221:regtest.c     **** 	for( ;; )
+ 222:regtest.c     **** 	{
+ 223:regtest.c     **** 		asm(	"LDI	r31,	1"		);
+ 866               	.LM135:
+ 867               	/* #APP */
+ 868               	 ;  223 "regtest.c" 1
+ 869 0144 F1E0      		LDI	r31,	1
+ 870               	 ;  0 "" 2
+ 224:regtest.c     **** 		asm( 	"MOV	r0,		r31"	);
+ 872               	.LM136:
+ 873               	 ;  224 "regtest.c" 1
+ 874 0146 0F2E      		MOV	r0,		r31
+ 875               	 ;  0 "" 2
+ 225:regtest.c     **** 		asm(	"LDI	r31,	2"		);
+ 877               	.LM137:
+ 878               	 ;  225 "regtest.c" 1
+ 879 0148 F2E0      		LDI	r31,	2
+ 880               	 ;  0 "" 2
+ 226:regtest.c     **** 		asm( 	"MOV	r1,		r31"	);
+ 882               	.LM138:
+ 883               	 ;  226 "regtest.c" 1
+ 884 014a 1F2E      		MOV	r1,		r31
+ 885               	 ;  0 "" 2
+ 227:regtest.c     **** 		asm(	"LDI	r31,	3"		);
+ 887               	.LM139:
+ 888               	 ;  227 "regtest.c" 1
+ 889 014c F3E0      		LDI	r31,	3
+ 890               	 ;  0 "" 2
+ 228:regtest.c     **** 		asm( 	"MOV	r2,		r31"	);
+ 892               	.LM140:
+ 893               	 ;  228 "regtest.c" 1
+ 894 014e 2F2E      		MOV	r2,		r31
+ 895               	 ;  0 "" 2
+ 229:regtest.c     **** 		asm(	"LDI	r31,	4"		);
+ 897               	.LM141:
+ 898               	 ;  229 "regtest.c" 1
+ 899 0150 F4E0      		LDI	r31,	4
+ 900               	 ;  0 "" 2
+ 230:regtest.c     **** 		asm( 	"MOV	r3,		r31"	);
+ 902               	.LM142:
+ 903               	 ;  230 "regtest.c" 1
+ 904 0152 3F2E      		MOV	r3,		r31
+ 905               	 ;  0 "" 2
+ 231:regtest.c     **** 		asm(	"LDI	r31,	5"		);
+ 907               	.LM143:
+ 908               	 ;  231 "regtest.c" 1
+ 909 0154 F5E0      		LDI	r31,	5
+ 910               	 ;  0 "" 2
+ 232:regtest.c     **** 		asm( 	"MOV	r4,		r31"	);
+ 912               	.LM144:
+ 913               	 ;  232 "regtest.c" 1
+ 914 0156 4F2E      		MOV	r4,		r31
+ 915               	 ;  0 "" 2
+ 233:regtest.c     **** 		asm(	"LDI	r31,	6"		);
+ 917               	.LM145:
+ 918               	 ;  233 "regtest.c" 1
+ 919 0158 F6E0      		LDI	r31,	6
+ 920               	 ;  0 "" 2
+ 234:regtest.c     **** 		asm( 	"MOV	r5,		r31"	);
+ 922               	.LM146:
+ 923               	 ;  234 "regtest.c" 1
+ 924 015a 5F2E      		MOV	r5,		r31
+ 925               	 ;  0 "" 2
+ 235:regtest.c     **** 		asm(	"LDI	r31,	7"		);
+ 927               	.LM147:
+ 928               	 ;  235 "regtest.c" 1
+ 929 015c F7E0      		LDI	r31,	7
+ 930               	 ;  0 "" 2
+ 236:regtest.c     **** 		asm( 	"MOV	r6,		r31"	);
+ 932               	.LM148:
+ 933               	 ;  236 "regtest.c" 1
+ 934 015e 6F2E      		MOV	r6,		r31
+ 935               	 ;  0 "" 2
+ 237:regtest.c     **** 		asm(	"LDI	r31,	8"		);
+ 937               	.LM149:
+ 938               	 ;  237 "regtest.c" 1
+ 939 0160 F8E0      		LDI	r31,	8
+ 940               	 ;  0 "" 2
+ 238:regtest.c     **** 		asm( 	"MOV	r7,		r31"	);
+ 942               	.LM150:
+ 943               	 ;  238 "regtest.c" 1
+ 944 0162 7F2E      		MOV	r7,		r31
+ 945               	 ;  0 "" 2
+ 239:regtest.c     **** 		asm(	"LDI	r31,	9"		);
+ 947               	.LM151:
+ 948               	 ;  239 "regtest.c" 1
+ 949 0164 F9E0      		LDI	r31,	9
+ 950               	 ;  0 "" 2
+ 240:regtest.c     **** 		asm( 	"MOV	r8,		r31"	);
+ 952               	.LM152:
+ 953               	 ;  240 "regtest.c" 1
+ 954 0166 8F2E      		MOV	r8,		r31
+ 955               	 ;  0 "" 2
+ 241:regtest.c     **** 		asm(	"LDI	r31,	10"		);
+ 957               	.LM153:
+ 958               	 ;  241 "regtest.c" 1
+ 959 0168 FAE0      		LDI	r31,	10
+ 960               	 ;  0 "" 2
+ 242:regtest.c     **** 		asm( 	"MOV	r9,		r31"	);
+ 962               	.LM154:
+ 963               	 ;  242 "regtest.c" 1
+ 964 016a 9F2E      		MOV	r9,		r31
+ 965               	 ;  0 "" 2
+ 243:regtest.c     **** 		asm(	"LDI	r31,	11"		);
+ 967               	.LM155:
+ 968               	 ;  243 "regtest.c" 1
+ 969 016c FBE0      		LDI	r31,	11
+ 970               	 ;  0 "" 2
+ 244:regtest.c     **** 		asm( 	"MOV	r10,	r31"	);
+ 972               	.LM156:
+ 973               	 ;  244 "regtest.c" 1
+ 974 016e AF2E      		MOV	r10,	r31
+ 975               	 ;  0 "" 2
+ 245:regtest.c     **** 		asm(	"LDI	r31,	12"		);
+ 977               	.LM157:
+ 978               	 ;  245 "regtest.c" 1
+ 979 0170 FCE0      		LDI	r31,	12
+ 980               	 ;  0 "" 2
+ 246:regtest.c     **** 		asm( 	"MOV	r11,	r31"	);
+ 982               	.LM158:
+ 983               	 ;  246 "regtest.c" 1
+ 984 0172 BF2E      		MOV	r11,	r31
+ 985               	 ;  0 "" 2
+ 247:regtest.c     **** 		asm(	"LDI	r31,	13"		);
+ 987               	.LM159:
+ 988               	 ;  247 "regtest.c" 1
+ 989 0174 FDE0      		LDI	r31,	13
+ 990               	 ;  0 "" 2
+ 248:regtest.c     **** 		asm( 	"MOV	r12,	r31"	);
+ 992               	.LM160:
+ 993               	 ;  248 "regtest.c" 1
+ 994 0176 CF2E      		MOV	r12,	r31
+ 995               	 ;  0 "" 2
+ 249:regtest.c     **** 		asm(	"LDI	r31,	14"		);
+ 997               	.LM161:
+ 998               	 ;  249 "regtest.c" 1
+ 999 0178 FEE0      		LDI	r31,	14
+ 1000               	 ;  0 "" 2
+ 250:regtest.c     **** 		asm( 	"MOV	r13,	r31"	);
+ 1002               	.LM162:
+ 1003               	 ;  250 "regtest.c" 1
+ 1004 017a DF2E      		MOV	r13,	r31
+ 1005               	 ;  0 "" 2
+ 251:regtest.c     **** 		asm(	"LDI	r31,	15"		);
+ 1007               	.LM163:
+ 1008               	 ;  251 "regtest.c" 1
+ 1009 017c FFE0      		LDI	r31,	15
+ 1010               	 ;  0 "" 2
+ 252:regtest.c     **** 		asm( 	"MOV	r14,	r31"	);
+ 1012               	.LM164:
+ 1013               	 ;  252 "regtest.c" 1
+ 1014 017e EF2E      		MOV	r14,	r31
+ 1015               	 ;  0 "" 2
+ 253:regtest.c     **** 		asm(	"LDI	r31,	16"		);
+ 1017               	.LM165:
+ 1018               	 ;  253 "regtest.c" 1
+ 1019 0180 F0E1      		LDI	r31,	16
+ 1020               	 ;  0 "" 2
+ 254:regtest.c     **** 		asm( 	"MOV	r15,	r31"	);
+ 1022               	.LM166:
+ 1023               	 ;  254 "regtest.c" 1
+ 1024 0182 FF2E      		MOV	r15,	r31
+ 1025               	 ;  0 "" 2
+ 255:regtest.c     **** 		asm(	"LDI	r16,	17"		);
+ 1027               	.LM167:
+ 1028               	 ;  255 "regtest.c" 1
+ 1029 0184 01E1      		LDI	r16,	17
+ 1030               	 ;  0 "" 2
+ 256:regtest.c     **** 		asm(	"LDI	r17,	18"		);
+ 1032               	.LM168:
+ 1033               	 ;  256 "regtest.c" 1
+ 1034 0186 12E1      		LDI	r17,	18
+ 1035               	 ;  0 "" 2
+ 257:regtest.c     **** 		asm(	"LDI	r18,	19"		);
+ 1037               	.LM169:
+ 1038               	 ;  257 "regtest.c" 1
+ 1039 0188 23E1      		LDI	r18,	19
+ 1040               	 ;  0 "" 2
+ 258:regtest.c     **** 		asm(	"LDI	r19,	20"		);
+ 1042               	.LM170:
+ 1043               	 ;  258 "regtest.c" 1
+ 1044 018a 34E1      		LDI	r19,	20
+ 1045               	 ;  0 "" 2
+ 259:regtest.c     **** 		asm(	"LDI	r20,	21"		);
+ 1047               	.LM171:
+ 1048               	 ;  259 "regtest.c" 1
+ 1049 018c 45E1      		LDI	r20,	21
+ 1050               	 ;  0 "" 2
+ 260:regtest.c     **** 		asm(	"LDI	r21,	22"		);
+ 1052               	.LM172:
+ 1053               	 ;  260 "regtest.c" 1
+ 1054 018e 56E1      		LDI	r21,	22
+ 1055               	 ;  0 "" 2
+ 261:regtest.c     **** 		asm(	"LDI	r22,	23"		);
+ 1057               	.LM173:
+ 1058               	 ;  261 "regtest.c" 1
+ 1059 0190 67E1      		LDI	r22,	23
+ 1060               	 ;  0 "" 2
+ 262:regtest.c     **** 		asm(	"LDI	r23,	24"		);
+ 1062               	.LM174:
+ 1063               	 ;  262 "regtest.c" 1
+ 1064 0192 78E1      		LDI	r23,	24
+ 1065               	 ;  0 "" 2
+ 263:regtest.c     **** 		asm(	"LDI	r24,	25"		);
+ 1067               	.LM175:
+ 1068               	 ;  263 "regtest.c" 1
+ 1069 0194 89E1      		LDI	r24,	25
+ 1070               	 ;  0 "" 2
+ 264:regtest.c     **** 		asm(	"LDI	r25,	26"		);
+ 1072               	.LM176:
+ 1073               	 ;  264 "regtest.c" 1
+ 1074 0196 9AE1      		LDI	r25,	26
+ 1075               	 ;  0 "" 2
+ 265:regtest.c     **** 		asm(	"LDI	r26,	27"		);
+ 1077               	.LM177:
+ 1078               	 ;  265 "regtest.c" 1
+ 1079 0198 ABE1      		LDI	r26,	27
+ 1080               	 ;  0 "" 2
+ 266:regtest.c     **** 		asm(	"LDI	r27,	28"		);
+ 1082               	.LM178:
+ 1083               	 ;  266 "regtest.c" 1
+ 1084 019a BCE1      		LDI	r27,	28
+ 1085               	 ;  0 "" 2
+ 267:regtest.c     **** 		asm(	"LDI	r30,	29"		);
+ 1087               	.LM179:
+ 1088               	 ;  267 "regtest.c" 1
+ 1089 019c EDE1      		LDI	r30,	29
+ 1090               	 ;  0 "" 2
+ 268:regtest.c     **** 
+ 269:regtest.c     **** 		asm(	"LDI	r31,	1"			);
+ 1092               	.LM180:
+ 1093               	 ;  269 "regtest.c" 1
+ 1094 019e F1E0      		LDI	r31,	1
+ 1095               	 ;  0 "" 2
+ 270:regtest.c     **** 		asm(	"CPSE	r31,	r0"			);
+ 1097               	.LM181:
+ 1098               	 ;  270 "regtest.c" 1
+ 1099 01a0 F011      		CPSE	r31,	r0
+ 1100               	 ;  0 "" 2
+ 271:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1102               	.LM182:
+ 1103               	 ;  271 "regtest.c" 1
+ 1104 01a2 0092 0000 		STS	xRegTestError, r0
+ 1105               	 ;  0 "" 2
+ 272:regtest.c     **** 		asm(	"LDI	r31,	2"			);
+ 1107               	.LM183:
+ 1108               	 ;  272 "regtest.c" 1
+ 1109 01a6 F2E0      		LDI	r31,	2
+ 1110               	 ;  0 "" 2
+ 273:regtest.c     **** 		asm(	"CPSE	r31,	r1"			);
+ 1112               	.LM184:
+ 1113               	 ;  273 "regtest.c" 1
+ 1114 01a8 F111      		CPSE	r31,	r1
+ 1115               	 ;  0 "" 2
+ 274:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1117               	.LM185:
+ 1118               	 ;  274 "regtest.c" 1
+ 1119 01aa 0092 0000 		STS	xRegTestError, r0
+ 1120               	 ;  0 "" 2
+ 275:regtest.c     **** 		asm(	"LDI	r31,	3"			);
+ 1122               	.LM186:
+ 1123               	 ;  275 "regtest.c" 1
+ 1124 01ae F3E0      		LDI	r31,	3
+ 1125               	 ;  0 "" 2
+ 276:regtest.c     **** 		asm(	"CPSE	r31,	r2"			);
+ 1127               	.LM187:
+ 1128               	 ;  276 "regtest.c" 1
+ 1129 01b0 F211      		CPSE	r31,	r2
+ 1130               	 ;  0 "" 2
+ 277:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1132               	.LM188:
+ 1133               	 ;  277 "regtest.c" 1
+ 1134 01b2 0092 0000 		STS	xRegTestError, r0
+ 1135               	 ;  0 "" 2
+ 278:regtest.c     **** 		asm(	"LDI	r31,	4"			);
+ 1137               	.LM189:
+ 1138               	 ;  278 "regtest.c" 1
+ 1139 01b6 F4E0      		LDI	r31,	4
+ 1140               	 ;  0 "" 2
+ 279:regtest.c     **** 		asm(	"CPSE	r31,	r3"			);
+ 1142               	.LM190:
+ 1143               	 ;  279 "regtest.c" 1
+ 1144 01b8 F311      		CPSE	r31,	r3
+ 1145               	 ;  0 "" 2
+ 280:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1147               	.LM191:
+ 1148               	 ;  280 "regtest.c" 1
+ 1149 01ba 0092 0000 		STS	xRegTestError, r0
+ 1150               	 ;  0 "" 2
+ 281:regtest.c     **** 		asm(	"LDI	r31,	5"			);
+ 1152               	.LM192:
+ 1153               	 ;  281 "regtest.c" 1
+ 1154 01be F5E0      		LDI	r31,	5
+ 1155               	 ;  0 "" 2
+ 282:regtest.c     **** 		asm(	"CPSE	r31,	r4"			);
+ 1157               	.LM193:
+ 1158               	 ;  282 "regtest.c" 1
+ 1159 01c0 F411      		CPSE	r31,	r4
+ 1160               	 ;  0 "" 2
+ 283:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1162               	.LM194:
+ 1163               	 ;  283 "regtest.c" 1
+ 1164 01c2 0092 0000 		STS	xRegTestError, r0
+ 1165               	 ;  0 "" 2
+ 284:regtest.c     **** 		asm(	"LDI	r31,	6"			);
+ 1167               	.LM195:
+ 1168               	 ;  284 "regtest.c" 1
+ 1169 01c6 F6E0      		LDI	r31,	6
+ 1170               	 ;  0 "" 2
+ 285:regtest.c     **** 		asm(	"CPSE	r31,	r5"			);
+ 1172               	.LM196:
+ 1173               	 ;  285 "regtest.c" 1
+ 1174 01c8 F511      		CPSE	r31,	r5
+ 1175               	 ;  0 "" 2
+ 286:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1177               	.LM197:
+ 1178               	 ;  286 "regtest.c" 1
+ 1179 01ca 0092 0000 		STS	xRegTestError, r0
+ 1180               	 ;  0 "" 2
+ 287:regtest.c     **** 		asm(	"LDI	r31,	7"			);
+ 1182               	.LM198:
+ 1183               	 ;  287 "regtest.c" 1
+ 1184 01ce F7E0      		LDI	r31,	7
+ 1185               	 ;  0 "" 2
+ 288:regtest.c     **** 		asm(	"CPSE	r31,	r6"			);
+ 1187               	.LM199:
+ 1188               	 ;  288 "regtest.c" 1
+ 1189 01d0 F611      		CPSE	r31,	r6
+ 1190               	 ;  0 "" 2
+ 289:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1192               	.LM200:
+ 1193               	 ;  289 "regtest.c" 1
+ 1194 01d2 0092 0000 		STS	xRegTestError, r0
+ 1195               	 ;  0 "" 2
+ 290:regtest.c     **** 		asm(	"LDI	r31,	8"			);
+ 1197               	.LM201:
+ 1198               	 ;  290 "regtest.c" 1
+ 1199 01d6 F8E0      		LDI	r31,	8
+ 1200               	 ;  0 "" 2
+ 291:regtest.c     **** 		asm(	"CPSE	r31,	r7"			);
+ 1202               	.LM202:
+ 1203               	 ;  291 "regtest.c" 1
+ 1204 01d8 F711      		CPSE	r31,	r7
+ 1205               	 ;  0 "" 2
+ 292:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1207               	.LM203:
+ 1208               	 ;  292 "regtest.c" 1
+ 1209 01da 0092 0000 		STS	xRegTestError, r0
+ 1210               	 ;  0 "" 2
+ 293:regtest.c     **** 		asm(	"LDI	r31,	9"			);
+ 1212               	.LM204:
+ 1213               	 ;  293 "regtest.c" 1
+ 1214 01de F9E0      		LDI	r31,	9
+ 1215               	 ;  0 "" 2
+ 294:regtest.c     **** 		asm(	"CPSE	r31,	r8"			);
+ 1217               	.LM205:
+ 1218               	 ;  294 "regtest.c" 1
+ 1219 01e0 F811      		CPSE	r31,	r8
+ 1220               	 ;  0 "" 2
+ 295:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1222               	.LM206:
+ 1223               	 ;  295 "regtest.c" 1
+ 1224 01e2 0092 0000 		STS	xRegTestError, r0
+ 1225               	 ;  0 "" 2
+ 296:regtest.c     **** 		asm(	"LDI	r31,	10"			);
+ 1227               	.LM207:
+ 1228               	 ;  296 "regtest.c" 1
+ 1229 01e6 FAE0      		LDI	r31,	10
+ 1230               	 ;  0 "" 2
+ 297:regtest.c     **** 		asm(	"CPSE	r31,	r9"			);
+ 1232               	.LM208:
+ 1233               	 ;  297 "regtest.c" 1
+ 1234 01e8 F911      		CPSE	r31,	r9
+ 1235               	 ;  0 "" 2
+ 298:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1237               	.LM209:
+ 1238               	 ;  298 "regtest.c" 1
+ 1239 01ea 0092 0000 		STS	xRegTestError, r0
+ 1240               	 ;  0 "" 2
+ 299:regtest.c     **** 		asm(	"LDI	r31,	11"			);
+ 1242               	.LM210:
+ 1243               	 ;  299 "regtest.c" 1
+ 1244 01ee FBE0      		LDI	r31,	11
+ 1245               	 ;  0 "" 2
+ 300:regtest.c     **** 		asm(	"CPSE	r31,	r10"		);
+ 1247               	.LM211:
+ 1248               	 ;  300 "regtest.c" 1
+ 1249 01f0 FA11      		CPSE	r31,	r10
+ 1250               	 ;  0 "" 2
+ 301:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1252               	.LM212:
+ 1253               	 ;  301 "regtest.c" 1
+ 1254 01f2 0092 0000 		STS	xRegTestError, r0
+ 1255               	 ;  0 "" 2
+ 302:regtest.c     **** 		asm(	"LDI	r31,	12"			);
+ 1257               	.LM213:
+ 1258               	 ;  302 "regtest.c" 1
+ 1259 01f6 FCE0      		LDI	r31,	12
+ 1260               	 ;  0 "" 2
+ 303:regtest.c     **** 		asm(	"CPSE	r31,	r11"		);
+ 1262               	.LM214:
+ 1263               	 ;  303 "regtest.c" 1
+ 1264 01f8 FB11      		CPSE	r31,	r11
+ 1265               	 ;  0 "" 2
+ 304:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1267               	.LM215:
+ 1268               	 ;  304 "regtest.c" 1
+ 1269 01fa 0092 0000 		STS	xRegTestError, r0
+ 1270               	 ;  0 "" 2
+ 305:regtest.c     **** 		asm(	"LDI	r31,	13"			);
+ 1272               	.LM216:
+ 1273               	 ;  305 "regtest.c" 1
+ 1274 01fe FDE0      		LDI	r31,	13
+ 1275               	 ;  0 "" 2
+ 306:regtest.c     **** 		asm(	"CPSE	r31,	r12"		);
+ 1277               	.LM217:
+ 1278               	 ;  306 "regtest.c" 1
+ 1279 0200 FC11      		CPSE	r31,	r12
+ 1280               	 ;  0 "" 2
+ 307:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1282               	.LM218:
+ 1283               	 ;  307 "regtest.c" 1
+ 1284 0202 0092 0000 		STS	xRegTestError, r0
+ 1285               	 ;  0 "" 2
+ 308:regtest.c     **** 		asm(	"LDI	r31,	14"			);
+ 1287               	.LM219:
+ 1288               	 ;  308 "regtest.c" 1
+ 1289 0206 FEE0      		LDI	r31,	14
+ 1290               	 ;  0 "" 2
+ 309:regtest.c     **** 		asm(	"CPSE	r31,	r13"		);
+ 1292               	.LM220:
+ 1293               	 ;  309 "regtest.c" 1
+ 1294 0208 FD11      		CPSE	r31,	r13
+ 1295               	 ;  0 "" 2
+ 310:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1297               	.LM221:
+ 1298               	 ;  310 "regtest.c" 1
+ 1299 020a 0092 0000 		STS	xRegTestError, r0
+ 1300               	 ;  0 "" 2
+ 311:regtest.c     **** 		asm(	"LDI	r31,	15"			);
+ 1302               	.LM222:
+ 1303               	 ;  311 "regtest.c" 1
+ 1304 020e FFE0      		LDI	r31,	15
+ 1305               	 ;  0 "" 2
+ 312:regtest.c     **** 		asm(	"CPSE	r31,	r14"		);
+ 1307               	.LM223:
+ 1308               	 ;  312 "regtest.c" 1
+ 1309 0210 FE11      		CPSE	r31,	r14
+ 1310               	 ;  0 "" 2
+ 313:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1312               	.LM224:
+ 1313               	 ;  313 "regtest.c" 1
+ 1314 0212 0092 0000 		STS	xRegTestError, r0
+ 1315               	 ;  0 "" 2
+ 314:regtest.c     **** 		asm(	"LDI	r31,	16"			);
+ 1317               	.LM225:
+ 1318               	 ;  314 "regtest.c" 1
+ 1319 0216 F0E1      		LDI	r31,	16
+ 1320               	 ;  0 "" 2
+ 315:regtest.c     **** 		asm(	"CPSE	r31,	r15"		);
+ 1322               	.LM226:
+ 1323               	 ;  315 "regtest.c" 1
+ 1324 0218 FF11      		CPSE	r31,	r15
+ 1325               	 ;  0 "" 2
+ 316:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1327               	.LM227:
+ 1328               	 ;  316 "regtest.c" 1
+ 1329 021a 0092 0000 		STS	xRegTestError, r0
+ 1330               	 ;  0 "" 2
+ 317:regtest.c     **** 		asm(	"LDI	r31,	17"			);
+ 1332               	.LM228:
+ 1333               	 ;  317 "regtest.c" 1
+ 1334 021e F1E1      		LDI	r31,	17
+ 1335               	 ;  0 "" 2
+ 318:regtest.c     **** 		asm(	"CPSE	r31,	r16"		);
+ 1337               	.LM229:
+ 1338               	 ;  318 "regtest.c" 1
+ 1339 0220 F013      		CPSE	r31,	r16
+ 1340               	 ;  0 "" 2
+ 319:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1342               	.LM230:
+ 1343               	 ;  319 "regtest.c" 1
+ 1344 0222 0092 0000 		STS	xRegTestError, r0
+ 1345               	 ;  0 "" 2
+ 320:regtest.c     **** 		asm(	"LDI	r31,	18"			);
+ 1347               	.LM231:
+ 1348               	 ;  320 "regtest.c" 1
+ 1349 0226 F2E1      		LDI	r31,	18
+ 1350               	 ;  0 "" 2
+ 321:regtest.c     **** 		asm(	"CPSE	r31,	r17"		);
+ 1352               	.LM232:
+ 1353               	 ;  321 "regtest.c" 1
+ 1354 0228 F113      		CPSE	r31,	r17
+ 1355               	 ;  0 "" 2
+ 322:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1357               	.LM233:
+ 1358               	 ;  322 "regtest.c" 1
+ 1359 022a 0092 0000 		STS	xRegTestError, r0
+ 1360               	 ;  0 "" 2
+ 323:regtest.c     **** 		asm(	"LDI	r31,	19"			);
+ 1362               	.LM234:
+ 1363               	 ;  323 "regtest.c" 1
+ 1364 022e F3E1      		LDI	r31,	19
+ 1365               	 ;  0 "" 2
+ 324:regtest.c     **** 		asm(	"CPSE	r31,	r18"		);
+ 1367               	.LM235:
+ 1368               	 ;  324 "regtest.c" 1
+ 1369 0230 F213      		CPSE	r31,	r18
+ 1370               	 ;  0 "" 2
+ 325:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1372               	.LM236:
+ 1373               	 ;  325 "regtest.c" 1
+ 1374 0232 0092 0000 		STS	xRegTestError, r0
+ 1375               	 ;  0 "" 2
+ 326:regtest.c     **** 		asm(	"LDI	r31,	20"			);
+ 1377               	.LM237:
+ 1378               	 ;  326 "regtest.c" 1
+ 1379 0236 F4E1      		LDI	r31,	20
+ 1380               	 ;  0 "" 2
+ 327:regtest.c     **** 		asm(	"CPSE	r31,	r19"		);
+ 1382               	.LM238:
+ 1383               	 ;  327 "regtest.c" 1
+ 1384 0238 F313      		CPSE	r31,	r19
+ 1385               	 ;  0 "" 2
+ 328:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1387               	.LM239:
+ 1388               	 ;  328 "regtest.c" 1
+ 1389 023a 0092 0000 		STS	xRegTestError, r0
+ 1390               	 ;  0 "" 2
+ 329:regtest.c     **** 		asm(	"LDI	r31,	21"			);
+ 1392               	.LM240:
+ 1393               	 ;  329 "regtest.c" 1
+ 1394 023e F5E1      		LDI	r31,	21
+ 1395               	 ;  0 "" 2
+ 330:regtest.c     **** 		asm(	"CPSE	r31,	r20"		);
+ 1397               	.LM241:
+ 1398               	 ;  330 "regtest.c" 1
+ 1399 0240 F413      		CPSE	r31,	r20
+ 1400               	 ;  0 "" 2
+ 331:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1402               	.LM242:
+ 1403               	 ;  331 "regtest.c" 1
+ 1404 0242 0092 0000 		STS	xRegTestError, r0
+ 1405               	 ;  0 "" 2
+ 332:regtest.c     **** 		asm(	"LDI	r31,	22"			);
+ 1407               	.LM243:
+ 1408               	 ;  332 "regtest.c" 1
+ 1409 0246 F6E1      		LDI	r31,	22
+ 1410               	 ;  0 "" 2
+ 333:regtest.c     **** 		asm(	"CPSE	r31,	r21"		);
+ 1412               	.LM244:
+ 1413               	 ;  333 "regtest.c" 1
+ 1414 0248 F513      		CPSE	r31,	r21
+ 1415               	 ;  0 "" 2
+ 334:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1417               	.LM245:
+ 1418               	 ;  334 "regtest.c" 1
+ 1419 024a 0092 0000 		STS	xRegTestError, r0
+ 1420               	 ;  0 "" 2
+ 335:regtest.c     **** 		asm(	"LDI	r31,	23"			);
+ 1422               	.LM246:
+ 1423               	 ;  335 "regtest.c" 1
+ 1424 024e F7E1      		LDI	r31,	23
+ 1425               	 ;  0 "" 2
+ 336:regtest.c     **** 		asm(	"CPSE	r31,	r22"		);
+ 1427               	.LM247:
+ 1428               	 ;  336 "regtest.c" 1
+ 1429 0250 F613      		CPSE	r31,	r22
+ 1430               	 ;  0 "" 2
+ 337:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1432               	.LM248:
+ 1433               	 ;  337 "regtest.c" 1
+ 1434 0252 0092 0000 		STS	xRegTestError, r0
+ 1435               	 ;  0 "" 2
+ 338:regtest.c     **** 		asm(	"LDI	r31,	24"			);
+ 1437               	.LM249:
+ 1438               	 ;  338 "regtest.c" 1
+ 1439 0256 F8E1      		LDI	r31,	24
+ 1440               	 ;  0 "" 2
+ 339:regtest.c     **** 		asm(	"CPSE	r31,	r23"		);
+ 1442               	.LM250:
+ 1443               	 ;  339 "regtest.c" 1
+ 1444 0258 F713      		CPSE	r31,	r23
+ 1445               	 ;  0 "" 2
+ 340:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1447               	.LM251:
+ 1448               	 ;  340 "regtest.c" 1
+ 1449 025a 0092 0000 		STS	xRegTestError, r0
+ 1450               	 ;  0 "" 2
+ 341:regtest.c     **** 		asm(	"LDI	r31,	25"			);
+ 1452               	.LM252:
+ 1453               	 ;  341 "regtest.c" 1
+ 1454 025e F9E1      		LDI	r31,	25
+ 1455               	 ;  0 "" 2
+ 342:regtest.c     **** 		asm(	"CPSE	r31,	r24"		);
+ 1457               	.LM253:
+ 1458               	 ;  342 "regtest.c" 1
+ 1459 0260 F813      		CPSE	r31,	r24
+ 1460               	 ;  0 "" 2
+ 343:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1462               	.LM254:
+ 1463               	 ;  343 "regtest.c" 1
+ 1464 0262 0092 0000 		STS	xRegTestError, r0
+ 1465               	 ;  0 "" 2
+ 344:regtest.c     **** 		asm(	"LDI	r31,	26"			);
+ 1467               	.LM255:
+ 1468               	 ;  344 "regtest.c" 1
+ 1469 0266 FAE1      		LDI	r31,	26
+ 1470               	 ;  0 "" 2
+ 345:regtest.c     **** 		asm(	"CPSE	r31,	r25"		);
+ 1472               	.LM256:
+ 1473               	 ;  345 "regtest.c" 1
+ 1474 0268 F913      		CPSE	r31,	r25
+ 1475               	 ;  0 "" 2
+ 346:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1477               	.LM257:
+ 1478               	 ;  346 "regtest.c" 1
+ 1479 026a 0092 0000 		STS	xRegTestError, r0
+ 1480               	 ;  0 "" 2
+ 347:regtest.c     **** 		asm(	"LDI	r31,	27"			);
+ 1482               	.LM258:
+ 1483               	 ;  347 "regtest.c" 1
+ 1484 026e FBE1      		LDI	r31,	27
+ 1485               	 ;  0 "" 2
+ 348:regtest.c     **** 		asm(	"CPSE	r31,	r26"		);
+ 1487               	.LM259:
+ 1488               	 ;  348 "regtest.c" 1
+ 1489 0270 FA13      		CPSE	r31,	r26
+ 1490               	 ;  0 "" 2
+ 349:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1492               	.LM260:
+ 1493               	 ;  349 "regtest.c" 1
+ 1494 0272 0092 0000 		STS	xRegTestError, r0
+ 1495               	 ;  0 "" 2
+ 350:regtest.c     **** 		asm(	"LDI	r31,	28"			);
+ 1497               	.LM261:
+ 1498               	 ;  350 "regtest.c" 1
+ 1499 0276 FCE1      		LDI	r31,	28
+ 1500               	 ;  0 "" 2
+ 351:regtest.c     **** 		asm(	"CPSE	r31,	r27"		);
+ 1502               	.LM262:
+ 1503               	 ;  351 "regtest.c" 1
+ 1504 0278 FB13      		CPSE	r31,	r27
+ 1505               	 ;  0 "" 2
+ 352:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1507               	.LM263:
+ 1508               	 ;  352 "regtest.c" 1
+ 1509 027a 0092 0000 		STS	xRegTestError, r0
+ 1510               	 ;  0 "" 2
+ 353:regtest.c     **** 		asm(	"LDI	r31,	29"			);
+ 1512               	.LM264:
+ 1513               	 ;  353 "regtest.c" 1
+ 1514 027e FDE1      		LDI	r31,	29
+ 1515               	 ;  0 "" 2
+ 354:regtest.c     **** 		asm(	"CPSE	r31,	r30"		);
+ 1517               	.LM265:
+ 1518               	 ;  354 "regtest.c" 1
+ 1519 0280 FE13      		CPSE	r31,	r30
+ 1520               	 ;  0 "" 2
+ 355:regtest.c     **** 		asm(	"STS	xRegTestError, r0"	);
+ 1522               	.LM266:
+ 1523               	 ;  355 "regtest.c" 1
+ 1524 0282 0092 0000 		STS	xRegTestError, r0
+ 1525               	 ;  0 "" 2
+ 356:regtest.c     **** 	}
+ 1527               	.LM267:
+ 1528               	/* #NOAPP */
+ 1529 0286 00C0      		rjmp .L4
+ 1531               	.Lscope2:
+ 1533               		.stabd	78,0,0
+ 1534               		.section	.rodata.str1.1,"aMS",@progbits,1
+ 1535               	.LC0:
+ 1536 0000 5265 6731 		.string	"Reg1"
+ 1536      00
+ 1537               	.LC1:
+ 1538 0005 5265 6732 		.string	"Reg2"
+ 1538      00
+ 1539               		.text
+ 1541               	.global	vStartRegTestTasks
+ 1543               	vStartRegTestTasks:
+ 1544               		.stabd	46,0,0
+  49:regtest.c     **** 	xTaskCreate( prvRegisterCheck1, "Reg1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+ 1546               	.LM268:
+ 1547               	.LFBB3:
+ 1548 0288 EF92      		push r14
+ 1549 028a FF92      		push r15
+ 1550 028c 0F93      		push r16
+ 1551               	/* prologue: function */
+ 1552               	/* frame size = 0 */
+ 1553               	/* stack size = 3 */
+ 1554               	.L__stack_usage = 3
+  50:regtest.c     **** 	xTaskCreate( prvRegisterCheck2, "Reg2", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL );
+ 1556               	.LM269:
+ 1557 028e E12C      		mov r14,__zero_reg__
+ 1558 0290 F12C      		mov r15,__zero_reg__
+ 1559 0292 00E0      		ldi r16,0
+ 1560 0294 20E0      		ldi r18,0
+ 1561 0296 30E0      		ldi r19,0
+ 1562 0298 45E5      		ldi r20,lo8(85)
+ 1563 029a 50E0      		ldi r21,0
+ 1564 029c 60E0      		ldi r22,lo8(.LC0)
+ 1565 029e 70E0      		ldi r23,hi8(.LC0)
+ 1566 02a0 80E0      		ldi r24,lo8(gs(prvRegisterCheck1))
+ 1567 02a2 90E0      		ldi r25,hi8(gs(prvRegisterCheck1))
+ 1568 02a4 0E94 0000 		call xTaskCreate
+  51:regtest.c     **** }
+ 1570               	.LM270:
+ 1571 02a8 20E0      		ldi r18,0
+ 1572 02aa 30E0      		ldi r19,0
+ 1573 02ac 45E5      		ldi r20,lo8(85)
+ 1574 02ae 50E0      		ldi r21,0
+ 1575 02b0 60E0      		ldi r22,lo8(.LC1)
+ 1576 02b2 70E0      		ldi r23,hi8(.LC1)
+ 1577 02b4 80E0      		ldi r24,lo8(gs(prvRegisterCheck2))
+ 1578 02b6 90E0      		ldi r25,hi8(gs(prvRegisterCheck2))
+ 1579 02b8 0E94 0000 		call xTaskCreate
+ 1580               	/* epilogue start */
+  52:regtest.c     **** /*-----------------------------------------------------------*/
+ 1582               	.LM271:
+ 1583 02bc 0F91      		pop r16
+ 1584 02be FF90      		pop r15
+ 1585 02c0 EF90      		pop r14
+ 1586 02c2 0895      		ret
+ 1588               	.Lscope3:
+ 1590               		.stabd	78,0,0
+ 1592               	.global	xAreRegTestTasksStillRunning
+ 1594               	xAreRegTestTasksStillRunning:
+ 1595               		.stabd	46,0,0
+  56:regtest.c     **** portBASE_TYPE xReturn;
+ 1597               	.LM272:
+ 1598               	.LFBB4:
+ 1599               	/* prologue: function */
+ 1600               	/* frame size = 0 */
+ 1601               	/* stack size = 0 */
+ 1602               	.L__stack_usage = 0
+  61:regtest.c     **** 	{
+ 1604               	.LM273:
+ 1605 02c4 81E0      		ldi r24,lo8(1)
+ 1606 02c6 9091 0000 		lds r25,xRegTestError
+ 1607 02ca 9111      		cpse r25,__zero_reg__
+ 1608 02cc 80E0      		ldi r24,0
+ 1609               	.L7:
+  71:regtest.c     **** /*-----------------------------------------------------------*/
+ 1611               	.LM274:
+ 1612 02ce 0895      		ret
+ 1614               	.Lscope4:
+ 1616               		.stabd	78,0,0
+ 1617               	.global	xRegTestError
+ 1618               		.section .bss
+ 1621               	xRegTestError:
+ 1622 0000 00        		.zero	1
+ 1624               		.text
+ 1626               	.Letext0:
+ 1627               		.ident	"GCC: (GNU) 4.9.2"
+ 1628               	.global __do_copy_data
+ 1629               	.global __do_clear_bss
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 regtest.c
+     /tmp/ccpNcizY.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccpNcizY.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccpNcizY.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccpNcizY.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccpNcizY.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccpNcizY.s:173    .text:0000000000000000 prvRegisterCheck1
+     /tmp/ccpNcizY.s:1621   .bss:0000000000000000 xRegTestError
+     /tmp/ccpNcizY.s:855    .text:0000000000000144 prvRegisterCheck2
+     /tmp/ccpNcizY.s:1543   .text:0000000000000288 vStartRegTestTasks
+     /tmp/ccpNcizY.s:1594   .text:00000000000002c4 xAreRegTestTasksStillRunning
+
+UNDEFINED SYMBOLS
+xTaskCreate
+__do_copy_data
+__do_clear_bss
