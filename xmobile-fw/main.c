@@ -160,7 +160,17 @@ void main( void )
 {
  
   //prvIncrementResetCount();
+  {
+    unsigned char pin7 = (1 << 7);
+    int i = 0;
+    DDRD |= pin7;
+    PORTD |= pin7;
 
+    for(;i < 10000; ++i)
+      {
+	PORTD ^= pin7;
+      }
+  }
 	/* Setup the LED's for output. */
 	vParTestInitialise();
 
@@ -199,26 +209,27 @@ void main( void )
 }
 /*-----------------------------------------------------------*/
 
-static void vBlikGpio13Task( void* pvParameters )
+static void vBlikGpio7Task( void* pvParameters )
 {
-  //portB, pin5
-  unsigned char pin5 = (1 << 5);
   unsigned char pin7 = (1 << 7);
   
   DDRD |= pin7;
   PORTD |= pin7;
-
-  /* Block for 500ms. */
-  const TickType_t xDelay = 150 / portTICK_PERIOD_MS;
+  TickType_t xLastWakeTime;
+  unsigned long delay = 0;
   
   for(;;)
     {
-      PORTD ^= pin7;
-      vTaskDelay( xDelay );
+      delay = 0;
+      for(;delay < 1000; delay += 50)
+	{
+	  PORTD ^= pin7;
+	  vTaskDelayUntil(&xLastWakeTime, delay);
+	}
     }
 }
 
-static void vBlikGpio7Task( void* pvParameters )
+static void vBlikGpio13Task( void* pvParameters )
 {
   //portB, pin5
   unsigned char pin5 = (1 << 5);
@@ -226,14 +237,13 @@ static void vBlikGpio7Task( void* pvParameters )
   
   DDRB |= pin5;
   PORTB |= pin5;
-
-  /* Block for 500ms. */
-  const TickType_t xDelay = 300 / portTICK_PERIOD_MS;
+  TickType_t xLastWakeTime;
   
   for(;;)
     {
       PORTB ^= pin5;
-      vTaskDelay( xDelay );
+      vTaskDelay( 250 );
+      vTaskDelayUntil(&xLastWakeTime, 250);
     }
 }
 
