@@ -46,12 +46,12 @@ Changes from V2.6.0
  *----------------------------------------------------------*/
 
 /* Start tasks with interrupts enables. */
-#define portFLAGS_INT_ENABLED					( ( StackType_t ) 0x80 )
+#define portFLAGS_INT_ENABLED		   ( ( StackType_t ) 0x80 )
 
 /* Hardware constants for timer 1. */
-#define portCLEAR_COUNTER_ON_MATCH				( ( uint8_t ) 0x08 ) // TCCR1B | WGM12 (ATmega323 TCCR1B)
-#define portPRESCALE_64							( ( uint8_t ) 0x03 ) // TCCR1B (ATmega323 TCCR1B)
-#define portCLOCK_PRESCALER						( ( uint32_t ) 64 )  // OCR1AL (ATmega323 OCR1AL)
+#define portCLEAR_COUNTER_ON_MATCH         ( ( uint8_t ) 0x08 ) // TCCR1B | WGM12 (ATmega323 TCCR1B)
+#define portPRESCALE_64			   ( ( uint8_t ) 0x03 ) // TCCR1B (ATmega323 TCCR1B)
+#define portCLOCK_PRESCALER		   ( ( uint32_t ) 64 )  // OCR1AL (ATmega323 OCR1AL)
 #define portCOMPARE_MATCH_A_INTERRUPT_ENABLE	( ( uint8_t ) 0x02 ) // TIMSK1 (TIMSK ATmega323 = 0x10) 
 
 /*-----------------------------------------------------------*/

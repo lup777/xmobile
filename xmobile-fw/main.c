@@ -151,35 +151,91 @@ static void prvIncrementResetCount( void );
  */
 void vApplicationIdleHook( void );
 
+static void vBlikGpio13Task( void* pvParameters );
+static void vBlikGpio7Task( void* pvParameters );
+
 /*-----------------------------------------------------------*/
 
-short main( void )
+void main( void )
 {
-	prvIncrementResetCount();
+ 
+  //prvIncrementResetCount();
 
 	/* Setup the LED's for output. */
 	vParTestInitialise();
 
 	/* Create the standard demo tasks. */
-	vStartIntegerMathTasks( tskIDLE_PRIORITY );
-	vAltStartComTestTasks( mainCOM_TEST_PRIORITY, mainCOM_TEST_BAUD_RATE, mainCOM_TEST_LED );
-	vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
-	vStartRegTestTasks();
+	//vStartIntegerMathTasks( tskIDLE_PRIORITY );
+	//vAltStartComTestTasks( mainCOM_TEST_PRIORITY, mainCOM_TEST_BAUD_RATE, mainCOM_TEST_LED );
+	//vStartPolledQueueTasks( mainQUEUE_POLL_PRIORITY );
+	//vStartRegTestTasks();
 
 	/* Create the tasks defined within this file. */
-	xTaskCreate( vErrorChecks, "Check", configMINIMAL_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );
+	//xTaskCreate( vErrorChecks, "Check", configMINIMAL_STACK_SIZE, NULL, mainCHECK_TASK_PRIORITY, NULL );
 
 	/* Create the co-routines that flash the LED's. */
-	vStartFlashCoRoutines( mainNUM_FLASH_COROUTINES );
+	//vStartFlashCoRoutines( mainNUM_FLASH_COROUTINES );
 
 	/* In this port, to use preemptive scheduler define configUSE_PREEMPTION
 	as 1 in portmacro.h.  To use the cooperative scheduler define
 	configUSE_PREEMPTION as 0. */
+
+	xTaskCreate( vBlikGpio13Task,
+		     (signed char*)"blink_GPIO_13_task",
+		     configMINIMAL_STACK_SIZE,
+		     NULL,
+		     1,
+		     NULL );
+
+	xTaskCreate( vBlikGpio7Task,
+		     (signed char*)"blink_GPIO_7_task",
+		     configMINIMAL_STACK_SIZE,
+		     NULL,
+		     1,
+		     NULL );
+	
 	vTaskStartScheduler();
 
-	return 0;
 }
 /*-----------------------------------------------------------*/
+
+static void vBlikGpio13Task( void* pvParameters )
+{
+  //portB, pin5
+  unsigned char pin5 = (1 << 5);
+  unsigned char pin7 = (1 << 7);
+  
+  DDRD |= pin7;
+  PORTD |= pin7;
+
+  /* Block for 500ms. */
+  const TickType_t xDelay = 150 / portTICK_PERIOD_MS;
+  
+  for(;;)
+    {
+      PORTD ^= pin7;
+      vTaskDelay( xDelay );
+    }
+}
+
+static void vBlikGpio7Task( void* pvParameters )
+{
+  //portB, pin5
+  unsigned char pin5 = (1 << 5);
+  unsigned char pin7 = (1 << 7);
+  
+  DDRB |= pin5;
+  PORTB |= pin5;
+
+  /* Block for 500ms. */
+  const TickType_t xDelay = 300 / portTICK_PERIOD_MS;
+  
+  for(;;)
+    {
+      PORTB ^= pin5;
+      vTaskDelay( xDelay );
+    }
+}
 
 static void vErrorChecks( void *pvParameters )
 {

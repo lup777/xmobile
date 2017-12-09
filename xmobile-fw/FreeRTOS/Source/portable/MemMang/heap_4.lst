@@ -4,10 +4,12 @@
    4               	__SREG__ = 0x3f
    5               	__tmp_reg__ = 0
    6               	__zero_reg__ = 1
-   9               		.text
-  10               	.Ltext0:
- 182               	prvInsertBlockIntoFreeList:
- 183               		.stabd	46,0,0
+   7               		.text
+   8               	.Ltext0:
+   9               		.cfi_sections	.debug_frame
+  11               	prvInsertBlockIntoFreeList:
+  12               	.LFB10:
+  13               		.file 1 "FreeRTOS/Source/portable/MemMang/heap_4.c"
    1:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*
    2:FreeRTOS/Source/portable/MemMang/heap_4.c ****  * FreeRTOS Kernel V10.0.0
    3:FreeRTOS/Source/portable/MemMang/heap_4.c ****  * Copyright (C) 2017 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
@@ -387,35 +389,44 @@
  377:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
  378:FreeRTOS/Source/portable/MemMang/heap_4.c **** static void prvInsertBlockIntoFreeList( BlockLink_t *pxBlockToInsert )
  379:FreeRTOS/Source/portable/MemMang/heap_4.c **** {
- 185               	.LM0:
- 186               	.LFBB1:
- 187 0000 CF93      		push r28
- 188 0002 DF93      		push r29
- 189               	/* prologue: function */
- 190               	/* frame size = 0 */
- 191               	/* stack size = 2 */
- 192               	.L__stack_usage = 2
- 193 0004 FC01      		movw r30,r24
+  14               		.loc 1 379 0
+  15               		.cfi_startproc
+  16               	.LVL0:
+  17 0000 CF93      		push r28
+  18               		.cfi_def_cfa_offset 3
+  19               		.cfi_offset 28, -2
+  20 0002 DF93      		push r29
+  21               		.cfi_def_cfa_offset 4
+  22               		.cfi_offset 29, -3
+  23               	/* prologue: function */
+  24               	/* frame size = 0 */
+  25               	/* stack size = 2 */
+  26               	.L__stack_usage = 2
+  27 0004 FC01      		movw r30,r24
+  28               	.LVL1:
  380:FreeRTOS/Source/portable/MemMang/heap_4.c **** BlockLink_t *pxIterator;
  381:FreeRTOS/Source/portable/MemMang/heap_4.c **** uint8_t *puc;
  382:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
  383:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	/* Iterate through the list until a block is found that has a higher address
  384:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	than the block being inserted. */
  385:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	for( pxIterator = &xStart; pxIterator->pxNextFreeBlock < pxBlockToInsert; pxIterator = pxIterator-
- 195               	.LM1:
- 196 0006 A0E0      		ldi r26,lo8(xStart)
- 197 0008 B0E0      		ldi r27,hi8(xStart)
- 198               	.L2:
- 200               	.LM2:
- 201 000a CD91      		ld r28,X+
- 202 000c DC91      		ld r29,X
- 203 000e 1197      		sbiw r26,1
- 204 0010 CE17      		cp r28,r30
- 205 0012 DF07      		cpc r29,r31
- 206 0014 00F4      		brsh .L10
- 207 0016 DE01      		movw r26,r28
- 208 0018 00C0      		rjmp .L2
- 209               	.L10:
+  29               		.loc 1 385 0
+  30 0006 A0E0      		ldi r26,lo8(xStart)
+  31 0008 B0E0      		ldi r27,hi8(xStart)
+  32               	.LVL2:
+  33               	.L2:
+  34               		.loc 1 385 0 is_stmt 0 discriminator 1
+  35 000a CD91      		ld r28,X+
+  36 000c DC91      		ld r29,X
+  37 000e 1197      		sbiw r26,1
+  38 0010 CE17      		cp r28,r30
+  39 0012 DF07      		cpc r29,r31
+  40 0014 00F4      		brsh .L10
+  41 0016 DE01      		movw r26,r28
+  42               	.LVL3:
+  43 0018 00C0      		rjmp .L2
+  44               	.LVL4:
+  45               	.L10:
  386:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  387:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		/* Nothing to do here, just iterate to the right position. */
  388:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	}
@@ -424,30 +435,33 @@
  391:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	make a contiguous block of memory? */
  392:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	puc = ( uint8_t * ) pxIterator;
  393:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	if( ( puc + pxIterator->xBlockSize ) == ( uint8_t * ) pxBlockToInsert )
- 211               	.LM3:
- 212 001a 1296      		adiw r26,2
- 213 001c 8D91      		ld r24,X+
- 214 001e 9C91      		ld r25,X
- 215 0020 1397      		sbiw r26,2+1
- 216 0022 9D01      		movw r18,r26
- 217 0024 280F      		add r18,r24
- 218 0026 391F      		adc r19,r25
- 219 0028 2E17      		cp r18,r30
- 220 002a 3F07      		cpc r19,r31
- 221 002c 01F4      		brne .L3
+  46               		.loc 1 393 0 is_stmt 1
+  47 001a 1296      		adiw r26,2
+  48 001c 8D91      		ld r24,X+
+  49 001e 9C91      		ld r25,X
+  50 0020 1397      		sbiw r26,2+1
+  51               	.LVL5:
+  52 0022 9D01      		movw r18,r26
+  53 0024 280F      		add r18,r24
+  54 0026 391F      		adc r19,r25
+  55 0028 2E17      		cp r18,r30
+  56 002a 3F07      		cpc r19,r31
+  57 002c 01F4      		brne .L3
  394:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  395:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		pxIterator->xBlockSize += pxBlockToInsert->xBlockSize;
- 223               	.LM4:
- 224 002e 2281      		ldd r18,Z+2
- 225 0030 3381      		ldd r19,Z+3
- 226 0032 820F      		add r24,r18
- 227 0034 931F      		adc r25,r19
- 228 0036 1396      		adiw r26,2+1
- 229 0038 9C93      		st X,r25
- 230 003a 8E93      		st -X,r24
- 231 003c 1297      		sbiw r26,2
- 232 003e FD01      		movw r30,r26
- 233               	.L3:
+  58               		.loc 1 395 0
+  59 002e 2281      		ldd r18,Z+2
+  60 0030 3381      		ldd r19,Z+3
+  61 0032 820F      		add r24,r18
+  62 0034 931F      		adc r25,r19
+  63 0036 1396      		adiw r26,2+1
+  64 0038 9C93      		st X,r25
+  65 003a 8E93      		st -X,r24
+  66 003c 1297      		sbiw r26,2
+  67               	.LVL6:
+  68 003e FD01      		movw r30,r26
+  69               	.LVL7:
+  70               	.L3:
  396:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		pxBlockToInsert = pxIterator;
  397:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	}
  398:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	else
@@ -459,41 +473,41 @@
  404:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	make a contiguous block of memory? */
  405:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	puc = ( uint8_t * ) pxBlockToInsert;
  406:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	if( ( puc + pxBlockToInsert->xBlockSize ) == ( uint8_t * ) pxIterator->pxNextFreeBlock )
- 235               	.LM5:
- 236 0040 8281      		ldd r24,Z+2
- 237 0042 9381      		ldd r25,Z+3
- 238 0044 9F01      		movw r18,r30
- 239 0046 280F      		add r18,r24
- 240 0048 391F      		adc r19,r25
- 241 004a 2C17      		cp r18,r28
- 242 004c 3D07      		cpc r19,r29
- 243 004e 01F4      		brne .L4
+  71               		.loc 1 406 0
+  72 0040 8281      		ldd r24,Z+2
+  73 0042 9381      		ldd r25,Z+3
+  74 0044 9F01      		movw r18,r30
+  75 0046 280F      		add r18,r24
+  76 0048 391F      		adc r19,r25
+  77 004a 2C17      		cp r18,r28
+  78 004c 3D07      		cpc r19,r29
+  79 004e 01F4      		brne .L4
  407:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  408:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		if( pxIterator->pxNextFreeBlock != pxEnd )
- 245               	.LM6:
- 246 0050 2091 0000 		lds r18,pxEnd
- 247 0054 3091 0000 		lds r19,pxEnd+1
- 248 0058 C217      		cp r28,r18
- 249 005a D307      		cpc r29,r19
- 250 005c 01F0      		breq .L4
+  80               		.loc 1 408 0
+  81 0050 2091 0000 		lds r18,pxEnd
+  82 0054 3091 0000 		lds r19,pxEnd+1
+  83 0058 C217      		cp r28,r18
+  84 005a D307      		cpc r29,r19
+  85 005c 01F0      		breq .L4
  409:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		{
  410:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			/* Form one big block from the two blocks. */
  411:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			pxBlockToInsert->xBlockSize += pxIterator->pxNextFreeBlock->xBlockSize;
- 252               	.LM7:
- 253 005e 2A81      		ldd r18,Y+2
- 254 0060 3B81      		ldd r19,Y+3
- 255 0062 820F      		add r24,r18
- 256 0064 931F      		adc r25,r19
- 257 0066 9383      		std Z+3,r25
- 258 0068 8283      		std Z+2,r24
+  86               		.loc 1 411 0
+  87 005e 2A81      		ldd r18,Y+2
+  88 0060 3B81      		ldd r19,Y+3
+  89 0062 820F      		add r24,r18
+  90 0064 931F      		adc r25,r19
+  91 0066 9383      		std Z+3,r25
+  92 0068 8283      		std Z+2,r24
  412:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock->pxNextFreeBlock;
- 260               	.LM8:
- 261 006a 8881      		ld r24,Y
- 262 006c 9981      		ldd r25,Y+1
- 263 006e 9183      		std Z+1,r25
- 264 0070 8083      		st Z,r24
- 265 0072 00C0      		rjmp .L6
- 266               	.L4:
+  93               		.loc 1 412 0
+  94 006a 8881      		ld r24,Y
+  95 006c 9981      		ldd r25,Y+1
+  96 006e 9183      		std Z+1,r25
+  97 0070 8083      		st Z,r24
+  98 0072 00C0      		rjmp .L6
+  99               	.L4:
  413:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		}
  414:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		else
  415:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		{
@@ -503,10 +517,10 @@
  419:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	else
  420:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  421:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		pxBlockToInsert->pxNextFreeBlock = pxIterator->pxNextFreeBlock;
- 268               	.LM9:
- 269 0074 D183      		std Z+1,r29
- 270 0076 C083      		st Z,r28
- 271               	.L6:
+ 100               		.loc 1 421 0
+ 101 0074 D183      		std Z+1,r29
+ 102 0076 C083      		st Z,r28
+ 103               	.L6:
  422:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	}
  423:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
  424:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	/* If the block being inserted plugged a gab, so was merged with the block
@@ -514,431 +528,485 @@
  426:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	already been set, and should not be set here as that would make it point
  427:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	to itself. */
  428:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	if( pxIterator != pxBlockToInsert )
- 273               	.LM10:
- 274 0078 AE17      		cp r26,r30
- 275 007a BF07      		cpc r27,r31
- 276 007c 01F0      		breq .L1
+ 104               		.loc 1 428 0
+ 105 0078 AE17      		cp r26,r30
+ 106 007a BF07      		cpc r27,r31
+ 107 007c 01F0      		breq .L1
  429:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  430:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		pxIterator->pxNextFreeBlock = pxBlockToInsert;
- 278               	.LM11:
- 279 007e ED93      		st X+,r30
- 280 0080 FC93      		st X,r31
- 281               	.L1:
- 282               	/* epilogue start */
+ 108               		.loc 1 430 0
+ 109 007e ED93      		st X+,r30
+ 110 0080 FC93      		st X,r31
+ 111               	.L1:
+ 112               	/* epilogue start */
  431:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	}
  432:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	else
  433:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
  434:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		mtCOVERAGE_TEST_MARKER();
  435:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	}
  436:FreeRTOS/Source/portable/MemMang/heap_4.c **** }
- 284               	.LM12:
- 285 0082 DF91      		pop r29
- 286 0084 CF91      		pop r28
- 287 0086 0895      		ret
- 289               	.Lscope1:
- 291               		.stabd	78,0,0
- 294               	.global	pvPortMalloc
- 296               	pvPortMalloc:
- 297               		.stabd	46,0,0
+ 113               		.loc 1 436 0
+ 114 0082 DF91      		pop r29
+ 115 0084 CF91      		pop r28
+ 116 0086 0895      		ret
+ 117               		.cfi_endproc
+ 118               	.LFE10:
+ 120               	.global	pvPortMalloc
+ 122               	pvPortMalloc:
+ 123               	.LFB4:
  115:FreeRTOS/Source/portable/MemMang/heap_4.c **** BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
- 299               	.LM13:
- 300               	.LFBB2:
- 301 0088 CF92      		push r12
- 302 008a DF92      		push r13
- 303 008c EF92      		push r14
- 304 008e FF92      		push r15
- 305 0090 0F93      		push r16
- 306 0092 1F93      		push r17
- 307 0094 CF93      		push r28
- 308 0096 DF93      		push r29
- 309               	/* prologue: function */
- 310               	/* frame size = 0 */
- 311               	/* stack size = 8 */
- 312               	.L__stack_usage = 8
- 313 0098 EC01      		movw r28,r24
+ 124               		.loc 1 115 0
+ 125               		.cfi_startproc
+ 126               	.LVL8:
+ 127 0088 CF92      		push r12
+ 128               		.cfi_def_cfa_offset 3
+ 129               		.cfi_offset 12, -2
+ 130 008a DF92      		push r13
+ 131               		.cfi_def_cfa_offset 4
+ 132               		.cfi_offset 13, -3
+ 133 008c EF92      		push r14
+ 134               		.cfi_def_cfa_offset 5
+ 135               		.cfi_offset 14, -4
+ 136 008e FF92      		push r15
+ 137               		.cfi_def_cfa_offset 6
+ 138               		.cfi_offset 15, -5
+ 139 0090 0F93      		push r16
+ 140               		.cfi_def_cfa_offset 7
+ 141               		.cfi_offset 16, -6
+ 142 0092 1F93      		push r17
+ 143               		.cfi_def_cfa_offset 8
+ 144               		.cfi_offset 17, -7
+ 145 0094 CF93      		push r28
+ 146               		.cfi_def_cfa_offset 9
+ 147               		.cfi_offset 28, -8
+ 148 0096 DF93      		push r29
+ 149               		.cfi_def_cfa_offset 10
+ 150               		.cfi_offset 29, -9
+ 151               	/* prologue: function */
+ 152               	/* frame size = 0 */
+ 153               	/* stack size = 8 */
+ 154               	.L__stack_usage = 8
+ 155 0098 EC01      		movw r28,r24
+ 156               	.LVL9:
  119:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
- 315               	.LM14:
- 316 009a 0E94 0000 		call vTaskSuspendAll
+ 157               		.loc 1 119 0
+ 158 009a 0E94 0000 		call vTaskSuspendAll
+ 159               	.LVL10:
  123:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		{
- 318               	.LM15:
- 319 009e 8091 0000 		lds r24,pxEnd
- 320 00a2 9091 0000 		lds r25,pxEnd+1
- 321 00a6 892B      		or r24,r25
- 322 00a8 01F4      		brne .L12
- 323               	.LBB4:
- 324               	.LBB5:
+ 160               		.loc 1 123 0
+ 161 009e 8091 0000 		lds r24,pxEnd
+ 162 00a2 9091 0000 		lds r25,pxEnd+1
+ 163 00a6 892B      		or r24,r25
+ 164 00a8 01F4      		brne .L12
+ 165               	.LVL11:
+ 166               	.LBB4:
+ 167               	.LBB5:
  351:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	xStart.xBlockSize = ( size_t ) 0;
- 326               	.LM16:
- 327 00aa 80E0      		ldi r24,lo8(ucHeap)
- 328 00ac 90E0      		ldi r25,hi8(ucHeap)
- 329 00ae 9093 0000 		sts xStart+1,r25
- 330 00b2 8093 0000 		sts xStart,r24
+ 168               		.loc 1 351 0
+ 169 00aa 80E0      		ldi r24,lo8(ucHeap)
+ 170 00ac 90E0      		ldi r25,hi8(ucHeap)
+ 171 00ae 9093 0000 		sts xStart+1,r25
+ 172 00b2 8093 0000 		sts xStart,r24
  352:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 332               	.LM17:
- 333 00b6 1092 0000 		sts xStart+2+1,__zero_reg__
- 334 00ba 1092 0000 		sts xStart+2,__zero_reg__
+ 173               		.loc 1 352 0
+ 174 00b6 1092 0000 		sts xStart+2+1,__zero_reg__
+ 175 00ba 1092 0000 		sts xStart+2,__zero_reg__
+ 176               	.LVL12:
  357:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	uxAddress &= ~( ( size_t ) portBYTE_ALIGNMENT_MASK );
- 336               	.LM18:
- 337 00be 20E0      		ldi r18,lo8(ucHeap+1496)
- 338 00c0 30E0      		ldi r19,hi8(ucHeap+1496)
+ 177               		.loc 1 357 0
+ 178 00be 20E0      		ldi r18,lo8(ucHeap+1496)
+ 179 00c0 30E0      		ldi r19,hi8(ucHeap+1496)
+ 180               	.LVL13:
  359:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	pxEnd->xBlockSize = 0;
- 340               	.LM19:
- 341 00c2 3093 0000 		sts pxEnd+1,r19
- 342 00c6 2093 0000 		sts pxEnd,r18
+ 181               		.loc 1 359 0
+ 182 00c2 3093 0000 		sts pxEnd+1,r19
+ 183 00c6 2093 0000 		sts pxEnd,r18
  360:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	pxEnd->pxNextFreeBlock = NULL;
- 344               	.LM20:
- 345 00ca 1092 0000 		sts ucHeap+1498+1,__zero_reg__
- 346 00ce 1092 0000 		sts ucHeap+1498,__zero_reg__
+ 184               		.loc 1 360 0
+ 185 00ca 1092 0000 		sts ucHeap+1498+1,__zero_reg__
+ 186 00ce 1092 0000 		sts ucHeap+1498,__zero_reg__
  361:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 348               	.LM21:
- 349 00d2 1092 0000 		sts ucHeap+1496+1,__zero_reg__
- 350 00d6 1092 0000 		sts ucHeap+1496,__zero_reg__
+ 187               		.loc 1 361 0
+ 188 00d2 1092 0000 		sts ucHeap+1496+1,__zero_reg__
+ 189 00d6 1092 0000 		sts ucHeap+1496,__zero_reg__
+ 190               	.LVL14:
  366:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	pxFirstFreeBlock->pxNextFreeBlock = pxEnd;
- 352               	.LM22:
- 353 00da 88ED      		ldi r24,lo8(-40)
- 354 00dc 95E0      		ldi r25,lo8(5)
- 355 00de 9093 0000 		sts ucHeap+2+1,r25
- 356 00e2 8093 0000 		sts ucHeap+2,r24
+ 191               		.loc 1 366 0
+ 192 00da 88ED      		ldi r24,lo8(-40)
+ 193 00dc 95E0      		ldi r25,lo8(5)
+ 194 00de 9093 0000 		sts ucHeap+2+1,r25
+ 195 00e2 8093 0000 		sts ucHeap+2,r24
  367:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 358               	.LM23:
- 359 00e6 3093 0000 		sts ucHeap+1,r19
- 360 00ea 2093 0000 		sts ucHeap,r18
+ 196               		.loc 1 367 0
+ 197 00e6 3093 0000 		sts ucHeap+1,r19
+ 198 00ea 2093 0000 		sts ucHeap,r18
  370:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	xFreeBytesRemaining = pxFirstFreeBlock->xBlockSize;
- 362               	.LM24:
- 363 00ee 9093 0000 		sts xMinimumEverFreeBytesRemaining+1,r25
- 364 00f2 8093 0000 		sts xMinimumEverFreeBytesRemaining,r24
+ 199               		.loc 1 370 0
+ 200 00ee 9093 0000 		sts xMinimumEverFreeBytesRemaining+1,r25
+ 201 00f2 8093 0000 		sts xMinimumEverFreeBytesRemaining,r24
  371:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 366               	.LM25:
- 367 00f6 9093 0000 		sts xFreeBytesRemaining+1,r25
- 368 00fa 8093 0000 		sts xFreeBytesRemaining,r24
+ 202               		.loc 1 371 0
+ 203 00f6 9093 0000 		sts xFreeBytesRemaining+1,r25
+ 204 00fa 8093 0000 		sts xFreeBytesRemaining,r24
  374:FreeRTOS/Source/portable/MemMang/heap_4.c **** }
- 370               	.LM26:
- 371 00fe 80E0      		ldi r24,0
- 372 0100 90E8      		ldi r25,lo8(-128)
- 373 0102 9093 0000 		sts xBlockAllocatedBit+1,r25
- 374 0106 8093 0000 		sts xBlockAllocatedBit,r24
- 375               	.L12:
- 376               	.LBE5:
- 377               	.LBE4:
+ 205               		.loc 1 374 0
+ 206 00fe 80E0      		ldi r24,0
+ 207 0100 90E8      		ldi r25,lo8(-128)
+ 208 0102 9093 0000 		sts xBlockAllocatedBit+1,r25
+ 209 0106 8093 0000 		sts xBlockAllocatedBit,r24
+ 210               	.LVL15:
+ 211               	.L12:
+ 212               	.LBE5:
+ 213               	.LBE4:
  136:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		{
- 379               	.LM27:
- 380 010a E090 0000 		lds r14,xBlockAllocatedBit
- 381 010e F090 0000 		lds r15,xBlockAllocatedBit+1
- 382 0112 CE01      		movw r24,r28
- 383 0114 8E21      		and r24,r14
- 384 0116 9F21      		and r25,r15
- 385 0118 892B      		or r24,r25
- 386 011a 01F0      		breq .+2
- 387 011c 00C0      		rjmp .L23
+ 214               		.loc 1 136 0
+ 215 010a E090 0000 		lds r14,xBlockAllocatedBit
+ 216 010e F090 0000 		lds r15,xBlockAllocatedBit+1
+ 217 0112 CE01      		movw r24,r28
+ 218 0114 8E21      		and r24,r14
+ 219 0116 9F21      		and r25,r15
+ 220 0118 892B      		or r24,r25
+ 221 011a 01F0      		breq .+2
+ 222 011c 00C0      		rjmp .L23
  140:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			{
- 389               	.LM28:
- 390 011e 2097      		sbiw r28,0
- 391 0120 01F4      		brne .+2
- 392 0122 00C0      		rjmp .L23
+ 223               		.loc 1 140 0
+ 224 011e 2097      		sbiw r28,0
+ 225 0120 01F4      		brne .+2
+ 226 0122 00C0      		rjmp .L23
  142:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 394               	.LM29:
- 395 0124 9E01      		movw r18,r28
- 396 0126 2C5F      		subi r18,-4
- 397 0128 3F4F      		sbci r19,-1
+ 227               		.loc 1 142 0
+ 228 0124 9E01      		movw r18,r28
+ 229 0126 2C5F      		subi r18,-4
+ 230 0128 3F4F      		sbci r19,-1
+ 231               	.LVL16:
  162:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			{
- 399               	.LM30:
- 400 012a 01F4      		brne .+2
- 401 012c 00C0      		rjmp .L23
+ 232               		.loc 1 162 0
+ 233 012a 01F4      		brne .+2
+ 234 012c 00C0      		rjmp .L23
  162:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			{
- 403               	.LM31:
- 404 012e C090 0000 		lds r12,xFreeBytesRemaining
- 405 0132 D090 0000 		lds r13,xFreeBytesRemaining+1
- 406 0136 C216      		cp r12,r18
- 407 0138 D306      		cpc r13,r19
- 408 013a 00F4      		brsh .+2
- 409 013c 00C0      		rjmp .L23
+ 235               		.loc 1 162 0 is_stmt 0 discriminator 1
+ 236 012e C090 0000 		lds r12,xFreeBytesRemaining
+ 237 0132 D090 0000 		lds r13,xFreeBytesRemaining+1
+ 238 0136 C216      		cp r12,r18
+ 239 0138 D306      		cpc r13,r19
+ 240 013a 00F4      		brsh .+2
+ 241 013c 00C0      		rjmp .L23
+ 242               	.LVL17:
  167:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				while( ( pxBlock->xBlockSize < xWantedSize ) && ( pxBlock->pxNextFreeBlock != NULL ) )
- 411               	.LM32:
- 412 013e C091 0000 		lds r28,xStart
- 413 0142 D091 0000 		lds r29,xStart+1
+ 243               		.loc 1 167 0 is_stmt 1
+ 244 013e C091 0000 		lds r28,xStart
+ 245 0142 D091 0000 		lds r29,xStart+1
+ 246               	.LVL18:
  166:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				pxBlock = xStart.pxNextFreeBlock;
- 415               	.LM33:
- 416 0146 E0E0      		ldi r30,lo8(xStart)
- 417 0148 F0E0      		ldi r31,hi8(xStart)
- 418               	.L16:
+ 247               		.loc 1 166 0
+ 248 0146 E0E0      		ldi r30,lo8(xStart)
+ 249 0148 F0E0      		ldi r31,hi8(xStart)
+ 250               	.LVL19:
+ 251               	.L16:
  168:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				{
- 420               	.LM34:
- 421 014a 4A81      		ldd r20,Y+2
- 422 014c 5B81      		ldd r21,Y+3
- 423 014e 4217      		cp r20,r18
- 424 0150 5307      		cpc r21,r19
- 425 0152 00F0      		brlo .L14
- 426               	.L17:
+ 252               		.loc 1 168 0
+ 253 014a 4A81      		ldd r20,Y+2
+ 254 014c 5B81      		ldd r21,Y+3
+ 255 014e 4217      		cp r20,r18
+ 256 0150 5307      		cpc r21,r19
+ 257 0152 00F0      		brlo .L14
+ 258               	.L17:
  176:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				{
- 428               	.LM35:
- 429 0154 8091 0000 		lds r24,pxEnd
- 430 0158 9091 0000 		lds r25,pxEnd+1
- 431 015c C817      		cp r28,r24
- 432 015e D907      		cpc r29,r25
- 433 0160 01F4      		brne .L15
- 434 0162 00C0      		rjmp .L23
- 435               	.L14:
+ 259               		.loc 1 176 0
+ 260 0154 8091 0000 		lds r24,pxEnd
+ 261 0158 9091 0000 		lds r25,pxEnd+1
+ 262 015c C817      		cp r28,r24
+ 263 015e D907      		cpc r29,r25
+ 264 0160 01F4      		brne .L15
+ 265 0162 00C0      		rjmp .L23
+ 266               	.L14:
  168:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				{
- 437               	.LM36:
- 438 0164 8881      		ld r24,Y
- 439 0166 9981      		ldd r25,Y+1
- 440 0168 0097      		sbiw r24,0
- 441 016a 01F0      		breq .L17
- 442 016c FE01      		movw r30,r28
- 443 016e EC01      		movw r28,r24
- 444 0170 00C0      		rjmp .L16
- 445               	.L15:
+ 267               		.loc 1 168 0 discriminator 1
+ 268 0164 8881      		ld r24,Y
+ 269 0166 9981      		ldd r25,Y+1
+ 270 0168 0097      		sbiw r24,0
+ 271 016a 01F0      		breq .L17
+ 272 016c FE01      		movw r30,r28
+ 273               	.LVL20:
+ 274 016e EC01      		movw r28,r24
+ 275               	.LVL21:
+ 276 0170 00C0      		rjmp .L16
+ 277               	.LVL22:
+ 278               	.L15:
  180:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 447               	.LM37:
- 448 0172 0081      		ld r16,Z
- 449 0174 1181      		ldd r17,Z+1
- 450 0176 0C5F      		subi r16,-4
- 451 0178 1F4F      		sbci r17,-1
+ 279               		.loc 1 180 0
+ 280 0172 0081      		ld r16,Z
+ 281 0174 1181      		ldd r17,Z+1
+ 282 0176 0C5F      		subi r16,-4
+ 283 0178 1F4F      		sbci r17,-1
+ 284               	.LVL23:
  184:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 453               	.LM38:
- 454 017a 8881      		ld r24,Y
- 455 017c 9981      		ldd r25,Y+1
- 456 017e 9183      		std Z+1,r25
- 457 0180 8083      		st Z,r24
+ 285               		.loc 1 184 0
+ 286 017a 8881      		ld r24,Y
+ 287 017c 9981      		ldd r25,Y+1
+ 288 017e 9183      		std Z+1,r25
+ 289 0180 8083      		st Z,r24
  188:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					{
- 459               	.LM39:
- 460 0182 421B      		sub r20,r18
- 461 0184 530B      		sbc r21,r19
- 462 0186 4930      		cpi r20,9
- 463 0188 5105      		cpc r21,__zero_reg__
- 464 018a 00F0      		brlo .L18
+ 290               		.loc 1 188 0
+ 291 0182 421B      		sub r20,r18
+ 292 0184 530B      		sbc r21,r19
+ 293 0186 4930      		cpi r20,9
+ 294 0188 5105      		cpc r21,__zero_reg__
+ 295 018a 00F0      		brlo .L18
  194:FreeRTOS/Source/portable/MemMang/heap_4.c **** 						configASSERT( ( ( ( size_t ) pxNewBlockLink ) & portBYTE_ALIGNMENT_MASK ) == 0 );
- 466               	.LM40:
- 467 018c CE01      		movw r24,r28
- 468 018e 820F      		add r24,r18
- 469 0190 931F      		adc r25,r19
+ 296               		.loc 1 194 0
+ 297 018c CE01      		movw r24,r28
+ 298 018e 820F      		add r24,r18
+ 299 0190 931F      		adc r25,r19
+ 300               	.LVL24:
  199:FreeRTOS/Source/portable/MemMang/heap_4.c **** 						pxBlock->xBlockSize = xWantedSize;
- 471               	.LM41:
- 472 0192 FC01      		movw r30,r24
- 473 0194 5383      		std Z+3,r21
- 474 0196 4283      		std Z+2,r20
+ 301               		.loc 1 199 0
+ 302 0192 FC01      		movw r30,r24
+ 303               	.LVL25:
+ 304 0194 5383      		std Z+3,r21
+ 305 0196 4283      		std Z+2,r20
  200:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 476               	.LM42:
- 477 0198 3B83      		std Y+3,r19
- 478 019a 2A83      		std Y+2,r18
+ 306               		.loc 1 200 0
+ 307 0198 3B83      		std Y+3,r19
+ 308 019a 2A83      		std Y+2,r18
  203:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					}
- 480               	.LM43:
- 481 019c 0E94 0000 		call prvInsertBlockIntoFreeList
- 482               	.L18:
+ 309               		.loc 1 203 0
+ 310 019c 0E94 0000 		call prvInsertBlockIntoFreeList
+ 311               	.LVL26:
+ 312               	.L18:
  210:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 484               	.LM44:
- 485 01a0 2A81      		ldd r18,Y+2
- 486 01a2 3B81      		ldd r19,Y+3
- 487 01a4 C601      		movw r24,r12
- 488 01a6 821B      		sub r24,r18
- 489 01a8 930B      		sbc r25,r19
- 490 01aa 9093 0000 		sts xFreeBytesRemaining+1,r25
- 491 01ae 8093 0000 		sts xFreeBytesRemaining,r24
+ 313               		.loc 1 210 0
+ 314 01a0 2A81      		ldd r18,Y+2
+ 315 01a2 3B81      		ldd r19,Y+3
+ 316 01a4 C601      		movw r24,r12
+ 317 01a6 821B      		sub r24,r18
+ 318 01a8 930B      		sbc r25,r19
+ 319 01aa 9093 0000 		sts xFreeBytesRemaining+1,r25
+ 320 01ae 8093 0000 		sts xFreeBytesRemaining,r24
  212:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					{
- 493               	.LM45:
- 494 01b2 4091 0000 		lds r20,xMinimumEverFreeBytesRemaining
- 495 01b6 5091 0000 		lds r21,xMinimumEverFreeBytesRemaining+1
- 496 01ba 8417      		cp r24,r20
- 497 01bc 9507      		cpc r25,r21
- 498 01be 00F4      		brsh .L19
+ 321               		.loc 1 212 0
+ 322 01b2 4091 0000 		lds r20,xMinimumEverFreeBytesRemaining
+ 323 01b6 5091 0000 		lds r21,xMinimumEverFreeBytesRemaining+1
+ 324 01ba 8417      		cp r24,r20
+ 325 01bc 9507      		cpc r25,r21
+ 326 01be 00F4      		brsh .L19
  214:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					}
- 500               	.LM46:
- 501 01c0 9093 0000 		sts xMinimumEverFreeBytesRemaining+1,r25
- 502 01c4 8093 0000 		sts xMinimumEverFreeBytesRemaining,r24
- 503               	.L19:
+ 327               		.loc 1 214 0
+ 328 01c0 9093 0000 		sts xMinimumEverFreeBytesRemaining+1,r25
+ 329 01c4 8093 0000 		sts xMinimumEverFreeBytesRemaining,r24
+ 330               	.L19:
  223:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					pxBlock->pxNextFreeBlock = NULL;
- 505               	.LM47:
- 506 01c8 E22A      		or r14,r18
- 507 01ca F32A      		or r15,r19
- 508 01cc FB82      		std Y+3,r15
- 509 01ce EA82      		std Y+2,r14
+ 331               		.loc 1 223 0
+ 332 01c8 E22A      		or r14,r18
+ 333 01ca F32A      		or r15,r19
+ 334 01cc FB82      		std Y+3,r15
+ 335 01ce EA82      		std Y+2,r14
  224:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				}
- 511               	.LM48:
- 512 01d0 1982      		std Y+1,__zero_reg__
- 513 01d2 1882      		st Y,__zero_reg__
- 514 01d4 00C0      		rjmp .L13
- 515               	.L23:
+ 336               		.loc 1 224 0
+ 337 01d0 1982      		std Y+1,__zero_reg__
+ 338 01d2 1882      		st Y,__zero_reg__
+ 339 01d4 00C0      		rjmp .L13
+ 340               	.LVL27:
+ 341               	.L23:
  117:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 517               	.LM49:
- 518 01d6 00E0      		ldi r16,0
- 519 01d8 10E0      		ldi r17,0
- 520               	.L13:
+ 342               		.loc 1 117 0
+ 343 01d6 00E0      		ldi r16,0
+ 344 01d8 10E0      		ldi r17,0
+ 345               	.LVL28:
+ 346               	.L13:
  243:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 522               	.LM50:
- 523 01da 0E94 0000 		call xTaskResumeAll
+ 347               		.loc 1 243 0
+ 348 01da 0E94 0000 		call xTaskResumeAll
+ 349               	.LVL29:
  261:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
- 525               	.LM51:
- 526 01de C801      		movw r24,r16
- 527               	/* epilogue start */
- 528 01e0 DF91      		pop r29
- 529 01e2 CF91      		pop r28
- 530 01e4 1F91      		pop r17
- 531 01e6 0F91      		pop r16
- 532 01e8 FF90      		pop r15
- 533 01ea EF90      		pop r14
- 534 01ec DF90      		pop r13
- 535 01ee CF90      		pop r12
- 536 01f0 0895      		ret
- 542               	.Lscope2:
- 544               		.stabd	78,0,0
- 547               	.global	vPortFree
- 549               	vPortFree:
- 550               		.stabd	46,0,0
+ 350               		.loc 1 261 0
+ 351 01de C801      		movw r24,r16
+ 352               	/* epilogue start */
+ 353 01e0 DF91      		pop r29
+ 354 01e2 CF91      		pop r28
+ 355 01e4 1F91      		pop r17
+ 356 01e6 0F91      		pop r16
+ 357               	.LVL30:
+ 358 01e8 FF90      		pop r15
+ 359 01ea EF90      		pop r14
+ 360 01ec DF90      		pop r13
+ 361 01ee CF90      		pop r12
+ 362 01f0 0895      		ret
+ 363               		.cfi_endproc
+ 364               	.LFE4:
+ 366               	.global	vPortFree
+ 368               	vPortFree:
+ 369               	.LFB5:
  265:FreeRTOS/Source/portable/MemMang/heap_4.c **** uint8_t *puc = ( uint8_t * ) pv;
- 552               	.LM52:
- 553               	.LFBB3:
- 554 01f2 CF93      		push r28
- 555 01f4 DF93      		push r29
- 556               	/* prologue: function */
- 557               	/* frame size = 0 */
- 558               	/* stack size = 2 */
- 559               	.L__stack_usage = 2
+ 370               		.loc 1 265 0
+ 371               		.cfi_startproc
+ 372               	.LVL31:
+ 373 01f2 CF93      		push r28
+ 374               		.cfi_def_cfa_offset 3
+ 375               		.cfi_offset 28, -2
+ 376 01f4 DF93      		push r29
+ 377               		.cfi_def_cfa_offset 4
+ 378               		.cfi_offset 29, -3
+ 379               	/* prologue: function */
+ 380               	/* frame size = 0 */
+ 381               	/* stack size = 2 */
+ 382               	.L__stack_usage = 2
+ 383               	.LVL32:
  269:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	{
- 561               	.LM53:
- 562 01f6 0097      		sbiw r24,0
- 563 01f8 01F0      		breq .L25
+ 384               		.loc 1 269 0
+ 385 01f6 0097      		sbiw r24,0
+ 386 01f8 01F0      		breq .L25
+ 387               	.LVL33:
  282:FreeRTOS/Source/portable/MemMang/heap_4.c **** 		{
- 565               	.LM54:
- 566 01fa EC01      		movw r28,r24
- 567 01fc 2497      		sbiw r28,4
- 568 01fe 8A81      		ldd r24,Y+2
- 569 0200 9B81      		ldd r25,Y+3
- 570 0202 2091 0000 		lds r18,xBlockAllocatedBit
- 571 0206 3091 0000 		lds r19,xBlockAllocatedBit+1
- 572 020a A901      		movw r20,r18
- 573 020c 4823      		and r20,r24
- 574 020e 5923      		and r21,r25
- 575 0210 452B      		or r20,r21
- 576 0212 01F0      		breq .L25
+ 388               		.loc 1 282 0
+ 389 01fa EC01      		movw r28,r24
+ 390 01fc 2497      		sbiw r28,4
+ 391               	.LVL34:
+ 392 01fe 8A81      		ldd r24,Y+2
+ 393 0200 9B81      		ldd r25,Y+3
+ 394               	.LVL35:
+ 395 0202 2091 0000 		lds r18,xBlockAllocatedBit
+ 396 0206 3091 0000 		lds r19,xBlockAllocatedBit+1
+ 397 020a A901      		movw r20,r18
+ 398 020c 4823      		and r20,r24
+ 399 020e 5923      		and r21,r25
+ 400 0210 452B      		or r20,r21
+ 401 0212 01F0      		breq .L25
  284:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			{
- 578               	.LM55:
- 579 0214 4881      		ld r20,Y
- 580 0216 5981      		ldd r21,Y+1
- 581 0218 452B      		or r20,r21
- 582 021a 01F4      		brne .L25
+ 402               		.loc 1 284 0
+ 403 0214 4881      		ld r20,Y
+ 404 0216 5981      		ldd r21,Y+1
+ 405 0218 452B      		or r20,r21
+ 406 021a 01F4      		brne .L25
  288:FreeRTOS/Source/portable/MemMang/heap_4.c **** 
- 584               	.LM56:
- 585 021c 2095      		com r18
- 586 021e 3095      		com r19
- 587 0220 8223      		and r24,r18
- 588 0222 9323      		and r25,r19
- 589 0224 9B83      		std Y+3,r25
- 590 0226 8A83      		std Y+2,r24
+ 407               		.loc 1 288 0
+ 408 021c 2095      		com r18
+ 409 021e 3095      		com r19
+ 410 0220 8223      		and r24,r18
+ 411 0222 9323      		and r25,r19
+ 412 0224 9B83      		std Y+3,r25
+ 413 0226 8A83      		std Y+2,r24
  290:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				{
- 592               	.LM57:
- 593 0228 0E94 0000 		call vTaskSuspendAll
+ 414               		.loc 1 290 0
+ 415 0228 0E94 0000 		call vTaskSuspendAll
+ 416               	.LVL36:
  293:FreeRTOS/Source/portable/MemMang/heap_4.c **** 					traceFREE( pv, pxLink->xBlockSize );
- 595               	.LM58:
- 596 022c 2091 0000 		lds r18,xFreeBytesRemaining
- 597 0230 3091 0000 		lds r19,xFreeBytesRemaining+1
- 598 0234 8A81      		ldd r24,Y+2
- 599 0236 9B81      		ldd r25,Y+3
- 600 0238 820F      		add r24,r18
- 601 023a 931F      		adc r25,r19
- 602 023c 9093 0000 		sts xFreeBytesRemaining+1,r25
- 603 0240 8093 0000 		sts xFreeBytesRemaining,r24
+ 417               		.loc 1 293 0
+ 418 022c 2091 0000 		lds r18,xFreeBytesRemaining
+ 419 0230 3091 0000 		lds r19,xFreeBytesRemaining+1
+ 420 0234 8A81      		ldd r24,Y+2
+ 421 0236 9B81      		ldd r25,Y+3
+ 422 0238 820F      		add r24,r18
+ 423 023a 931F      		adc r25,r19
+ 424 023c 9093 0000 		sts xFreeBytesRemaining+1,r25
+ 425 0240 8093 0000 		sts xFreeBytesRemaining,r24
  295:FreeRTOS/Source/portable/MemMang/heap_4.c **** 				}
- 605               	.LM59:
- 606 0244 CE01      		movw r24,r28
- 607 0246 0E94 0000 		call prvInsertBlockIntoFreeList
- 608               	/* epilogue start */
+ 426               		.loc 1 295 0
+ 427 0244 CE01      		movw r24,r28
+ 428 0246 0E94 0000 		call prvInsertBlockIntoFreeList
+ 429               	.LVL37:
+ 430               	/* epilogue start */
  309:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
- 610               	.LM60:
- 611 024a DF91      		pop r29
- 612 024c CF91      		pop r28
+ 431               		.loc 1 309 0
+ 432 024a DF91      		pop r29
+ 433 024c CF91      		pop r28
+ 434               	.LVL38:
  297:FreeRTOS/Source/portable/MemMang/heap_4.c **** 			}
- 614               	.LM61:
- 615 024e 0C94 0000 		jmp xTaskResumeAll
- 616               	.L25:
- 617               	/* epilogue start */
+ 435               		.loc 1 297 0
+ 436 024e 0C94 0000 		jmp xTaskResumeAll
+ 437               	.LVL39:
+ 438               	.L25:
+ 439               	/* epilogue start */
  309:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
- 619               	.LM62:
- 620 0252 DF91      		pop r29
- 621 0254 CF91      		pop r28
- 622 0256 0895      		ret
- 624               	.Lscope3:
- 626               		.stabd	78,0,0
- 628               	.global	xPortGetFreeHeapSize
- 630               	xPortGetFreeHeapSize:
- 631               		.stabd	46,0,0
+ 440               		.loc 1 309 0
+ 441 0252 DF91      		pop r29
+ 442 0254 CF91      		pop r28
+ 443 0256 0895      		ret
+ 444               		.cfi_endproc
+ 445               	.LFE5:
+ 447               	.global	xPortGetFreeHeapSize
+ 449               	xPortGetFreeHeapSize:
+ 450               	.LFB6:
  313:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	return xFreeBytesRemaining;
- 633               	.LM63:
- 634               	.LFBB4:
- 635               	/* prologue: function */
- 636               	/* frame size = 0 */
- 637               	/* stack size = 0 */
- 638               	.L__stack_usage = 0
+ 451               		.loc 1 313 0
+ 452               		.cfi_startproc
+ 453               	/* prologue: function */
+ 454               	/* frame size = 0 */
+ 455               	/* stack size = 0 */
+ 456               	.L__stack_usage = 0
  315:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
- 640               	.LM64:
- 641 0258 8091 0000 		lds r24,xFreeBytesRemaining
- 642 025c 9091 0000 		lds r25,xFreeBytesRemaining+1
- 643 0260 0895      		ret
- 645               	.Lscope4:
- 647               		.stabd	78,0,0
- 649               	.global	xPortGetMinimumEverFreeHeapSize
- 651               	xPortGetMinimumEverFreeHeapSize:
- 652               		.stabd	46,0,0
+ 457               		.loc 1 315 0
+ 458 0258 8091 0000 		lds r24,xFreeBytesRemaining
+ 459 025c 9091 0000 		lds r25,xFreeBytesRemaining+1
+ 460 0260 0895      		ret
+ 461               		.cfi_endproc
+ 462               	.LFE6:
+ 464               	.global	xPortGetMinimumEverFreeHeapSize
+ 466               	xPortGetMinimumEverFreeHeapSize:
+ 467               	.LFB7:
  319:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	return xMinimumEverFreeBytesRemaining;
- 654               	.LM65:
- 655               	.LFBB5:
- 656               	/* prologue: function */
- 657               	/* frame size = 0 */
- 658               	/* stack size = 0 */
- 659               	.L__stack_usage = 0
+ 468               		.loc 1 319 0
+ 469               		.cfi_startproc
+ 470               	/* prologue: function */
+ 471               	/* frame size = 0 */
+ 472               	/* stack size = 0 */
+ 473               	.L__stack_usage = 0
  321:FreeRTOS/Source/portable/MemMang/heap_4.c **** /*-----------------------------------------------------------*/
- 661               	.LM66:
- 662 0262 8091 0000 		lds r24,xMinimumEverFreeBytesRemaining
- 663 0266 9091 0000 		lds r25,xMinimumEverFreeBytesRemaining+1
- 664 026a 0895      		ret
- 666               	.Lscope5:
- 668               		.stabd	78,0,0
- 670               	.global	vPortInitialiseBlocks
- 672               	vPortInitialiseBlocks:
- 673               		.stabd	46,0,0
+ 474               		.loc 1 321 0
+ 475 0262 8091 0000 		lds r24,xMinimumEverFreeBytesRemaining
+ 476 0266 9091 0000 		lds r25,xMinimumEverFreeBytesRemaining+1
+ 477 026a 0895      		ret
+ 478               		.cfi_endproc
+ 479               	.LFE7:
+ 481               	.global	vPortInitialiseBlocks
+ 483               	vPortInitialiseBlocks:
+ 484               	.LFB8:
  325:FreeRTOS/Source/portable/MemMang/heap_4.c **** 	/* This just exists to keep the linker quiet. */
- 675               	.LM67:
- 676               	.LFBB6:
- 677               	/* prologue: function */
- 678               	/* frame size = 0 */
- 679               	/* stack size = 0 */
- 680               	.L__stack_usage = 0
- 681 026c 0895      		ret
- 683               	.Lscope6:
- 685               		.stabd	78,0,0
- 686               		.local	xBlockAllocatedBit
- 687               		.comm	xBlockAllocatedBit,2,1
- 688               		.local	xMinimumEverFreeBytesRemaining
- 689               		.comm	xMinimumEverFreeBytesRemaining,2,1
- 690               		.local	xFreeBytesRemaining
- 691               		.comm	xFreeBytesRemaining,2,1
- 692               		.local	pxEnd
- 693               		.comm	pxEnd,2,1
- 694               		.local	xStart
- 695               		.comm	xStart,4,1
- 696               		.local	ucHeap
- 697               		.comm	ucHeap,1500,1
- 706               	.Letext0:
- 707               		.ident	"GCC: (GNU) 4.9.2"
- 708               	.global __do_clear_bss
+ 485               		.loc 1 325 0
+ 486               		.cfi_startproc
+ 487               	/* prologue: function */
+ 488               	/* frame size = 0 */
+ 489               	/* stack size = 0 */
+ 490               	.L__stack_usage = 0
+ 491 026c 0895      		ret
+ 492               		.cfi_endproc
+ 493               	.LFE8:
+ 495               		.local	xBlockAllocatedBit
+ 496               		.comm	xBlockAllocatedBit,2,1
+ 497               		.local	xMinimumEverFreeBytesRemaining
+ 498               		.comm	xMinimumEverFreeBytesRemaining,2,1
+ 499               		.local	xFreeBytesRemaining
+ 500               		.comm	xFreeBytesRemaining,2,1
+ 501               		.local	pxEnd
+ 502               		.comm	pxEnd,2,1
+ 503               		.local	xStart
+ 504               		.comm	xStart,4,1
+ 505               		.local	ucHeap
+ 506               		.comm	ucHeap,1500,1
+ 507               	.Letext0:
+ 508               		.file 2 "/usr/lib64/gcc/avr/4.9.2/include/stddef.h"
+ 509               		.file 3 "/usr/avr/include/stdint.h"
+ 510               		.file 4 "FreeRTOS/Source/include/../portable/GCC/ATMega323/portmacro.h"
+ 511               		.file 5 "FreeRTOS/Source/include/task.h"
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 heap_4.c
-     /tmp/ccQ90U1c.s:2      *ABS*:000000000000003e __SP_H__
-     /tmp/ccQ90U1c.s:3      *ABS*:000000000000003d __SP_L__
-     /tmp/ccQ90U1c.s:4      *ABS*:000000000000003f __SREG__
-     /tmp/ccQ90U1c.s:5      *ABS*:0000000000000000 __tmp_reg__
-     /tmp/ccQ90U1c.s:6      *ABS*:0000000000000001 __zero_reg__
-     /tmp/ccQ90U1c.s:182    .text:0000000000000000 prvInsertBlockIntoFreeList
-     /tmp/ccQ90U1c.s:693    .bss:0000000000000008 xStart
-     /tmp/ccQ90U1c.s:691    .bss:0000000000000006 pxEnd
-     /tmp/ccQ90U1c.s:296    .text:0000000000000088 pvPortMalloc
-     /tmp/ccQ90U1c.s:695    .bss:000000000000000c ucHeap
-     /tmp/ccQ90U1c.s:687    .bss:0000000000000002 xMinimumEverFreeBytesRemaining
-     /tmp/ccQ90U1c.s:689    .bss:0000000000000004 xFreeBytesRemaining
+     /tmp/ccJoreKE.s:2      *ABS*:000000000000003e __SP_H__
+     /tmp/ccJoreKE.s:3      *ABS*:000000000000003d __SP_L__
+     /tmp/ccJoreKE.s:4      *ABS*:000000000000003f __SREG__
+     /tmp/ccJoreKE.s:5      *ABS*:0000000000000000 __tmp_reg__
+     /tmp/ccJoreKE.s:6      *ABS*:0000000000000001 __zero_reg__
+     /tmp/ccJoreKE.s:11     .text:0000000000000000 prvInsertBlockIntoFreeList
+     /tmp/ccJoreKE.s:502    .bss:0000000000000008 xStart
+     /tmp/ccJoreKE.s:500    .bss:0000000000000006 pxEnd
+     /tmp/ccJoreKE.s:122    .text:0000000000000088 pvPortMalloc
+     /tmp/ccJoreKE.s:504    .bss:000000000000000c ucHeap
+     /tmp/ccJoreKE.s:496    .bss:0000000000000002 xMinimumEverFreeBytesRemaining
+     /tmp/ccJoreKE.s:498    .bss:0000000000000004 xFreeBytesRemaining
                              .bss:0000000000000000 xBlockAllocatedBit
-     /tmp/ccQ90U1c.s:549    .text:00000000000001f2 vPortFree
-     /tmp/ccQ90U1c.s:630    .text:0000000000000258 xPortGetFreeHeapSize
-     /tmp/ccQ90U1c.s:651    .text:0000000000000262 xPortGetMinimumEverFreeHeapSize
-     /tmp/ccQ90U1c.s:672    .text:000000000000026c vPortInitialiseBlocks
+     /tmp/ccJoreKE.s:368    .text:00000000000001f2 vPortFree
+     /tmp/ccJoreKE.s:449    .text:0000000000000258 xPortGetFreeHeapSize
+     /tmp/ccJoreKE.s:466    .text:0000000000000262 xPortGetMinimumEverFreeHeapSize
+     /tmp/ccJoreKE.s:483    .text:000000000000026c vPortInitialiseBlocks
 
 UNDEFINED SYMBOLS
 vTaskSuspendAll

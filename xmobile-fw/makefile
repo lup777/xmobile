@@ -58,7 +58,7 @@ $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/croutine.c \
-$(SOURCE_DIR)/portable/MemMang/heap_4.c \
+$(SOURCE_DIR)/portable/MemMang/heap_1.c \
 $(PORT_DIR)/port.c \
 $(DEMO_DIR)/crflash.c \
 $(DEMO_DIR)/integer.c \
@@ -165,7 +165,7 @@ LDFLAGS += -lm
 AVRDUDE_PROGRAMMER = usbtiny
 
 
-AVRDUDE_PORT = com1	   # programmer connected to serial device
+AVRDUDE_PORT = usb	   # programmer connected to serial device
 #AVRDUDE_PORT = lpt1	# programmer connected to parallel port
 
 AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex
