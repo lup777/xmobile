@@ -31,7 +31,7 @@
 
 
 # MCU name
-MCU = atmega328p
+MCU = atmega2560
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -47,7 +47,7 @@ OPT = s
 # List C source files here. (C dependencies are automatically generated.)
 DEMO_DIR = FreeRTOS/Demo/Common/Minimal
 SOURCE_DIR = FreeRTOS/Source
-PORT_DIR = FreeRTOS/Source/portable/GCC/ATMega328p
+PORT_DIR = FreeRTOS/Source/portable/GCC/ATMega2560
 
 SRC	= \
 main.c \

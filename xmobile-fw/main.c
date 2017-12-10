@@ -24,7 +24,7 @@ static void vUsartSendTask(void* pvParameters);
 
 /*-----------------------------------------------------------*/
 
-void vHwInitAtmega328p()
+void vHwInitAtmega2560()
 {
   /*UART 0*/
   /* UCSR0A
@@ -107,9 +107,9 @@ void vHwInitAtmega328p()
   //UBRR0L = 51;  //19200 bps, 16MGz
   //UBRR0L = 34;  //28800 bps, 16MGz
   //UBRR0L = 25;  //38400 bps, 16MGz
-  //UBRR0L = 16;  //57600 bps, 16MGz
+  UBRR0L = 16;  //57600 bps, 16MGz
   //UBRR0L = 12;  //76800 bps, 16MGz
-  UBRR0L = 8;   //115200 bps, 16MGz
+  //UBRR0L = 8;   //115200 bps, 16MGz
   
   UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
   UCSR0B = (1 << RXEN0) | (1 << TXEN0);
@@ -126,7 +126,7 @@ void vHwInitAtmega328p()
 void main( void )
 {
   /* Initialisations */
-  vHwInitAtmega328p();
+  vHwInitAtmega2560();
   
   /* Variables */
   QueueHandle_t xDebugQueue = xQueueCreate(5, sizeof(unsigned char));
@@ -192,17 +192,14 @@ static void vUsartSendTask(void* pvParameters)
 
 static void vBlikGpio7Task( void* pvParameters )
 {
-  unsigned char pin7 = (1 << 7);
   QueueHandle_t xQueue = (QueueHandle_t) pvParameters;
-  
-  DDRD |= pin7;
-  PORTD |= pin7;
+
   TickType_t xLastWakeTime;
   unsigned long delay = 1000;
   unsigned char errno = 0;
   for(;;)
     {
-      PORTD ^= pin7;
+      vTogglePin13();
       xQueueSend(xQueue, (void*) &errno, (TickType_t) 0);
       vTaskDelayUntil(&xLastWakeTime, delay);
     }
@@ -210,16 +207,16 @@ static void vBlikGpio7Task( void* pvParameters )
 
 inline void vEnablePin13()
 {
-  DDRB  |= (1 << 5);
-  PORTB |= (1 << 5);
+  DDRB  |= (1 << 7);
+  PORTB |= (1 << 7);
 }
 inline void vDisablePin13()
 {
-  DDRB  |= (1 << 5);
-  PORTB &= ~(1 << 5);
+  DDRB  |= (1 << 7);
+  PORTB &= ~(1 << 7);
 }
 inline void vTogglePin13()
 {
-  DDRB  |= (1 << 5);
-  PORTB ^= (1 << 5);
+  //DDRB  |= (1 << 7);
+  PORTB ^= (1 << 7);
 }
