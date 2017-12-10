@@ -154,6 +154,8 @@ void vApplicationIdleHook( void );
 static void vBlikGpio13Task( void* pvParameters );
 static void vBlikGpio7Task( void* pvParameters );
 inline void vTogglePin13();
+inline void vEnablePin13();
+inline void vDisablePin13();
 static void vUsartSendTask(void* pvParameters);
 /*-----------------------------------------------------------*/
 
@@ -233,7 +235,8 @@ void vHwInitAtmega328p()
      57.6  bps: UBRRn = 16
 */
   UBRR0H &= ~0x0F;
-  UBRR0L = 103; //9600 bps
+  UBRR0L = 103; //9600 bps, 16MGz
+  //UBRR0L = 51; //9600 bps, 8MGz
   UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
   UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 }
@@ -266,13 +269,21 @@ void main( void )
 
 static void vUsartSendTask(void* pvParameters)
 {
+  TickType_t xLastWakeTime;
+  char ch = 0;
+  
   for(;;)
     {
-      UDR0 = 'a';
+      for(ch = 0; ch < 255; ch++)
+	{
+	  UDR0 = ch;
 
-      while(UCSR0A & (1 << UDRE0) == 0) {}
+	  while(UCSR0A & (1 << TXC0) == 0) {}
+
+	  vTogglePin13();
       
-      vTogglePin13();
+	  vTaskDelayUntil(&xLastWakeTime, 500);
+	}
     }
 }
 
@@ -283,19 +294,25 @@ static void vBlikGpio7Task( void* pvParameters )
   DDRD |= pin7;
   PORTD |= pin7;
   TickType_t xLastWakeTime;
-  unsigned long delay = 0;
+  unsigned long delay = 1000;
   
   for(;;)
     {
-      delay = 0;
-      for(;delay < 1000; delay += 50)
-	{
-	  PORTD ^= pin7;
-	  vTaskDelayUntil(&xLastWakeTime, delay);
-	}
+      PORTD ^= pin7;
+      vTaskDelayUntil(&xLastWakeTime, delay);
     }
 }
 
+inline void vEnablePin13()
+{
+  DDRB  |= (1 << 5);
+  PORTB |= (1 << 5);
+}
+inline void vDisablePin13()
+{
+  DDRB  |= (1 << 5);
+  PORTB &= ~(1 << 5);
+}
 inline void vTogglePin13()
 {
   DDRB  |= (1 << 5);
