@@ -50,6 +50,7 @@ SOURCE_DIR = FreeRTOS/Source
 PORT_DIR = FreeRTOS/Source/portable/GCC/ATMega2560
 
 SRC	= \
+usart.c \
 main.c \
 ParTest/ParTest.c \
 serial/serial.c \
