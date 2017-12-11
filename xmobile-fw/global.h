@@ -16,12 +16,20 @@
 #include "task.h"
 
 #include "queue.h"
-
+#include "usart.h"
 
 #define CHECK_FOR_NULL(X) { if(X == NULL) vEnablePin13(); }
 
 #define ERROR_MSG_0 "Hellow from FreeRTOS";
 #define ERROR_MSG_1 "Hellow from FreeRTOS1";
+#define MSG_SPI_DATA_WAS_SENT "spi data was sent"
+#define MSG_SPI_DATA_GOINT_TO_SEND "going to send spi data"
+
+typedef struct struct_queues
+{
+  QueueHandle_t debug;
+  QueueHandle_t spi;
+};
 
 inline void vEnablePin13()
 {

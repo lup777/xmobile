@@ -1,21 +1,32 @@
 //usart.c
 #include "usart.h"
 
+void dbg(struct struct_queues* pxQueues, unsigned char ucMsgNo)
+{
+  xQueueSend(pxQueues->debug, (void*) &ucMsgNo, (TickType_t) 0);
+}
+
 void vUsartSendTask(void* pvParameters)
 {
   TickType_t xLastWakeTime;
   unsigned char errno = 0;
   char* msg = NULL;
 
-  QueueHandle_t xQueue = (QueueHandle_t) pvParameters;
+  struct struct_queues* pxQueues = (QueueHandle_t) pvParameters;
   
   for(;;)
     {
-      if( xQueueReceive(xQueue, &errno, (TickType_t) 0) == pdPASS)
+      if( xQueueReceive(pxQueues->debug, &errno, (TickType_t) 0) == pdPASS)
 	{
 	  switch(errno)
 	    {
 	    case 0: msg = ERROR_MSG_1;
+	      break;
+
+	    case 2: msg = MSG_SPI_DATA_WAS_SENT;
+	      break;
+
+	    case 3: msg = MSG_SPI_DATA_GOINT_TO_SEND;
 	      break;
 	      
 	    default:

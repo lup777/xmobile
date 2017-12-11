@@ -52,6 +52,7 @@ PORT_DIR = FreeRTOS/Source/portable/GCC/ATMega2560
 SRC	= \
 usart.c \
 main.c \
+spi.c \
 ParTest/ParTest.c \
 serial/serial.c \
 regtest.c \

@@ -34,16 +34,13 @@ void vHwInitAtmega2560()
     SCK  - PB1
   */
   DDRB |= (1 << 2);  // MOSI
-  DDRB &= ~(1 << 3); // MISO
+  //DDRB &= ~(1 << 3); // MISO
   DDRB |= (1 << 1);  // SCK
+  DDRB |= 0x01;     // SS
+  PORTB &= ~0x01;
   
   SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // f/16
 }
-typedef struct struct_queues
-{
-  QueueHandle_t debug;
-  QueueHandle_t spi;
-};
 
 void main( void )
 {
@@ -56,7 +53,7 @@ void main( void )
   QueueHandle_t xSpiQueue = xQueueCreate(5, sizeof(unsigned char));
   CHECK_FOR_NULL(xDebugQueue);
 
-  struct_queues queues;
+  struct struct_queues queues;
   queues.debug = xDebugQueue;
   queues.spi = xSpiQueue;
   
@@ -64,14 +61,14 @@ void main( void )
   xTaskCreate( vUsartSendTask,
 	       (signed char*)"send_uart_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) xDebugQueue,
+	       (void*) &queues,
 	       1,
 	       NULL );
 
   xTaskCreate( vSpiSendTask,
 	       (signed char*)"send_spi_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) xSpiQueue,
+	       (void*) &queues,
 	       1,
 	       NULL );
 
@@ -90,8 +87,8 @@ void main( void )
 
 static void vTestTask( void* pvParameters )
 {
-  struct_queues* queues  = (struct struct_queues *) pvParameters;
-
+  struct struct_queues* queues  = (struct struct_queues *) pvParameters;
+  
   TickType_t xLastWakeTime;
   unsigned long delay = 1000;
   unsigned char errno = 0;
@@ -101,7 +98,7 @@ static void vTestTask( void* pvParameters )
     {
       vTogglePin13();
 
-      xQueueSend(queues->debug, (void*) &errno, (TickType_t) 0);
+      //xQueueSend(queues->debug, (void*) &errno, (TickType_t) 0);
       xQueueSend(queues->spi, (void*) &ch, (TickType_t) 0);
       
       vTaskDelayUntil(&xLastWakeTime, delay);
