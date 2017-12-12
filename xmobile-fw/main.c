@@ -105,7 +105,7 @@ static void vTestTask( void* pvParameters )
         {
             vTogglePin13();
 	    //dbg("Hello from DBG\n\0");
-            SpiSendStream("Hello from SPI\n");
+            //SpiSendStream("Hello from SPI\n");
       
             vTaskDelayUntil(&xLastWakeTime, delay);
         }

@@ -13,7 +13,7 @@ void vSpiSendByte(char byte)
 void vSpiSendTask(void* pvParameters)
 {
   (void)(pvParameters);
-  char ch;
+  unsigned char ch;
   size_t result;
   
   for(;;)
@@ -35,9 +35,8 @@ void vSpiSendTask(void* pvParameters)
     (void)(pvParameters);
     }*/
 
-void SpiSendStream(char* msg)
+void SpiSendStream(unsiged char* msg, size_t len)
 {
-    size_t len = strlen(msg);
     size_t result;
     
     const TickType_t xDelayMs = pdMS_TO_TICKS( 100 );

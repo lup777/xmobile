@@ -4,6 +4,6 @@
 #include "global.h"
 
 extern void vSpiSendTask(void* pvParameters);
-extern void SpiSendStream(char* msg);
+extern void SpiSendStream(char* msg, size_t len);
 
 #endif
