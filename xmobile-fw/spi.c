@@ -18,17 +18,15 @@ void vSpiSendTask(void* pvParameters)
   
   for(;;)
       {
-          result = xStreamBufferReceive( context.xDebugStream,
+          result = xStreamBufferReceive( context.xDisplayStream,
                                        &ch,
                                        sizeof(ch),
                                        portMAX_DELAY ); // infinite waite
           
           if( result == 1 )
-              {
-                  dbg("SPI begin");
-                  vSpiSendByte(ch);
-                  dbg("SPI end");
-              }
+	    {
+	      vSpiSendByte(ch);
+	    }
       }
 }
 
@@ -40,21 +38,17 @@ void vSpiSendTask(void* pvParameters)
 void SpiSendStream(char* msg)
 {
     size_t len = strlen(msg);
-    size_t i;
     size_t result;
     
     const TickType_t xDelayMs = pdMS_TO_TICKS( 100 );
 
-    for(i = 0; i < len; i++)
-        {
-            result = xStreamBufferSend( context.xDisplayStream, //target stream
-                                        (void*) (msg + i),               //data byte
-                                        (size_t)1,            // data size in bytes
-                                        xDelayMs );               // time in ticks  to waite
+    result = xStreamBufferSend( context.xDisplayStream, //target stream
+				(void*) msg,               //data byte
+				len,            // data size in bytes
+				xDelayMs );               // time in ticks  to waite
 
-            if(result != 1)
-                {
-                    vEnablePin13();
-                }
-        }
+    if(result != len)
+      {
+	vEnablePin13();
+      }
 }

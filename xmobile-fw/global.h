@@ -26,7 +26,6 @@
 #define MSG_SPI_DATA_WAS_SENT "spi data was sent"
 #define MSG_SPI_DATA_GOINT_TO_SEND "going to send spi data"
 
-
 struct struct_context
 {
     StreamBufferHandle_t xDebugStream;
