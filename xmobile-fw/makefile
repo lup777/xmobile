@@ -53,19 +53,21 @@ SRC	= \
 usart.c \
 main.c \
 spi.c \
-ParTest/ParTest.c \
-serial/serial.c \
-regtest.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/croutine.c \
 $(SOURCE_DIR)/portable/MemMang/heap_1.c \
-$(PORT_DIR)/port.c \
-$(DEMO_DIR)/crflash.c \
-$(DEMO_DIR)/integer.c \
-$(DEMO_DIR)/PollQ.c \
-$(DEMO_DIR)/comtest.c
+$(SOURCE_DIR)/stream_buffer.c \
+$(PORT_DIR)/port.c
+#$(DEMO_DIR)/crflash.c \
+#$(DEMO_DIR)/integer.c \
+#$(DEMO_DIR)/PollQ.c \
+#$(DEMO_DIR)/comtest.c
+
+#ParTest/ParTest.c \
+#serial/serial.c \
+#regtest.c \
 
 
 # If there is more than one source file, append them above, or modify and
@@ -119,7 +121,7 @@ $(patsubst %,-I%,$(EXTRAINCDIRS))
 #CFLAGS += -std=c89
 #CFLAGS += -std=gnu89
 #CFLAGS += -std=c99
-CFLAGS += -std=gnu99
+CFLAGS += -std=gnu99 -Werror
 
 
 

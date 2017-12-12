@@ -5,7 +5,7 @@
 #include "global.h"
 
 extern void vUsartSendTask(void* pvParameters);
-
+extern void dbg(const char* msg);
 
 
 #endif //__USART_H__

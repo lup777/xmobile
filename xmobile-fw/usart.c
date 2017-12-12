@@ -1,51 +1,51 @@
 //usart.c
 #include "usart.h"
 
-void dbg(struct struct_queues* pxQueues, unsigned char ucMsgNo)
+void vUsartSendByte(char ch);
+
+void dbg(const char* msg)
 {
-  xQueueSend(pxQueues->debug, (void*) &ucMsgNo, (TickType_t) 0);
+    //context.xDebugStream
+    size_t i;
+    size_t len = sizeof(msg);
+    size_t result; //num of bytes was sent
+    const TickType_t x0ms = pdMS_TO_TICKS( 0 );
+    
+    
+    for(i = 0; i < len; i++)
+        {
+            result = xStreamBufferSend( context.xDebugStream, //target stream
+                                        (void*)(msg + i),               //data byte
+                                        (size_t)1,            // data size in bytes
+                                        x0ms );               // time in ticks  to waite
+            if(result != 1)
+                {
+                    vEnablePin13();
+                }
+        }
+}
+
+inline void vUsartSendByte(char ch)
+{
+    while( !(UCSR0A & (1 << UDRE0) ) );
+    UDR0 = ch;
 }
 
 void vUsartSendTask(void* pvParameters)
 {
-  TickType_t xLastWakeTime;
-  unsigned char errno = 0;
-  char* msg = NULL;
-
-  struct struct_queues* pxQueues = (QueueHandle_t) pvParameters;
+    (void)(pvParameters);
+    char ch;
+    size_t result;
   
-  for(;;)
-    {
-      if( xQueueReceive(pxQueues->debug, &errno, (TickType_t) 0) == pdPASS)
-	{
-	  switch(errno)
-	    {
-	    case 0: msg = ERROR_MSG_1;
-	      break;
-
-	    case 2: msg = MSG_SPI_DATA_WAS_SENT;
-	      break;
-
-	    case 3: msg = MSG_SPI_DATA_GOINT_TO_SEND;
-	      break;
-	      
-	    default:
-	      msg = ERROR_MSG_0;
-	      break;
-	    } // switch (errno)
-
-	  unsigned char len = strlen(msg);
-	  
-	  for(unsigned char i = 0; i < len ; i++)
-	    {
-	      while( !(UCSR0A & (1 << UDRE0) ) );
-	      UDR0 = msg[i];
-	      
-	      //vTaskDelayUntil(&xLastWakeTime, 40);
-	    }
-
-	  while( !(UCSR0A & (1 << UDRE0) ) );
-	  UDR0 = '\n';
-	}// if
+    for(;;)
+        {
+            result = xStreamBufferReceive( context.xDebugStream,
+                                           &ch,
+                                           sizeof(ch),
+                                           portMAX_DELAY ); // infinite waite
+            if( result == 1 )
+                {
+                    vUsartSendByte(ch);
+                }
     }
 }

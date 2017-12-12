@@ -3,11 +3,13 @@
 #include "global.h"
 #include "usart.h"
 #include "spi.h"
-static void vTestTask( void* pvParameters );
 
+static void vTestTask( void* pvParameters );
+void vMainInitContext(void);
+void vHwInitAtmega2560(void);
 /*-----------------------------------------------------------*/
 
-void vHwInitAtmega2560()
+void vHwInitAtmega2560(void)
 {
   /* USART 0 */
   UBRR0H &= ~0x0F;
@@ -42,66 +44,87 @@ void vHwInitAtmega2560()
   SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // f/16
 }
 
-void main( void )
+void vMainInitContext(void)
+{
+    context.xDebugStream = xStreamBufferCreate(200, // size
+                                               1);  //trigger level
+    CHECK_FOR_NULL(context.xDebugStream);
+
+    
+    context.xDisplayStream = xStreamBufferCreate(200, // size
+                                                 1);  //trigger level
+    CHECK_FOR_NULL(context.xDisplayStream);
+}
+
+struct struct_context context;
+
+int main( void )
 {
   /* Initialisations */
   vHwInitAtmega2560();
+
+  vMainInitContext();
   
   /* Variables */
-  QueueHandle_t xDebugQueue = xQueueCreate(5, sizeof(unsigned char));
-  CHECK_FOR_NULL(xDebugQueue);
-  QueueHandle_t xSpiQueue = xQueueCreate(5, sizeof(unsigned char));
-  CHECK_FOR_NULL(xDebugQueue);
-
-  struct struct_queues queues;
-  queues.debug = xDebugQueue;
-  queues.spi = xSpiQueue;
   
   /* Tasks */
   xTaskCreate( vUsartSendTask,
-	       (signed char*)"send_uart_task",
+	       "send_uart_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) &queues,
+	       (void*) NULL,
 	       1,
 	       NULL );
 
   xTaskCreate( vSpiSendTask,
-	       (signed char*)"send_spi_task",
+	       "send_spi_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) &queues,
+	       (void*) NULL,
 	       1,
 	       NULL );
 
   xTaskCreate( vTestTask,
-	       (signed char*)"blink_GPIO_7_task",
+	       "blink_GPIO_7_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) &queues,
+	       (void*) NULL,
 	       1,
 	       NULL );
 	
   vTaskStartScheduler();
-
+  return 0;
 }
 /*-----------------------------------------------------------*/
 
 
 static void vTestTask( void* pvParameters )
 {
-  struct struct_queues* queues  = (struct struct_queues *) pvParameters;
-  
-  TickType_t xLastWakeTime;
-  unsigned long delay = 1000;
-  unsigned char errno = 0;
-  char ch = 'a';
+    (void)(pvParameters);
+    TickType_t xLastWakeTime;
+    unsigned long delay = 1000;
 
-  for(;;)
-    {
-      vTogglePin13();
+    for(;;)
+        {
+            vTogglePin13();
 
-      //xQueueSend(queues->debug, (void*) &errno, (TickType_t) 0);
-      xQueueSend(queues->spi, (void*) &ch, (TickType_t) 0);
+            SpiSendStream("Hello from SPI");
       
-      vTaskDelayUntil(&xLastWakeTime, delay);
-    }
+            vTaskDelayUntil(&xLastWakeTime, delay);
+        }
 }
 
+inline void vEnablePin13(void)
+{
+  DDRB  |= (1 << 7);
+  PORTB |= (1 << 7);
+}
+
+inline void vDisablePin13(void)
+{
+  DDRB  |= (1 << 7);
+  PORTB &= ~(1 << 7);
+}
+
+inline void vTogglePin13(void)
+{
+  //DDRB  |= (1 << 7);
+  PORTB ^= (1 << 7);
+}

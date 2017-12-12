@@ -17,6 +17,7 @@
 
 #include "queue.h"
 #include "usart.h"
+#include "stream_buffer.h"
 
 #define CHECK_FOR_NULL(X) { if(X == NULL) vEnablePin13(); }
 
@@ -25,29 +26,19 @@
 #define MSG_SPI_DATA_WAS_SENT "spi data was sent"
 #define MSG_SPI_DATA_GOINT_TO_SEND "going to send spi data"
 
-typedef struct struct_queues
+
+struct struct_context
 {
-  QueueHandle_t debug;
-  QueueHandle_t spi;
+    StreamBufferHandle_t xDebugStream;
+    StreamBufferHandle_t xDisplayStream;
 };
+typedef struct struct_context struct_context;
 
-inline void vEnablePin13()
-{
-  DDRB  |= (1 << 7);
-  PORTB |= (1 << 7);
-}
+struct struct_context context;
 
-inline void vDisablePin13()
-{
-  DDRB  |= (1 << 7);
-  PORTB &= ~(1 << 7);
-}
-
-inline void vTogglePin13()
-{
-  //DDRB  |= (1 << 7);
-  PORTB ^= (1 << 7);
-}
+void vEnablePin13(void);
+void vDisablePin13(void);
+void vTogglePin13(void);
 
 
 

@@ -1,7 +1,8 @@
 //spi.c
 #include "spi.h"
 
-void vSpiSend(char byte)
+void vSpiSendByte(char byte);
+void vSpiSendByte(char byte)
 {
   PORTB &= ~0x01;
   SPDR = byte;
@@ -11,26 +12,49 @@ void vSpiSend(char byte)
 
 void vSpiSendTask(void* pvParameters)
 {
-  TickType_t xLastWakeTime;
-
-  struct struct_queues* pxQueues = (QueueHandle_t) pvParameters;
-  char data;
+  (void)(pvParameters);
+  char ch;
+  size_t result;
   
   for(;;)
-    {
-      if( xQueueReceive(pxQueues->spi, &data, (TickType_t) 0) == pdPASS)
-	{
-	  dbg(pxQueues, 3);
-	  vSpiSend(data);
-	  //vTaskDelayUntil(&xLastWakeTime, 40);
-	    //MSG_SPI_DATA_WAS_SENT
-	  dbg(pxQueues, 2);
-	  
-	}
-    }
+      {
+          result = xStreamBufferReceive( context.xDebugStream,
+                                       &ch,
+                                       sizeof(ch),
+                                       portMAX_DELAY ); // infinite waite
+          
+          if( result == 1 )
+              {
+                  dbg("SPI begin");
+                  vSpiSendByte(ch);
+                  dbg("SPI end");
+              }
+      }
 }
 
-void vSpiReadTask(void* pvParameters)
+/*void vSpiReadTask(void* pvParameters)
 {
-  
+    (void)(pvParameters);
+    }*/
+
+void SpiSendStream(char* msg)
+{
+    size_t len = strlen(msg);
+    size_t i;
+    size_t result;
+    
+    const TickType_t xDelayMs = pdMS_TO_TICKS( 100 );
+
+    for(i = 0; i < len; i++)
+        {
+            result = xStreamBufferSend( context.xDisplayStream, //target stream
+                                        (void*) (msg + i),               //data byte
+                                        (size_t)1,            // data size in bytes
+                                        xDelayMs );               // time in ticks  to waite
+
+            if(result != 1)
+                {
+                    vEnablePin13();
+                }
+        }
 }

@@ -214,7 +214,7 @@ uint16_t usAddress;
 	pxTopOfStack--;
 	*/
 
-	usAddress = pxCode;
+	usAddress = (uint16_t)pxCode;
 	*pxTopOfStack = ( usAddress & 0x00ff );
 	pxTopOfStack--;
 
