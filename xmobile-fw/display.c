@@ -24,6 +24,8 @@ void vDisplaySendData(uint8_t data);
 bool bDisplayIsBysy(void);
 void vDisplay_reset_down(void);
 void vDisplay_reset_up(void);
+void vDisplay_BS_down(void);
+void vDisplay_BS_up(void);
 void vDisplay_DC_CMD(void);
 void vDisplay_DC_DATA(void);
 void vDiasplayLoadLUTForFullUpdate(void);
@@ -78,6 +80,19 @@ inline void vDisplay_reset_down(void)
   DDRC |= (1 << 0);
   PORTC &= (1 << 0);
 }
+#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
+inline void vDisplay_BS_up(void)
+{
+  DDRF |= (1 << 2);
+  PORTF |= (1 << 2);
+}
+
+inline void vDisplay_BS_down(void)
+{
+  DDRC |= (1 << 0);
+  PORTC &= (1 << 0);
+}
+#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
 
 inline bool bDisplayIsBysy(void)
 { // PORTC 1. NEED TO CHECK !!!
@@ -179,6 +194,11 @@ const uint8_t RamDataEntryMode[] PROGMEM = {0x11,0x01}; // Ram data entry mode
 #endif
 #include <util/delay.h>
 
+void vDisplayShowBackground(void)
+{
+    vDisplayShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+}
+
 inline void vDisplayShowFullScreenImage(const uint8_t *image,
                                         uint16_t xsize,
                                         uint16_t ysize)
@@ -203,11 +223,8 @@ inline void vDisplayShowFullScreenImage(const uint8_t *image,
 
 inline void vDisplayInit(void)
 {
-#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
     //ePaper_BS_0;    // 4 wire spi mode selected
-    DDRF |= (1 << 2);
-    PORTF &= ~(1 << 2);
-#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
+    vDisplay_BS_down();
     
     //Reset the controller
     vDisplay_reset_down();

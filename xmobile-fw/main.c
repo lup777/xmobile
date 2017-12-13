@@ -108,13 +108,20 @@ static void vTestTask( void* pvParameters )
     (void)(pvParameters);
     TickType_t xLastWakeTime;
     unsigned long delay = 1000;
+    char counter = 0;
 
     for(;;)
         {
             vTogglePin13();
 	    //dbg("Hello from DBG\n\0");
             //SpiSendStream("Hello from SPI\n");
-      
+            if(counter >= 5 )
+                {
+                    vDisplayShowBackground();
+                    counter = 0;
+                }
+            counter ++;
+            
             vTaskDelayUntil(&xLastWakeTime, delay);
         }
 }

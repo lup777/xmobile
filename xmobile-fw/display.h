@@ -5,6 +5,6 @@
 #include <avr/pgmspace.h>
 
 void vDisplayTask( void* pvParameters );
-
+void vDisplayShowBackground(void);
 
 #endif //__DISPLAY_H__
