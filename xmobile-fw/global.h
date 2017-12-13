@@ -39,6 +39,8 @@ void vEnablePin13(void);
 void vDisablePin13(void);
 void vTogglePin13(void);
 
-
+typedef uint8_t bool;
+#define false  0
+#define true   1
 
 #endif //__GLOBAL_H__

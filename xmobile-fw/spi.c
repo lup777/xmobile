@@ -35,7 +35,12 @@ void vSpiSendTask(void* pvParameters)
     (void)(pvParameters);
     }*/
 
-void SpiSendStream(unsiged char* msg, size_t len)
+void vSpiSendStreamByte(unsigned char byte)
+{
+    vSpiSendStream(&byte, 1);
+}
+
+void vSpiSendStream(const unsigned char* msg, size_t len)
 {
     size_t result;
     
@@ -48,6 +53,6 @@ void SpiSendStream(unsiged char* msg, size_t len)
 
     if(result != len)
       {
-	vEnablePin13();
+          vEnablePin13();
       }
 }

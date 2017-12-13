@@ -3,6 +3,7 @@
 #include "global.h"
 #include "usart.h"
 #include "spi.h"
+#include "display.h"
 
 static void vTestTask( void* pvParameters );
 void vMainInitContext(void);
@@ -84,6 +85,13 @@ int main( void )
 
   xTaskCreate( vTestTask,
 	       "blink_GPIO_7_task",
+	       configMINIMAL_STACK_SIZE,
+	       (void*) NULL,
+	       1,
+	       NULL );
+
+  xTaskCreate( vDisplayTask,
+	       "display_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,

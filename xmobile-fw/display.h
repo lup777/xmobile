@@ -1,40 +1,10 @@
 //display.h
 #ifndef __DISPLAY_H__
 #define __DISPLAY_H__
-#include "global.h"
+//#include "global.h"
+#include <avr/pgmspace.h>
 
-const uint8_t pcDisplayLUTFullUpdate[31] PROGMEM =
-  {0x32, // command
-   0x02, //C221 25C Full update waveform
-   0x02,
-   0x01,
-   0x11,
-   0x12,
-   0x12,
-   0x22,
-   0x22,
-   0x66,
-   0x69,
-   0x69,
-   0x59,
-   0x58,
-   0x99,
-   0x99,
-   0x88,
-   0x00,
-   0x00,
-   0x00,
-   0x00,
-   0xF8,
-   0xB4,
-   0x13,
-   0x51,
-   0x35,
-   0x51,
-   0x51,
-   0x19,
-   0x01,
-   0x00};
+void vDisplayTask( void* pvParameters );
 
 
 #endif //__DISPLAY_H__

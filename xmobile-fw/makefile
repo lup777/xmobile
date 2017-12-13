@@ -53,6 +53,7 @@ SRC	= \
 usart.c \
 main.c \
 spi.c \
+display.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
