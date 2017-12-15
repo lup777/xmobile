@@ -6,5 +6,6 @@
 
 void vDisplayTask( void* pvParameters );
 void vDisplayShowBackground(void);
+void vDisplayInit(void);
 
 #endif //__DISPLAY_H__

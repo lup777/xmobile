@@ -4,10 +4,10 @@
 void vSpiSendByte(char byte);
 void vSpiSendByte(char byte)
 {
-  PORTB &= ~0x01;
+  //  PORTB &= ~0x01;
   SPDR = byte;
   while(!(SPSR & (1 << SPIF)));
-  PORTB |= 0x01;
+  //PORTB |= 0x01;
 }
 
 void vSpiSendTask(void* pvParameters)
@@ -19,9 +19,9 @@ void vSpiSendTask(void* pvParameters)
   for(;;)
       {
           result = xStreamBufferReceive( context.xDisplayStream,
-                                       &ch,
-                                       sizeof(ch),
-                                       portMAX_DELAY ); // infinite waite
+					 &ch,
+					 sizeof(ch),
+					 portMAX_DELAY ); // infinite waite
           
           if( result == 1 )
 	    {
@@ -33,11 +33,11 @@ void vSpiSendTask(void* pvParameters)
 /*void vSpiReadTask(void* pvParameters)
 {
     (void)(pvParameters);
-    }*/
+}*/
 
-void vSpiSendStreamByte(unsigned char byte)
+/*void vSpiSendStreamByte(unsigned char byte)
 {
-    vSpiSendStream(&byte, 1);
+  vSpiSendStream(&byte, 1);
 }
 
 void vSpiSendStream(const unsigned char* msg, size_t len)
@@ -45,14 +45,32 @@ void vSpiSendStream(const unsigned char* msg, size_t len)
     size_t result;
     
     const TickType_t xDelayMs = pdMS_TO_TICKS( 100 );
-
-    result = xStreamBufferSend( context.xDisplayStream, //target stream
-				(void*) msg,               //data byte
-				len,            // data size in bytes
-				xDelayMs );               // time in ticks  to waite
-
-    if(result != len)
+    if( xStreamBufferIsFull(context.xDisplayStream) == pdTRUE )
       {
-          vEnablePin13();
+	//dbg("^");
       }
+    else
+      {
+	result = xStreamBufferSend( context.xDisplayStream, //target stream
+				    (void*) msg,               //data byte
+				    len,            // data size in bytes
+				    xDelayMs );               // time in ticks  to waite
+      
+	if(result != len)
+	  {
+	    vEnablePin13();
+	  }
+      }
+      }*/
+void vSpiSendStreamByte(unsigned char byte)
+{
+  vSpiSendByte(byte);
+}
+
+void vSpiSendStream(const unsigned char* msg, size_t len)
+{
+  for(size_t i = 0; i < len; i++)
+    {
+      vSpiSendByte(msg[i]);
+    }
 }

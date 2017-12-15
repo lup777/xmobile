@@ -39,10 +39,22 @@ void vHwInitAtmega2560(void)
   DDRB |= (1 << 2);  // MOSI
   //DDRB &= ~(1 << 3); // MISO
   DDRB |= (1 << 1);  // SCK
-  DDRB |= 0x01;     // SS
-  PORTB &= ~0x01;
+  DDRB |= (1 << 0);     // SS
+  PORTB &= ~(1 << 0);
   
-  SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0); // f/16
+  SPCR = (1 << SPE) | (1 << MSTR) | (1 << SPR0) | (1 << SPR1); // f/128
+  
+
+  /* DISPLAY */
+  DDRC  &= ~(1 < 1); // BUSY
+  
+  DDRC  |= (1 << 0); // RESET
+  PORTC |= (1 << 0); // RESET
+  
+  DDRG  |= (1 << 2); // DC
+  PORTG |= (1 << 2); // DC
+
+  PORTB |= (1 << 0); // CS
 }
 
 void vMainInitContext(void)
@@ -69,33 +81,33 @@ int main( void )
   /* Variables */
   
   /* Tasks */
-  xTaskCreate( vUsartSendTask,
+  /*xTaskCreate( vUsartSendTask,
 	       "send_uart_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 
-  xTaskCreate( vSpiSendTask,
+  /*xTaskCreate( vSpiSendTask,
 	       "send_spi_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 
   xTaskCreate( vTestTask,
-	       "blink_GPIO_7_task",
+	       "test_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
 	       NULL );
 
-  xTaskCreate( vDisplayTask,
+  /*xTaskCreate( vDisplayTask,
 	       "display_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 	
   vTaskStartScheduler();
   return 0;
@@ -107,20 +119,19 @@ static void vTestTask( void* pvParameters )
 {
     (void)(pvParameters);
     TickType_t xLastWakeTime;
-    unsigned long delay = 1000;
-    char counter = 0;
+    unsigned long delay = 2000;
 
+    dbg("init display\n");
+    vDisplayInit();
+      
     for(;;)
         {
-            vTogglePin13();
-	    //dbg("Hello from DBG\n\0");
+	  vEnablePin13();
+	    //dbg("draw background\n");
+	    vUsartSendString("draw background\n");
             //SpiSendStream("Hello from SPI\n");
-            if(counter >= 5 )
-                {
-                    vDisplayShowBackground();
-                    counter = 0;
-                }
-            counter ++;
+	    vDisplayShowBackground();
+	    vDisablePin13();
             
             vTaskDelayUntil(&xLastWakeTime, delay);
         }
@@ -128,18 +139,18 @@ static void vTestTask( void* pvParameters )
 
 inline void vEnablePin13(void)
 {
-  DDRB  |= (1 << 7);
-  PORTB |= (1 << 7);
+  DDRB  |= (1 << 6);
+  PORTB |= (1 << 6);
 }
 
 inline void vDisablePin13(void)
 {
-  DDRB  |= (1 << 7);
-  PORTB &= ~(1 << 7);
+  DDRB  |= (1 << 6);
+  PORTB &= ~(1 << 6);
 }
 
 inline void vTogglePin13(void)
 {
   //DDRB  |= (1 << 7);
-  PORTB ^= (1 << 7);
+  PORTB ^= (1 << 6);
 }

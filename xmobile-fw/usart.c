@@ -26,11 +26,24 @@ inline void vUsartSendByte(char ch)
   UDR0 = ch;
 }
 
+inline void vUsartSendString(char* str)
+{
+  size_t len = strlen(str);
+  
+  for(size_t i = 0; i < len; i++)
+    {
+      while( !(UCSR0A & (1 << UDRE0) ) );
+      UDR0 = str[i];
+    }
+}
+
 void vUsartSendTask(void* pvParameters)
 {
     (void)(pvParameters);
     char ch;
     size_t result;
+
+    dbg("USART start\n");
   
     for(;;)
         {

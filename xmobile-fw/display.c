@@ -24,12 +24,13 @@ void vDisplaySendData(uint8_t data);
 bool bDisplayIsBysy(void);
 void vDisplay_reset_down(void);
 void vDisplay_reset_up(void);
-void vDisplay_BS_down(void);
-void vDisplay_BS_up(void);
+//void vDisplay_BS_down(void);
+//void vDisplay_BS_up(void);
 void vDisplay_DC_CMD(void);
 void vDisplay_DC_DATA(void);
 void vDiasplayLoadLUTForFullUpdate(void);
-
+void vDisplay_CS_DOWN(void);
+void vDisplay_CS_UP(void);
 
 void vDisplayTask( void* pvParameters )
 {
@@ -42,6 +43,8 @@ void vDisplayTask( void* pvParameters )
 
         }
 }
+
+
 
 inline void vDiasplayLoadLUTForFullUpdate(void)
 {
@@ -56,32 +59,37 @@ inline void vDiasplayLoadLUTForFullUpdate(void)
 #define DISPLAY_PIN_CLK // SPI SCK
 #define DISPLAY_PIN_BS // SPI mode select
 
+inline void vDisplay_CS_DOWN(void)
+{
+  PORTB &= (1 << 0);
+}
+
+inline void vDisplay_CS_UP(void)
+{
+  PORTB |= (1 << 0);
+}
+
 inline void vDisplay_DC_DATA(void)
 {
-  DDRG |= (1 << 2);
   PORTG |= (1 << 2);
   //arduino pin 39
 }
 inline void vDisplay_DC_CMD(void)
 {
-  DDRG |= (1 << 2);
   PORTG &= ~(1 << 2);
   //arduino pin 39
 }
 
 inline void vDisplay_reset_up(void)
 {
-  DDRC |= (1 << 0);
   PORTC |= (1 << 0);
 }
 
 inline void vDisplay_reset_down(void)
 {
-  DDRC |= (1 << 0);
   PORTC &= (1 << 0);
 }
-#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
-inline void vDisplay_BS_up(void)
+/*inline void vDisplay_BS_up(void)
 {
   DDRF |= (1 << 2);
   PORTF |= (1 << 2);
@@ -92,27 +100,30 @@ inline void vDisplay_BS_down(void)
   DDRC |= (1 << 0);
   PORTC &= (1 << 0);
 }
-#pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
-
+*/
 inline bool bDisplayIsBysy(void)
 { // PORTC 1. NEED TO CHECK !!!
-#pragma message "!!! CHECK AND CONFIGURE BISY PIN OF DISPLAY !!!!!!!"
-    DDRC &= ~(1 < 1);
-    return ((PORTC >> 1) & (~1));
+  return ((PORTC >> 1) & 1);
+  if( (PORTC & (1 << 1)) == 0 )
+    return 0;
+  else
+    return 1;
 }
 
 inline void vDisplaySendCmd(uint8_t command)
   {
-      //ePaper_CS_0;
-      vDisplay_DC_CMD();
-      vSpiSendStreamByte(command);
+    vDisplay_CS_DOWN();
+    vDisplay_DC_CMD();
+    vSpiSendStreamByte(command);
+    vDisplay_CS_UP();
   }
 
 inline void vDisplaySendData(uint8_t data)
   {
-      //ePaper_CS_0;
-      vDisplay_DC_DATA();
-      vSpiSendStreamByte(data);
+    vDisplay_CS_DOWN();
+    vDisplay_DC_DATA();
+    vSpiSendStreamByte(data);
+    vDisplay_CS_UP();
   }
 
 inline void vDisplayWriteCmdString(const uint8_t *data, size_t data_len)
@@ -120,6 +131,7 @@ inline void vDisplayWriteCmdString(const uint8_t *data, size_t data_len)
   //CS pin -> low
 
   //firt byte in string is command
+  vDisplay_CS_DOWN();
   vDisplay_DC_CMD();
   vSpiSendStreamByte(*data++);
   data_len--;
@@ -129,6 +141,7 @@ inline void vDisplayWriteCmdString(const uint8_t *data, size_t data_len)
 
   vSpiSendStream(data, data_len);
   //CS pin -> up
+  vDisplay_CS_UP();
 }
 
 inline void vDisplayWriteCmdPair(uint8_t cmd, uint8_t data)
@@ -136,6 +149,7 @@ inline void vDisplayWriteCmdPair(uint8_t cmd, uint8_t data)
   //CS pin -> low
 
   //firt byte in string is command
+  vDisplay_CS_DOWN();
   vDisplay_DC_CMD();
   vSpiSendStreamByte(cmd);
 
@@ -143,7 +157,7 @@ inline void vDisplayWriteCmdPair(uint8_t cmd, uint8_t data)
   vDisplay_DC_DATA();
   
   vSpiSendStreamByte(data);
-
+  vDisplay_CS_UP();
   //CS pin -> up
 }
 
@@ -190,13 +204,13 @@ const uint8_t Gatetime[]         PROGMEM = {0x3b,0x08}; // 2us per line
 const uint8_t RamDataEntryMode[] PROGMEM = {0x11,0x01}; // Ram data entry mode
 
 #ifndef F_CPU
-#define F_CPU   16000000UL
+#define F_CPU   8000000UL
 #endif
 #include <util/delay.h>
 
 void vDisplayShowBackground(void)
 {
-    vDisplayShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+  vDisplayShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 }
 
 inline void vDisplayShowFullScreenImage(const uint8_t *image,
@@ -206,10 +220,13 @@ inline void vDisplayShowFullScreenImage(const uint8_t *image,
     //Get xbytes from xsize, rounding up
     uint8_t xbytes;
     xbytes = ( xsize + 7 ) >> 3;
-
     vDiasplayLoadLUTForFullUpdate();
+
+
     vDisplayPowerOn();
 
+
+    
     vDisplaySetArea(0,          // X start
                     xbytes - 1, // X end
                     ysize - 1,  // Y start
@@ -219,18 +236,22 @@ inline void vDisplayShowFullScreenImage(const uint8_t *image,
     vDisplayUpdateFull();  
 
     vDisplayPowerOff();
+    vUsartSendString("end of showing bg\n");
+    //return;
+    
 }
 
 inline void vDisplayInit(void)
 {
     //ePaper_BS_0;    // 4 wire spi mode selected
-    vDisplay_BS_down();
+    //vDisplay_BS_down();
     
     //Reset the controller
+  
     vDisplay_reset_down();
     _delay_ms(100);
     vDisplay_reset_up();
-    _delay_ms(100);
+    _delay_ms(1000);
     
     // Panel configuration, Gate selection
     vDisplayWriteCmdString(GDOControl, sizeof(GDOControl));
@@ -244,6 +265,8 @@ inline void vDisplayInit(void)
     vDisplayWriteCmdString(Gatetime, sizeof(Gatetime));
     // X decrease, Y decrease
     vDisplayWriteCmdString(RamDataEntryMode, sizeof(RamDataEntryMode));
+    
+    vUsartSendString("display init complete\n");
 }
 
 inline void vDisplayUpdateFull(void)
@@ -286,10 +309,11 @@ inline void vDisplayLoadFlashImageToDisplayRam(uint8_t  XSize,
     //Convert Xsize from pixels to bytes, rounding up
     XSize = ( XSize + 7 ) >> 3;
 
-    while( true == bDisplayIsBysy() ); // wait 
+    while( 0 != bDisplayIsBysy() ); // wait 
   
     //Select the controller   
-    //ePaper_CS_0;                     
+    //ePaper_CS_0;
+    vDisplay_CS_DOWN();
 
     //Write the command, 0x24
     //ePaper_DC_0;
@@ -297,6 +321,7 @@ inline void vDisplayLoadFlashImageToDisplayRam(uint8_t  XSize,
 
     //Pump the image out as data    
     //ePaper_DC_1;
+    vDisplay_DC_DATA();
 
     for( y = 0; y < YSize; y++ )
         {
@@ -307,6 +332,7 @@ inline void vDisplayLoadFlashImageToDisplayRam(uint8_t  XSize,
         }
     //Deslect the controller   
     //ePaper_CS_1;
+    vDisplay_CS_UP();
 }
 
 inline void vDisplaySetArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
@@ -339,11 +365,11 @@ inline void vDisplaySetArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 
 inline void vDisplayPowerOn(void)
   {
-      vDisplayWriteCmdPair(0x22, 0xC0);
+    vDisplayWriteCmdPair(0x22, 0xC0);
 
       vDisplaySendCmd(0x20);
 
-      while( true == bDisplayIsBysy() ); // wait 
+      while( 0 != bDisplayIsBysy() ); // wait 
   }
 inline void vDisplayPowerOff(void)
   {
@@ -351,5 +377,5 @@ inline void vDisplayPowerOff(void)
 
       vDisplaySendCmd(0x20);
 
-      while( true == bDisplayIsBysy() ); // wait 
+      while( 0 != bDisplayIsBysy() ); // wait 
   }

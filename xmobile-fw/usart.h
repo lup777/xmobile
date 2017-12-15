@@ -6,7 +6,7 @@
 
 extern void vUsartSendTask(void* pvParameters);
 extern void dbg(const char* msg);
-
+extern void vUsartSendString(char* str);
 
 #endif //__USART_H__
 
