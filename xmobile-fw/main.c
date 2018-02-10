@@ -4,10 +4,15 @@
 #include "usart.h"
 #include "spi.h"
 #include "display.h"
+#include "gsm.h"
+#include <stdio.h>
+#include <string.h>
+#include "disp42/epd4in2.h"
 
 static void vTestTask( void* pvParameters );
 void vMainInitContext(void);
 void vHwInitAtmega2560(void);
+void dbg(char* format, ...);
 /*-----------------------------------------------------------*/
 
 void vHwInitAtmega2560(void)
@@ -20,13 +25,15 @@ void vHwInitAtmega2560(void)
   //UBRR0L = 51;  //19200 bps, 16MGz
   //UBRR0L = 34;  //28800 bps, 16MGz
   //UBRR0L = 25;  //38400 bps, 16MGz
-  UBRR0L = 16;  //57600 bps, 16MGz
+  //UBRR0L = 16;  //57600 bps, 16MGz
   //UBRR0L = 12;  //76800 bps, 16MGz
-  //UBRR0L = 8;   //115200 bps, 16MGz
+  UBRR0L = 8;   //115200 bps, 16MGz
   
   UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);
   UCSR0B = (1 << RXEN0) | (1 << TXEN0);
 
+  vGsmUart1Init(57600);
+    
   /* Debug */
   vDisablePin13();
 
@@ -69,19 +76,19 @@ int main( void )
   /* Variables */
   
   /* Tasks */
-  xTaskCreate( vUsartSendTask,
+  /*xTaskCreate( vUsartSendTask,
 	       "send_uart_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 
-  xTaskCreate( vSpiSendTask,
+  /*  xTaskCreate( vSpiSendTask,
 	       "send_spi_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 
   xTaskCreate( vTestTask,
 	       "blink_GPIO_7_task",
@@ -90,12 +97,12 @@ int main( void )
 	       1,
 	       NULL );
 
-  xTaskCreate( vDisplayTask,
+  /*xTaskCreate( vDisplayTask,
 	       "display_task",
 	       configMINIMAL_STACK_SIZE,
 	       (void*) NULL,
 	       1,
-	       NULL );
+	       NULL );*/
 	
   vTaskStartScheduler();
   return 0;
@@ -108,20 +115,15 @@ static void vTestTask( void* pvParameters )
     (void)(pvParameters);
     TickType_t xLastWakeTime;
     unsigned long delay = 1000;
-    char counter = 0;
 
     for(;;)
         {
             vTogglePin13();
-	    //dbg("Hello from DBG\n\0");
+	    //vGsmUsartTest("gsm usart test\n");
             //SpiSendStream("Hello from SPI\n");
-            if(counter >= 5 )
-                {
-                    vDisplayShowBackground();
-                    counter = 0;
-                }
-            counter ++;
-            
+	    //vGsmModuleInit();
+
+	    dbg("Hello from %s:%d", __PRETTY_FUNCTION__, __LINE__);
             vTaskDelayUntil(&xLastWakeTime, delay);
         }
 }
@@ -142,4 +144,21 @@ inline void vTogglePin13(void)
 {
   //DDRB  |= (1 << 7);
   PORTB ^= (1 << 7);
+}
+
+inline void dbg(char* format, ...)
+{
+  char buffer[50];
+  va_list argptr;
+  va_start(argptr, format);
+  vsprintf(buffer, format, argptr);
+  va_end(argptr);
+  
+  int len = strlen(buffer);
+  for(int i = 0; i < len; i++)
+    {
+      vUsartSendByte(buffer[i]);
+    }
+  vUsartSendByte(13);
+  vUsartSendByte(10);
 }

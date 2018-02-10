@@ -60,7 +60,8 @@ $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/croutine.c \
 $(SOURCE_DIR)/portable/MemMang/heap_1.c \
 $(SOURCE_DIR)/stream_buffer.c \
-$(PORT_DIR)/port.c
+$(PORT_DIR)/port.c \
+gsm.c
 #$(DEMO_DIR)/crflash.c \
 #$(DEMO_DIR)/integer.c \
 #$(DEMO_DIR)/PollQ.c \
