@@ -73,6 +73,7 @@ inline void vDisplay_reset_up(void)
 {
   DDRC |= (1 << 0);
   PORTC |= (1 << 0);
+  //arduino pin 37
 }
 
 inline void vDisplay_reset_down(void)
@@ -83,8 +84,9 @@ inline void vDisplay_reset_down(void)
 #pragma message "!!! CHECK AND CONFIGURE BS (BUS SELELECT) PIN OF DISPLAY !!!!!!!"
 inline void vDisplay_BS_up(void)
 {
-  DDRF |= (1 << 2);
-  PORTF |= (1 << 2);
+  DDRC |= (1 << 2);
+  PORTC |= (1 << 2);
+  // arduino pin 35
 }
 
 inline void vDisplay_BS_down(void)
@@ -99,6 +101,7 @@ inline bool bDisplayIsBysy(void)
 #pragma message "!!! CHECK AND CONFIGURE BISY PIN OF DISPLAY !!!!!!!"
     DDRC &= ~(1 < 1);
     return ((PORTC >> 1) & (~1));
+    // arduino pin 36
 }
 
 inline void vDisplaySendCmd(uint8_t command)

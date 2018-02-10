@@ -5,8 +5,10 @@
 #include "global.h"
 
 extern void vUsartSendTask(void* pvParameters);
-extern void dbg(const char* msg);
-
+extern void dbg_const(const char* msg);
+extern void dbg_char(char msg);
+extern void dbg(char* msg);
+extern void vUsartSendByte(char ch);
 
 #endif //__USART_H__
 

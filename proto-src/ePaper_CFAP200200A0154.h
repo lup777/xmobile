@@ -9,10 +9,10 @@
 //=============================================================================
 // Arduino digital pins used for the e-paper display 
 #define EPD_BUSSEL  2
-#define EPD_BUSY    35
+#define EPD_BUSY    36
 #define EPD_RESET   37
 #define EPD_DC      39
-#define EPD_CS      41
+#define EPD_CS      53
 
 void ePaper_Init(void);
 void ePaper_POWERON(void);
