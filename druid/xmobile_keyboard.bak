@@ -1,4 +1,5 @@
 EESchema Schematic File Version 2
+LIBS:xmobile-rescue
 LIBS:power
 LIBS:device
 LIBS:transistors
@@ -28,78 +29,10 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
-LIBS:zakadc
-LIBS:vw2500m
-LIBS:usb-b
-LIBS:uprojects-msp430
-LIBS:uprojects-maxim-integrated
-LIBS:tps79530
-LIBS:tps63001
-LIBS:tps61040dbv
-LIBS:tact_sw
-LIBS:str751fr0t6
-LIBS:stm32f103cb
-LIBS:stm32f101cbt6
-LIBS:stm32f030f4
-LIBS:stm32f20x_LQFP64
-LIBS:sn54ac04
-LIBS:smf05c
-LIBS:sim_holder
-LIBS:sim900
-LIBS:sim800c
-LIBS:reset_supervisor
-LIBS:quectel
-LIBS:psl-ecg_12md_ads1298
-LIBS:pl2303
-LIBS:pcf8563_rtc
-LIBS:opa333_sot23-5
-LIBS:nrf8001
-LIBS:ncp3020
-LIBS:mt3608
-LIBS:molex_sim_holder_47553
-LIBS:micro_usb_b
-LIBS:microsd_socket
-LIBS:md1506_gsm_ant
-LIBS:mcp73833
-LIBS:mcp73831
-LIBS:mb6s
-LIBS:max669
-LIBS:ltc4120
-LIBS:ltc3533
-LIBS:lt1370
-LIBS:lpc1313
-LIBS:lp2951
-LIBS:lm2931cdr2g
-LIBS:lm809
-LIBS:lis3dh
-LIBS:led_couple
-LIBS:l6984
-LIBS:itg3200
-LIBS:irfh9310
-LIBS:irfh5300
-LIBS:ir2110l4
-LIBS:hmc5883
-LIBS:hlk-rm04
-LIBS:hc735-oscillator
-LIBS:gl850g_usb_hub
-LIBS:esp-07
-LIBS:dpak-diode
-LIBS:cstce_crystal
-LIBS:conn15
-LIBS:cc3100mod
-LIBS:bmp180
-LIBS:ble112
-LIBS:alt_symbols
-LIBS:ads1298_ecg_adc
-LIBS:ad8542
-LIBS:ad8495
-LIBS:ad8054
-LIBS:ad8051
-LIBS:3225_4p_quartz
-LIBS:74lvc02
 LIBS:XC6206P332MR
 LIBS:STF202-22T1G
 LIBS:MCP73871
+LIBS:switch1
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END
@@ -116,195 +49,271 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L SW_PUSH SW5
-U 1 1 5AA516BA
-P 6050 2900
-F 0 "SW5" H 6200 3010 50  0000 C CNN
-F 1 "SW_PUSH" H 6050 2820 50  0000 C CNN
-F 2 "" H 6050 2900 60  0000 C CNN
-F 3 "" H 6050 2900 60  0000 C CNN
-	1    6050 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW2
-U 1 1 5AA5170D
-P 5250 2900
-F 0 "SW2" H 5400 3010 50  0000 C CNN
-F 1 "SW_PUSH" H 5250 2820 50  0000 C CNN
-F 2 "" H 5250 2900 60  0000 C CNN
-F 3 "" H 5250 2900 60  0000 C CNN
-	1    5250 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW8
-U 1 1 5AA51794
-P 6850 2900
-F 0 "SW8" H 7000 3010 50  0000 C CNN
-F 1 "SW_PUSH" H 6850 2820 50  0000 C CNN
-F 2 "" H 6850 2900 60  0000 C CNN
-F 3 "" H 6850 2900 60  0000 C CNN
-	1    6850 2900
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW6
-U 1 1 5AA518A8
-P 6050 3350
-F 0 "SW6" H 6200 3460 50  0000 C CNN
-F 1 "SW_PUSH" H 6050 3270 50  0000 C CNN
-F 2 "" H 6050 3350 60  0000 C CNN
-F 3 "" H 6050 3350 60  0000 C CNN
-	1    6050 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW3
-U 1 1 5AA518AE
-P 5250 3350
-F 0 "SW3" H 5400 3460 50  0000 C CNN
-F 1 "SW_PUSH" H 5250 3270 50  0000 C CNN
-F 2 "" H 5250 3350 60  0000 C CNN
-F 3 "" H 5250 3350 60  0000 C CNN
-	1    5250 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW9
-U 1 1 5AA518B4
-P 6850 3350
-F 0 "SW9" H 7000 3460 50  0000 C CNN
-F 1 "SW_PUSH" H 6850 3270 50  0000 C CNN
-F 2 "" H 6850 3350 60  0000 C CNN
-F 3 "" H 6850 3350 60  0000 C CNN
-	1    6850 3350
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW7
-U 1 1 5AA5191D
-P 6050 3800
-F 0 "SW7" H 6200 3910 50  0000 C CNN
-F 1 "SW_PUSH" H 6050 3720 50  0000 C CNN
-F 2 "" H 6050 3800 60  0000 C CNN
-F 3 "" H 6050 3800 60  0000 C CNN
-	1    6050 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW4
-U 1 1 5AA51923
-P 5250 3800
-F 0 "SW4" H 5400 3910 50  0000 C CNN
-F 1 "SW_PUSH" H 5250 3720 50  0000 C CNN
-F 2 "" H 5250 3800 60  0000 C CNN
-F 3 "" H 5250 3800 60  0000 C CNN
-	1    5250 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L SW_PUSH SW10
-U 1 1 5AA51929
-P 6850 3800
-F 0 "SW10" H 7000 3910 50  0000 C CNN
-F 1 "SW_PUSH" H 6850 3720 50  0000 C CNN
-F 2 "" H 6850 3800 60  0000 C CNN
-F 3 "" H 6850 3800 60  0000 C CNN
-	1    6850 3800
-	1    0    0    -1  
-$EndComp
-$Comp
-L R R21
+L R-RESCUE-xmobile R21
 U 1 1 5AA51D42
-P 4500 2650
-F 0 "R21" V 4580 2650 40  0000 C CNN
-F 1 "1MOmh" V 4507 2651 40  0000 C CNN
-F 2 "" V 4430 2650 30  0000 C CNN
-F 3 "" H 4500 2650 30  0000 C CNN
-	1    4500 2650
+P 2600 1750
+F 0 "R21" V 2680 1750 40  0000 C CNN
+F 1 "10KOmh" V 2607 1751 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2530 1750 30  0000 C CNN
+F 3 "" H 2600 1750 30  0000 C CNN
+	1    2600 1750
 	0    1    1    0   
 $EndComp
 $Comp
-L R R22
+L R-RESCUE-xmobile R22
 U 1 1 5AA51DF9
-P 4500 3100
-F 0 "R22" V 4580 3100 40  0000 C CNN
-F 1 "1MOmh" V 4507 3101 40  0000 C CNN
-F 2 "" V 4430 3100 30  0000 C CNN
-F 3 "" H 4500 3100 30  0000 C CNN
-	1    4500 3100
+P 2600 3275
+F 0 "R22" V 2680 3275 40  0000 C CNN
+F 1 "10kOmh" V 2607 3276 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2530 3275 30  0000 C CNN
+F 3 "" H 2600 3275 30  0000 C CNN
+	1    2600 3275
 	0    1    1    0   
 $EndComp
 $Comp
-L R R23
+L R-RESCUE-xmobile R23
 U 1 1 5AA51E6E
-P 4500 3550
-F 0 "R23" V 4580 3550 40  0000 C CNN
-F 1 "1MOmh" V 4507 3551 40  0000 C CNN
-F 2 "" V 4430 3550 30  0000 C CNN
-F 3 "" H 4500 3550 30  0000 C CNN
-	1    4500 3550
+P 2600 4650
+F 0 "R23" V 2680 4650 40  0000 C CNN
+F 1 "10kOmh" V 2607 4651 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2530 4650 30  0000 C CNN
+F 3 "" H 2600 4650 30  0000 C CNN
+	1    2600 4650
 	0    1    1    0   
 $EndComp
-Wire Wire Line
-	4750 2650 6550 2650
-Wire Wire Line
-	4950 2650 4950 2900
-Wire Wire Line
-	5750 2650 5750 2900
-Connection ~ 4950 2650
-Wire Wire Line
-	6550 2650 6550 2900
-Connection ~ 5750 2650
-Wire Wire Line
-	4750 3100 6550 3100
-Wire Wire Line
-	4950 3100 4950 3350
-Wire Wire Line
-	5750 3100 5750 3350
-Connection ~ 4950 3100
-Wire Wire Line
-	6550 3100 6550 3350
-Connection ~ 5750 3100
-Wire Wire Line
-	4750 3550 6550 3550
-Wire Wire Line
-	4950 3550 4950 3800
-Wire Wire Line
-	5750 3550 5750 3800
-Connection ~ 4950 3550
-Wire Wire Line
-	6550 3550 6550 3800
-Connection ~ 5750 3550
-Text Label 6550 2650 0    60   ~ 0
-GND
-Text Label 6550 3100 0    60   ~ 0
-GND
-Text Label 6550 3550 0    60   ~ 0
-GND
-Wire Wire Line
-	5550 2900 5550 4100
-Connection ~ 5550 3350
-Wire Wire Line
-	6350 2900 6350 4100
-Connection ~ 6350 3350
-Wire Wire Line
-	7150 2900 7150 4100
-Connection ~ 7150 3350
-Text HLabel 5550 4100 0    60   Input ~ 0
+Text HLabel 4700 6050 3    60   Input ~ 0
 in1
-Text HLabel 6350 4100 0    60   Input ~ 0
+Text HLabel 6400 6050 3    60   Input ~ 0
 in2
-Text HLabel 7150 4100 0    60   Input ~ 0
+Text HLabel 8275 6050 3    60   Input ~ 0
 in3
-Text HLabel 4250 2650 0    60   Output ~ 0
+Text HLabel 1800 1750 0    60   Output ~ 0
 out1
-Text HLabel 4250 3100 0    60   Output ~ 0
+Text HLabel 1800 3275 0    60   Output ~ 0
 out2
-Text HLabel 4250 3550 0    60   Output ~ 0
+Text HLabel 1800 4650 0    60   Output ~ 0
 out3
-Connection ~ 5550 3800
-Connection ~ 6350 3800
-Connection ~ 7150 3800
+$Comp
+L switch1 U6
+U 1 1 5AB6B647
+P 3800 1850
+F 0 "U6" H 3800 1650 60  0000 C CNN
+F 1 "switch1" H 3800 2050 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 3775 2125 60  0000 C CNN
+F 3 "" H 3800 1850 60  0001 C CNN
+	1    3800 1850
+	1    0    0    -1  
+$EndComp
+Text HLabel 4875 925  0    60   BiDi ~ 0
+GND
+Text Label 4875 925  0    60   ~ 0
+GND
+Text Label 4150 1850 0    60   ~ 0
+GND
+$Comp
+L switch1 U9
+U 1 1 5AB6D08C
+P 5500 1850
+F 0 "U9" H 5500 1650 60  0000 C CNN
+F 1 "switch1" H 5500 2050 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 5475 2125 60  0000 C CNN
+F 3 "" H 5500 1850 60  0001 C CNN
+	1    5500 1850
+	1    0    0    -1  
+$EndComp
+Text Label 5850 1850 0    60   ~ 0
+GND
+$Comp
+L switch1 U12
+U 1 1 5AB6D196
+P 7275 1850
+F 0 "U12" H 7275 1650 60  0000 C CNN
+F 1 "switch1" H 7275 2050 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 7250 2125 60  0000 C CNN
+F 3 "" H 7275 1850 60  0001 C CNN
+	1    7275 1850
+	1    0    0    -1  
+$EndComp
+Text Label 7625 1850 0    60   ~ 0
+GND
+$Comp
+L switch1 U7
+U 1 1 5AB6E254
+P 3800 3375
+F 0 "U7" H 3800 3175 60  0000 C CNN
+F 1 "switch1" H 3800 3575 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 3775 3650 60  0000 C CNN
+F 3 "" H 3800 3375 60  0001 C CNN
+	1    3800 3375
+	1    0    0    -1  
+$EndComp
+Text Label 4150 3375 0    60   ~ 0
+GND
+$Comp
+L switch1 U10
+U 1 1 5AB6E25B
+P 5500 3375
+F 0 "U10" H 5500 3175 60  0000 C CNN
+F 1 "switch1" H 5500 3575 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 5475 3650 60  0000 C CNN
+F 3 "" H 5500 3375 60  0001 C CNN
+	1    5500 3375
+	1    0    0    -1  
+$EndComp
+Text Label 5850 3375 0    60   ~ 0
+GND
+$Comp
+L switch1 U13
+U 1 1 5AB6E262
+P 7275 3375
+F 0 "U13" H 7275 3175 60  0000 C CNN
+F 1 "switch1" H 7275 3575 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 7250 3650 60  0000 C CNN
+F 3 "" H 7275 3375 60  0001 C CNN
+	1    7275 3375
+	1    0    0    -1  
+$EndComp
+Text Label 7625 3375 0    60   ~ 0
+GND
+$Comp
+L switch1 U8
+U 1 1 5AB6F43A
+P 3800 4750
+F 0 "U8" H 3800 4550 60  0000 C CNN
+F 1 "switch1" H 3800 4950 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 3775 5025 60  0000 C CNN
+F 3 "" H 3800 4750 60  0001 C CNN
+	1    3800 4750
+	1    0    0    -1  
+$EndComp
+Text Label 4150 4750 0    60   ~ 0
+GND
+$Comp
+L switch1 U11
+U 1 1 5AB6F441
+P 5500 4750
+F 0 "U11" H 5500 4550 60  0000 C CNN
+F 1 "switch1" H 5500 4950 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 5475 5025 60  0000 C CNN
+F 3 "" H 5500 4750 60  0001 C CNN
+	1    5500 4750
+	1    0    0    -1  
+$EndComp
+Text Label 5850 4750 0    60   ~ 0
+GND
+$Comp
+L switch1 U14
+U 1 1 5AB6F448
+P 7275 4750
+F 0 "U14" H 7275 4550 60  0000 C CNN
+F 1 "switch1" H 7275 4950 60  0000 C CNN
+F 2 "switch1:switch_6x9" H 7250 5025 60  0000 C CNN
+F 3 "" H 7275 4750 60  0001 C CNN
+	1    7275 4750
+	1    0    0    -1  
+$EndComp
+Text Label 7625 4750 0    60   ~ 0
+GND
+Wire Wire Line
+	4150 1750 5150 1750
+Wire Wire Line
+	5850 1750 6925 1750
+Wire Wire Line
+	4150 3275 5150 3275
+Wire Wire Line
+	5850 3275 6925 3275
+Wire Wire Line
+	4150 4650 5150 4650
+Wire Wire Line
+	5850 4650 6925 4650
+Wire Wire Line
+	2850 4650 3450 4650
+Wire Wire Line
+	1800 4650 2350 4650
+Wire Wire Line
+	1800 3275 2350 3275
+Wire Wire Line
+	2850 3275 3450 3275
+Wire Wire Line
+	1800 1750 2350 1750
+Wire Wire Line
+	2850 1750 3450 1750
+Wire Wire Line
+	4700 4850 4150 4850
+Wire Wire Line
+	4700 3475 4150 3475
+Wire Wire Line
+	4700 1950 4150 1950
+$Comp
+L R-RESCUE-xmobile R25
+U 1 1 5AB74756
+P 6400 5550
+F 0 "R25" V 6480 5550 40  0000 C CNN
+F 1 "10kOmh" V 6407 5551 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 6330 5550 30  0000 C CNN
+F 3 "" H 6400 5550 30  0000 C CNN
+	1    6400 5550
+	-1   0    0    1   
+$EndComp
+$Comp
+L R-RESCUE-xmobile R24
+U 1 1 5AB74898
+P 4700 5550
+F 0 "R24" V 4780 5550 40  0000 C CNN
+F 1 "10kOmh" V 4707 5551 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4630 5550 30  0000 C CNN
+F 3 "" H 4700 5550 30  0000 C CNN
+	1    4700 5550
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4700 1950 4700 5300
+Wire Wire Line
+	4700 6050 4700 5800
+Wire Wire Line
+	6400 6050 6400 5800
+Wire Wire Line
+	6400 1950 6400 5300
+Wire Wire Line
+	6400 4850 5850 4850
+Connection ~ 4700 4850
+Connection ~ 4700 3475
+Wire Wire Line
+	6400 3475 5850 3475
+Connection ~ 6400 4850
+Wire Wire Line
+	5850 1950 6400 1950
+Connection ~ 6400 3475
+$Comp
+L R-RESCUE-xmobile R26
+U 1 1 5AB75641
+P 8275 5550
+F 0 "R26" V 8355 5550 40  0000 C CNN
+F 1 "10kOmh" V 8282 5551 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603" V 8205 5550 30  0000 C CNN
+F 3 "" H 8275 5550 30  0000 C CNN
+	1    8275 5550
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	7625 4850 8275 4850
+Wire Wire Line
+	8275 1950 8275 5300
+Wire Wire Line
+	8275 6050 8275 5800
+Wire Wire Line
+	7625 3475 8275 3475
+Connection ~ 8275 4850
+Wire Wire Line
+	7625 1950 8275 1950
+Connection ~ 8275 3475
+NoConn ~ 6925 1950
+NoConn ~ 5150 1950
+NoConn ~ 3450 1950
+NoConn ~ 3450 4850
+NoConn ~ 5150 4850
+NoConn ~ 6925 4850
+NoConn ~ 6925 3475
+NoConn ~ 5150 3475
+NoConn ~ 3450 3475
 $EndSCHEMATC
