@@ -1,0 +1,310 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:zakadc
+LIBS:vw2500m
+LIBS:usb-b
+LIBS:uprojects-msp430
+LIBS:uprojects-maxim-integrated
+LIBS:tps79530
+LIBS:tps63001
+LIBS:tps61040dbv
+LIBS:tact_sw
+LIBS:str751fr0t6
+LIBS:stm32f103cb
+LIBS:stm32f101cbt6
+LIBS:stm32f030f4
+LIBS:stm32f20x_LQFP64
+LIBS:sn54ac04
+LIBS:smf05c
+LIBS:sim_holder
+LIBS:sim900
+LIBS:sim800c
+LIBS:reset_supervisor
+LIBS:quectel
+LIBS:psl-ecg_12md_ads1298
+LIBS:pl2303
+LIBS:pcf8563_rtc
+LIBS:opa333_sot23-5
+LIBS:nrf8001
+LIBS:ncp3020
+LIBS:mt3608
+LIBS:molex_sim_holder_47553
+LIBS:micro_usb_b
+LIBS:microsd_socket
+LIBS:md1506_gsm_ant
+LIBS:mcp73833
+LIBS:mcp73831
+LIBS:mb6s
+LIBS:max669
+LIBS:ltc4120
+LIBS:ltc3533
+LIBS:lt1370
+LIBS:lpc1313
+LIBS:lp2951
+LIBS:lm2931cdr2g
+LIBS:lm809
+LIBS:lis3dh
+LIBS:led_couple
+LIBS:l6984
+LIBS:itg3200
+LIBS:irfh9310
+LIBS:irfh5300
+LIBS:ir2110l4
+LIBS:hmc5883
+LIBS:hlk-rm04
+LIBS:hc735-oscillator
+LIBS:gl850g_usb_hub
+LIBS:esp-07
+LIBS:dpak-diode
+LIBS:cstce_crystal
+LIBS:conn15
+LIBS:cc3100mod
+LIBS:bmp180
+LIBS:ble112
+LIBS:alt_symbols
+LIBS:ads1298_ecg_adc
+LIBS:ad8542
+LIBS:ad8495
+LIBS:ad8054
+LIBS:ad8051
+LIBS:3225_4p_quartz
+LIBS:74lvc02
+LIBS:XC6206P332MR
+LIBS:STF202-22T1G
+LIBS:MCP73871
+LIBS:xmobile-cache
+EELAYER 25 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 5 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L SW_PUSH SW5
+U 1 1 5AA516BA
+P 6050 2900
+F 0 "SW5" H 6200 3010 50  0000 C CNN
+F 1 "SW_PUSH" H 6050 2820 50  0000 C CNN
+F 2 "" H 6050 2900 60  0000 C CNN
+F 3 "" H 6050 2900 60  0000 C CNN
+	1    6050 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW2
+U 1 1 5AA5170D
+P 5250 2900
+F 0 "SW2" H 5400 3010 50  0000 C CNN
+F 1 "SW_PUSH" H 5250 2820 50  0000 C CNN
+F 2 "" H 5250 2900 60  0000 C CNN
+F 3 "" H 5250 2900 60  0000 C CNN
+	1    5250 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW8
+U 1 1 5AA51794
+P 6850 2900
+F 0 "SW8" H 7000 3010 50  0000 C CNN
+F 1 "SW_PUSH" H 6850 2820 50  0000 C CNN
+F 2 "" H 6850 2900 60  0000 C CNN
+F 3 "" H 6850 2900 60  0000 C CNN
+	1    6850 2900
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW6
+U 1 1 5AA518A8
+P 6050 3350
+F 0 "SW6" H 6200 3460 50  0000 C CNN
+F 1 "SW_PUSH" H 6050 3270 50  0000 C CNN
+F 2 "" H 6050 3350 60  0000 C CNN
+F 3 "" H 6050 3350 60  0000 C CNN
+	1    6050 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW3
+U 1 1 5AA518AE
+P 5250 3350
+F 0 "SW3" H 5400 3460 50  0000 C CNN
+F 1 "SW_PUSH" H 5250 3270 50  0000 C CNN
+F 2 "" H 5250 3350 60  0000 C CNN
+F 3 "" H 5250 3350 60  0000 C CNN
+	1    5250 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW9
+U 1 1 5AA518B4
+P 6850 3350
+F 0 "SW9" H 7000 3460 50  0000 C CNN
+F 1 "SW_PUSH" H 6850 3270 50  0000 C CNN
+F 2 "" H 6850 3350 60  0000 C CNN
+F 3 "" H 6850 3350 60  0000 C CNN
+	1    6850 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW7
+U 1 1 5AA5191D
+P 6050 3800
+F 0 "SW7" H 6200 3910 50  0000 C CNN
+F 1 "SW_PUSH" H 6050 3720 50  0000 C CNN
+F 2 "" H 6050 3800 60  0000 C CNN
+F 3 "" H 6050 3800 60  0000 C CNN
+	1    6050 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW4
+U 1 1 5AA51923
+P 5250 3800
+F 0 "SW4" H 5400 3910 50  0000 C CNN
+F 1 "SW_PUSH" H 5250 3720 50  0000 C CNN
+F 2 "" H 5250 3800 60  0000 C CNN
+F 3 "" H 5250 3800 60  0000 C CNN
+	1    5250 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L SW_PUSH SW10
+U 1 1 5AA51929
+P 6850 3800
+F 0 "SW10" H 7000 3910 50  0000 C CNN
+F 1 "SW_PUSH" H 6850 3720 50  0000 C CNN
+F 2 "" H 6850 3800 60  0000 C CNN
+F 3 "" H 6850 3800 60  0000 C CNN
+	1    6850 3800
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R21
+U 1 1 5AA51D42
+P 4500 2650
+F 0 "R21" V 4580 2650 40  0000 C CNN
+F 1 "1MOmh" V 4507 2651 40  0000 C CNN
+F 2 "" V 4430 2650 30  0000 C CNN
+F 3 "" H 4500 2650 30  0000 C CNN
+	1    4500 2650
+	0    1    1    0   
+$EndComp
+$Comp
+L R R22
+U 1 1 5AA51DF9
+P 4500 3100
+F 0 "R22" V 4580 3100 40  0000 C CNN
+F 1 "1MOmh" V 4507 3101 40  0000 C CNN
+F 2 "" V 4430 3100 30  0000 C CNN
+F 3 "" H 4500 3100 30  0000 C CNN
+	1    4500 3100
+	0    1    1    0   
+$EndComp
+$Comp
+L R R23
+U 1 1 5AA51E6E
+P 4500 3550
+F 0 "R23" V 4580 3550 40  0000 C CNN
+F 1 "1MOmh" V 4507 3551 40  0000 C CNN
+F 2 "" V 4430 3550 30  0000 C CNN
+F 3 "" H 4500 3550 30  0000 C CNN
+	1    4500 3550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	4750 2650 6550 2650
+Wire Wire Line
+	4950 2650 4950 2900
+Wire Wire Line
+	5750 2650 5750 2900
+Connection ~ 4950 2650
+Wire Wire Line
+	6550 2650 6550 2900
+Connection ~ 5750 2650
+Wire Wire Line
+	4750 3100 6550 3100
+Wire Wire Line
+	4950 3100 4950 3350
+Wire Wire Line
+	5750 3100 5750 3350
+Connection ~ 4950 3100
+Wire Wire Line
+	6550 3100 6550 3350
+Connection ~ 5750 3100
+Wire Wire Line
+	4750 3550 6550 3550
+Wire Wire Line
+	4950 3550 4950 3800
+Wire Wire Line
+	5750 3550 5750 3800
+Connection ~ 4950 3550
+Wire Wire Line
+	6550 3550 6550 3800
+Connection ~ 5750 3550
+Text Label 6550 2650 0    60   ~ 0
+GND
+Text Label 6550 3100 0    60   ~ 0
+GND
+Text Label 6550 3550 0    60   ~ 0
+GND
+Wire Wire Line
+	5550 2900 5550 4100
+Connection ~ 5550 3350
+Wire Wire Line
+	6350 2900 6350 4100
+Connection ~ 6350 3350
+Wire Wire Line
+	7150 2900 7150 4100
+Connection ~ 7150 3350
+Text HLabel 5550 4100 0    60   Input ~ 0
+in1
+Text HLabel 6350 4100 0    60   Input ~ 0
+in2
+Text HLabel 7150 4100 0    60   Input ~ 0
+in3
+Text HLabel 4250 2650 0    60   Output ~ 0
+out1
+Text HLabel 4250 3100 0    60   Output ~ 0
+out2
+Text HLabel 4250 3550 0    60   Output ~ 0
+out3
+Connection ~ 5550 3800
+Connection ~ 6350 3800
+Connection ~ 7150 3800
+$EndSCHEMATC
