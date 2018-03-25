@@ -1,0 +1,79 @@
+ERC report (Вс 25 мар 2018 09:38:16, Encoding UTF8 )
+
+***** Sheet /
+ErrType(3): Pin connected to some others pins but no pin to drive it
+    @ (259,08 mm,58,42 mm): Pin 39 (Power input) of component IC1 is not driven (Net 20).
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (375,28 mm,116,20 mm): Pin 4 (Passive) of component CON1 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (368,94 mm,118,74 mm): Pin 5 (Passive) of component CON1 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (368,94 mm,116,20 mm): Pin 3 (Passive) of component CON1 is unconnected.
+ErrType(3): Pin connected to some others pins but no pin to drive it
+    @ (251,46 mm,58,42 mm): Pin 19 (Power input) of component IC1 is not driven (Net 39).
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (228,60 mm,68,58 mm): Pin 34 (Input) of component IC1 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,166,37 mm): Pin 40 (Power input) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,187,32 mm): Pin 14 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,198,75 mm): Pin 23 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,162,56 mm): Pin 42 (Output) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,200,66 mm): Pin 22 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,198,75 mm): Pin 20 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,189,23 mm): Pin 28 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,187,32 mm): Pin 29 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,194,94 mm): Pin 18 (Power output) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,193,04 mm): Pin 17 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (284,48 mm,173,99 mm): Pin 36 (Power input) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,191,13 mm): Pin 16 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (241,30 mm,189,23 mm): Pin 15 (Bidirectional) of component U2 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (228,60 mm,90,17 mm): Pin 29 (Bidirectional) of component IC1 is unconnected.
+
+***** Sheet /audio/
+
+***** Sheet /xmobile_sim_holder/
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (112,39 mm,76,20 mm): Pin 2 (Passive) of component R19 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (117,47 mm,73,66 mm): Pin 2 (Passive) of component R20 is unconnected.
+ErrType(3): Pin connected to some others pins but no pin to drive it
+    @ (142,88 mm,71,12 mm): Pin 1 (Power input) of component U3 is not driven (Net 12).
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (81,28 mm,74,30 mm): Pin 2 (Passive) of component R17 is unconnected.
+ErrType(5): Conflict problem between pins. Severity: error
+    @ (142,88 mm,78,74 mm): Pin 7 (Output) of component U3 is connected to 
+    @ (142,88 mm,81,28 mm): pin 8 (Output) of component U3 (net 41).
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (130,17 mm,95,88 mm): Pin 3 (Passive) of component D10 is unconnected.
+ErrType(3): Pin connected to some others pins but no pin to drive it
+    @ (170,81 mm,71,12 mm): Pin 2 (Power input) of component U3 is not driven (Net 97).
+ErrType(3): Pin connected to some others pins but no pin to drive it
+    @ (170,81 mm,78,74 mm): Pin 5 (Power input) of component U3 is not driven (Net 99).
+
+***** Sheet /xmega_power/
+
+***** Sheet /xmobile_keyboard/
+ErrType(4): Conflict problem between pins. Severity: warning
+    @ (105,41 mm,46,99 mm): Pin 5 (Bidirectional) of component U6 is connected to 
+    @ (118,11 mm,149,22 mm): pin 1 (Power output) of component #FLG05 (net 111).
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (193,67 mm,118,11 mm): Pin 2 (Bidirectional) of component U14 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (193,67 mm,44,45 mm): Pin 2 (Bidirectional) of component U12 is unconnected.
+ErrType(2): Pin not connected (and no connect symbol found on this pin)
+    @ (193,67 mm,83,19 mm): Pin 2 (Bidirectional) of component U13 is unconnected.
+
+ ** ERC messages: 32  Errors 1  Warnings 31
