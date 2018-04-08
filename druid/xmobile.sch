@@ -576,55 +576,6 @@ KBD_OUT_3
 Text Label 10550 5025 0    60   ~ 0
 XMEGA_PD0_GSM_POWER
 $Comp
-L CONN_10 P6
-U 1 1 5AA653CA
-P 15300 2975
-F 0 "P6" V 15250 2975 60  0000 C CNN
-F 1 "CONN_10" V 15350 2975 60  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-10P-2T_2x05x2.00mm_Straight" H 15300 2975 60  0001 C CNN
-F 3 "" H 15300 2975 60  0001 C CNN
-	1    15300 2975
-	1    0    0    -1  
-$EndComp
-Text Label 10550 2975 0    60   ~ 0
-XMEGA_PA5
-Text Label 14950 2525 2    60   ~ 0
-XMEGA_PA5
-Text Label 10550 3075 0    60   ~ 0
-XMEGA_PA6
-Text Label 14950 2625 2    60   ~ 0
-XMEGA_PA6
-Text Label 10550 3175 0    60   ~ 0
-XMEGA_PA7
-Text Label 14950 2725 2    60   ~ 0
-XMEGA_PA7
-Text Label 10550 3325 0    60   ~ 0
-XMEGA_PB0
-Text Label 14950 2825 2    60   ~ 0
-XMEGA_PB0
-Text Label 10550 3425 0    60   ~ 0
-XMEGA_PB1
-Text Label 14950 2925 2    60   ~ 0
-XMEGA_PB1
-Text Label 10550 3525 0    60   ~ 0
-XMEGA_PB2
-Text Label 14950 3025 2    60   ~ 0
-XMEGA_PB2
-Text Label 10550 3625 0    60   ~ 0
-XMEGA_PB3
-Text Label 14950 3125 2    60   ~ 0
-XMEGA_PB3
-Text Label 10550 4475 0    60   ~ 0
-XMEGA_PC3
-Text Label 14950 3225 2    60   ~ 0
-XMEGA_PC3
-Text Label 8150 2725 2    60   ~ 0
-XMEGA_PR0
-Text Label 14950 3325 2    60   ~ 0
-XMEGA_PR0
-Text Label 14950 3425 2    60   ~ 0
-XMEGA_PR1
-$Comp
 L CONN_4 P7
 U 1 1 5AA6D87E
 P 15300 3825
@@ -643,8 +594,6 @@ Text Label 10550 2675 0    60   ~ 0
 XMEGA_PA2
 Text Label 14950 3775 2    60   ~ 0
 XMEGA_PA2
-Text Label 8150 2825 2    60   ~ 0
-XMEGA_PR1
 Text Label 10550 4775 0    60   ~ 0
 XMEGA_PC6
 Text Label 14950 3875 2    60   ~ 0
@@ -1171,4 +1120,14 @@ F 3 "" H 11375 1350 50  0000 C CNN
 	1    11375 1350
 	1    0    0    -1  
 $EndComp
+NoConn ~ 10550 3075
+NoConn ~ 10550 2975
+NoConn ~ 10550 3525
+NoConn ~ 10550 3625
+NoConn ~ 10550 3175
+NoConn ~ 10550 3325
+NoConn ~ 10550 3425
+NoConn ~ 8150 2725
+NoConn ~ 8150 2825
+NoConn ~ 10550 4475
 $EndSCHEMATC

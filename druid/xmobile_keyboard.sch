@@ -81,17 +81,17 @@ F 3 "" H 2600 4650 30  0000 C CNN
 	1    2600 4650
 	0    1    1    0   
 $EndComp
-Text HLabel 4700 6050 3    60   Input ~ 0
+Text HLabel 8275 6050 3    60   Input ~ 0
 in1
 Text HLabel 6400 6050 3    60   Input ~ 0
 in2
-Text HLabel 8275 6050 3    60   Input ~ 0
+Text HLabel 4700 6050 3    60   Input ~ 0
 in3
-Text HLabel 1800 1750 0    60   Output ~ 0
+Text HLabel 1800 4650 0    60   Output ~ 0
 out1
 Text HLabel 1800 3275 0    60   Output ~ 0
 out2
-Text HLabel 1800 4650 0    60   Output ~ 0
+Text HLabel 1800 1750 0    60   Output ~ 0
 out3
 $Comp
 L switch1 U6
