@@ -1,4 +1,4 @@
-update=Вс 25 мар 2018 23:50:43
+update=Сб 13 окт 2018 23:16:45
 version=1
 last_client=kicad
 [pcbnew]
@@ -25,6 +25,16 @@ version=1
 NetIExt=net
 [general]
 version=1
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
 [eeschema]
 version=1
 LibDir=/home/lup/kicad_libs/kicad_libs;tm-kicad-library;/home/lup/kicad_libs/kicad-library
@@ -63,13 +73,3 @@ LibName31=XC6206P332MR
 LibName32=STF202-22T1G
 LibName33=MCP73871
 LibName34=switch1
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60
