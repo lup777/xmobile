@@ -1,3 +1,10 @@
 *~
 *.bak
 *.kicad_pcb-bak
+*.o
+*.lst
+*.eep
+*.lss
+*.sym
+*.map
+#*#
