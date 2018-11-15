@@ -42,7 +42,7 @@ CPU_TYPE = __AVR_ATxmega128A1U__
 FORMAT = ihex
 
 # Target file name (without extension).
-TARGET = xmobile-fw
+TARGET = druid-fw
 
 # Optimization level, can be [0, 1, 2, 3, s]. 0 turns off optimization.
 # (Note: 3 is not always the best optimization level. See avr-libc FAQ.)
@@ -56,6 +56,8 @@ PORT_DIR = FreeRTOS/Source/portable/GCC/ATXmega
 
 SRC = \
 main.c \
+usart.c \
+spi.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
@@ -63,14 +65,13 @@ $(SOURCE_DIR)/croutine.c \
 $(SOURCE_DIR)/portable/MemMang/heap_1.c \
 $(SOURCE_DIR)/stream_buffer.c \
 $(PORT_DIR)/port.c \
+
 #$(DEMO_DIR)/crflash.c \
 #$(DEMO_DIR)/integer.c \
 #$(DEMO_DIR)/PollQ.c \
 #$(DEMO_DIR)/comtest.c
 
 #gsm.c
-#usart.c \
-#spi.c \
 #display.c \
 
 #ParTest/ParTest.c \
@@ -115,7 +116,7 @@ DEBUG_LEVEL=-g
 WARNINGS=-Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare \
 		-Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused
 
-CFLAGS = -D GCC_MEGA_AVR -D $(CPU_TYPE) -I. -IFreeRTOS/Source/include -ICommon/include  \
+CFLAGS = -D GCC_XMEGA_AVR -D $(CPU_TYPE) -I. -IFreeRTOS/Source/include -ICommon/include  \
 $(DEBUG_LEVEL) -O$(OPT) \
 -fsigned-char -funsigned-bitfields -fpack-struct -fshort-enums \
 $(WARNINGS) \

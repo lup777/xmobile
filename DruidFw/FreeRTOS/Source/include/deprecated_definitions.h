@@ -48,6 +48,10 @@ projects should not use them. */
 	typedef void ( __interrupt __far *pxISR )();
 #endif
 
+#ifdef GCC_XMEGA_AVR
+	#include "../portable/GCC/ATXmega/portmacro.h"
+#endif
+
 #ifdef GCC_MEGA_AVR
 	#include "../portable/GCC/ATMega323/portmacro.h"
 #endif
