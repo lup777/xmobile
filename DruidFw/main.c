@@ -13,6 +13,7 @@
 static void vTogglePA0Task(void* pvParameters);
 void gpio_init(void);
 void GPIO_toggle_PA0(void);
+void sleep(uint16_t time_ms);
 
 /* GPIO
    PORT (those bits controls GPIO lines):
@@ -45,19 +46,23 @@ int main(void) {
   
   return 0;
 }
+void sleep(uint16_t time_ms) {
+  //TickType_t xDelay = time / portTICK_PERIOD_MS;
+  vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
+}
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  const TickType_t xDelay = 1000 / portTICK_PERIOD_MS;
   log("Start vTogglePA0Task task");
+  sleep(1000);
 
   EPD_Init();
+  EPD_clear();
 
   for(;;) {
     GPIO_toggle_PA0();
 
-    vTaskDelay(xDelay);
-    //EPD_clear();
+    sleep(5000);
     EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
     log("Hello from FreeRTOS!");
   }
