@@ -57,13 +57,19 @@ static void vTogglePA0Task(void* pvParameters) {
   sleep(1000);
 
   EPD_Init();
-  EPD_clear();
+  sleep(500);
+  //EPD_clear();
+  EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+
+  sleep(500);
+  EPS_ShowPartialImage(ucDisplayFullLupImage);
 
   for(;;) {
     GPIO_toggle_PA0();
 
-    sleep(5000);
-    EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+    sleep(1000);
+    // EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+    //EPS_ShowPartialImage(ucDisplayFullLupImage);
     log("Hello from FreeRTOS!");
   }
 }

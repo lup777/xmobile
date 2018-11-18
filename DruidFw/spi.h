@@ -13,10 +13,12 @@ void EPD_clear(void);
 extern void EPD_ShowFullScreenImage(const uint8_t *image,
 				    uint16_t xsize,
 				    uint16_t ysize);
+void EPS_ShowPartialImage(const uint8_t* background);
 
 // Display resolution
 #define EPD_WIDTH       200
 #define EPD_HEIGHT      200
+#define EPD_WIDTH_BYTES 25
 
 // EPD1IN54 commands
 #define DRIVER_OUTPUT_CONTROL                       0x01
