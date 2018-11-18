@@ -13,7 +13,8 @@ typedef uint8_t bool;
 #define false  0
 #define true   1
 
-#define log(X) USART0_SendStr(X)
+//#define log(X) USART0_SendStr(X)
+#define log(X) {}
 
 uint8_t gi;
 
@@ -455,7 +456,8 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
   EPD_CSHi();
 }
 
-void EPS_ShowPartialImage(const uint8_t* background) {
+void EPS_ShowPartialImages(const uint8_t* background, Image* images,
+			  size_t len) {
   log("EPD Show partial image");
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
@@ -465,9 +467,16 @@ void EPS_ShowPartialImage(const uint8_t* background) {
 		    EPD_WIDTH_BYTES - 1, // X end
 		    EPD_HEIGHT - 1,      // Y start
 		    0);                  // Y End
-    
-  EPD_ClearDisplayRam(EPD_WIDTH,   //X size
-		      EPD_HEIGHT); //Image
+  
+  if (background == NULL) {
+    EPD_ClearDisplayRam(EPD_WIDTH,   //X size
+			EPD_HEIGHT); //Image
+  }
+  else {
+    EPD_LoadFlashImageToDisplayRam(EPD_WIDTH,   //X size
+				   EPD_HEIGHT,
+				   background); //Image
+  }
   
   //Swap foreground and background, this will
   //show the full-screen image we just put up.
@@ -484,55 +493,34 @@ void EPS_ShowPartialImage(const uint8_t* background) {
 		    EPD_HEIGHT - 1,      // Y start
 		    0);                  // Y end
 
-  EPD_ClearDisplayRam(EPD_WIDTH,  //X size
-		      EPD_HEIGHT);    //Image
+  if (background == NULL) {
+    EPD_ClearDisplayRam(EPD_WIDTH,   //X size
+			EPD_HEIGHT); //Image
+  }
+  else {
+    EPD_LoadFlashImageToDisplayRam(EPD_WIDTH,   //X size
+				   EPD_HEIGHT,
+				   background); //Image
+  }
 
   // for(;;) LOOP FOR SOME IMAGES
 
-  uint8_t w = 2; // width in bytes
-  uint8_t h = 23; // height in bits
-  uint8_t x = 2; // point in bytes
-  uint8_t y = 150; // point in bits
+  //uint8_t w = 2; // width in bytes
+  //uint8_t h = 23; // height in bits
+  //uint8_t x = 2; // point in bytes
+  //uint8_t y = 150; // point in bits
   
-  for (x = 21; x >= 2; x -= 2) {
-  
-    EPD_SetMemoryArea(x,
-		      x + w - 1,
-		      y,
-		      y + h - 1);
-
-    static uint8_t counter = 0;
-    const uint8_t* p = test_font_2;
-    switch(counter) {
-    case 0:
-      p = test_font_1;
-      break;
-
-    case 1:
-      p = test_font_2;
-      break;
-      
-    case 2:
-      p = test_font_3;
-      break;
-
-    case 3:
-      p = test_font_4;
-      break;
-
-    case 4:
-      p = test_font_5;
-      break;
-
-    default:
-      p = test_font_1;
-      break;
-    }
-    counter++;
+  for (gi = 0; gi < len; gi++) {
+    Image image = images[gi];
     
-    EPD_LoadFlashImageToDisplayRam(w * 8, //WIDTH_PIXELS,  //X size
-				   h,   //HEIGHT_PIXELS, //Y size
-				   p);    //Image
+    EPD_SetMemoryArea(image.x,
+		      image.x + image.width - 1,
+		      image.y,
+		      image.y + image.height - 1);
+    
+    EPD_LoadFlashImageToDisplayRam(image.width * 8, //WIDTH_PIXELS,  //X size
+				   image.height,   //HEIGHT_PIXELS, //Y size
+				   image.data);    //Image
   }
     // END OF LOOP FOR SOME IMAGES
   EPD_UpdatePartial();

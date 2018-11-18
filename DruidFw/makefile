@@ -59,6 +59,7 @@ main.c \
 usart.c \
 spi.c \
 pgm.c \
+kbd.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \

@@ -6,19 +6,19 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
-
-void EPD_Init(void);
-uint8_t SPIC_TransferByte(uint8_t data);
-void EPD_clear(void);
-extern void EPD_ShowFullScreenImage(const uint8_t *image,
-				    uint16_t xsize,
-				    uint16_t ysize);
-void EPS_ShowPartialImage(const uint8_t* background);
-
 // Display resolution
 #define EPD_WIDTH       200
 #define EPD_HEIGHT      200
 #define EPD_WIDTH_BYTES 25
+
+typedef struct struct_ImagePack {
+  const uint8_t* data;
+  uint8_t width;  // bytes
+  uint8_t height; // bits
+  uint8_t x; // bytes
+  uint8_t y; // bits
+} Image;
+
 
 // EPD1IN54 commands
 #define DRIVER_OUTPUT_CONTROL                       0x01
@@ -42,5 +42,15 @@ void EPS_ShowPartialImage(const uint8_t* background);
 #define SET_RAM_X_ADDRESS_COUNTER                   0x4E
 #define SET_RAM_Y_ADDRESS_COUNTER                   0x4F
 #define TERMINATE_FRAME_READ_WRITE                  0xFF
+
+void EPD_Init(void);
+uint8_t SPIC_TransferByte(uint8_t data);
+void EPD_clear(void);
+extern void EPD_ShowFullScreenImage(const uint8_t *image,
+				    uint16_t xsize,
+				    uint16_t ysize);
+void EPS_ShowPartialImages(const uint8_t* background, Image* images,
+			   size_t len);
+
 
 #endif //__SPI_H__
