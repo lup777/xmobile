@@ -1,0 +1,12 @@
+1. [SPI][EPD] Is it possible to check status bit before sending byte to EPD.
+   When we sending some bytes to EPD, will can use tranfer delay for preparing next byte.
+   No need to wait transfer complete if we have something to do.
+   a. send 1st byte
+   b. prepare 2nd byte while 1st is in transfer process.
+   c. send 2nd byte
+   d. prepare 3rd byte while 2nd is in transfer process...
+
+2. [LOG] log("abc"); place const string of such logs in PROGMEM. Something like this.
+   #define log(X) {      \
+   const char* msg PROGMEM = X;  \
+   USART0_Transfer(msg); }
