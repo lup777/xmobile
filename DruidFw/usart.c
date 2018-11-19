@@ -1,9 +1,16 @@
 // usart.c
 #include <avr/io.h>
 
-#include <string.h>
+#include "FreeRTOS.h"
+#include "task.h"
 
 #include "usart.h"
+
+void log(const char* msg) {
+  taskENTER_CRITICAL();
+  USART0_SendStr(msg);
+  taskEXIT_CRITICAL();
+}
 
 void USART0_init(void) {
   // 1. Set the TxD pin value high, and optionally set the XCK low

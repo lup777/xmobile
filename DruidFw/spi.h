@@ -6,11 +6,6 @@
 #include <avr/io.h>
 #include <avr/pgmspace.h>
 
-// Display resolution
-#define EPD_WIDTH       200
-#define EPD_HEIGHT      200
-#define EPD_WIDTH_BYTES 25
-
 typedef struct struct_ImagePack {
   const uint8_t* data;
   uint8_t width;  // bytes
@@ -19,6 +14,10 @@ typedef struct struct_ImagePack {
   uint8_t y; // bits
 } Image;
 
+// Display resolution
+#define EPD_WIDTH       200
+#define EPD_HEIGHT      200
+#define EPD_WIDTH_BYTES 25
 
 // EPD1IN54 commands
 #define DRIVER_OUTPUT_CONTROL                       0x01

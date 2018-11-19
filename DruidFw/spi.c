@@ -5,6 +5,8 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+
+#include "global.h"
 #include "usart.h"
 #include "display_data.h"
 #include "pgm.h"

@@ -1,17 +1,14 @@
 // main.c
-#include <avr/io.h>
 
-/* Scheduler include files. */
+#include "global.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "usart.h"
 #include "spi.h"
-#include "display_data.h"
 #include "pgm.h"
 #include "kbd.h"
-
-#define log(X) USART0_SendStr(X)
+#include "ui.h"
 
 static void vTogglePA0Task(void* pvParameters);
 void gpio_init(void);
@@ -27,6 +24,12 @@ void KBD_Init(void);
    PINnCTRL = configuration   
  */
 
+typedef struct struct_context {
+  TaskHandle_t ui_task_handle;
+} Context;
+
+Context context;
+
 void gpio_init(void) {
   PORTA.DIRSET = PIN0_bm; // PORT A, PIN 0,  OUT
 }
@@ -40,10 +43,17 @@ int main(void) {
   USART0_init();
   KBD_Init();
 
+  xTaskCreate(vUITask,
+	      "UI tsak",
+	      configMINIMAL_STACK_SIZE,
+	      NULL,
+	      1,
+	      &(context.ui_task_handle));
+  
   xTaskCreate( vTogglePA0Task,
 	       "blink_PORTA_0_task",
 	       configMINIMAL_STACK_SIZE,
-	       (void*) NULL,
+	       NULL,
 	       1,
 	       NULL );
 
@@ -74,73 +84,13 @@ static void vTogglePA0Task(void* pvParameters) {
 
     Key key = KBD_check();
     if (key != keyNo) {
-
-      // EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
-      Image images[1];
-      switch(key) {
-      case key0:
-	log("KBD key ");
-	images[0].data = test_font_1;
-	break;
-
-      case key1:
-	log("KBD key 1");
-	images[0].data = test_font_2;
-	break;
-
-      case key2:
-	log("KBD key 2");
-	images[0].data = test_font_3;
-	break;
-
-      case key3:
-	log("KBD key 3");
-	images[0].data = test_font_4;
-	break;
-
-      case key4:
-	log("KBD key 4");
-	images[0].data = test_font_5;
-	break;
-
-      case key5:
-	log("KBD key 5");
-	images[0].data = test_font_1;
-	
-	break;
-      case key6:
-	log("KBD key 6");
-	images[0].data = test_font_2;
-	break;
-
-      case key7:
-	log("KBD key 7");
-	images[0].data = test_font_3;
-	break;
-
-      case key8:
-	log("KBD key 8");
-	images[0].data = test_font_4;
-	break;
-
-      case key9:
-	log("KBD key 9");
-	images[0].data = test_font_5;
-	break;
-
-      default:
-	log("KBD key No");
-	images[0].data = test_font_1;
-	break;
+      UI_SetKey(key);
+      //if (pdPASS == xTaskNotify(context.ui_task_handle, 0, eIncrement)) {
+      if (pdPASS == xTaskNotifyGive(context.ui_task_handle)) {
+	log("MAIN Notification Success");
+      } else {
+	log("MAIN Notification Failed");
       }
-      
-      images[0].data = test_font_5;
-      images[0].width = 2;
-      images[0].height = 23;
-      images[0].x = 10;
-      images[0].y = 100;
-      EPS_ShowPartialImages(NULL, images, 1);
-      sleep(1000);
     }
   }
 }
