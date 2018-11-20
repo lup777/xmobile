@@ -12,22 +12,30 @@
 static volatile Key g_key = keyNo;
 static volatile bool g_need_update = false;
 
-/*#ifndef pdMS_TO_TICKS
-#define pdMS_TO_TICKS( xTimeInMs ) ( ( TickType_t ) ( ( ( TickType_t ) ( xTimeInMs ) * ( TickType_t ) configTICK_RATE_HZ ) / ( TickType_t ) 1000 ) )
-#endif*/
+bool UI_IsUpdateNeeded(void);
 
 void UI_SetKey(Key key) {
   taskENTER_CRITICAL();
 
   g_key = key;
-  
-  taskEXIT_CRITICAL(); 
+  g_need_update = true;
+
+  taskEXIT_CRITICAL();
+}
+
+bool UI_IsUpdateNeeded(void) {
+  bool tmp;
+  taskENTER_CRITICAL();
+  tmp = g_need_update;
+  g_need_update = false;
+  taskEXIT_CRITICAL();
+  return tmp;
 }
 
 Key UI_GetKey(void) {
   Key key;
   taskENTER_CRITICAL();
-  
+
   key = g_key;
 
   taskEXIT_CRITICAL();
@@ -41,10 +49,11 @@ void vUITask(void* pvParameters) {
   uint8_t images_num = 1;
 
   EPD_Init();
-  sleep(500);
+  _sleep(500);
+
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
-  sleep(500);
-  
+  _sleep(500);
+
   Image images[images_num];
   images[0].data = test_font_1;
   images[0].width = 2;
@@ -52,20 +61,13 @@ void vUITask(void* pvParameters) {
   images[0].x = 10;
   images[0].y = 100;
 
-  uint32_t ulNotifiedValue;
-  const TickType_t xBlockTime = pdMS_TO_TICKS( 500 );
-  
   for(;;) {
-    //while (pdTRUE != xTaskNotifyWait(0x00, 0xFFFFFFFF/*ULONG_MAX*/,
-    //NULL,
-    //portMAX_DELAY)) {} // indefinitely
-    ulNotifiedValue = ulTaskNotifyTake(pdFALSE, xBlockTime/*portMAX_DELAY*/);
+    if (false == UI_IsUpdateNeeded()) {
+      taskYIELD();
+    }
 
-    if (ulNotifiedValue == 0)
-      continue;
-    
     log("UI Notification received");
-    
+
     switch(UI_GetKey()) {
     case key0:
       log("KBD key ");
@@ -95,7 +97,7 @@ void vUITask(void* pvParameters) {
     case key5:
       log("KBD key 5");
       images[0].data = test_font_1;
-	
+
       break;
     case key6:
       log("KBD key 6");
@@ -123,7 +125,6 @@ void vUITask(void* pvParameters) {
       break;
     } // switch
     EPS_ShowPartialImages(NULL, images, images_num);
-    sleep(1000);
+    _sleep(300);
   }// for
 }
-

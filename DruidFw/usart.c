@@ -3,16 +3,18 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "semphr.h"
 
+#include "global.h"
 #include "usart.h"
 
 void log(const char* msg) {
-  taskENTER_CRITICAL();
+  xSemaphoreTake(context.log_mutex, pdMS_TO_TICKS(100));
   USART0_SendStr(msg);
-  taskEXIT_CRITICAL();
+  xSemaphoreGive(context.log_mutex);
 }
 
-void USART0_init(void) {
+inline void USART0_init(void) {
   // 1. Set the TxD pin value high, and optionally set the XCK low
   PORTF.OUTSET = PIN3_bm;
   // 2. Set the TxD and optionally the XCK pin as output.
@@ -42,21 +44,20 @@ void USART0_init(void) {
 
   // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
   // 5. Enable the transmitter or the receiver, depending on the usage.2.
-  
+
 }
 
-void USART0_SendByte(char c) {
+inline void USART0_SendByte(char c) {
   while( !(USARTF0_STATUS & USART_DREIF_bm) ); //Wait until DATA buffer is empty
   USARTF0_DATA = c;
 }
 
 void USART0_SendStr(const char* str) {
   volatile uint8_t i = 0;
-  uint8_t len = strlen(str);
+  const uint8_t len = strlen(str);
   for(i = 0; i < len; i++) {
     USART0_SendByte(str[i]);
   }
   USART0_SendByte('\n');
   USART0_SendByte('\r');
 }
-

@@ -8,6 +8,6 @@ typedef enum EnumKey {
 } Key;
 
 void KBD_Init(void);
-Key KBD_check(void);
-
+Key KBD_Check(void);
+Key KBD_Read(void);
 #endif // __KEY_H__

@@ -22,7 +22,7 @@ uint8_t gi;
 
 /*
   E-Paper info
-  
+
   GPIO
   BUSY - PORTA 3
   RESET - PORTA 4
@@ -47,11 +47,11 @@ void EPD_WaitUntilIdle(void);
 void EPD_DisplayFrame(void);
 uint8_t SPIC_TransferByte(uint8_t data_out);
 inline void EPD_Reset(void);
-void SPIC_Init(void);
-inline void EPD_DelayMs(uint16_t time);
-inline void EPD_SendData(uint8_t* arr, size_t len);
+inline void SPIC_Init(void);
+void EPD_DelayMs(uint16_t time);
+void EPD_SendData(uint8_t* arr, size_t len);
 inline void EPD_SendDataByte(uint8_t byte);
-inline void EPD_SendCmd(uint8_t* arr, size_t len);
+void EPD_SendCmd(uint8_t* arr, size_t len);
 inline void EPD_SendCmdByte(uint8_t byte);
 inline void EPD_SelectData(void);
 inline void EPD_SelectCommand(void);
@@ -66,6 +66,7 @@ inline void EPD_ShowFullScreenImage(const uint8_t *image,
 inline void EPD_PowerOn(void);
 inline void EPD_PowerOff(void);
 inline void EPD_UpdateFull(void);
+void EPD_UpdatePartial(void);
 inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 					   uint16_t YSize,
 					   const uint8_t  *image);
@@ -109,7 +110,7 @@ inline void EPD_SendCmdByte(uint8_t byte) {
   SPIC_TransferByte(byte);
 }
 
-inline void EPD_SendCmd(uint8_t* arr, size_t len) {
+void EPD_SendCmd(uint8_t* arr, size_t len) {
   EPD_SelectCommand();
   for(gi = 0; gi < len; gi++) {
     SPIC_TransferByte(arr[gi]);
@@ -121,19 +122,19 @@ inline void EPD_SendDataByte(uint8_t byte) {
   SPIC_TransferByte(byte);
 }
 
-inline void EPD_SendData(uint8_t* arr, size_t len) {
+void EPD_SendData(uint8_t* arr, size_t len) {
   EPD_SelectData();
   for(gi = 0; gi < len; gi++) {
     SPIC_TransferByte(arr[gi]);
   }
 }
 
-inline void EPD_DelayMs(uint16_t time) {
+void EPD_DelayMs(uint16_t time) {
   const TickType_t xDelay = time / portTICK_PERIOD_MS;
   vTaskDelay(xDelay);
 }
 
-void SPIC_Init(void) {
+inline void SPIC_Init(void) {
   PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
   EPD_CSHi(); // PIN4_bm
   PORTA.DIRCLR = PIN3_bm;
@@ -224,14 +225,14 @@ void EPD_ClearFrameMemory(uint8_t color) {
 void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 		       uint16_t RAM_YST,uint16_t RAM_YEND) {
   log("EPD set memory area");
-  
+
   //Set region X
   EPD_CSLow();
   EPD_SendCmdByte(0x44); // command
   EPD_SendDataByte(RAM_XST);
   EPD_SendDataByte(RAM_XEND);
   EPD_CSHi();
-  
+
   //Set region Y
   EPD_CSLow();
   EPD_SendCmdByte(0x45); // command
@@ -274,7 +275,7 @@ inline void EPD_Init(void) {
   PORTA.DIRSET = PIN4_bm; // Reset
   PORTA.DIRCLR = PIN3_bm; // Busy
   EPD_CSHi();
-  
+
   EPD_Reset();
 
   log("EPD init");
@@ -313,7 +314,7 @@ inline void EPD_Init(void) {
   EPD_CSHi();
 
   log("EPD Init completed");
-  
+
   EPD_clear();
 }
 
@@ -336,7 +337,7 @@ inline void EPD_PowerOn(void) {
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
-  
+
   EPD_WaitUntilIdle();
 }
 
@@ -351,7 +352,7 @@ inline void EPD_PowerOff(void) {
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
 
-  EPD_WaitUntilIdle(); // wait 
+  EPD_WaitUntilIdle(); // wait
 }
 
 inline void EPD_UpdateFull(void) {
@@ -369,6 +370,8 @@ inline void EPD_UpdateFull(void) {
     // |||-------- LOAD TEMPERATURE (0x20)
     // ||--------- CP ENABLE        (0x40)
     // |---------- CLK/OSC ENABLE   (0x80)
+  EPD_WaitUntilIdle(); // wait
+
   EPD_CSLow();
   EPD_SendCmdByte(DISPLAY_UPDATE_CONTROL_2);
   EPD_SendDataByte(0xC7);
@@ -388,8 +391,8 @@ inline void EPD_UpdateFull(void) {
   EPD_CSLow();
   EPD_SendCmdByte(TERMINATE_FRAME_READ_WRITE);
   EPD_CSHi();
-  
-  EPD_WaitUntilIdle(); // wait 
+
+  EPD_WaitUntilIdle(); // wait
 }
 
 void EPD_ShowFullScreenImage(const uint8_t *image,
@@ -404,7 +407,7 @@ void EPD_ShowFullScreenImage(const uint8_t *image,
   EPD_SetLut(lut_full_update);
 
   EPD_PowerOn();
-    
+
   EPD_SetMemoryArea(0,          // X start
 		    xbytes - 1, // X end
 		    ysize - 1,  // Y start
@@ -412,7 +415,7 @@ void EPD_ShowFullScreenImage(const uint8_t *image,
   //EPD_SetMemoryPointer(0, 0);
 
   EPD_LoadFlashImageToDisplayRam(xsize, ysize, image);
-  EPD_UpdateFull();  
+  EPD_UpdateFull();
 
   EPD_PowerOff();
 }
@@ -422,9 +425,8 @@ inline void EPD_ClearDisplayRam(uint8_t  XSize,
   log("EPD load image to RAM");
   uint8_t x;
   uint16_t y;
-  uint16_t index = 0;
 
-  EPD_WaitUntilIdle(); // wait 
+  EPD_WaitUntilIdle(); // wait
 
   //Convert Xsize from pixels to bytes, rounding up
   XSize = ( XSize + 7 ) >> 3;
@@ -461,6 +463,8 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 void EPS_ShowPartialImages(const uint8_t* background, Image* images,
 			  size_t len) {
   log("EPD Show partial image");
+  EPD_WaitUntilIdle(); // wait
+
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
 
@@ -469,7 +473,7 @@ void EPS_ShowPartialImages(const uint8_t* background, Image* images,
 		    EPD_WIDTH_BYTES - 1, // X end
 		    EPD_HEIGHT - 1,      // Y start
 		    0);                  // Y End
-  
+
   if (background == NULL) {
     EPD_ClearDisplayRam(EPD_WIDTH,   //X size
 			EPD_HEIGHT); //Image
@@ -479,7 +483,7 @@ void EPS_ShowPartialImages(const uint8_t* background, Image* images,
 				   EPD_HEIGHT,
 				   background); //Image
   }
-  
+
   //Swap foreground and background, this will
   //show the full-screen image we just put up.
   EPD_UpdatePartial();
@@ -511,15 +515,15 @@ void EPS_ShowPartialImages(const uint8_t* background, Image* images,
   //uint8_t h = 23; // height in bits
   //uint8_t x = 2; // point in bytes
   //uint8_t y = 150; // point in bits
-  
+
   for (gi = 0; gi < len; gi++) {
     Image image = images[gi];
-    
+
     EPD_SetMemoryArea(image.x,
 		      image.x + image.width - 1,
 		      image.y,
 		      image.y + image.height - 1);
-    
+
     EPD_LoadFlashImageToDisplayRam(image.width * 8, //WIDTH_PIXELS,  //X size
 				   image.height,   //HEIGHT_PIXELS, //Y size
 				   image.data);    //Image
@@ -552,7 +556,7 @@ void EPD_UpdatePartial(void)
   // 0x20 = Master Activation
   // Activate Display Update Sequence
   // The Display Update Sequence Option is
-  // located at R22h    
+  // located at R22h
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
@@ -561,7 +565,7 @@ void EPD_UpdatePartial(void)
   //This command is an empty command; it
   //does not have any effect on the display module.
   //However it can be used to terminate Frame Memory
-  //Write or Read Commands.   
+  //Write or Read Commands.
   EPD_CSLow();
   EPD_SendCmdByte(0xFF);
   EPD_CSHi();
