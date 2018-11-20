@@ -29,7 +29,7 @@ void KBD_Init(void) {
 
 Key KBD_Check(void) {
   uint8_t counter = 0;
-  Key new = KBD_Read();
+  volatile Key new = KBD_Read();
   static Key old = keyNo;
 
   if (new == old)
@@ -39,7 +39,7 @@ Key KBD_Check(void) {
     old = new;
   }
 
-  if (counter > 5) {
+  if (counter >= 3) {
     counter = 0;
     return new;
   }
@@ -48,49 +48,67 @@ Key KBD_Check(void) {
 
 Key KBD_Read(void) {
   PORTD.OUTSET = PIN5_bm;
-  _sleep(10);
+  _sleep(40);
   uint8_t pc0 = PORTC.IN & PIN0_bm;
   uint8_t pc1 = PORTC.IN & PIN1_bm;
   uint8_t pc2 = PORTC.IN & PIN2_bm;
   PORTD.OUTCLR = PIN5_bm;
-  _sleep(10);
+  _sleep(40);
 
-  if (pc0 != 0)
+  if (pc0 != 0) {
+    log("key 1");
     return key1;
-  if (pc1 != 0)
+  }
+  if (pc1 != 0) {
+    log("key 2");
     return key2;
-  if (pc2 != 0)
+  }
+  if (pc2 != 0) {
+    log("key 3");
     return key3;
+  }
 
   PORTD.OUTSET = PIN6_bm;
-  _sleep(10);
+  _sleep(40);
   pc0 = PORTC.IN & PIN0_bm;
   pc1 = PORTC.IN & PIN1_bm;
   pc2 = PORTC.IN & PIN2_bm;
   PORTD.OUTCLR = PIN6_bm;
-  _sleep(10);
+  _sleep(40);
 
-  if (pc0 != 0)
+  if (pc0 != 0) {
+    log("key 4");
     return key4;
-  if (pc1 != 0)
+  }
+  if (pc1 != 0) {
+    log("key 5");
     return key5;
-  if (pc2 != 0)
+  }
+  if (pc2 != 0) {
+    log("key 6");
     return key6;
+  }
 
   PORTD.OUTSET = PIN7_bm;
-  _sleep(10);
+  _sleep(40);
   pc0 = PORTC.IN & PIN0_bm;
   pc1 = PORTC.IN & PIN1_bm;
   pc2 = PORTC.IN & PIN2_bm;
   PORTD.OUTCLR = PIN7_bm;
-  _sleep(10);
+  _sleep(40);
 
-  if (pc0 != 0)
+  if (pc0 != 0) {
+    log("key 7");
     return key7;
-  if (pc1 != 0)
+  }
+  if (pc1 != 0) {
+    log("key 8");
     return key8;
-  if (pc2 != 0)
+  }
+  if (pc2 != 0) {
+    log("key 9");
     return key9;
+  }
 
   return keyNo;
 }

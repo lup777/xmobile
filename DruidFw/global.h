@@ -16,7 +16,8 @@ typedef uint8_t bool;
 
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
-  xSemaphoreHandle log_mutex;
+  QueueHandle_t log_queue;
+  SemaphoreHandle_t ui_sem;
 } Context;
 
 extern Context context;

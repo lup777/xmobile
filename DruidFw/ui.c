@@ -10,43 +10,33 @@
 #include "display_data.h"
 #include "spi.h"
 
-static volatile Key g_key = keyNo;
-static volatile bool g_need_update = false;
+volatile Key g_key;
+volatile bool g_need_update = false;
 
 bool UI_IsUpdateNeeded(void);
 
 void UI_SetKey(Key key) {
-  taskENTER_CRITICAL();
-
   g_key = key;
   g_need_update = true;
-
-  taskEXIT_CRITICAL();
 }
 
 bool UI_IsUpdateNeeded(void) {
-  bool tmp;
-  taskENTER_CRITICAL();
-  tmp = g_need_update;
-  g_need_update = false;
-  taskEXIT_CRITICAL();
-  return tmp;
+  if (g_need_update) {
+    g_need_update = false;
+    return true;
+  }
+  return false;
 }
 
 Key UI_GetKey(void) {
-  Key key;
-  taskENTER_CRITICAL();
-
-  key = g_key;
-
-  taskEXIT_CRITICAL();
-  return key;
+  return g_key;
 }
 
 void vUITask(void* pvParameters) {
   (void)(pvParameters);
   log("UI Task stated");
 
+  g_key = keyNo;
   uint8_t images_num = 1;
 
   EPD_Init();
@@ -54,6 +44,8 @@ void vUITask(void* pvParameters) {
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
   _sleep(500);
+  
+  log("UI Task Init completed");
 
   Image images[images_num];
   images[0].data = test_font_1;
@@ -63,15 +55,13 @@ void vUITask(void* pvParameters) {
   images[0].y = 100;
 
   for(;;) {
-    if (false == UI_IsUpdateNeeded()) {
-      taskYIELD();
+    if (pdTRUE == xSemaphoreTake(context.ui_sem, portMAX_DELAY)) {
+      log("UI Notification received");
+
+      images[0].data = FONT_GetPicture8x13(UI_GetKey()); // for testing only, wrong logic
+
+      EPS_ShowPartialImages(NULL, images, images_num);
+      _sleep(100);
     }
-
-    log("UI Notification received");
-
-    images[0].data = FONT_GetPicture8x13(UI_GetKey()); // for testing only, wrong logic
-
-    EPS_ShowPartialImages(NULL, images, images_num);
-    _sleep(300);
   }// for
 }

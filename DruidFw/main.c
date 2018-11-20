@@ -38,7 +38,15 @@ int main(void) {
   USART0_init();
   KBD_Init();
 
-  context.log_mutex = xSemaphoreCreateMutex();
+  context.log_queue = xQueueCreate(50, sizeof(const char**));
+  context.ui_sem = xSemaphoreCreateBinary();
+
+  xTaskCreate( xLogTask,
+	       "UsartLogstask",
+	       configMINIMAL_STACK_SIZE,
+	       NULL,
+	       1,
+	       NULL );
 
   xTaskCreate(vUITask,
               "UI tsak",
@@ -75,13 +83,16 @@ static void vTogglePA0Task(void* pvParameters) {
 
   _sleep(500);
   //EPS_ShowPartialImage(NULL);
-
+  log("MAIN main task init completed");
   for(;;) {
-    GPIO_toggle_PA0();
+    //GPIO_toggle_PA0();
 
-    Key key = KBD_Check();
+    //volatile Key key = KBD_Check();
+    volatile Key key = KBD_Read();
     if (key != keyNo) {
+      //log("MAIN key pressed");
       UI_SetKey(key);
+      xSemaphoreGive(context.ui_sem);
     }
   }
 }

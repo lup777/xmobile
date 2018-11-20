@@ -3,15 +3,29 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
-#include "semphr.h"
+#include "queue.h"
 
 #include "global.h"
 #include "usart.h"
 
 void log(const char* msg) {
-  xSemaphoreTake(context.log_mutex, pdMS_TO_TICKS(100));
-  USART0_SendStr(msg);
-  xSemaphoreGive(context.log_mutex);
+    xQueueSend(context.log_queue, (void*)&msg, (TickType_t)100);
+}
+
+void xLogTask(void* pvParameters) {
+  (void)(pvParameters);
+
+  for(;;) {
+    const char* msg;
+    if (uxQueueMessagesWaiting(context.log_queue) > 0) {
+      if( pdTRUE == xQueueReceive(context.log_queue,
+				  (const char**)&msg, portMAX_DELAY) ) {
+	if (msg) {
+	  USART0_SendStr(msg);
+	}
+      }
+    }
+  }
 }
 
 inline void USART0_init(void) {
