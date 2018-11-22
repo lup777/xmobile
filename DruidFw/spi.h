@@ -46,10 +46,10 @@ void EPD_Init(void);
 uint8_t SPIC_TransferByte(uint8_t data);
 void EPD_clear(void);
 extern void EPD_ShowFullScreenImage(const uint8_t *image,
-				    uint16_t xsize,
-				    uint16_t ysize);
+                                    uint16_t xsize,
+                                    uint16_t ysize);
 void EPS_ShowPartialImages(const uint8_t* background, Image* images,
-			   size_t len);
-
+                           size_t len);
+void EPD_ShowString(char* str, uint8_t x, uint8_t y);
 
 #endif //__SPI_H__

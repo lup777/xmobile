@@ -37,30 +37,22 @@ void vUITask(void* pvParameters) {
   log("UI Task stated");
 
   g_key = keyNo;
-  uint8_t images_num = 1;
 
   EPD_Init();
   _sleep(500);
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
   _sleep(500);
-  
-  log("UI Task Init completed");
 
-  Image images[images_num];
-  images[0].data = test_font_1;
-  images[0].width = 1;
-  images[0].height = 13;
-  images[0].x = 10;
-  images[0].y = 100;
+  log("UI Task Init completed");
 
   for(;;) {
     if (pdTRUE == xSemaphoreTake(context.ui_sem, portMAX_DELAY)) {
       log("UI Notification received");
-
-      images[0].data = FONT_GetPicture8x13(UI_GetKey()); // for testing only, wrong logic
-
-      EPS_ShowPartialImages(NULL, images, images_num);
+      char msg[2];
+      msg[0] = g_key;
+      msg[1] = '\n';
+      EPD_ShowString( msg, 10, 100 );
       _sleep(100);
     }
   }// for

@@ -10,3 +10,10 @@
    #define log(X) {      \
    const char* msg PROGMEM = X;  \
    USART0_Transfer(msg); }
+
+3. [KBD] Return "key pressed" only when key state changed from "pressed" to "released".
+
+4. [KBD] Add capacitors to keayboard
+
+5. [KBD] Read KBD from ISR (no need special thread). It also needed for sleep mode.
+   Enable "Slew-rate control" for output

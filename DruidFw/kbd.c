@@ -3,8 +3,6 @@
 #include "global.h"
 #include "kbd.h"
 
-#include <avr/io.h>
-
 #include "FreeRTOS.h"
 
 /*void _sleep(uint16_t time_ms) {
@@ -12,103 +10,111 @@
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
   }*/
 
+volatile uint16_t g_key_map;
+
+#define KEY_1 (0x0001)
+#define KEY_2 (1 << 1)
+#define KEY_3 (1 << 2)
+#define KEY_4 (1 << 3)
+#define KEY_5 (1 << 4)
+#define KEY_6 (1 << 5)
+#define KEY_7 (1 << 6)
+#define KEY_8 (1 << 7)
+#define KEY_9 (1 << 8)
+#define KEY_10 (1 << 9)
+#define KEY_11 (1 << 10)
+#define KEY_12 (1 << 11)
+#define KEY_13 (1 << 12)
+#define KEY_14 (1 << 13)
+#define KEY_15 (1 << 14)
+#define KEY_16 (1 << 15)
+
 void KBD_Init(void) {
-  // KBD IN
+  // KBD OUT
   // PD 5 6 7
 
-  // KBD OUT
+  // KBD IN
   // PC 0 1 2
-  PORTD.DIRSET = PIN5_bm | PIN6_bm | PIN7_bm;
-  PORTD.OUTCLR = PIN5_bm | PIN6_bm | PIN7_bm;
+  PORTD.DIRCLR = PIN5_bm | PIN6_bm | PIN7_bm;
+  //PORTD.OUTCLR = PIN5_bm | PIN6_bm | PIN7_bm;
+
+  // slew rate
+  //PORTD.PIN5CTRL |= PORT_SRLEN_bm;
+  //PORTD.PIN6CTRL |= PORT_SRLEN_bm;
+  //PORTD.PIN7CTRL |= PORT_SRLEN_bm;
+
 
   PORTC.DIRCLR = PIN0_bm | PIN1_bm | PIN2_bm;
-  PORTC.PIN0CTRL = PORT_OPC_PULLDOWN_gc;
-  PORTC.PIN1CTRL = PORT_OPC_PULLDOWN_gc;
-  PORTC.PIN2CTRL = PORT_OPC_PULLDOWN_gc;
+  PORTC.PIN0CTRL |= PORT_OPC_PULLDOWN_gc | PORT_ISC_FALLING_gc; // | PORT_INVEN_bm;
+  PORTC.PIN1CTRL |= PORT_OPC_PULLDOWN_gc | PORT_ISC_FALLING_gc; // | PORT_INVEN_bm;
+  PORTC.PIN2CTRL |= PORT_OPC_PULLDOWN_gc | PORT_ISC_FALLING_gc; // | PORT_INVEN_bm;
 }
 
-Key KBD_Check(void) {
-  uint8_t counter = 0;
-  volatile Key new = KBD_Read();
-  static Key old = keyNo;
+//ISR(PORTC_INT0_vect) {}
 
-  if (new == old)
-    counter ++;
-  else {
-    counter = 0;
-    old = new;
+Key KBD_Check(void) { // only 1 key at one time
+  uint8_t i;
+  uint16_t map = KBD_Read();
+
+  if (map == 0 && g_key_map != 0) { // some key was released
+    for (i = 0; i < 16; i++) {
+      if (g_key_map & (uint16_t)(1 << i))
+        break; // [i] key released
+    }
   }
 
-  if (counter >= 3) {
-    counter = 0;
-    return new;
-  }
-  return keyNo;
+  g_key_map = 0; // clear last key map
+  return (Key)i;
 }
 
-Key KBD_Read(void) {
+uint16_t KBD_Read(void) {
+  uint16_t key_map = 0;
+
+  PORTD.DIRCLR = PIN6_bm | PIN7_bm;
+
+  PORTD.DIRSET = PIN5_bm;
   PORTD.OUTSET = PIN5_bm;
+
   _sleep(40);
-  uint8_t pc0 = PORTC.IN & PIN0_bm;
-  uint8_t pc1 = PORTC.IN & PIN1_bm;
-  uint8_t pc2 = PORTC.IN & PIN2_bm;
+
+  if (PORTC.IN & PIN0_bm)
+    g_key_map |= KEY_1;
+  if (PORTC.IN & PIN1_bm)
+    g_key_map |= KEY_2;
+  if (PORTC.IN & PIN2_bm)
+    g_key_map |= KEY_3;
+
   PORTD.OUTCLR = PIN5_bm;
-  _sleep(40);
+  PORTD.DIRCLR = PIN5_bm | PIN6_bm | PIN7_bm;
 
-  if (pc0 != 0) {
-    log("key 1");
-    return key1;
-  }
-  if (pc1 != 0) {
-    log("key 2");
-    return key2;
-  }
-  if (pc2 != 0) {
-    log("key 3");
-    return key3;
-  }
 
+  PORTD.DIRSET = PIN6_bm;
   PORTD.OUTSET = PIN6_bm;
   _sleep(40);
-  pc0 = PORTC.IN & PIN0_bm;
-  pc1 = PORTC.IN & PIN1_bm;
-  pc2 = PORTC.IN & PIN2_bm;
+
+  if (PORTC.IN & PIN0_bm)
+    g_key_map |= KEY_4;
+  if (PORTC.IN & PIN1_bm)
+    g_key_map |= KEY_5;
+  if (PORTC.IN & PIN2_bm)
+    g_key_map |= KEY_6;
+
   PORTD.OUTCLR = PIN6_bm;
-  _sleep(40);
+  PORTD.DIRCLR = PIN5_bm | PIN6_bm | PIN7_bm;
 
-  if (pc0 != 0) {
-    log("key 4");
-    return key4;
-  }
-  if (pc1 != 0) {
-    log("key 5");
-    return key5;
-  }
-  if (pc2 != 0) {
-    log("key 6");
-    return key6;
-  }
-
+  PORTD.DIRSET = PIN7_bm;
   PORTD.OUTSET = PIN7_bm;
   _sleep(40);
-  pc0 = PORTC.IN & PIN0_bm;
-  pc1 = PORTC.IN & PIN1_bm;
-  pc2 = PORTC.IN & PIN2_bm;
+
+  if (PORTC.IN & PIN0_bm)
+    g_key_map |= KEY_7;
+  if (PORTC.IN & PIN1_bm)
+    g_key_map |= KEY_8;
+  if (PORTC.IN & PIN2_bm)
+    g_key_map |= KEY_9;
+
   PORTD.OUTCLR = PIN7_bm;
-  _sleep(40);
+  PORTD.DIRCLR = PIN5_bm | PIN6_bm | PIN7_bm;
 
-  if (pc0 != 0) {
-    log("key 7");
-    return key7;
-  }
-  if (pc1 != 0) {
-    log("key 8");
-    return key8;
-  }
-  if (pc2 != 0) {
-    log("key 9");
-    return key9;
-  }
-
-  return keyNo;
+  return key_map;
 }

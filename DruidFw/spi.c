@@ -2,6 +2,7 @@
 #include "spi.h"
 
 #include <avr/io.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -10,6 +11,7 @@
 #include "usart.h"
 #include "display_data.h"
 #include "pgm.h"
+#include "fonts.h"
 
 typedef uint8_t bool;
 #define false  0
@@ -19,6 +21,7 @@ typedef uint8_t bool;
 #define log(X) {}
 
 uint8_t gi;
+const uint8_t* gbackground;
 
 /*
   E-Paper info
@@ -60,18 +63,13 @@ inline void EPD_ResetDisable(void);
 inline bool EPD_Busy(void);
 inline void EPD_CSLow(void);
 inline void EPD_CSHi(void);
-inline void EPD_ShowFullScreenImage(const uint8_t *image,
-				    uint16_t xsize,
-				    uint16_t ysize);
+inline void EPD_ShowFullScreenImage(const uint8_t *image, uint16_t xsize, uint16_t ysize);
 inline void EPD_PowerOn(void);
 inline void EPD_PowerOff(void);
 inline void EPD_UpdateFull(void);
 void EPD_UpdatePartial(void);
-inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
-					   uint16_t YSize,
-					   const uint8_t  *image);
-inline void EPD_ClearDisplayRam(uint8_t  XSize,
-				uint16_t YSize);
+inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize, uint16_t YSize,
+                                           const uint8_t  *image);
 
 inline void EPD_CSLow(void) {
   if ((PORTC.OUT & PIN4_bm) != 0)
@@ -270,6 +268,7 @@ void EPD_SetLut(const uint8_t* lut) {
 inline void EPD_Init(void) {
   SPIC_Init();
   log("SPI init completed");
+  gbackground = NULL;
   // CS configured to out in SPIC_Init()
   PORTA.DIRSET = PIN1_bm; // DC
   PORTA.DIRSET = PIN4_bm; // Reset
@@ -420,29 +419,9 @@ void EPD_ShowFullScreenImage(const uint8_t *image,
   EPD_PowerOff();
 }
 
-inline void EPD_ClearDisplayRam(uint8_t  XSize,
-				uint16_t YSize) {
-  log("EPD load image to RAM");
-  uint8_t x;
-  uint16_t y;
-
-  EPD_WaitUntilIdle(); // wait
-
-  //Convert Xsize from pixels to bytes, rounding up
-  XSize = ( XSize + 7 ) >> 3;
-  EPD_CSLow();
-  EPD_SendCmdByte(WRITE_RAM);
-  for( y = 0; y < YSize; y++ ) {
-    for( x = 0; x < XSize; x++ ) {
-      EPD_SendDataByte(0xFF);
-    }
-  }
-  EPD_CSHi();
-}
-
 inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
-					   uint16_t YSize,
-					   const uint8_t  *image) {
+                                           uint16_t YSize,
+                                           const uint8_t  *image) {
   log("EPD load image to RAM");
   uint8_t x;
   uint16_t y;
@@ -454,81 +433,69 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
   EPD_SendCmdByte(WRITE_RAM);
   for( y = 0; y < YSize; y++ ) {
     for( x = 0; x < XSize; x++ ) {
-      EPD_SendDataByte( pgm_read_byte( &image[index++] ) );
+      if (image == NULL)
+        EPD_SendDataByte( 0xFF );
+      else
+        EPD_SendDataByte( pgm_read_byte( &image[index++] ) );
     }
   }
   EPD_CSHi();
 }
 
-void EPS_ShowPartialImages(const uint8_t* background, Image* images,
-			  size_t len) {
+void EPD_ShowString(char* str, uint8_t x, uint8_t y) {
   log("EPD Show partial image");
   EPD_WaitUntilIdle(); // wait
 
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
 
-  //Fill entire display RAM with background image.
-  EPD_SetMemoryArea(0,                   // X start
-		    EPD_WIDTH_BYTES - 1, // X end
-		    EPD_HEIGHT - 1,      // Y start
-		    0);                  // Y End
+  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
 
-  if (background == NULL) {
-    EPD_ClearDisplayRam(EPD_WIDTH,   //X size
-			EPD_HEIGHT); //Image
-  }
-  else {
-    EPD_LoadFlashImageToDisplayRam(EPD_WIDTH,   //X size
-				   EPD_HEIGHT,
-				   background); //Image
-  }
-
-  //Swap foreground and background, this will
-  //show the full-screen image we just put up.
   EPD_UpdatePartial();
 
-  //Now again fill entire display RAM with the same
-  //background image. This will make it so the parts
-  //of the dispaly that are not changed by the partial
-  //update do not flicker.
-  //If you instead load Diag_1BPP, you can see the
-  //background swap out on every other update.
-  EPD_SetMemoryArea(0,                   // X start
-		    EPD_WIDTH_BYTES - 1, // X end
-		    EPD_HEIGHT - 1,      // Y start
-		    0);                  // Y end
+  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
 
-  if (background == NULL) {
-    EPD_ClearDisplayRam(EPD_WIDTH,   //X size
-			EPD_HEIGHT); //Image
-  }
-  else {
-    EPD_LoadFlashImageToDisplayRam(EPD_WIDTH,   //X size
-				   EPD_HEIGHT,
-				   background); //Image
+  size_t len = strlen(str);
+
+  for (gi = 0; gi < len; gi++) {
+    const uint8_t* picture = FONT_GetPicture8x13( str[gi] );
+    uint8_t width = 1; // byte
+    uint8_t height = 13; // bits
+
+    EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
+    EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
   }
 
-  // for(;;) LOOP FOR SOME IMAGES
+  EPD_UpdatePartial();
+  EPD_PowerOff();
+}
 
-  //uint8_t w = 2; // width in bytes
-  //uint8_t h = 23; // height in bits
-  //uint8_t x = 2; // point in bytes
-  //uint8_t y = 150; // point in bits
+void EPD_ShowPartialImages(const uint8_t* background, Image* images,
+                           size_t len) {
+  log("EPD Show partial image");
+  EPD_WaitUntilIdle(); // wait
+
+  EPD_SetLut(lut_partial_update);
+  EPD_PowerOn();
+
+  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, background);
+
+  EPD_UpdatePartial();
+
+  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, background);
 
   for (gi = 0; gi < len; gi++) {
     Image image = images[gi];
 
-    EPD_SetMemoryArea(image.x,
-		      image.x + image.width - 1,
-		      image.y,
-		      image.y + image.height - 1);
-
-    EPD_LoadFlashImageToDisplayRam(image.width * 8, //WIDTH_PIXELS,  //X size
-				   image.height,   //HEIGHT_PIXELS, //Y size
-				   image.data);    //Image
+    EPD_SetMemoryArea(image.x, image.x + image.width - 1, image.y,
+                      image.y + image.height - 1);
+    EPD_LoadFlashImageToDisplayRam(image.width * 8, image.height, image.data);
   }
-    // END OF LOOP FOR SOME IMAGES
+
   EPD_UpdatePartial();
   EPD_PowerOff();
 }
