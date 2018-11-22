@@ -442,7 +442,7 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
   EPD_CSHi();
 }
 
-void EPD_ShowString(char* str, uint8_t x, uint8_t y) {
+void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   log("EPD Show partial image");
   EPD_WaitUntilIdle(); // wait
 
@@ -457,7 +457,7 @@ void EPD_ShowString(char* str, uint8_t x, uint8_t y) {
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
 
-  size_t len = strlen(str);
+  //size_t len = strlen(str);
 
   for (gi = 0; gi < len; gi++) {
     const uint8_t* picture = FONT_GetPicture8x13( str[gi] );

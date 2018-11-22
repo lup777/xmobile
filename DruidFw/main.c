@@ -88,11 +88,10 @@ static void vTogglePA0Task(void* pvParameters) {
     //GPIO_toggle_PA0();
 
     //volatile Key key = KBD_Check();
-    volatile Key key = KBD_Read();
+    volatile Key key = KBD_Check();
     if (key != keyNo) {
       //log("MAIN key pressed");
       UI_SetKey(key);
-      xSemaphoreGive(context.ui_sem);
     }
   }
 }

@@ -11,21 +11,10 @@
 #include "spi.h"
 
 volatile Key g_key;
-volatile bool g_need_update = false;
-
-bool UI_IsUpdateNeeded(void);
 
 void UI_SetKey(Key key) {
   g_key = key;
-  g_need_update = true;
-}
-
-bool UI_IsUpdateNeeded(void) {
-  if (g_need_update) {
-    g_need_update = false;
-    return true;
-  }
-  return false;
+  xSemaphoreGive(context.ui_sem);
 }
 
 Key UI_GetKey(void) {
@@ -52,8 +41,8 @@ void vUITask(void* pvParameters) {
       char msg[2];
       msg[0] = g_key;
       msg[1] = '\n';
-      EPD_ShowString( msg, 10, 100 );
-      _sleep(100);
+      EPD_ShowString( msg, 2, 10, 100 );
+      _sleep(1000);
     }
   }// for
 }
