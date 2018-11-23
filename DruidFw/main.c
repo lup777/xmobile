@@ -73,24 +73,14 @@ void _sleep(uint16_t time_ms) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  log("Start vTogglePA0Task task");
+  log("MAIN starting main  task");
   _sleep(1000);
 
-  EPD_Init();
-  _sleep(500);
-  //EPD_clear();
-  EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
-
-  _sleep(500);
-  //EPS_ShowPartialImage(NULL);
   log("MAIN main task init completed");
   for(;;) {
-    //GPIO_toggle_PA0();
 
-    //volatile Key key = KBD_Check();
     volatile Key key = KBD_Check();
     if (key != keyNo) {
-      //log("MAIN key pressed");
       UI_SetKey(key);
     }
   }

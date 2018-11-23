@@ -81,7 +81,7 @@ uint16_t KBD_Read(void) {
   PORTD.OUTSET = PIN5_bm;
 
   _sleep(40);
-  
+
   tmp = PORTC.IN;
   if ((tmp & PIN0_bm) != 0) {
     key_map |= KEY_1;

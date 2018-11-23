@@ -23,15 +23,15 @@ Key UI_GetKey(void) {
 
 void vUITask(void* pvParameters) {
   (void)(pvParameters);
-  log("UI Task stated");
+  log("UI starting UI task");
 
   g_key = keyNo;
 
   EPD_Init();
-  _sleep(500);
+  _sleep(100);
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
-  _sleep(500);
+  _sleep(100);
 
   log("UI Task Init completed");
 
