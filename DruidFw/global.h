@@ -27,6 +27,7 @@ void _clog(const char* msg);
 void _log(char* msg);
 void _sleep(uint16_t time_ms);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
+uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _strlen(char * str);
 
 

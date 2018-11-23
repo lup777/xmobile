@@ -16,7 +16,8 @@ void _log(char* msg) {
   // so let put 1 bit 0x8000 to adress and do not forgot to clear it
   // in the end of queue
   const char err[] = "ERROR: ADDR & 0x8000 != 0 in _log";
-  void* ptr = &msg;
+  uint16_t _msg = (uint16_t)msg | (uint16_t)0x8000;
+  void* ptr = &_msg;
   if ((uint16_t)ptr & (uint16_t)0x8000) {
     xQueueSend(context.log_queue, (void*)&err, (TickType_t)100);
   } else {
@@ -52,6 +53,9 @@ void xLogTask(void* pvParameters) {
       if( pdTRUE == xQueueReceive(context.log_queue,
 				  (const char**)&msg, portMAX_DELAY) ) {
         if (msg) {
+          if ((uint16_t)msg & (uint16_t)0x8000) {
+            msg = (const char*)((uint16_t)msg & (uint16_t)0x7FFF);
+          }
           USART0_SendStr(msg);
         }
       }
