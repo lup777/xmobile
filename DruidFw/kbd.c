@@ -69,9 +69,11 @@ Key KBD_Check(void) { // only 1 key at one time
     g_key_map = map;
   }
 
-  char buf[] = "K:___";
-  _u8tos(i, buf + 2, 3, 10);
-  _log(buf);
+  // Its need to alloc memoy and share pointer
+  // or share pinter to const string and uint8_t value
+  //  char buf[] = "K:___\n";
+  //_u8tos(i, buf + 2, 3, 10);
+  //_log(buf);
   return (Key)i;
 }
 
@@ -88,15 +90,12 @@ uint16_t KBD_Read(void) {
   tmp = PORTC.IN;
   if ((tmp & PIN0_bm) != 0) {
     key_map |= KEY_1;
-    _clog("key 1");
   }
   if ((tmp & PIN1_bm) != 0) {
     key_map |= KEY_2;
-    _clog("key 2");
   }
   if ((tmp & PIN2_bm) != 0) {
     key_map |= KEY_3;
-    _clog("key 3");
   }
 
   PORTD.OUTCLR = PIN5_bm;
@@ -109,15 +108,12 @@ uint16_t KBD_Read(void) {
   tmp = PORTC.IN;
   if (tmp & PIN0_bm) {
     key_map |= KEY_4;
-    _clog("key 4");
   }
   if (tmp & PIN1_bm) {
     key_map |= KEY_5;
-    _clog("key 5");
   }
   if (tmp & PIN2_bm) {
     key_map |= KEY_6;
-    _clog("key 6");
   }
 
   PORTD.OUTCLR = PIN6_bm;
@@ -130,15 +126,12 @@ uint16_t KBD_Read(void) {
   tmp = PORTC.IN;
   if (tmp & PIN0_bm) {
     key_map |= KEY_7;
-    _clog("key 7");
   }
   if (tmp & PIN1_bm) {
     key_map |= KEY_8;
-    _clog("key 8");
   }
   if (tmp & PIN2_bm) {
     key_map |= KEY_9;
-    _clog("key 9");
   }
 
   PORTD.OUTCLR = PIN7_bm;

@@ -23,7 +23,7 @@ Key UI_GetKey(void) {
 
 void vUITask(void* pvParameters) {
   (void)(pvParameters);
-  _clog("UI starting UI task");
+  //_clog("UI starting UI task");
 
   g_key = keyNo;
 
@@ -38,10 +38,8 @@ void vUITask(void* pvParameters) {
   for(;;) {
     if (pdTRUE == xSemaphoreTake(context.ui_sem, portMAX_DELAY)) {
       _clog("UI Notification received");
-      char msg[2];
-      msg[0] = g_key;
-      msg[1] = '\n';
-      EPD_ShowString( msg, 2, 10, 100 );
+      char msg[26] = "abcdefghijklmnopqrstuvwxyz";
+      EPD_ShowString( (char*)msg, 26, 0, 100 );
       _sleep(1000);
     }
   }// for

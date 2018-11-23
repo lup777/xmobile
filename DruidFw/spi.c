@@ -447,59 +447,38 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   _clog("EPD Show partial image");
   EPD_WaitUntilIdle(); // wait
+  taskENTER_CRITICAL();
 
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
 
-  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
-  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
+    //EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+    //EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
 
-  EPD_UpdatePartial();
+    //EPD_UpdatePartial();
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
 
   //size_t len = strlen(str);
-
+  x = 24 - x;
   for (gi = 0; gi < len; gi++) {
-    const uint8_t* picture = FONT_GetPicture8x13( str[gi] );
+    const uint8_t* picture = FONT_GetPicture8x13( (uint8_t)(str[gi]) );
     uint8_t width = 1; // byte
     uint8_t height = 13; // bits
 
     EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
+    if (x > 0) {
+      x -= 1;
+    } else {
+      break;
+    }
   }
 
   EPD_UpdatePartial();
   EPD_PowerOff();
-}
-
-void EPD_ShowPartialImages(const uint8_t* background, Image* images,
-                           size_t len) {
-  _clog("EPD Show partial image");
-  EPD_WaitUntilIdle(); // wait
-
-  EPD_SetLut(lut_partial_update);
-  EPD_PowerOn();
-
-  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
-  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, background);
-
-  EPD_UpdatePartial();
-
-  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
-  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, background);
-
-  for (gi = 0; gi < len; gi++) {
-    Image image = images[gi];
-
-    EPD_SetMemoryArea(image.x, image.x + image.width - 1, image.y,
-                      image.y + image.height - 1);
-    EPD_LoadFlashImageToDisplayRam(image.width * 8, image.height, image.data);
-  }
-
-  EPD_UpdatePartial();
-  EPD_PowerOff();
+  taskEXIT_CRITICAL();
 }
 
 void EPD_UpdatePartial(void)

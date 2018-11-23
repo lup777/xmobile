@@ -48,8 +48,6 @@ void EPD_clear(void);
 extern void EPD_ShowFullScreenImage(const uint8_t *image,
                                     uint16_t xsize,
                                     uint16_t ysize);
-void EPS_ShowPartialImages(const uint8_t* background, Image* images,
-                           size_t len);
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y);
 
 #endif //__SPI_H__

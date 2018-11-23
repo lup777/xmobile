@@ -33,12 +33,13 @@ void GPIO_toggle_PA0(void) {
   PORTA.OUTTGL = PIN0_bm;
 }
 
+
 int main(void) {
   gpio_init();
   USART0_init();
   KBD_Init();
 
-  context.log_queue = xQueueCreate(50, sizeof(const char**));
+  context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
 
   xTaskCreate( xLogTask,
@@ -73,7 +74,7 @@ void _sleep(uint16_t time_ms) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  _clog("MAIN starting main  task");
+  //_clog("MAIN starting main  task");
   _sleep(1000);
 
   _clog("MAIN main task init completed");
@@ -82,6 +83,7 @@ static void vTogglePA0Task(void* pvParameters) {
     volatile Key key = KBD_Check();
     if (key != keyNo) {
       UI_SetKey(key);
+      //_clogu8("key released:", (uint8_t)key);
     }
   }
 }

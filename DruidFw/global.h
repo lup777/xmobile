@@ -20,11 +20,15 @@ typedef struct struct_context {
   SemaphoreHandle_t ui_sem;
 } Context;
 
+
+typedef struct StructLogPairU8 {
+  const char* msg;
+  uint8_t value;
+} LogPairU8;
+
 extern Context context;
 
 //#define log(X) USART0_SendStr(X)
-void _clog(const char* msg);
-void _log(char* msg);
 void _sleep(uint16_t time_ms);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);

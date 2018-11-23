@@ -9,55 +9,38 @@
 #include "global.h"
 #include "usart.h"
 
-void _log(char* msg) {
-  // It is experiment:
-  // We need to distinguish "const char*" and "char*"
-  // Because of strlen works only with "const char*"
-  // so let put 1 bit 0x8000 to adress and do not forgot to clear it
-  // in the end of queue
-  const char err[] = "ERROR: ADDR & 0x8000 != 0 in _log";
-  uint16_t _msg = (uint16_t)msg | (uint16_t)0x8000;
-  void* ptr = &_msg;
-  if ((uint16_t)ptr & (uint16_t)0x8000) {
-    xQueueSend(context.log_queue, (void*)&err, (TickType_t)100);
-  } else {
-    ptr = (void*)((uint16_t)ptr | (uint16_t)0x8000); // It is not constant string
-    xQueueSend(context.log_queue, ptr, (TickType_t)100);
-  }
+void USART0_SendBuf(char* str);
+
+void _clogu8(const char* str, uint8_t v) {
+  LogPairU8 pair;
+  pair.msg = str;
+  pair.value = v;
+  xQueueSend(context.log_queue, &pair, (TickType_t)100);
 }
 
 void _clog(const char* msg) {
-  // It is experiment:
-  // We need to distinguish "const char*" and "char*"
-  // Because of strlen works only with "const char*"
-  // so let put 1 bit 0x8000 to adress and do not forgot to clear it
-  // in the end of queue
-  const char err[] = "ERROR: ADDR & 0x8000 != 0 in _clog";
-  void* ptr = &msg;
-  if ((uint16_t)ptr & (uint16_t)0x8000) {
-    xQueueSend(context.log_queue, (void*)&err, (TickType_t)100);
-  } else {
-    xQueueSend(context.log_queue, (void*)&msg, (TickType_t)100);
-  }
+  LogPairU8 pair;
+  pair.msg = msg;
+  pair.value = 0;
+  xQueueSend(context.log_queue, &pair, (TickType_t)100);
 }
-
-
-
 
 void xLogTask(void* pvParameters) {
   (void)(pvParameters);
 
   for(;;) {
-    const char* msg;
+    LogPairU8 pair;
     if (uxQueueMessagesWaiting(context.log_queue) > 0) {
       if( pdTRUE == xQueueReceive(context.log_queue,
-				  (const char**)&msg, portMAX_DELAY) ) {
-        if (msg) {
-          if ((uint16_t)msg & (uint16_t)0x8000) {
-            msg = (const char*)((uint16_t)msg & (uint16_t)0x7FFF);
-          }
-          USART0_SendStr(msg);
-        }
+				  &pair, portMAX_DELAY) ) {
+	USART0_SendStr(pair.msg);
+
+	char buf[] = " ___";
+	_u8tos(pair.value, buf + 1, 3, 10);
+	USART0_SendBuf(buf);
+	  
+	USART0_SendByte('\n');
+	USART0_SendByte('\r');
       }
     }
   }
@@ -109,6 +92,12 @@ void USART0_SendStr(const char* str) {
   for(i = 0; i < len; i++) {
     USART0_SendByte(str[i]);
   }
-  USART0_SendByte('\n');
-  USART0_SendByte('\r');
+}
+
+void USART0_SendBuf(char* str) {
+  volatile uint8_t i = 0;
+  const uint8_t len = _strlen(str);
+  for(i = 0; i < len; i++) {
+    USART0_SendByte(str[i]);
+  }
 }
