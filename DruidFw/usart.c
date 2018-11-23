@@ -9,9 +9,39 @@
 #include "global.h"
 #include "usart.h"
 
-void _log(const char* msg) {
-    xQueueSend(context.log_queue, (void*)&msg, (TickType_t)100);
+void _log(char* msg) {
+  // It is experiment:
+  // We need to distinguish "const char*" and "char*"
+  // Because of strlen works only with "const char*"
+  // so let put 1 bit 0x8000 to adress and do not forgot to clear it
+  // in the end of queue
+  const char err[] = "ERROR: ADDR & 0x8000 != 0 in _log";
+  void* ptr = &msg;
+  if ((uint16_t)ptr & (uint16_t)0x8000) {
+    xQueueSend(context.log_queue, (void*)&err, (TickType_t)100);
+  } else {
+    ptr = (void*)((uint16_t)ptr | (uint16_t)0x8000); // It is not constant string
+    xQueueSend(context.log_queue, ptr, (TickType_t)100);
+  }
 }
+
+void _clog(const char* msg) {
+  // It is experiment:
+  // We need to distinguish "const char*" and "char*"
+  // Because of strlen works only with "const char*"
+  // so let put 1 bit 0x8000 to adress and do not forgot to clear it
+  // in the end of queue
+  const char err[] = "ERROR: ADDR & 0x8000 != 0 in _clog";
+  void* ptr = &msg;
+  if ((uint16_t)ptr & (uint16_t)0x8000) {
+    xQueueSend(context.log_queue, (void*)&err, (TickType_t)100);
+  } else {
+    xQueueSend(context.log_queue, (void*)&msg, (TickType_t)100);
+  }
+}
+
+
+
 
 void xLogTask(void* pvParameters) {
   (void)(pvParameters);
@@ -21,9 +51,9 @@ void xLogTask(void* pvParameters) {
     if (uxQueueMessagesWaiting(context.log_queue) > 0) {
       if( pdTRUE == xQueueReceive(context.log_queue,
 				  (const char**)&msg, portMAX_DELAY) ) {
-	if (msg) {
-	  USART0_SendStr(msg);
-	}
+        if (msg) {
+          USART0_SendStr(msg);
+        }
       }
     }
   }

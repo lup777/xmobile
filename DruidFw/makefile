@@ -62,6 +62,7 @@ pgm.c \
 kbd.c \
 ui.c \
 fonts.c \
+util.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \

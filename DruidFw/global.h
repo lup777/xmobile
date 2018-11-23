@@ -23,7 +23,11 @@ typedef struct struct_context {
 extern Context context;
 
 //#define log(X) USART0_SendStr(X)
-void _log(const char* msg);
+void _clog(const char* msg);
+void _log(char* msg);
 void _sleep(uint16_t time_ms);
+uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
+uint8_t _strlen(char * str);
+
 
 #endif // __GLOBAL_H__

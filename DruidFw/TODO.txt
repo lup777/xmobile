@@ -17,3 +17,5 @@
 
 5. [KBD] Read KBD from ISR (no need special thread). It also needed for sleep mode.
    Enable "Slew-rate control" for output
+
+6. [EPD] Try to remove divider in EPD SPI config to increase speed

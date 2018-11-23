@@ -73,10 +73,10 @@ void _sleep(uint16_t time_ms) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  _log("MAIN starting main  task");
+  _clog("MAIN starting main  task");
   _sleep(1000);
 
-  _log("MAIN main task init completed");
+  _clog("MAIN main task init completed");
   for(;;) {
 
     volatile Key key = KBD_Check();
