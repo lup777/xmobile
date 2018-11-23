@@ -17,8 +17,8 @@ typedef uint8_t bool;
 #define false  0
 #define true   1
 
-//#define log(X) USART0_SendStr(X)
-#define log(X) {}
+//#define _log(X) USART0_SendStr(X)
+#define _log(X) {}
 
 uint8_t gi;
 const uint8_t* gbackground;
@@ -63,7 +63,9 @@ inline void EPD_ResetDisable(void);
 inline bool EPD_Busy(void);
 inline void EPD_CSLow(void);
 inline void EPD_CSHi(void);
-inline void EPD_ShowFullScreenImage(const uint8_t *image, uint16_t xsize, uint16_t ysize);
+inline void EPD_ShowFullScreenImage(const uint8_t *image, uint16_t xsize,
+                                    uint16_t ysize);
+void EPD_ShowPartialImages(const uint8_t* background, Image* images, size_t len);
 inline void EPD_PowerOn(void);
 inline void EPD_PowerOff(void);
 inline void EPD_UpdateFull(void);
@@ -141,7 +143,7 @@ inline void SPIC_Init(void) {
 }
 
 inline void EPD_Reset(void) {
-  log("EPD Reset start");
+  _log("EPD Reset start");
   EPD_ResetEnable();
   EPD_DelayMs(100);
   EPD_ResetDisable();
@@ -165,7 +167,7 @@ uint8_t SPIC_TransferByte(uint8_t data_out) {
 }
 
 void EPD_DisplayFrame(void) {
-  log("EPD display frame");
+  _log("EPD display frame");
   EPD_CSLow();
   EPD_SendCmdByte(DISPLAY_UPDATE_CONTROL_2);
   EPD_SendDataByte(0xC4);
@@ -183,7 +185,7 @@ void EPD_DisplayFrame(void) {
 }
 
 void EPD_WaitUntilIdle(void) {
-  log("EPD waite busy");
+  _log("EPD waite busy");
   while(EPD_Busy() == true) {      //LOW: idle, HIGH: busy
     EPD_DelayMs(100);
   }
@@ -192,7 +194,7 @@ void EPD_WaitUntilIdle(void) {
 void EPD_SetMemoryPointer(int x, int y) {
   EPD_WaitUntilIdle();
 
-  log("EPD set memory pointer");
+  _log("EPD set memory pointer");
   EPD_CSLow();
   EPD_SendCmdByte(SET_RAM_X_ADDRESS_COUNTER);
     /* x point must be the multiple of 8 or the last 3 bits will be ignored */
@@ -207,7 +209,7 @@ void EPD_SetMemoryPointer(int x, int y) {
 }
 
 void EPD_ClearFrameMemory(uint8_t color) {
-  log("EPD clear frame memory");
+  _log("EPD clear frame memory");
   EPD_SetMemoryArea(0, 0, EPD_WIDTH - 1, EPD_HEIGHT - 1);
   //EPD_SetMemoryPointer(0, 0);
 
@@ -222,7 +224,7 @@ void EPD_ClearFrameMemory(uint8_t color) {
 
 void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 		       uint16_t RAM_YST,uint16_t RAM_YEND) {
-  log("EPD set memory area");
+  _log("EPD set memory area");
 
   //Set region X
   EPD_CSLow();
@@ -255,7 +257,7 @@ void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 }
 
 void EPD_SetLut(const uint8_t* lut) {
-  log("EPD set lut");
+  _log("EPD set lut");
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_LUT_REGISTER);
 
@@ -267,7 +269,7 @@ void EPD_SetLut(const uint8_t* lut) {
 
 inline void EPD_Init(void) {
   SPIC_Init();
-  log("SPI init completed");
+  _log("SPI init completed");
   gbackground = NULL;
   // CS configured to out in SPIC_Init()
   PORTA.DIRSET = PIN1_bm; // DC
@@ -277,7 +279,7 @@ inline void EPD_Init(void) {
 
   EPD_Reset();
 
-  log("EPD init");
+  _log("EPD init");
   EPD_CSLow();
   EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
   EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
@@ -312,14 +314,14 @@ inline void EPD_Init(void) {
   EPD_SendDataByte(0x01); // 0x03
   EPD_CSHi();
 
-  log("EPD Init completed");
+  _log("EPD Init completed");
 
   EPD_clear();
 }
 
 void EPD_clear(void) {
   // clear EPD
-  log("EPD clear");
+  _log("EPD clear");
   EPD_ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
   EPD_DisplayFrame();
   EPD_ClearFrameMemory(0x00);   // bit set = white, bit reset = black
@@ -327,7 +329,7 @@ void EPD_clear(void) {
 }
 
 inline void EPD_PowerOn(void) {
-  log("EPD power on");
+  _log("EPD power on");
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0xC0);
@@ -341,7 +343,7 @@ inline void EPD_PowerOn(void) {
 }
 
 inline void EPD_PowerOff(void) {
-  log("EPD power off");
+  _log("EPD power off");
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0xC0);
@@ -355,7 +357,7 @@ inline void EPD_PowerOff(void) {
 }
 
 inline void EPD_UpdateFull(void) {
-  log("EPD full update");
+  _log("EPD full update");
     //0x22 = Display Update Control 2
     //Display Update Sequence Option
     //Executes set bits like a mini program, from MSB to LSB
@@ -398,7 +400,7 @@ void EPD_ShowFullScreenImage(const uint8_t *image,
 				    uint16_t xsize,
 				    uint16_t ysize)
 {
-  log("EPD show full screen image");
+  _log("EPD show full screen image");
   //Get xbytes from xsize, rounding up
   uint8_t xbytes;
   xbytes = ( xsize + 7 ) >> 3;
@@ -422,7 +424,7 @@ void EPD_ShowFullScreenImage(const uint8_t *image,
 inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
                                            uint16_t YSize,
                                            const uint8_t  *image) {
-  log("EPD load image to RAM");
+  _log("EPD load image to RAM");
   uint8_t x;
   uint16_t y;
   uint16_t index = 0;
@@ -443,7 +445,7 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
-  log("EPD Show partial image");
+  _log("EPD Show partial image");
   EPD_WaitUntilIdle(); // wait
 
   EPD_SetLut(lut_partial_update);
@@ -474,7 +476,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
 
 void EPD_ShowPartialImages(const uint8_t* background, Image* images,
                            size_t len) {
-  log("EPD Show partial image");
+  _log("EPD Show partial image");
   EPD_WaitUntilIdle(); // wait
 
   EPD_SetLut(lut_partial_update);

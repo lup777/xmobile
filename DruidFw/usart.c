@@ -1,5 +1,6 @@
 // usart.c
 #include <avr/io.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -8,7 +9,7 @@
 #include "global.h"
 #include "usart.h"
 
-void log(const char* msg) {
+void _log(const char* msg) {
     xQueueSend(context.log_queue, (void*)&msg, (TickType_t)100);
 }
 
@@ -65,6 +66,8 @@ inline void USART0_SendByte(char c) {
   while( !(USARTF0_STATUS & USART_DREIF_bm) ); //Wait until DATA buffer is empty
   USARTF0_DATA = c;
 }
+
+
 
 void USART0_SendStr(const char* str) {
   volatile uint8_t i = 0;

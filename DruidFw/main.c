@@ -73,10 +73,10 @@ void _sleep(uint16_t time_ms) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  log("MAIN starting main  task");
+  _log("MAIN starting main  task");
   _sleep(1000);
 
-  log("MAIN main task init completed");
+  _log("MAIN main task init completed");
   for(;;) {
 
     volatile Key key = KBD_Check();
@@ -85,7 +85,6 @@ static void vTogglePA0Task(void* pvParameters) {
     }
   }
 }
-
 
 /*
   Если принимающий поток уже был заблокирован и ожидает нотификации, когда нотификация пришла, принимающий поток будет выведен из заблокированного состояния и нотификация будет очищена.

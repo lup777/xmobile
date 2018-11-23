@@ -171,12 +171,12 @@ uint16_t usAddress;
 
     /* The start of the task code will be popped off the stack last, so place
     it on first. */
-    ulAddress = ( uint32_t ) pxCode;
-    *pxTopOfStack = ( StackType_t ) ( ulAddress & ( uint32_t ) 0x000000ff );
+    ulAddress = ( uint16_t ) pxCode;
+    *pxTopOfStack = ( StackType_t ) ( ulAddress & ( uint16_t ) 0x000000ff );
     pxTopOfStack--;
 
     ulAddress >>= 8;
-    *pxTopOfStack = ( StackType_t ) ( ulAddress & ( uint32_t ) 0x000000ff );
+    *pxTopOfStack = ( StackType_t ) ( ulAddress & ( uint16_t ) 0x000000ff );
     pxTopOfStack--;
 
 #ifdef __AVR_3_BYTE_PC__
@@ -244,11 +244,11 @@ uint16_t usAddress;
 
     /* Place the parameter on the stack in the expected location. */
     usAddress = ( uint16_t ) pvParameters;
-    *pxTopOfStack = ( StackType_t ) ( usAddress & ( uint32_t ) 0x000000ff );
+    *pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x000000ff );
     pxTopOfStack--;
 
     usAddress >>= 8;
-    *pxTopOfStack = ( StackType_t ) ( usAddress & ( uint32_t ) 0x000000ff );
+    *pxTopOfStack = ( StackType_t ) ( usAddress & ( uint16_t ) 0x000000ff );
     pxTopOfStack--;
 
     *pxTopOfStack = ( StackType_t ) 0x26;   /* R26 X */
@@ -362,7 +362,7 @@ static void prvSetupTimerInterrupt(void)
 
         //set period of counter
         TCC0.PER = (configCPU_CLOCK_HZ / configTICK_RATE_HZ / 1) - 1;
-	
+
         //enable interrupt and set low level
         TCC0.INTCTRLA = TC_OVFINTLVL_LO_gc;
 
