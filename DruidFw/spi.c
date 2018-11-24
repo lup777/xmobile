@@ -147,7 +147,7 @@ inline void EPD_Reset(void) {
   EPD_ResetEnable();
   EPD_DelayMs(100);
   EPD_ResetDisable();
-  EPD_DelayMs(1000);
+  EPD_DelayMs(100);
 }
 
 uint8_t SPIC_TransferByte(uint8_t data_out) {
@@ -168,18 +168,24 @@ uint8_t SPIC_TransferByte(uint8_t data_out) {
 
 void EPD_DisplayFrame(void) {
   _clog("EPD display frame");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(DISPLAY_UPDATE_CONTROL_2);
   EPD_SendDataByte(0xC4);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(MASTER_ACTIVATION);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(TERMINATE_FRAME_READ_WRITE);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   EPD_WaitUntilIdle();
 }
@@ -195,17 +201,21 @@ void EPD_SetMemoryPointer(int x, int y) {
   EPD_WaitUntilIdle();
 
   _clog("EPD set memory pointer");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_RAM_X_ADDRESS_COUNTER);
     /* x point must be the multiple of 8 or the last 3 bits will be ignored */
   EPD_SendDataByte((x >> 3) & 0xFF);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_RAM_Y_ADDRESS_COUNTER);
   EPD_SendDataByte(y & 0xFF);
   EPD_SendDataByte((y >> 8) & 0xFF);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }
 
 void EPD_ClearFrameMemory(uint8_t color) {
@@ -213,6 +223,7 @@ void EPD_ClearFrameMemory(uint8_t color) {
   EPD_SetMemoryArea(0, 0, EPD_WIDTH - 1, EPD_HEIGHT - 1);
   //EPD_SetMemoryPointer(0, 0);
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_RAM);
   /* send the color data */
@@ -220,20 +231,24 @@ void EPD_ClearFrameMemory(uint8_t color) {
     EPD_SendDataByte(color);
   }
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }
 
 void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 		       uint16_t RAM_YST,uint16_t RAM_YEND) {
   _clog("EPD set memory area");
 
+  //taskENTER_CRITICAL();
   //Set region X
   EPD_CSLow();
   EPD_SendCmdByte(0x44); // command
   EPD_SendDataByte(RAM_XST);
   EPD_SendDataByte(RAM_XEND);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   //Set region Y
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x45); // command
   EPD_SendDataByte((uint8_t)(RAM_YST&0x00FF));
@@ -241,23 +256,29 @@ void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
   EPD_SendDataByte((uint8_t)(RAM_YEND&0x00FF));
   EPD_SendDataByte((uint8_t)(RAM_YEND>>8));
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   //Set origin X
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x4e); //command
   EPD_SendDataByte(RAM_XST);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   //Set origin Y
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x4f);
   EPD_SendDataByte((uint8_t)(RAM_YST&0x00FF));
   EPD_SendDataByte((uint8_t)(RAM_YST>>8));
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }
 
 void EPD_SetLut(const uint8_t* lut) {
   _clog("EPD set lut");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_LUT_REGISTER);
 
@@ -265,6 +286,7 @@ void EPD_SetLut(const uint8_t* lut) {
     EPD_SendDataByte(pgm_read_byte(&lut[gi]));
   }
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }
 
 inline void EPD_Init(void) {
@@ -280,39 +302,51 @@ inline void EPD_Init(void) {
   EPD_Reset();
 
   _clog("EPD init");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
   EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
   EPD_SendDataByte(/*((EPD_HEIGHT - 1) >> 8) & 0xFF*/0x00);
   EPD_SendDataByte(0x00); // GD = 0, SM = 0, TB = 0
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(BOOSTER_SOFT_START_CONTROL);
   EPD_SendDataByte(0xD7);
   EPD_SendDataByte(0xD6);
   EPD_SendDataByte(0x9D);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_VCOM_REGISTER);
   EPD_SendDataByte(0xA8);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_DUMMY_LINE_PERIOD);
   EPD_SendDataByte(0x1A);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_GATE_TIME);
   EPD_SendDataByte(0x08);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(DATA_ENTRY_MODE_SETTING);
   EPD_SendDataByte(0x01); // 0x03
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   _clog("EPD Init completed");
 
@@ -330,28 +364,35 @@ void EPD_clear(void) {
 
 inline void EPD_PowerOn(void) {
   _clog("EPD power on");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0xC0);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
-
+  //taskEXIT_CRITICAL();
   EPD_WaitUntilIdle();
 }
 
 inline void EPD_PowerOff(void) {
   _clog("EPD power off");
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0xC0);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   EPD_WaitUntilIdle(); // wait
 }
@@ -373,25 +414,31 @@ inline void EPD_UpdateFull(void) {
     // |---------- CLK/OSC ENABLE   (0x80)
   EPD_WaitUntilIdle(); // wait
 
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(DISPLAY_UPDATE_CONTROL_2);
   EPD_SendDataByte(0xC7);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
     // 0x20 = Master Activation
     // Activate Display Update Sequence
     // The Display Update Sequence Option is
     // located at R22h
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(MASTER_ACTIVATION);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
     //0xFF = NOP
     //This command is an empty command; it
     //does not have any effect on the display module.
     //However it can be used to terminate Frame Memory
     //Write or Read Commands.
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(TERMINATE_FRAME_READ_WRITE);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   EPD_WaitUntilIdle(); // wait
 }
@@ -431,6 +478,7 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 
   //Convert Xsize from pixels to bytes, rounding up
   XSize = ( XSize + 7 ) >> 3;
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_RAM);
   for( y = 0; y < YSize; y++ ) {
@@ -442,14 +490,17 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
     }
   }
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   _clog("EPD Show partial image");
+  //_sleep(200);
   EPD_WaitUntilIdle(); // wait
   taskENTER_CRITICAL();
 
   EPD_SetLut(lut_partial_update);
+  
   EPD_PowerOn();
 
     //EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
@@ -496,25 +547,31 @@ void EPD_UpdatePartial(void)
   // |||-------- LOAD TEMPERATURE (0x20)
   // ||--------- CP ENABLE        (0x40)
   // |---------- CLK/OSC ENABLE   (0x80)
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0x04);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   // 0x20 = Master Activation
   // Activate Display Update Sequence
   // The Display Update Sequence Option is
   // located at R22h
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 
   //0xFF = NOP
   //This command is an empty command; it
   //does not have any effect on the display module.
   //However it can be used to terminate Frame Memory
   //Write or Read Commands.
+  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0xFF);
   EPD_CSHi();
+  //taskEXIT_CRITICAL();
 }

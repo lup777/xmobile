@@ -4,10 +4,10 @@
 
 #include <avr/pgmspace.h>
 
-#define FONTS_NUM 96
+#define FONTS_NUM 128
 
-const uint8_t FONT_pt_mono_bold_8x13[][FONTS_NUM] PROGMEM = {
-  {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
+const uint8_t FONT_pt_mono_bold_8x13_1[][FONTS_NUM] PROGMEM = {
+  {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
   {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},//32
   //(пробел) Source image file: "F:\Images\xmobile-fonts\pt-mono-bold\8x13\bmp\pt-mono-bold-dot-8x13.bmp"
   {0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF3, 0xF7, 0xFF, 0xF3, 0xF3, 0xFF, 0xFF, 0xFF}, //33
@@ -139,7 +139,10 @@ const uint8_t FONT_pt_mono_bold_8x13[][FONTS_NUM] PROGMEM = {
   //} 
   {0xFF, 0xFF, 0xFF, 0xFF, 0xF3, 0x81, 0x8F, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF},//126
   //~ Source image file: "pt-mono-bold-ts-8x13.bmp"
-  {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
+  {},{}};
+
+const uint8_t FONT_pt_mono_bold_8x13_2[][FONTS_NUM] PROGMEM = {
+  {},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},{},
   {},{},{},{},
 
   
@@ -207,7 +210,7 @@ const uint8_t FONT_pt_mono_bold_8x13[][FONTS_NUM] PROGMEM = {
   //ю Source image file: "pt-mono-bold-k-8x13.bmp"
   {0xFF, 0xFF, 0xFF, 0x83, 0x81, 0xB9, 0x81, 0x83, 0xB1, 0xB9, 0xFF, 0xFF, 0xFF},//239
   //я Source image file: "pt-mono-bold-ie-8x13.bmp"
-
+  {},
 
   
   
@@ -219,25 +222,25 @@ const uint8_t FONT_pt_mono_bold_8x13[][FONTS_NUM] PROGMEM = {
 
 const uint8_t* FONT_GetPicture8x13(uint8_t code) {
   if (code >= ' ' && code <= ':')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code == '<')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code == '?')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code >= '[' && code <= ']')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code >= 'a' && code <= '{')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code >= '}' && code <= '~')
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_1[code];
 
   if (code == 241) // ё
-    return FONT_pt_mono_bold_8x13[code];
+    return FONT_pt_mono_bold_8x13_2[code + 128];
 
-  return FONT_pt_mono_bold_8x13['!'];
+  return FONT_pt_mono_bold_8x13_1['!'];
 }
