@@ -38,8 +38,6 @@ void vUITask(void* pvParameters) {
   for(;;) {
     if (pdTRUE == xSemaphoreTake(context.ui_sem, portMAX_DELAY)) {
       _clog("UI Notification received");
-      char msg[26] = "abcdefghijklmnopqrstuvwxyz";
-      EPD_ShowString( (char*)msg, 26, 0, 100 );
       _sleep(1000);
     }
   }// for

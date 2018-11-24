@@ -50,12 +50,12 @@ int main(void) {
 	       1,
 	       NULL );
 
-  xTaskCreate(vUITask,
+  /*xTaskCreate(vUITask,
               "UI tsak",
               configMINIMAL_STACK_SIZE,
               NULL,
               1,
-              &(context.ui_task_handle));
+              &(context.ui_task_handle));*/
 
   xTaskCreate( vTogglePA0Task,
                "blink_PORTA_0_task",
@@ -75,8 +75,13 @@ void _sleep(uint16_t time_ms) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  _sleep(2000); // waite for UI init
 
+  EPD_Init();
+  _sleep(100);
+
+  EPD_ShowFullScreenImage(NULL/*ucDisplayFullLupImage*/, 200, 200);
+  _sleep(100);
+  
   _clog("MAIN main task init completed");
   for(;;) {
     APP_Telephone();

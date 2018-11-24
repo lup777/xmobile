@@ -89,10 +89,10 @@ uint16_t KBD_Read(void) {
 
   tmp = PORTC.IN;
   if ((tmp & PIN0_bm) != 0) {
-    key_map |= KEY_1;
+    key_map |= KEY_9;
   }
   if ((tmp & PIN1_bm) != 0) {
-    key_map |= KEY_2;
+    key_map |= KEY_6;
   }
   if ((tmp & PIN2_bm) != 0) {
     key_map |= KEY_3;
@@ -107,13 +107,13 @@ uint16_t KBD_Read(void) {
 
   tmp = PORTC.IN;
   if (tmp & PIN0_bm) {
-    key_map |= KEY_4;
+    key_map |= KEY_8;
   }
   if (tmp & PIN1_bm) {
     key_map |= KEY_5;
   }
   if (tmp & PIN2_bm) {
-    key_map |= KEY_6;
+    key_map |= KEY_2;
   }
 
   PORTD.OUTCLR = PIN6_bm;
@@ -128,10 +128,10 @@ uint16_t KBD_Read(void) {
     key_map |= KEY_7;
   }
   if (tmp & PIN1_bm) {
-    key_map |= KEY_8;
+    key_map |= KEY_4;
   }
   if (tmp & PIN2_bm) {
-    key_map |= KEY_9;
+    key_map |= KEY_1;
   }
 
   PORTD.OUTCLR = PIN7_bm;
