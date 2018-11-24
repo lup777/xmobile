@@ -6,14 +6,13 @@
 #include "pgm.h"
 #include "kbd.h"
 #include "ui.h"
+#include "telephone.h"
 
 static void vTogglePA0Task(void* pvParameters);
 void gpio_init(void);
 void GPIO_toggle_PA0(void);
 void _sleep(uint16_t time_ms);
 void KBD_Init(void);
-void APP_telephone(void);
-Key APP_WaiteKey(void);
 
 /* GPIO
    PORT (those bits controls GPIO lines):
@@ -74,48 +73,13 @@ void _sleep(uint16_t time_ms) {
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
 }
 
-void APP_telephone(void) {
-  Key key;
-  char number [20] = "number: +xxxxxxxxxxx";
-  _clog("Enter telephone");
-  _sleep(100);
-  EPD_ShowString((char*)number, 20, 2, 140);
-  uint8_t i = 0;
-  for (i = 0; i < 12; i++) {
-    key = APP_WaiteKey();
-    if (key != keyNo) {
-      number[i+9] = (char)key + '0';
-      EPD_ShowString((char*)number, 20, 2, 140);
-    }
-  }
-  _clog("exit telepone\0");
-  }
-
-Key APP_WaiteKey(void) {
-  Key key = keyNo;
-  _clog("waiting for key");
-  do {
-    key = KBD_Check();
-    /*_sleep(1000);  // waite for UI init
-    static uint8_t tmp = 0;
-    if (tmp < 9)
-      tmp ++;
-    else
-      tmp = 0;
-      key = tmp;*/
-  } while(key == keyNo);
-  _clog("key pressed");
-  return key;
-}
-
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-  //_clog("MAIN starting main  task");
   _sleep(2000); // waite for UI init
 
   _clog("MAIN main task init completed");
   for(;;) {
-    APP_telephone();
+    APP_Telephone();
     APP_WaiteKey();
   }
 }
