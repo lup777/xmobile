@@ -64,11 +64,12 @@ ui.c \
 fonts.c \
 util.c \
 telephone.c \
+gsm.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/croutine.c \
-$(SOURCE_DIR)/portable/MemMang/heap_1.c \
+$(SOURCE_DIR)/portable/MemMang/heap_4.c \
 $(SOURCE_DIR)/stream_buffer.c \
 $(PORT_DIR)/port.c \
 

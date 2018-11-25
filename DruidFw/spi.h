@@ -52,6 +52,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y);
 
 void EPD_StartPartial(void);
 void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y);
+void EPD_UpdatePartial(void);
 void EPD_StopPartial(void);
 
 #endif //__SPI_H__

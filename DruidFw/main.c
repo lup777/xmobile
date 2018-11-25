@@ -7,6 +7,7 @@
 #include "kbd.h"
 #include "ui.h"
 #include "telephone.h"
+#include "gsm.h"
 
 static void vTogglePA0Task(void* pvParameters);
 void gpio_init(void);
@@ -81,8 +82,14 @@ static void vTogglePA0Task(void* pvParameters) {
 
   EPD_ShowFullScreenImage(NULL/*ucDisplayFullLupImage*/, 200, 200);
   _sleep(100);
+
+  GSM_Init();
   
   _clog("MAIN main task init completed");
+
+  PORTD.DIRSET = PIN0_bm;
+  PORTD.OUTCLR = PIN0_bm;
+  
   for(;;) {
     APP_Telephone();
     APP_WaiteKey();

@@ -503,6 +503,9 @@ void EPD_StartPartial(void) {
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
+
+  EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
+  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
   taskEXIT_CRITICAL();
 }
 
@@ -525,7 +528,7 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     }
   }
 
-  EPD_UpdatePartial();  
+  //EPD_UpdatePartial();  
 }
 
 void EPD_StopPartial(void) {
@@ -582,7 +585,7 @@ void EPD_UpdatePartial(void)
   // |||-------- LOAD TEMPERATURE (0x20)
   // ||--------- CP ENABLE        (0x40)
   // |---------- CLK/OSC ENABLE   (0x80)
-  //taskENTER_CRITICAL();
+  taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0x04);
@@ -608,5 +611,5 @@ void EPD_UpdatePartial(void)
   EPD_CSLow();
   EPD_SendCmdByte(0xFF);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
+  taskEXIT_CRITICAL();
 }
