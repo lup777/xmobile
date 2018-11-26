@@ -18,13 +18,13 @@ void GSM_Init(void) {
   PORTD.OUTSET = PIN0_bm;
 
   // USARTE0
-  
+
   PORTE.DIRSET = PIN3_bm;
   PORTE.OUTSET = PIN3_bm;
 
   USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
-  
+
   USARTE0.CTRLA = USART_RXCINTLVL_gm | USART_TXCINTLVL_gm | USART_DREINTLVL_gm
     | USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
 
@@ -40,11 +40,7 @@ void GSM_Init(void) {
   buf[1] = GSM_ReadByte();
   _clog("waiting for GSM responce");
   EPD_ShowString(buf, 2, 1, 180);
-  Key key = keyNo;
-  do {
-    key = KBD_Check();
-  } while(key == keyNo);
-  
+  KBD_WaiteKey();
 }
 
 void GSM_SendCStr(const char* str) {

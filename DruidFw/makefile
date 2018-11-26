@@ -65,6 +65,7 @@ fonts.c \
 util.c \
 telephone.c \
 gsm.c \
+menu.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \

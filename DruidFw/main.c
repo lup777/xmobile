@@ -8,13 +8,14 @@
 #include "ui.h"
 #include "telephone.h"
 #include "gsm.h"
+#include "menu.h"
 
 static void vTogglePA0Task(void* pvParameters);
 void gpio_init(void);
 void GPIO_toggle_PA0(void);
 void _sleep(uint16_t time_ms);
 void KBD_Init(void);
-
+void TestApp1(void);
 /* GPIO
    PORT (those bits controls GPIO lines):
    DIR - direction
@@ -74,8 +75,24 @@ void _sleep(uint16_t time_ms) {
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
 }
 
+void TestApp1(void) {
+  EPD_StartPartial();
+  EPD_ContinuePartial("      XMobile", 13, 1, 10);
+  EPD_ContinuePartial("not implemented yet", 19, 1, 11);
+  EPD_StopPartial();
+  KBD_WaiteKey();
+}
+
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
+
+  const App menu[] = {
+    {APP_Telephone, "telephone      "},
+    {TestApp1, "calendar       "},
+    {TestApp1, "reader         "},
+    {TestApp1, "snake          "},
+    {TestApp1, "music player   "}
+  };
 
   EPD_Init();
   _sleep(100);
@@ -84,18 +101,14 @@ static void vTogglePA0Task(void* pvParameters) {
   _sleep(100);
 
   GSM_Init();
-  
+
   _clog("MAIN main task init completed");
 
   PORTD.DIRSET = PIN0_bm;
   PORTD.OUTCLR = PIN0_bm;
-  
+
   for(;;) {
-    APP_Telephone();
-    APP_WaiteKey();
+    MENU_Show(menu);
+    //APP_Telephone();
   }
 }
-
-/*
-  Если принимающий поток уже был заблокирован и ожидает нотификации, когда нотификация пришла, принимающий поток будет выведен из заблокированного состояния и нотификация будет очищена.
- */

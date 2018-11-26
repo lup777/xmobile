@@ -139,3 +139,13 @@ uint16_t KBD_Read(void) {
 
   return key_map;
 }
+
+Key KBD_WaiteKey(void) {
+  Key key = keyNo;
+  _clog("waiting for key");
+  do {
+    key = KBD_Check();
+  } while(key == keyNo);
+  _clog("key pressed");
+  return key;
+}

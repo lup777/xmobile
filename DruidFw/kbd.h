@@ -13,4 +13,5 @@ typedef enum EnumKey {
 void KBD_Init(void);
 Key KBD_Check(void);
 uint16_t KBD_Read(void);
+Key KBD_WaiteKey(void);
 #endif // __KEY_H__
