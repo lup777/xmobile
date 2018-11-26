@@ -146,6 +146,6 @@ Key KBD_WaiteKey(void) {
   do {
     key = KBD_Check();
   } while(key == keyNo);
-  _clog("key pressed");
+  _clogu8("key pressed", (uint8_t)key);
   return key;
 }

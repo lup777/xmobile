@@ -35,10 +35,14 @@ void GSM_Init(void) {
 
   GSM_SendCStr("AT");
 
-  char buf[2];
-  buf[0] = GSM_ReadByte();
-  buf[1] = GSM_ReadByte();
   _clog("waiting for GSM responce");
+  char buf[2];
+  _clog("waite 1st byte");
+  buf[0] = GSM_ReadByte();
+  _clog("waite 2nd byte");
+  buf[1] = GSM_ReadByte();
+
+  _clog("GSM responce received");
   EPD_ShowString(buf, 2, 1, 180);
   KBD_WaiteKey();
 }

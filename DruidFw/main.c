@@ -26,6 +26,15 @@ void TestApp1(void);
 
 // GLOBAL VARIABLES
 Context context;
+
+App menu[] = {
+  {APP_Telephone, "telephone      "},
+  {TestApp1, "calendar       "},
+  {TestApp1, "reader         "},
+  {TestApp1, "snake          "},
+  {TestApp1, "music player   "}
+};
+
 // ~GLOBAL VARIABLES~
 
 void gpio_init(void) {
@@ -85,14 +94,6 @@ void TestApp1(void) {
 
 static void vTogglePA0Task(void* pvParameters) {
   (void)(pvParameters);
-
-  const App menu[] = {
-    {APP_Telephone, "telephone      "},
-    {TestApp1, "calendar       "},
-    {TestApp1, "reader         "},
-    {TestApp1, "snake          "},
-    {TestApp1, "music player   "}
-  };
 
   EPD_Init();
   _sleep(100);

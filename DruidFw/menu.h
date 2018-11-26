@@ -7,4 +7,4 @@ typedef struct struct_application {
   const char* header;
 } App;
 
-void MENU_Show(const App* menu);
+void MENU_Show(App* menu);
