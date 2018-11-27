@@ -19,3 +19,31 @@
    Enable "Slew-rate control" for output
 
 6. [EPD] Try to remove divider in EPD SPI config to increase speed
+
+7. [HW] Add: some leds for notifications: incoming call, calendar notifications
+
+8. [HW] Add:
+        - SIM holder for micro SIM
+        - microSD card slot
+        - + 7 buttons (o, *, #, <, >, up, down)
+        - power tumbler(s)
+        - RTC (maybe it exists in XMega)
+        - external RAM
+        - external flash memory (program mem) is it possible
+        - buttary charger
+        - test points
+
+9. [HW] 4 layer at least. external layers are only for contact pads and test points.
+        Two interlan layers are for lines.
+
+10. [HW] [KBD] Add resistors to graund
+
+11. [HW] Hols for mounting
+
+12. [HW] Druid logo
+
+13. [HW] Holl for antenna soldering
+
+14. [HW] Use GSm module with FM radio if it can work with user diaposon
+
+15. [HW] Vibro
