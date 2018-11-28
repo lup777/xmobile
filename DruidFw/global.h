@@ -14,10 +14,19 @@ typedef uint8_t bool;
 #define true 1
 #define false 0
 
+typedef struct struct_gsm_data {
+  uint8_t flags; // should be renamed
+  // signal level
+  // battary level
+} GsmData;
+
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
+  TaskHandle_t gsm_task_handle;
+  TaskHandle_t log_task_handle;
   QueueHandle_t log_queue;
   SemaphoreHandle_t ui_sem;
+  GsmData gsm_data;
 } Context;
 
 

@@ -59,7 +59,7 @@ int main(void) {
 	       configMINIMAL_STACK_SIZE,
 	       NULL,
 	       1,
-	       NULL );
+	       &(context.log_task_handle) );
 
   /*xTaskCreate(vUITask,
               "UI tsak",

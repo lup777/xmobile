@@ -47,3 +47,7 @@
 14. [HW] Use GSm module with FM radio if it can work with user diaposon
 
 15. [HW] Vibro
+
+16. [HW] Button for screen refresh
+
+17. [HW] Button for Telephone application start

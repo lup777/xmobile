@@ -22,6 +22,7 @@ typedef uint8_t bool;
 
 uint8_t gi;
 const uint8_t* gbackground;
+volatile SemaphoreHandle_t gEpdMutex;
 
 /*
   E-Paper info
@@ -351,6 +352,8 @@ inline void EPD_Init(void) {
   _clog("EPD Init completed");
 
   EPD_clear();
+
+  gEpdMutex = xSemaphoreCreateMutex();
 }
 
 void EPD_clear(void) {
@@ -495,6 +498,9 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
 
 void EPD_StartPartial(void) {
   _clog("EPD Start partial update");
+  if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
+    _clog("EPD_StartPartial Failed to take mutex");
+  }
   EPD_WaitUntilIdle(); // wait
 
   taskENTER_CRITICAL();
@@ -512,7 +518,7 @@ void EPD_StartPartial(void) {
 void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
   x = 24 - x;
   for (gi = 0; gi < len; gi++) {
-    const uint8_t* picture = FONT_GetPicture8x13( (uint8_t)(str[gi]) );
+    const uint8_t* picture = FONT_GetPicture8x13( (uint8_t)(str[gi]));
     uint8_t width = 1; // byte
     uint8_t height = 13; // bits
 
@@ -520,7 +526,7 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
     taskEXIT_CRITICAL();
-    
+
     if (x > 0) {
       x -= 1;
     } else {
@@ -528,23 +534,28 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     }
   }
 
-  //EPD_UpdatePartial();  
+  //EPD_UpdatePartial();
 }
 
 void EPD_StopPartial(void) {
   taskENTER_CRITICAL();
   EPD_PowerOff();
   taskEXIT_CRITICAL();
+  xSemaphoreGive(gEpdMutex);
+  _clog("EPD_StopPartial give mutex");
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   _clog("EPD Show partial image");
   //_sleep(200);
   EPD_WaitUntilIdle(); // wait
+  if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
+    _clog("EPD_StartPartial Failed to take mutex");
+  }
   taskENTER_CRITICAL();
 
   EPD_SetLut(lut_partial_update);
-  
+
   EPD_PowerOn();
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
@@ -568,6 +579,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   EPD_UpdatePartial();
   EPD_PowerOff();
   taskEXIT_CRITICAL();
+  xSemaphoreGive(gEpdMutex);
 }
 
 void EPD_UpdatePartial(void)
