@@ -9,12 +9,11 @@
 
 #define READ_BUFFER_SIZE 255
 
-static void vGsmTask(void* pvParameters);
 void GSM_CallCmd(const char* msg);
 void GSM_SendCStr(const char* str);
 void GSM_SendStr(char* str, uint8_t len);
 bool GSM_SendByte(char c, uint16_t delay_ms);
-bool GSM_ReadByte(uint16_t delay_ms, char* out);
+bool GSM_ReadByte(char* out, uint16_t delay_ms);
 char GSM_ReadResultCode(uint16_t delay_ms, char* out);
 
 // http://codius.ru/articles/GSM_%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_SIM800L_%D1%87%D0%B0%D1%81%D1%82%D1%8C_1
@@ -46,20 +45,25 @@ void GSM_Init(void) {
   GSM_SendCStr("AT");
 
   _clog("waiting for GSM responce");
-  GSM_ReadByte(rbuf[0], 1000);
-  GSM_ReadByte(rbuf[1], 100);
-  GSM_ReadByte(rbuf[2], 100);
-  GSM_ReadByte(rbuf[3], 100);
-  GSM_ReadByte(rbuf[4], 100);
-  GSM_ReadByte(rbuf[5], 100);
+  GSM_ReadByte(rbuf, 1000);
+  GSM_ReadByte(rbuf + 1, 1000);
+  GSM_ReadByte(rbuf + 2, 1000);
+  GSM_ReadByte(rbuf + 3, 1000);
+  GSM_ReadByte(rbuf + 4, 1000);
+  GSM_ReadByte(rbuf + 5, 1000);
 
   _clog("GSM responce received");
-  EPD_ShowString(buf + 2, 2, 1, 180);
+  EPD_ShowString(rbuf + 2, 2, 1, 180);
 
   GSM_CallCmd(CMD_SET_NUMBERIC_RESPONCE_FORMAT);
   GSM_CallCmd(CMD_DISABLE_ECHO);
   GSM_CallCmd(CMD_SET_ERROR_LEVEL_1);
   GSM_CallCmd(CMD_ENABLE_AON);
+
+  _sleep(2000);
+
+  GSM_CallCmd(CMD_CHECK_NET_STATUS);
+  GSM_CallCmd(CMD_GET_IMEI);
 
   /*xTaskCreate( vGsmTask,
                "GsmTask",
@@ -69,30 +73,26 @@ void GSM_Init(void) {
                &(context.gsm_task_handle) );*/
 }
 
-static void vGsmTask(void* pvParameters) {
-  while(1) {
-    GSM_ReadNotifications();
-  }
-}
 void GSM_CallCmd(const char* msg) {
   GSM_SendCStr(msg);
-  result = GSM_ReadResultCode(100);
-  _clogu8(CMD_SET_NUMBERIC_RESPONCE_FORMAT, (uint8_t)result);
+  char result_code;
+  bool result = GSM_ReadResultCode(1000, &result_code);
+  _clogu8(msg, (uint8_t)result);
 }
 
 void GSM_SendCStr(const char* str) {
   volatile uint8_t i = 0;
   const uint8_t len = strlen(str);
   for(i = 0; i < len; i++) {
-    GSM_SendByte(str[i], 100);
+    GSM_SendByte(str[i], 1000);
   }
-  GSM_SendByte('\n', 100);
+  GSM_SendByte('\n', 1000);
 }
 
 void GSM_SendStr(char* str, uint8_t len) {
   volatile uint8_t i = 0;
   for(i = 0; i < len; i++) {
-    GSM_SendByte(str[i], 100);
+    GSM_SendByte(str[i], 1000);
   }
 }
 
@@ -101,7 +101,7 @@ bool GSM_SendByte(char c, uint16_t delay_ms) {
 
   do {
     if (USARTE0_STATUS & USART_DREIF_bm) {
-      USARTE0_DATA = c;
+      USARTE0.DATA = c;
       return true;
     }
 
@@ -116,12 +116,13 @@ bool GSM_SendByte(char c, uint16_t delay_ms) {
   return false;
 }
 
-bool GSM_ReadByte(uint16_t delay_ms, char* out) {
+bool GSM_ReadByte(char* out, uint16_t delay_ms) {
   volatile TickType_t begin_time = xTaskGetTickCount();
 
   do {
     if (USARTE0.STATUS & USART_RXCIF_bm) {
-      *out = USARTC0.DATA;
+      *out = USARTE0.DATA;
+      _clogu8("read byte: ", *out);
       return true;
     }
     if (xTaskGetTickCount() - begin_time > pdMS_TO_TICKS(delay_ms))
@@ -130,14 +131,14 @@ bool GSM_ReadByte(uint16_t delay_ms, char* out) {
       taskYIELD();
   } while(true);
 
-  _clog("GSM read byte failed");
+  //_clog("GSM read byte failed");
   return false;
 }
 
 char GSM_ReadResultCode(uint16_t delay_ms, char* out) {
   uint8_t i;
   for (i = 0; i < READ_BUFFER_SIZE; i++) {
-    if (true == GSM_ReadByte(delay_ms, rbuf + i))
+    if (true == GSM_ReadByte(rbuf + i, delay_ms))
       if ((rbuf[i]) == '\r')
         break;
   }
@@ -148,7 +149,6 @@ char GSM_ReadResultCode(uint16_t delay_ms, char* out) {
     return true;
   }
 
-  _clog("GSM read result code error");
   return false;
 }
 

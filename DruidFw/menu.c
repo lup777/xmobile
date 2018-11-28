@@ -17,6 +17,7 @@ void MENU_Show(App* menu) {
   EPD_ContinuePartial("      XMobile", 13, 1, 180);
   EPD_UpdatePartial();
   EPD_StopPartial();
+  EPD_StartPartial();
 
   do {
 
@@ -36,7 +37,6 @@ void MENU_Show(App* menu) {
         break;
     }
 
-    EPD_StartPartial();
     if (i-3 >= 0 && i-3 < menu_size)
       EPD_ContinuePartial((char*)(menu[i-3].header), APP_HEADER_LEN, 0,
                           180);
@@ -82,8 +82,8 @@ void MENU_Show(App* menu) {
       EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 20);
 
     EPD_UpdatePartial();
-    EPD_StopPartial();
   } while(key != key3);
 
+  EPD_StopPartial();
 
 }

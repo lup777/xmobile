@@ -99,7 +99,7 @@ static void vTogglePA0Task(void* pvParameters) {
   _sleep(100);
 
   EPD_ShowFullScreenImage(NULL/*ucDisplayFullLupImage*/, 200, 200);
-  _sleep(100);
+  _sleep(3000);
 
   GSM_Init();
 
