@@ -5,6 +5,7 @@
 #include <avr/io.h>
 
 #include "FreeRTOS.h"
+#include "message_buffer.h"
 #include "task.h"
 #include "semphr.h"
 
@@ -20,6 +21,12 @@ typedef struct struct_gsm_data {
   // battary level
 } GsmData;
 
+#define MAIL_MENU_INDEX 0
+
+#define MSG_KBD 0
+#define MSG_DRAW 1
+#define MSG_CLOSE 2
+
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
   TaskHandle_t gsm_task_handle;
@@ -27,6 +34,8 @@ typedef struct struct_context {
   QueueHandle_t log_queue;
   SemaphoreHandle_t ui_sem;
   GsmData gsm_data;
+  MessageBufferHandle_t mail[1];
+  uint8_t active_app_index;
 } Context;
 
 

@@ -1,13 +1,16 @@
 // usart.c
 #include <avr/io.h>
+#include <avr/interrupt.h>
 #include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
 #include "queue.h"
+#include "message_buffer.h"
 
 #include "global.h"
 #include "usart.h"
+#include "kbd.h"
 
 void USART0_SendBuf(char* str);
 
@@ -38,7 +41,7 @@ void xLogTask(void* pvParameters) {
 	char buf[] = " ___";
 	_u8tos(pair.value, buf + 1, 3, 10);
 	USART0_SendBuf(buf);
-	  
+
 	USART0_SendByte('\n');
 	USART0_SendByte('\r');
       }
@@ -62,7 +65,7 @@ inline void USART0_init(void) {
   // Transmit complete interrupt: Disabled
   // Data register empty interrupt: Disabled
   USARTF0.CTRLA |= USART_RXCINTLVL_gm | USART_TXCINTLVL_gm | USART_DREINTLVL_gm
-    | USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
+    | USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc | USART_RXCINTLVL_LO_gc;
 
   // Required Baud rate: 9600
   // Real Baud Rate: 9601.0 (x2 Mode), Error: 0.0 %
@@ -72,11 +75,26 @@ inline void USART0_init(void) {
   // Transmitter: On
   // Double transmission speed mode: On
   // Multi-processor communication mode: Off
-  USARTF0.CTRLB |= USART_TXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+  USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 
   // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
   // 5. Enable the transmitter or the receiver, depending on the usage.2.
 
+}
+
+ISR(USARTF0_RXC_vect) {
+  struct {
+    char id;
+    Key key;
+  } data;
+  data.id = MSG_KBD;
+  data.key = (Key)USARTF0_DATA;
+  MessageBufferHandle_t* pHandle = context.mail + context.active_app_index;
+  BaseType_t higher_priority_task_woken;
+  //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
+    xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
+                              &higher_priority_task_woken);
+  //}
 }
 
 inline void USART0_SendByte(char c) {

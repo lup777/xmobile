@@ -53,10 +53,11 @@ int main(void) {
 
   context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
+  context.active_app_index = MAIL_MENU_INDEX;
 
   xTaskCreate( xLogTask,
 	       "UsartLogstask",
-	       configMINIMAL_STACK_SIZE,
+         configMINIMAL_STACK_SIZE,
 	       NULL,
 	       1,
 	       &(context.log_task_handle) );
@@ -105,11 +106,10 @@ static void vTogglePA0Task(void* pvParameters) {
 
   _clog("MAIN main task init completed");
 
-  PORTD.DIRSET = PIN0_bm;
-  PORTD.OUTCLR = PIN0_bm;
+  APP_MenuStart(menu);
 
   for(;;) {
-    MENU_Show(menu);
+
     //APP_Telephone();
   }
 }

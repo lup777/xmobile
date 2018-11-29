@@ -1,7 +1,5 @@
 // key.h
-
-#ifndef __KEY_H__
-#define __KEY_H__
+#pragma once
 
 #include <avr/io.h>
 
@@ -14,4 +12,3 @@ void KBD_Init(void);
 Key KBD_Check(void);
 uint16_t KBD_Read(void);
 Key KBD_WaiteKey(void);
-#endif // __KEY_H__

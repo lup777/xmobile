@@ -1,88 +1,145 @@
 // menu.c
 #include "menu.h"
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "message_buffer.h"
+
 #include "global.h"
 #include "kbd.h"
 #include "spi.h"
 
 #define APP_HEADER_LEN 15
 
-void MENU_Show(App* menu) {
-  int8_t i = 0;
-  Key key;
-  int8_t menu_size = 5;//(int8_t)((sizeof(menu) / sizeof(App)));
+static volatile int8_t i;
+App* gp_menu;
 
-  _clogu8("Start menu", (uint8_t)menu_size);
-  EPD_StartPartial();
-  EPD_ContinuePartial("      XMobile", 13, 1, 180);
-  EPD_UpdatePartial();
-  EPD_StopPartial();
-  EPD_StartPartial();
+void App_MenuThread(void* pvParameters);
+void APP_MenuMessagePump(void);
+void MENU_KeyPressHandler(Key key);
+void MENU_DrawHanadler(void);
 
-  do {
+void APP_MenuStart(App* menu) {
+  gp_menu = menu;
+  xTaskCreate(App_MenuThread, "menuTask", configMINIMAL_STACK_SIZE,
+              NULL, 1, NULL);
+  context.active_app_index = MAIL_MENU_INDEX;
+  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  char msg = MSG_DRAW;
+  xMessageBufferSend(*pHandle, &msg, sizeof(char), 0);
+}
 
-    key = KBD_WaiteKey();
-    switch(key) {
-      case key1:
+void App_MenuThread(void* pvParameters) {
+  (void)(pvParameters);
+  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  *pHandle = xMessageBufferCreate((size_t)50);
+
+  APP_MenuMessagePump();
+  _clog("APP menu closed");
+}
+
+void APP_MenuMessagePump(void) {
+  char data[2];
+  size_t len;
+  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  i = 0;
+
+  _clog("APP menu started");
+  while(1) {
+    len = xMessageBufferReceive(*pHandle, data, 2, portMAX_DELAY);
+    if (len > 0) {
+      switch(data[0]) {
+        case MSG_KBD: {
+          _clogu8("APP menu msg: key ", (uint8_t)(data[1]));
+          MENU_KeyPressHandler((Key)data[1]);
+          MENU_DrawHanadler();
+          break;
+        } // case MSG_KBD
+
+          case MSG_DRAW: {
+            _clog("APP menu msg: show");
+            MENU_DrawHanadler();
+          } // case MSG_DRAW
+
+          default:
+            _clog("APP menu msg: not known");
+            break;
+
+      } // switch
+    }
+  }
+}
+
+void MENU_KeyPressHandler(Key key) {
+  int8_t menu_size = (int8_t)(sizeof(gp_menu) / sizeof(App));
+
+  switch(key) {
+      case key2:
         i--;
         break;
-      case key7:
+      case key8:
         i++;
         break;
-      case key4:
+      case key5:
         if (i >= 0 && i < menu_size)
-          menu[i].Call();
+          gp_menu[i].Call();
         break;
       default:
         break;
     }
+}
 
-    if (i-3 >= 0 && i-3 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i-3].header), APP_HEADER_LEN, 0,
-                          180);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 180);
+void MENU_DrawHanadler(void) {
+  int8_t menu_size = (int8_t)(sizeof(gp_menu) / sizeof(App));
 
-    if (i-2 >= 0 && i-2 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i-2].header), APP_HEADER_LEN, 1,
-                          160);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 160);
+  EPD_StartPartial();
+  EPD_ContinuePartial("      XMobile", 13, 1, 180);
 
-    if (i-1 >= 0 && i-1 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i-1].header), APP_HEADER_LEN, 2,
-                          140);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 140);
+  if (i-3 >= 0 && i-3 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i-3].header), APP_HEADER_LEN, 0,
+                        180);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 180);
 
-    EPD_ContinuePartial(" -----", 6, 0, 120);
-    if (i >= 0 && i < menu_size)
-      EPD_ContinuePartial((char*)(menu[i].header), APP_HEADER_LEN, 3,
-                          100);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 3, 100);
-    EPD_ContinuePartial(" -----", 6, 0, 80);
+  if (i-2 >= 0 && i-2 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i-2].header), APP_HEADER_LEN, 1,
+                        160);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 160);
 
-    if (i+1 >= 0 && i+1 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i+1].header), APP_HEADER_LEN, 2,
-                          60);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 60);
+  if (i-1 >= 0 && i-1 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i-1].header), APP_HEADER_LEN, 2,
+                        140);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 140);
 
-    if (i+2 >= 0 && i+2 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i+2].header), APP_HEADER_LEN, 1,
-                          40);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 40);
+  EPD_ContinuePartial(" -----", 6, 0, 120);
+  if (i >= 0 && i < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i].header), APP_HEADER_LEN, 3,
+                        100);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 3, 100);
+  EPD_ContinuePartial(" -----", 6, 0, 80);
 
-    if (i+3 >= 0 && i+3 < menu_size)
-      EPD_ContinuePartial((char*)(menu[i+3].header), APP_HEADER_LEN, 0,
-                          20);
-    else
-      EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 20);
+  if (i+1 >= 0 && i+1 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i+1].header), APP_HEADER_LEN, 2,
+                        60);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 60);
 
-    EPD_UpdatePartial();
-  } while(key != key3);
+  if (i+2 >= 0 && i+2 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i+2].header), APP_HEADER_LEN, 1,
+                        40);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 40);
+
+  if (i+3 >= 0 && i+3 < menu_size)
+    EPD_ContinuePartial((char*)(gp_menu[i+3].header), APP_HEADER_LEN, 0,
+                        20);
+  else
+    EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 20);
+
+  EPD_UpdatePartial();
 
   EPD_StopPartial();
 
