@@ -64,8 +64,7 @@ inline void USART0_init(void) {
   // Receive complete interrupt: Low Level
   // Transmit complete interrupt: Disabled
   // Data register empty interrupt: Disabled
-  USARTF0.CTRLA |= USART_RXCINTLVL_gm | USART_TXCINTLVL_gm | USART_DREINTLVL_gm
-    | USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc | USART_RXCINTLVL_LO_gc;
+  USARTF0.CTRLA |= USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
 
   // Required Baud rate: 9600
   // Real Baud Rate: 9601.0 (x2 Mode), Error: 0.0 %
@@ -93,7 +92,8 @@ ISR(USARTF0_RXC_vect) {
   BaseType_t higher_priority_task_woken;
   if (*pHandle != NULL) {
     //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
+    data.key -= '0';
+    xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
                                 &higher_priority_task_woken);
     //}
   }

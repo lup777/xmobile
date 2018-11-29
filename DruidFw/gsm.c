@@ -48,7 +48,7 @@ void GSM_Init(void) {
 
   USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 
-  GSM_SendCStr("AT");
+  /*  GSM_SendCStr("AT");
 
   _clog("waiting for GSM responce");
   GSM_ReadByte(rbuf, 1000);
@@ -57,7 +57,7 @@ void GSM_Init(void) {
   GSM_ReadByte(rbuf + 3, 1000);
   GSM_ReadByte(rbuf + 4, 1000);
   GSM_ReadByte(rbuf + 5, 1000);
-
+  */
   _clog("GSM responce received");
   /*EPD_ShowString(rbuf + 2, 2, 1, 180);
 

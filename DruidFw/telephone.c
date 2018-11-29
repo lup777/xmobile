@@ -2,7 +2,9 @@
 
 #include "telephone.h"
 
-#include <string.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "message_buffer.h"
 
 #include "global.h"
 #include "spi.h"
@@ -15,54 +17,19 @@ void TEL_KeyPressHandler(Key key);
 void TEL_DrawHandler(void);
 void ShowLine(uint8_t i, uint8_t x, uint8_t y);
 
-#define TEL_MENU_SIZE (sizeof(menu) / sizeof(TelMenu))
+#define TEL_MENU_SIZE 6//(sizeof(menu) / sizeof(TelMenu))
 
-static TelMenu menu[] = {
+static TelMenu menu[TEL_MENU_SIZE] = {
   {"AT+CREG?\0   ", "            "},
   {"AT+GSN\0     ", "            "},
   {"ATE0\0       ", "            "},
-  {"            ", "            "},
-  {"            ", "            "},
-  {"            ", "            "},
+  {"AT\0         ", "            "},
+  {"\0           ", "            "},
+  {"\0           ", "            "},
 
 };
 
 uint8_t g_selected;
-
-void APP_Telephone(void) {
-  Key key;
-
-  char* number = pvPortMalloc(11);
-  memset(number, 'x', 11);
-  if (number == NULL) {
-    _clog("ERROR Malloc failed");
-    return;
-  }
-
-  const char msg[9] = "number: +";
-  _clog("Enter telephone");
-  _sleep(100);
-
-  EPD_StartPartial();
-  EPD_ContinuePartial((char*)msg, 9, 2, 140);
-  EPD_ContinuePartial((char*)number, 11, 2 + 9, 140);
-  EPD_UpdatePartial();
-
-  uint8_t i = 0;
-  for (i = 0; i < 12; i++) {
-    key = KBD_WaiteKey();
-    if (key != keyNo) {
-      number[i] = (char)key + '0';
-      EPD_ContinuePartial((char*)msg, 9, 2, 140);
-      EPD_ContinuePartial((char*)number, 11, 2 + 9, 140);
-      EPD_UpdatePartial();
-    }
-  }
-  EPD_StopPartial();
-  if(number)
-    vPortFree(number);
-  _clog("exit telepone\0");
-}
 
 void APP_TelephoneStart(void) {
   xTaskCreate(TEL_Thread, "telephoneTask", configMINIMAL_STACK_SIZE,
@@ -70,7 +37,12 @@ void APP_TelephoneStart(void) {
   context.active_app_index = TELEPHONE_MAILBOX_OFFSET;
   MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
   char msg = MSG_DRAW;
-  xMessageBufferSend(*pHandle, &msg, sizeof(char), 0);
+  _sleep(100);
+
+  /*if (*pHandle)
+    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);*/
+  (void)(pHandle);
+  (void)(msg);
 }
 
 void TEL_Thread(void* pvParameters) {
@@ -85,39 +57,41 @@ void TEL_Thread(void* pvParameters) {
 void TEL_MessagePump(void) {
   char data[100];
   size_t len;
+  g_selected = 0;
 
   MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
 
   _clog("APP telephone started");
 
   while(1) {
-    len = xMessageBufferReceive(*pHandle, data, 2, portMAX_DELAY);
+    len = xMessageBufferReceive(*pHandle, data, 100, portMAX_DELAY);
     if (len > 0) {
       switch(data[0]) {
+	
         case MSG_KBD: {
           _clogu8("APP menu msg: key ", (uint8_t)(data[1]));
           TEL_KeyPressHandler((Key)data[1]);
           TEL_DrawHandler();
           break;
         } // case MSG_KBD
-
+	
           case MSG_DRAW: {
             _clog("APP menu msg: show");
             TEL_DrawHandler();
             break;
           } // case MSG_DRAW
-
+	    
           case MSG_GSM_INPUT: {
             uint8_t i;
             _clog("APP menu msg: gsm input");
-            for (i = 0; i < len; i ++)
+            for (i = 0; i < len && i < 100; i ++)
               menu[g_selected].answer[i] = data[i];
             TEL_DrawHandler();
             break;
           }
 
           default:
-            _clog("APP menu msg: not known");
+            _clogu8("APP menu msg: not known", (uint8_t)(data[0]));
             break;
 
       } // switch
@@ -155,8 +129,8 @@ void TEL_DrawHandler(void) {
   ShowLine(2, 1, 120);
   ShowLine(3, 1, 100);
   ShowLine(4, 1, 80);
-  ShowLine(6, 1, 60);
-
+  ShowLine(5, 1, 60);
+  
   EPD_UpdatePartial();
   EPD_StopPartial();
 }

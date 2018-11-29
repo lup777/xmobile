@@ -26,14 +26,16 @@ void APP_MenuStart(App* menu) {
   context.active_app_index = MENU_MAILBOX_OFFSET;
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
   char msg = MSG_DRAW;
-  xMessageBufferSend(*pHandle, &msg, sizeof(char), 0);
+  _sleep(100);
+
+  if (*pHandle)
+    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);
 }
 
 void App_MenuThread(void* pvParameters) {
   (void)(pvParameters);
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
   *pHandle = xMessageBufferCreate((size_t)50);
-
   APP_MenuMessagePump();
   _clog("APP menu closed");
 }
@@ -47,6 +49,7 @@ void APP_MenuMessagePump(void) {
   _clog("APP menu started");
   while(1) {
     len = xMessageBufferReceive(*pHandle, data, 2, portMAX_DELAY);
+    _clog("APP menu msg received");
     if (len > 0) {
       switch(data[0]) {
         case MSG_KBD: {
@@ -91,7 +94,8 @@ void MENU_KeyPressHandler(Key key) {
 }
 
 void MENU_DrawHanadler(void) {
-  int8_t menu_size = (int8_t)(sizeof(gp_menu) / sizeof(App));
+  int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
+  _clogu8("menu size ", menu_size);
 
   EPD_StartPartial();
   EPD_ContinuePartial("      XMobile", 13, 1, 180);

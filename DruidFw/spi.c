@@ -503,7 +503,7 @@ void EPD_StartPartial(void) {
   }
   EPD_WaitUntilIdle(); // wait
 
-  taskENTER_CRITICAL();
+  //taskENTER_CRITICAL();
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
 
@@ -512,7 +512,7 @@ void EPD_StartPartial(void) {
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
-  taskEXIT_CRITICAL();
+  //taskEXIT_CRITICAL();
 }
 
 void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
@@ -522,10 +522,10 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     uint8_t width = 1; // byte
     uint8_t height = 13; // bits
 
-    taskENTER_CRITICAL();
+    //taskENTER_CRITICAL();
     EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
-    taskEXIT_CRITICAL();
+    //taskEXIT_CRITICAL();
 
     if (x > 0) {
       x -= 1;
@@ -538,9 +538,9 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
 }
 
 void EPD_StopPartial(void) {
-  taskENTER_CRITICAL();
+  //taskENTER_CRITICAL();
   EPD_PowerOff();
-  taskEXIT_CRITICAL();
+  //taskEXIT_CRITICAL();
   xSemaphoreGive(gEpdMutex);
   _clog("EPD_StopPartial give mutex");
 }
@@ -552,7 +552,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
     _clog("EPD_StartPartial Failed to take mutex");
   }
-  taskENTER_CRITICAL();
+  //taskENTER_CRITICAL();
 
   EPD_SetLut(lut_partial_update);
 
@@ -578,7 +578,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
 
   EPD_UpdatePartial();
   EPD_PowerOff();
-  taskEXIT_CRITICAL();
+  //taskEXIT_CRITICAL();
   xSemaphoreGive(gEpdMutex);
 }
 

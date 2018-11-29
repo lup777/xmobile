@@ -27,8 +27,9 @@ void TestApp1(void);
 // GLOBAL VARIABLES
 Context context;
 
-static App menu[] = {
-  {APP_Telephone, "telephone      "},
+
+static App menu[MENU_SIZE] = {
+  {APP_TelephoneStart, "telephone      "},
   {TestApp1, "calendar       "},
   {TestApp1, "reader         "},
   {TestApp1, "snake          "},
@@ -109,11 +110,12 @@ static void vTogglePA0Task(void* pvParameters) {
 
   _clog("MAIN main task init completed");
 
-  APP_MenuStart(menu);
+
   APP_TelephoneStart();
-
+  //APP_MenuStart(menu);
   for(;;) {
-
     //APP_Telephone();
   }
+  APP_MenuStart(menu);
+  APP_TelephoneStart();
 }
