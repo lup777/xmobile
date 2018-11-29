@@ -91,10 +91,12 @@ ISR(USARTF0_RXC_vect) {
   data.key = (Key)USARTF0_DATA;
   MessageBufferHandle_t* pHandle = context.mail + context.active_app_index;
   BaseType_t higher_priority_task_woken;
-  //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
-    xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
-                              &higher_priority_task_woken);
-  //}
+  if (*pHandle != NULL) {
+    //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
+                                &higher_priority_task_woken);
+    //}
+  }
 }
 
 inline void USART0_SendByte(char c) {

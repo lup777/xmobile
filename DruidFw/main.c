@@ -54,6 +54,7 @@ int main(void) {
   context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
   context.active_app_index = MAIL_MENU_INDEX;
+  context.mail[MAIL_MENU_INDEX] = NULL;
 
   xTaskCreate( xLogTask,
 	       "UsartLogstask",
