@@ -27,7 +27,7 @@ void TestApp1(void);
 // GLOBAL VARIABLES
 Context context;
 
-App menu[] = {
+static App menu[] = {
   {APP_Telephone, "telephone      "},
   {TestApp1, "calendar       "},
   {TestApp1, "reader         "},
@@ -53,8 +53,10 @@ int main(void) {
 
   context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
-  context.active_app_index = MAIL_MENU_INDEX;
-  context.mail[MAIL_MENU_INDEX] = NULL;
+
+  context.active_app_index = MENU_MAILBOX_OFFSET;
+  context.mail[MENU_MAILBOX_OFFSET] = NULL;
+  context.mail[TELEPHONE_MAILBOX_OFFSET] = NULL;
 
   xTaskCreate( xLogTask,
 	       "UsartLogstask",
@@ -108,6 +110,7 @@ static void vTogglePA0Task(void* pvParameters) {
   _clog("MAIN main task init completed");
 
   APP_MenuStart(menu);
+  APP_TelephoneStart();
 
   for(;;) {
 

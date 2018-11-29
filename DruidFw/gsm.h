@@ -12,3 +12,4 @@
 #define CMD_GET_IMEI "AT+GSN"
 
 void GSM_Init(void);
+void GSM_CallCmd(const char* msg);

@@ -21,11 +21,13 @@ typedef struct struct_gsm_data {
   // battary level
 } GsmData;
 
-#define MAIL_MENU_INDEX 0
+#define MENU_MAILBOX_OFFSET 0
+#define TELEPHONE_MAILBOX_OFFSET 1
 
 #define MSG_KBD 0
 #define MSG_DRAW 1
 #define MSG_CLOSE 2
+#define MSG_GSM_INPUT 3
 
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
@@ -34,7 +36,7 @@ typedef struct struct_context {
   QueueHandle_t log_queue;
   SemaphoreHandle_t ui_sem;
   GsmData gsm_data;
-  MessageBufferHandle_t mail[1];
+  MessageBufferHandle_t mail[2];
   uint8_t active_app_index;
 } Context;
 

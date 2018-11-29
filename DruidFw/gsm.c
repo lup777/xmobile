@@ -2,8 +2,14 @@
 
 #include "gsm.h"
 
-#include <string.h>
+#include "FreeRTOS.h"
+#include "task.h"
+#include "message_buffer.h"
 
+#include <string.h>
+#include <avr/interrupt.h>
+
+#include "global.h"
 #include "spi.h"
 #include "kbd.h"
 
@@ -53,7 +59,7 @@ void GSM_Init(void) {
   GSM_ReadByte(rbuf + 5, 1000);
 
   _clog("GSM responce received");
-  EPD_ShowString(rbuf + 2, 2, 1, 180);
+  /*EPD_ShowString(rbuf + 2, 2, 1, 180);
 
   GSM_CallCmd(CMD_SET_NUMBERIC_RESPONCE_FORMAT);
   GSM_CallCmd(CMD_DISABLE_ECHO);
@@ -63,14 +69,24 @@ void GSM_Init(void) {
   _sleep(2000);
 
   GSM_CallCmd(CMD_CHECK_NET_STATUS);
-  GSM_CallCmd(CMD_GET_IMEI);
+  GSM_CallCmd(CMD_GET_IMEI);*/
+}
 
-  /*xTaskCreate( vGsmTask,
-               "GsmTask",
-               configMINIMAL_STACK_SIZE,
-               NULL,
-               2,
-               &(context.gsm_task_handle) );*/
+ISR(USARTE0_RXC_vect) {
+  static volatile uint8_t i = 1;
+  BaseType_t higher_priority_task_woken;
+  rbuf[i] = USARTE0.DATA;
+  i++;
+
+  if (rbuf[i - 1] == 13 || i >= READ_BUFFER_SIZE) {
+    i = 1;
+    MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
+    if (*pHandle != NULL) {
+      rbuf[0] = MSG_GSM_INPUT;
+      xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)(i - 1),
+                                &higher_priority_task_woken);
+    }
+  }
 }
 
 void GSM_CallCmd(const char* msg) {

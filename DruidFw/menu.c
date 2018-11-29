@@ -23,15 +23,15 @@ void APP_MenuStart(App* menu) {
   gp_menu = menu;
   xTaskCreate(App_MenuThread, "menuTask", configMINIMAL_STACK_SIZE,
               NULL, 1, NULL);
-  context.active_app_index = MAIL_MENU_INDEX;
-  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  context.active_app_index = MENU_MAILBOX_OFFSET;
+  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
   char msg = MSG_DRAW;
   xMessageBufferSend(*pHandle, &msg, sizeof(char), 0);
 }
 
 void App_MenuThread(void* pvParameters) {
   (void)(pvParameters);
-  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
   *pHandle = xMessageBufferCreate((size_t)50);
 
   APP_MenuMessagePump();
@@ -41,7 +41,7 @@ void App_MenuThread(void* pvParameters) {
 void APP_MenuMessagePump(void) {
   char data[2];
   size_t len;
-  MessageBufferHandle_t* pHandle = context.mail + MAIL_MENU_INDEX;
+  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
   i = 0;
 
   _clog("APP menu started");
@@ -59,6 +59,7 @@ void APP_MenuMessagePump(void) {
           case MSG_DRAW: {
             _clog("APP menu msg: show");
             MENU_DrawHanadler();
+            break;
           } // case MSG_DRAW
 
           default:
