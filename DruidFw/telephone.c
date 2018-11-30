@@ -16,6 +16,7 @@ void TEL_MessagePump(void);
 void TEL_KeyPressHandler(Key key);
 void TEL_DrawHandler(void);
 void ShowLine(uint8_t i, uint8_t x, uint8_t y);
+void TEL_CloseHandler(void);
 
 #define TEL_MENU_SIZE 6//(sizeof(menu) / sizeof(TelMenu))
 
@@ -88,13 +89,27 @@ void TEL_MessagePump(void) {
             break;
           }
 
+          case MSG_CLOSE: {
+            _clog("APP menu msg: close telephonet");
+
+            TEL_CloseHandler();
+
+            context.active_app_index = MENU_MAILBOX_OFFSET;
+            vMessageBufferDelete(*pHandle);
+            vTaskDelete(NULL);
+            return;
+          }
+
           default:
             _clogu8("APP menu msg: not known", (uint8_t)(data[0]));
             break;
 
       } // switch
-    }
-  }
+    } // if ( len > 0 )
+  } // while(1)
+}
+
+void TEL_CloseHandler(void) {
 }
 
 void TEL_KeyPressHandler(Key key) {

@@ -84,19 +84,30 @@ inline void USART0_init(void) {
 ISR(USARTF0_RXC_vect) {
   struct {
     char id;
-    Key key;
+    char key;
   } data;
   data.id = MSG_KBD;
-  data.key = (Key)USARTF0_DATA;
+  data.key = USARTF0_DATA;
   MessageBufferHandle_t* pHandle = context.mail + context.active_app_index;
-  BaseType_t higher_priority_task_woken;
-  if (*pHandle != NULL) {
-    //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
+  BaseType_t hptm;
+  //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
+  if (data.key >= '0' && data.key <= '9') {
     data.key -= '0';
-    xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data),
-                                &higher_priority_task_woken);
-    //}
+    data.id = MSG_KBD;
+    if (*pHandle != NULL)
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm);
+
+  } else if (data.key == 'x') {
+    data.id = MSG_CLOSE;
+    if (*pHandle != NULL)
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
+
+    data.id = MSG_DRAW;
+    pHandle = context.mail + MENU_MAILBOX_OFFSET;
+    if (*pHandle != NULL)
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
   }
+  //}
 }
 
 inline void USART0_SendByte(char c) {
