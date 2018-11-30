@@ -1,10 +1,12 @@
 // spi.h
-//#pragma once
-#ifndef __SPI_H__
-#define __SPI_H__
+#pragma once
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>
+
+#include "global.h"
+#include "display_data.h"
+#include "pgm.h"
 
 typedef struct struct_ImagePack {
   const uint8_t* data;
@@ -48,11 +50,32 @@ void EPD_clear(void);
 extern void EPD_ShowFullScreenImage(const uint8_t *image,
                                     uint16_t xsize,
                                     uint16_t ysize);
-void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y);
+void EPD_WaitUntilIdle(void);
+void EPD_SetLut(const uint8_t* lut);
+void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize, uint16_t YSize,
+                                           const uint8_t  *image);
+void EPD_PowerOn(void);
+void EPD_PowerOff(void);
+void EPD_UpdateFull(void);
+void EPD_SendDataByte(uint8_t byte);
+void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
+		       uint16_t RAM_YST,uint16_t RAM_YEND);
 
-void EPD_StartPartial(void);
-void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y);
-void EPD_UpdatePartial(void);
-void EPD_StopPartial(void);
-
-#endif //__SPI_H__
+void EPD_ClearFrameMemory(uint8_t color);
+void EPD_SetMemoryPointer(int x, int y);
+void EPD_DisplayFrame(void);
+uint8_t SPIC_TransferByte(uint8_t data_out);
+void EPD_Reset(void);
+void SPIC_Init(void);
+void EPD_DelayMs(uint16_t time);
+void EPD_SendData(uint8_t* arr, size_t len);
+void EPD_SendCmd(uint8_t* arr, size_t len);
+void EPD_SendCmdByte(uint8_t byte);
+void EPD_SelectData(void);
+void EPD_SelectCommand(void);
+void EPD_ResetEnable(void);
+void EPD_ResetDisable(void);
+bool EPD_Busy(void);
+void EPD_CSLow(void);
+void EPD_CSHi(void);
+void EPD_ShowPartialImages(const uint8_t* background, Image* images, size_t len);

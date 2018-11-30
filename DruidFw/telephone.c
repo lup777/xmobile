@@ -7,7 +7,7 @@
 #include "message_buffer.h"
 
 #include "global.h"
-#include "spi.h"
+#include "epd.h"
 #include "gsm.h"
 
 void APP_TelephoneStart(void);
@@ -39,10 +39,8 @@ void APP_TelephoneStart(void) {
   char msg = MSG_DRAW;
   _sleep(100);
 
-  /*if (*pHandle)
-    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);*/
-  (void)(pHandle);
-  (void)(msg);
+  if (*pHandle)
+    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);
 }
 
 void TEL_Thread(void* pvParameters) {
@@ -67,20 +65,20 @@ void TEL_MessagePump(void) {
     len = xMessageBufferReceive(*pHandle, data, 100, portMAX_DELAY);
     if (len > 0) {
       switch(data[0]) {
-	
+
         case MSG_KBD: {
           _clogu8("APP menu msg: key ", (uint8_t)(data[1]));
           TEL_KeyPressHandler((Key)data[1]);
           TEL_DrawHandler();
           break;
         } // case MSG_KBD
-	
+
           case MSG_DRAW: {
             _clog("APP menu msg: show");
             TEL_DrawHandler();
             break;
           } // case MSG_DRAW
-	    
+
           case MSG_GSM_INPUT: {
             uint8_t i;
             _clog("APP menu msg: gsm input");
@@ -130,7 +128,7 @@ void TEL_DrawHandler(void) {
   ShowLine(3, 1, 100);
   ShowLine(4, 1, 80);
   ShowLine(5, 1, 60);
-  
+
   EPD_UpdatePartial();
   EPD_StopPartial();
 }

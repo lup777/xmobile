@@ -2,7 +2,7 @@
 
 #include "global.h"
 
-#include "spi.h"
+#include "epd.h"
 #include "pgm.h"
 #include "kbd.h"
 #include "ui.h"
@@ -93,6 +93,7 @@ void TestApp1(void) {
   EPD_StartPartial();
   EPD_ContinuePartial("      XMobile", 13, 1, 10);
   EPD_ContinuePartial("not implemented yet", 19, 1, 11);
+  EPD_UpdatePartial();
   EPD_StopPartial();
   KBD_WaiteKey();
 }
@@ -115,6 +116,7 @@ static void vTogglePA0Task(void* pvParameters) {
   //APP_MenuStart(menu);
   for(;;) {
     //APP_Telephone();
+    _sleep(1000);
   }
   APP_MenuStart(menu);
   APP_TelephoneStart();

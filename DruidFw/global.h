@@ -17,6 +17,10 @@ typedef uint8_t bool;
 
 #define MENU_SIZE 5
 
+typedef uint8_t bool;
+#define false  0
+#define true   1
+
 typedef struct struct_gsm_data {
   uint8_t flags; // should be renamed
   // signal level

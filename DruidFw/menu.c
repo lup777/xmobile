@@ -7,7 +7,7 @@
 
 #include "global.h"
 #include "kbd.h"
-#include "spi.h"
+#include "epd.h"
 
 #define APP_HEADER_LEN 15
 
