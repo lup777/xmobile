@@ -184,7 +184,7 @@ LDFLAGS += -lm
 # Type: avrdude -c ?
 # to get a full listing.
 #
-AVRDUDE_PROGRAMMER = jtagmkII
+AVRDUDE_PROGRAMMER = jtag2pdi
 
 
 AVRDUDE_PORT = usb	   # programmer connected to serial device
