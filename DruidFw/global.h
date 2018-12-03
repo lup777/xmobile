@@ -27,8 +27,11 @@ typedef struct struct_gsm_data {
   // battary level
 } GsmData;
 
-#define MENU_MAILBOX_OFFSET 0
-#define TELEPHONE_MAILBOX_OFFSET 1
+#define MENU_MAILBOX_ID 0
+#define TELEPHONE_MAILBOX_ID 1
+#define NOT_EXISTS_ID 2
+
+#define MAILBOX_SIZE 2
 
 #define MSG_KBD 0
 #define MSG_DRAW 1
@@ -42,8 +45,8 @@ typedef struct struct_context {
   QueueHandle_t log_queue;
   SemaphoreHandle_t ui_sem;
   GsmData gsm_data;
-  MessageBufferHandle_t mail[2];
-  uint8_t active_app_index;
+  MessageBufferHandle_t mail[MAILBOX_SIZE];
+  uint8_t active_app_id;
 } Context;
 
 
@@ -59,6 +62,7 @@ void _sleep(uint16_t time_ms);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _strlen(char * str);
-
+void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
+                uint8_t mailbox_id);
 
 #endif // __GLOBAL_H__

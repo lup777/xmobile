@@ -29,11 +29,11 @@ Context context;
 
 
 static App menu[MENU_SIZE] = {
-  {APP_TelephoneStart, "telephone      "},
-  {TestApp1, "calendar       "},
-  {TestApp1, "reader         "},
-  {TestApp1, "snake          "},
-  {TestApp1, "music player   "}
+  {APP_TelephoneStart, TELEPHONE_MAILBOX_ID,  "telephone      "},
+  {TestApp1, NOT_EXISTS_ID,                   "calendar       "},
+  {TestApp1, NOT_EXISTS_ID,                   "reader         "},
+  {TestApp1, NOT_EXISTS_ID,                   "snake          "},
+  {TestApp1, NOT_EXISTS_ID,                   "music player   "}
 };
 
 // ~GLOBAL VARIABLES~
@@ -46,6 +46,34 @@ void GPIO_toggle_PA0(void) {
   PORTA.OUTTGL = PIN0_bm;
 }
 
+void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
+                uint8_t mailbox_id) {
+  char buf[10];
+  if (payload_len > 10 + 1) {
+    _clog("ERR SendAppMsg: too log msg");
+    return;
+  }
+
+  if (context.mail[mailbox_id] == NULL) {
+    _clog("ERR SendAppMsg: mailbox id == NULL");
+    return;
+  }
+
+  buf[0] = msg_id;
+  for (int i = 0; i < payload_len; i++)
+    buf[i + 1] = payload[i]; // copy payload
+
+  size_t xBytesSent;
+
+  taskENTER_CRITICAL();
+  xBytesSent = xMessageBufferSend(context.mail[mailbox_id], buf,
+                                  (size_t)payload_len + 1, 0);
+  taskEXIT_CRITICAL();
+
+  if (xBytesSent != (size_t)payload_len + 1) {
+    _clog("ERR SendAppMsg: xMessageBufferSend failed");
+  }
+}
 
 int main(void) {
   gpio_init();
@@ -55,9 +83,10 @@ int main(void) {
   context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
 
-  context.active_app_index = MENU_MAILBOX_OFFSET;
-  context.mail[MENU_MAILBOX_OFFSET] = NULL;
-  context.mail[TELEPHONE_MAILBOX_OFFSET] = NULL;
+  context.active_app_id = MENU_MAILBOX_ID;
+
+  for (uint8_t i = 0; i < MAILBOX_SIZE; i++)
+    context.mail[i] = NULL;
 
   xTaskCreate( xLogTask,
 	       "UsartLogstask",

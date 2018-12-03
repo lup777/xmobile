@@ -35,18 +35,15 @@ uint8_t g_selected;
 void APP_TelephoneStart(void) {
   xTaskCreate(TEL_Thread, "telephoneTask", configMINIMAL_STACK_SIZE,
               NULL, 1, NULL);
-  context.active_app_index = TELEPHONE_MAILBOX_OFFSET;
-  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
-  char msg = MSG_DRAW;
+  context.active_app_id = TELEPHONE_MAILBOX_ID;
   _sleep(100);
 
-  if (*pHandle)
-    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);
+  SendAppMsg(MSG_DRAW, NULL, 0, TELEPHONE_MAILBOX_ID);
 }
 
 void TEL_Thread(void* pvParameters) {
   (void)(pvParameters);
-  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
+  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
   *pHandle = xMessageBufferCreate((size_t)100);
 
   TEL_MessagePump();
@@ -58,7 +55,7 @@ void TEL_MessagePump(void) {
   size_t len;
   g_selected = 0;
 
-  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
+  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
 
   _clog("APP telephone started");
 
@@ -94,8 +91,9 @@ void TEL_MessagePump(void) {
 
             TEL_CloseHandler();
 
-            context.active_app_index = MENU_MAILBOX_OFFSET;
+            context.active_app_id = MENU_MAILBOX_ID;
             vMessageBufferDelete(*pHandle);
+            context.mail[TELEPHONE_MAILBOX_ID] = NULL;
             vTaskDelete(NULL);
             return;
           }

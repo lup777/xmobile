@@ -23,18 +23,15 @@ void APP_MenuStart(App* menu) {
   gp_menu = menu;
   xTaskCreate(App_MenuThread, "menuTask", configMINIMAL_STACK_SIZE,
               NULL, 1, NULL);
-  context.active_app_index = MENU_MAILBOX_OFFSET;
-  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
-  char msg = MSG_DRAW;
+  context.active_app_id = MENU_MAILBOX_ID;
   _sleep(100);
 
-  if (*pHandle)
-    xMessageBufferSend(*pHandle, &msg, sizeof(char), 1000);
+  SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
 }
 
 void App_MenuThread(void* pvParameters) {
   (void)(pvParameters);
-  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
+  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
   *pHandle = xMessageBufferCreate((size_t)50);
   APP_MenuMessagePump();
   _clog("APP menu closed");
@@ -43,7 +40,7 @@ void App_MenuThread(void* pvParameters) {
 void APP_MenuMessagePump(void) {
   char data[2];
   size_t len;
-  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_OFFSET;
+  MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
   i = 0;
 
   _clog("APP menu started");
@@ -85,8 +82,15 @@ void MENU_KeyPressHandler(Key key) {
         i++;
         break;
       case key5:
-        if (i >= 0 && i < menu_size)
-          gp_menu[i].Call();
+        if (i >= 0 && i < menu_size) {
+          MessageBufferHandle_t handle = context.mail[gp_menu[i].id];
+          if (handle == NULL) {
+            gp_menu[i].Call();
+          } else {
+            context.active_app_id = gp_menu[i].id;
+            SendAppMsg(MSG_DRAW, NULL, 0, gp_menu[i].id);
+          }
+        }
         break;
       default:
         break;

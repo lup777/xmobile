@@ -87,25 +87,36 @@ ISR(USARTF0_RXC_vect) {
   } data;
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
-  MessageBufferHandle_t* pHandle = context.mail + context.active_app_index;
+  MessageBufferHandle_t* pHandle = context.mail + context.active_app_id;
   BaseType_t hptm1 = pdFALSE;
   BaseType_t hptm2 = pdFALSE;
+
+  UBaseType_t uxSavedInterruptStatus;
 
   if (data.key >= '0' && data.key <= '9') {
     data.key -= '0';
     data.id = MSG_KBD;
-    if (*pHandle != NULL)
+    if (*pHandle != NULL) {
+      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
       xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm1);
+      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    }
 
   } else if (data.key == 'x') {
     data.id = MSG_CLOSE;
-    if (*pHandle != NULL)
+    if (*pHandle != NULL) {
+      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
       xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm1);
+      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    }
 
     data.id = MSG_DRAW;
-    pHandle = context.mail + MENU_MAILBOX_OFFSET;
-    if (*pHandle != NULL)
+    pHandle = context.mail + MENU_MAILBOX_ID;
+    if (*pHandle != NULL) {
+      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
       xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm2);
+      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    }
   }
 
   if ( hptm1 != pdFALSE || hptm2 != pdFALSE )
