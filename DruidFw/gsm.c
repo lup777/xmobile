@@ -74,19 +74,28 @@ void GSM_Init(void) {
 
 ISR(USARTE0_RXC_vect) {
   static volatile uint8_t i = 1;
-  BaseType_t higher_priority_task_woken;
+  BaseType_t hptm = pdFALSE;
   rbuf[i] = USARTE0.DATA;
-  i++;
 
-  if (rbuf[i - 1] == 13 || i >= READ_BUFFER_SIZE) {
+  // "<CR><LF><response><CR><LF>"
+  // CR -  carriage return - '\r' - 0xD - 13
+  // LF - line feed(?) - '\n' - 0xA - 10
+
+  if (i >= READ_BUFFER_SIZE)
+    i = 1;
+
+  if (rbuf[i] == 13) {
     i = 1;
     MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
     if (*pHandle != NULL) {
       rbuf[0] = MSG_GSM_INPUT;
-      xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)(i - 1),
-                                &higher_priority_task_woken);
+      xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
     }
   }
+
+  i++;
+  if (hptm != pdFALSE)
+    taskYIELD();
 }
 
 void GSM_CallCmd(const char* msg) {

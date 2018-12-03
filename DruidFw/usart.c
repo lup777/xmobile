@@ -78,7 +78,6 @@ inline void USART0_init(void) {
 
   // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
   // 5. Enable the transmitter or the receiver, depending on the usage.2.
-
 }
 
 ISR(USARTF0_RXC_vect) {
@@ -89,33 +88,34 @@ ISR(USARTF0_RXC_vect) {
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
   MessageBufferHandle_t* pHandle = context.mail + context.active_app_index;
-  BaseType_t hptm;
-  //if (xMessageBufferSpacesAvailable(*pHandle) + (size_t)2 >= sizeof(data)) { // 2 - sizeof(void*)
+  BaseType_t hptm1 = pdFALSE;
+  BaseType_t hptm2 = pdFALSE;
+
   if (data.key >= '0' && data.key <= '9') {
     data.key -= '0';
     data.id = MSG_KBD;
     if (*pHandle != NULL)
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm);
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm1);
 
   } else if (data.key == 'x') {
     data.id = MSG_CLOSE;
     if (*pHandle != NULL)
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm1);
 
     data.id = MSG_DRAW;
     pHandle = context.mail + MENU_MAILBOX_OFFSET;
     if (*pHandle != NULL)
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
+      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm2);
   }
-  //}
+
+  if ( hptm1 != pdFALSE || hptm2 != pdFALSE )
+    taskYIELD();
 }
 
 inline void USART0_SendByte(char c) {
   while( !(USARTF0_STATUS & USART_DREIF_bm) ); //Wait until DATA buffer is empty
   USARTF0_DATA = c;
 }
-
-
 
 void USART0_SendStr(const char* str) {
   volatile uint8_t i = 0;

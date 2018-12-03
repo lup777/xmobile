@@ -51,3 +51,5 @@
 16. [HW] Button for screen refresh
 
 17. [HW] Button for Telephone application start
+
+18. [GSM] Use rtr/rts,dtr,cts to control usart queue
