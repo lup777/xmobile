@@ -23,7 +23,7 @@ Key UI_GetKey(void) {
 
 void vUITask(void* pvParameters) {
   (void)(pvParameters);
-  //_clog("UI starting UI task");
+  //_log("UI starting UI task");
 
   g_key = keyNo;
 
@@ -33,11 +33,11 @@ void vUITask(void* pvParameters) {
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
   _sleep(100);
 
-  _clog("UI Task Init completed");
+  _log("UI Task Init completed");
 
   for(;;) {
     if (pdTRUE == xSemaphoreTake(context.ui_sem, portMAX_DELAY)) {
-      _clog("UI Notification received");
+      _log("UI Notification received");
       _sleep(1000);
     }
   }// for

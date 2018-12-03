@@ -28,7 +28,7 @@ char rbuf[READ_BUFFER_SIZE];
 char gresult;
 
 void GSM_Init(void) {
-  _clog("GSM Start gsm init");
+  _log("GSM Start gsm init");
   PORTD.DIRSET = PIN0_bm;
   PORTD.OUTSET = PIN0_bm;
 
@@ -40,39 +40,35 @@ void GSM_Init(void) {
   USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
 
-  USARTE0.CTRLA = USART_RXCINTLVL_gm | USART_TXCINTLVL_gm | USART_DREINTLVL_gm
-    | USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
+  USARTE0.CTRLA = USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_LO_gc | USART_DREINTLVL_OFF_gc;
 
   USARTE0.BAUDCTRLA = 25;
   USARTE0.BAUDCTRLB = 0;//((0x09 << USART_BSCALE_bp) & USART_BSCALE_gm) | 0x0C;
 
-  USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
-
   PORTD.DIRSET = PIN4_bm; // CTS
   PORTD.OUTSET = PIN4_bm; // CTS
 
-  /*  GSM_SendCStr("AT");
+  g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
+ 
+  USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+  _log("GSM init completed");
+}
 
-  _clog("waiting for GSM responce");
-  GSM_ReadByte(rbuf, 1000);
-  GSM_ReadByte(rbuf + 1, 1000);
-  GSM_ReadByte(rbuf + 2, 1000);
-  GSM_ReadByte(rbuf + 3, 1000);
-  GSM_ReadByte(rbuf + 4, 1000);
-  GSM_ReadByte(rbuf + 5, 1000);
-  */
-  _clog("GSM responce received");
-  /*EPD_ShowString(rbuf + 2, 2, 1, 180);
+StreamBufferHandle_t g_gsm_tx_buffer_handle;
 
-  GSM_CallCmd(CMD_SET_NUMBERIC_RESPONCE_FORMAT);
-  GSM_CallCmd(CMD_DISABLE_ECHO);
-  GSM_CallCmd(CMD_SET_ERROR_LEVEL_1);
-  GSM_CallCmd(CMD_ENABLE_AON);
+ISR(USARTE0_TXC_vect) {
+  char data;
+  BaseType_t pxHPTW = pdFALSE;
+  size_t read_count =
+    xStreamBufferReceiveFromISR(g_gsm_tx_buffer_handle, // stream handle
+				&data,           // buffer pointer
+				1,               // buffer length
+				&pxHPTW);
+  if (read_count > 0)
+    USARTE0_DATA = data;
 
-  _sleep(2000);
-
-  GSM_CallCmd(CMD_CHECK_NET_STATUS);
-  GSM_CallCmd(CMD_GET_IMEI);*/
+  if (pxHPTW != pdFALSE )
+    taskYIELD();
 }
 
 ISR(USARTE0_RXC_vect) {
@@ -111,11 +107,26 @@ ISR(USARTE0_RXC_vect) {
     taskYIELD();
 }
 
+void SendGsm(const char* msg) {
+  taskENTER_CRITICAL();
+  xStreamBufferSend(g_gsm_tx_buffer_handle,
+		    msg,
+		    strlen(msg),
+		    0);
+  const char eol = '\n';
+  xStreamBufferSend(g_gsm_tx_buffer_handle,
+		    &eol,
+		    1,
+		    0);
+  taskEXIT_CRITICAL();
+  USARTF0_DATA = 0;
+}
+
 void GSM_CallCmd(const char* msg) {
   GSM_SendCStr(msg);
   char result_code;
   bool result = GSM_ReadResultCode(1000, &result_code);
-  _clogu8(msg, (uint8_t)result);
+  _log("%s: %d", msg, (uint8_t)result);
 }
 
 void GSM_SendCStr(const char* str) {
@@ -150,7 +161,7 @@ bool GSM_SendByte(char c, uint16_t delay_ms) {
 
   } while(true);
 
-  _clog("GSM send byte failed");
+  _log("GSM send byte failed");
   return false;
 }
 
@@ -160,7 +171,7 @@ bool GSM_ReadByte(char* out, uint16_t delay_ms) {
   do {
     if (USARTE0.STATUS & USART_RXCIF_bm) {
       *out = USARTE0.DATA;
-      _clogu8("read byte: ", *out);
+      _log("read byte: %d", *out);
       return true;
     }
     if (xTaskGetTickCount() - begin_time > pdMS_TO_TICKS(delay_ms))
@@ -169,7 +180,7 @@ bool GSM_ReadByte(char* out, uint16_t delay_ms) {
       taskYIELD();
   } while(true);
 
-  //_clog("GSM read byte failed");
+  //_log("GSM read byte failed");
   return false;
 }
 

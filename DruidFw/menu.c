@@ -34,7 +34,7 @@ void App_MenuThread(void* pvParameters) {
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
   *pHandle = xMessageBufferCreate((size_t)50);
   APP_MenuMessagePump();
-  _clog("APP menu closed");
+  _log("APP menu closed");
 }
 
 void APP_MenuMessagePump(void) {
@@ -43,27 +43,27 @@ void APP_MenuMessagePump(void) {
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
   i = 0;
 
-  _clog("APP menu started");
+  _log("APP menu started");
   while(1) {
     len = xMessageBufferReceive(*pHandle, data, 2, portMAX_DELAY);
-    _clog("APP menu msg received");
+    _log("APP menu msg received");
     if (len > 0) {
       switch(data[0]) {
         case MSG_KBD: {
-          _clogu8("APP menu msg: key ", (uint8_t)(data[1]));
+          _log("APP menu msg: key: %d ", (uint8_t)(data[1]));
           MENU_KeyPressHandler((Key)data[1]);
           MENU_DrawHanadler();
           break;
         } // case MSG_KBD
 
           case MSG_DRAW: {
-            _clog("APP menu msg: show");
+            _log("APP menu msg: show");
             MENU_DrawHanadler();
             break;
           } // case MSG_DRAW
 
           default:
-            _clog("APP menu msg: not known");
+            _log("APP menu msg: not known");
             break;
 
       } // switch
@@ -98,8 +98,9 @@ void MENU_KeyPressHandler(Key key) {
 }
 
 void MENU_DrawHanadler(void) {
+  return;
   int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
-  _clogu8("menu size ", menu_size);
+  _log("menu size: %d ", menu_size);
 
   EPD_StartPartial();
   EPD_ContinuePartial("      XMobile", 13, 1, 180);

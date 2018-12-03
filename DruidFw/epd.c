@@ -11,15 +11,13 @@
 #include "spi.h"
 #include "fonts.h"
 
-//#define _clog(X) {}
-
 volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
 static volatile uint8_t gi;
 
 inline void EPD_Init(void) {
   SPIC_Init();
-  _clog("SPI init completed");
+  _log("SPI init completed");
   gbackground = NULL;
   // CS configured to out in SPIC_Init()
   PORTA.DIRSET = PIN1_bm; // DC
@@ -29,54 +27,42 @@ inline void EPD_Init(void) {
 
   EPD_Reset();
 
-  _clog("EPD init");
-  //taskENTER_CRITICAL();
+  _log("EPD init");
   EPD_CSLow();
   EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
   EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
   EPD_SendDataByte(/*((EPD_HEIGHT - 1) >> 8) & 0xFF*/0x00);
   EPD_SendDataByte(0x00); // GD = 0, SM = 0, TB = 0
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(BOOSTER_SOFT_START_CONTROL);
   EPD_SendDataByte(0xD7);
   EPD_SendDataByte(0xD6);
   EPD_SendDataByte(0x9D);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(WRITE_VCOM_REGISTER);
   EPD_SendDataByte(0xA8);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_DUMMY_LINE_PERIOD);
   EPD_SendDataByte(0x1A);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(SET_GATE_TIME);
   EPD_SendDataByte(0x08);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(DATA_ENTRY_MODE_SETTING);
   EPD_SendDataByte(0x01); // 0x03
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  _clog("EPD Init completed");
+  _log("EPD Init completed");
 
   EPD_clear();
 
@@ -84,14 +70,13 @@ inline void EPD_Init(void) {
 }
 
 void EPD_StartPartial(void) {
-  _clog("EPD Start partial update");
+  _log("EPD Start partial update");
   if (xSemaphoreTake(gEpdMutex, (TickType_t)150) != pdTRUE) {
-    _clog("EPD_StartPartial Failed to take mutex");
+    _log("EPD_StartPartial Failed to take mutex");
     return;
   }
   EPD_WaitUntilIdle(); // wait
 
-  //taskENTER_CRITICAL();
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
 
@@ -100,7 +85,6 @@ void EPD_StartPartial(void) {
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
-  //taskEXIT_CRITICAL();
 }
 
 void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
@@ -110,11 +94,9 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     uint8_t width = 1; // byte
     uint8_t height = 13; // bits
 
-    //taskENTER_CRITICAL();
-    EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
+      EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
-    //taskEXIT_CRITICAL();
-
+  
     if (x > 0) {
       x -= 1;
     } else {
@@ -126,22 +108,20 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
 }
 
 void EPD_StopPartial(void) {
-  //taskENTER_CRITICAL();
   EPD_PowerOff();
-  //taskEXIT_CRITICAL();
+  _log("EPD_StopPartial give mutex");
   xSemaphoreGive(gEpdMutex);
-  _clog("EPD_StopPartial give mutex");
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
-  _clog("EPD Show partial image");
+  _log("EPD Show partial image");
   //_sleep(200);
   EPD_WaitUntilIdle(); // wait
+  _log("EPD_StopPartial take mutex");
   if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
-    _clog("EPD_StartPartial Failed to take mutex");
+    _log("EPD_StartPartial Failed to take mutex");
     return;
   }
-  //taskENTER_CRITICAL();
 
   EPD_SetLut(lut_partial_update);
 
@@ -167,37 +147,30 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
 
   EPD_UpdatePartial();
   EPD_PowerOff();
-  //taskEXIT_CRITICAL();
   xSemaphoreGive(gEpdMutex);
 }
 
 void EPD_UpdatePartial(void)
 {
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x22);
   EPD_SendDataByte(0x04);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0x20);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 
-  //taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SendCmdByte(0xFF);
   EPD_CSHi();
-  //taskEXIT_CRITICAL();
 }
 
 void EPD_ShowFullScreenImage(const uint8_t *image,
                              uint16_t xsize,
                              uint16_t ysize)
 {
-  _clog("EPD show full screen image");
+  _log("EPD show full screen image");
   //Get xbytes from xsize, rounding up
   uint8_t xbytes;
   xbytes = ( xsize + 7 ) >> 3;

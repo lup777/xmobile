@@ -142,10 +142,10 @@ uint16_t KBD_Read(void) {
 
 Key KBD_WaiteKey(void) {
   Key key = keyNo;
-  _clog("waiting for key");
+  _log("waiting for key");
   do {
     key = KBD_Check();
   } while(key == keyNo);
-  _clogu8("key pressed", (uint8_t)key);
+  _log("key pressed: %d", (uint8_t)key);
   return key;
 }

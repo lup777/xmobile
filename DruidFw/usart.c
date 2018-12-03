@@ -2,6 +2,8 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <string.h>
+#include <stdarg.h>
+#include <stdio.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -14,39 +16,34 @@
 
 void USART0_SendBuf(char* str);
 
-void _clogu8(const char* str, uint8_t v) {
-  LogPairU8 pair;
-  pair.msg = str;
-  pair.value = v;
-  xQueueSend(context.log_queue, &pair, (TickType_t)100);
-}
+#define LOG_BUFFER_LEN 100
 
-void _clog(const char* msg) {
-  LogPairU8 pair;
-  pair.msg = msg;
-  pair.value = 0;
-  xQueueSend(context.log_queue, &pair, (TickType_t)100);
-}
+void _log(const char *format, ...) {
+  char buffer[LOG_BUFFER_LEN];
+  memset(buffer, 0, LOG_BUFFER_LEN);
+  
+  va_list args;
+  va_start(args, format);
 
-void xLogTask(void* pvParameters) {
-  (void)(pvParameters);
+  uint8_t len = snprintf(buffer,
+			 LOG_BUFFER_LEN,
+			 format,
+			 args);
 
-  for(;;) {
-    LogPairU8 pair;
-    if (uxQueueMessagesWaiting(context.log_queue) > 0) {
-      if( pdTRUE == xQueueReceive(context.log_queue,
-				  &pair, portMAX_DELAY) ) {
-	USART0_SendStr(pair.msg);
-
-	char buf[] = " ___";
-	_u8tos(pair.value, buf + 1, 3, 10);
-	USART0_SendBuf(buf);
-
-	USART0_SendByte('\n');
-	USART0_SendByte('\r');
-      }
-    }
+  va_end(args);
+  
+  if (len + 2 <= LOG_BUFFER_LEN) {
+    buffer[len] = '\n';
+    buffer[len + 1] = '\r';
   }
+
+  taskENTER_CRITICAL();
+  xStreamBufferSend(g_log_tx_buffer_handle,
+		    buffer,
+		    len + 2,
+		    0);
+  taskEXIT_CRITICAL();
+  USARTF0_DATA = 0;
 }
 
 inline void USART0_init(void) {
@@ -62,22 +59,43 @@ inline void USART0_init(void) {
   USARTF0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
   // Receive complete interrupt: Low Level
-  // Transmit complete interrupt: Disabled
+  // Transmit complete interrupt: Low level
   // Data register empty interrupt: Disabled
-  USARTF0.CTRLA |= USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
+  USARTF0.CTRLA |= USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_LO_gc | USART_DREINTLVL_OFF_gc;
 
   // Required Baud rate: 9600
   // Real Baud Rate: 9601.0 (x2 Mode), Error: 0.0 %
   USARTF0.BAUDCTRLA = 25;
   USARTF0.BAUDCTRLB = 0;//((0x09 << USART_BSCALE_bp) & USART_BSCALE_gm) | 0x0C;
+
+  // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
+  // 5. Enable the transmitter or the receiver, depending on the usage.2.
+
+  g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
+
+
   // Receiver: On
   // Transmitter: On
   // Double transmission speed mode: On
   // Multi-processor communication mode: Off
   USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+}
 
-  // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
-  // 5. Enable the transmitter or the receiver, depending on the usage.2.
+StreamBufferHandle_t g_log_tx_buffer_handle;
+
+ISR(USARTF0_TXC_vect) {
+  char data;
+  BaseType_t pxHPTW = pdFALSE;
+  size_t read_count =
+    xStreamBufferReceiveFromISR(g_log_tx_buffer_handle, // stream handle
+				&data,           // buffer pointer
+				1,               // buffer length
+				&pxHPTW);
+  if (read_count > 0)
+    USARTF0_DATA = data;
+
+  if (pxHPTW != pdFALSE )
+    taskYIELD();
 }
 
 ISR(USARTF0_RXC_vect) {
@@ -126,20 +144,4 @@ ISR(USARTF0_RXC_vect) {
 inline void USART0_SendByte(char c) {
   while( !(USARTF0_STATUS & USART_DREIF_bm) ); //Wait until DATA buffer is empty
   USARTF0_DATA = c;
-}
-
-void USART0_SendStr(const char* str) {
-  volatile uint8_t i = 0;
-  const uint8_t len = strlen(str);
-  for(i = 0; i < len; i++) {
-    USART0_SendByte(str[i]);
-  }
-}
-
-void USART0_SendBuf(char* str) {
-  volatile uint8_t i = 0;
-  const uint8_t len = _strlen(str);
-  for(i = 0; i < len; i++) {
-    USART0_SendByte(str[i]);
-  }
 }

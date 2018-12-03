@@ -2,6 +2,8 @@
 
 #include "global.h"
 
+#include <stdio.h>
+
 #include "epd.h"
 #include "pgm.h"
 #include "kbd.h"
@@ -50,12 +52,12 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
                 uint8_t mailbox_id) {
   char buf[10];
   if (payload_len > 10 + 1) {
-    _clog("ERR SendAppMsg: too log msg");
+    _log("ERR SendAppMsg: too log msg");
     return;
   }
 
   if (context.mail[mailbox_id] == NULL) {
-    _clog("ERR SendAppMsg: mailbox id == NULL");
+    _log("ERR SendAppMsg: mailbox id == NULL");
     return;
   }
 
@@ -71,7 +73,7 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   taskEXIT_CRITICAL();
 
   if (xBytesSent != (size_t)payload_len + 1) {
-    _clog("ERR SendAppMsg: xMessageBufferSend failed");
+    _log("ERR SendAppMsg: xMessageBufferSend failed");
   }
 }
 
@@ -80,7 +82,6 @@ int main(void) {
   USART0_init();
   KBD_Init();
 
-  context.log_queue = xQueueCreate(5, sizeof(LogPairU8));
   context.ui_sem = xSemaphoreCreateBinary();
 
   context.active_app_id = MENU_MAILBOX_ID;
@@ -88,12 +89,12 @@ int main(void) {
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++)
     context.mail[i] = NULL;
 
-  xTaskCreate( xLogTask,
+  /*xTaskCreate( xLogTask,
 	       "UsartLogstask",
          configMINIMAL_STACK_SIZE,
 	       NULL,
 	       1,
-	       &(context.log_task_handle) );
+	       &(context.log_task_handle) );*/
 
   /*xTaskCreate(vUITask,
               "UI tsak",
@@ -138,13 +139,16 @@ static void vTogglePA0Task(void* pvParameters) {
 
   GSM_Init();
 
-  _clog("MAIN main task init completed");
+  _log("MAIN main task init completed");
 
 
-  APP_TelephoneStart();
-  //APP_MenuStart(menu);
+  //APP_TelephoneStart();
+  APP_MenuStart(menu);
+  
   for(;;) {
-    //APP_Telephone();
+    _log("hello from main :) %s", "zzz");
+    _sleep(1000);
+    SendGsm("AT");
     _sleep(1000);
   }
   APP_MenuStart(menu);

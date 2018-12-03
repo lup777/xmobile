@@ -53,3 +53,5 @@
 17. [HW] Button for Telephone application start
 
 18. [GSM] Use rtr/rts,dtr,cts to control usart queue
+
+19. [HW] Add lamp for error state (error indicator)

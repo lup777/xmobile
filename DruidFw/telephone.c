@@ -47,7 +47,7 @@ void TEL_Thread(void* pvParameters) {
   *pHandle = xMessageBufferCreate((size_t)100);
 
   TEL_MessagePump();
-  _clog("APP telephone closed");
+  _log("APP telephone closed");
 }
 
 void TEL_MessagePump(void) {
@@ -57,7 +57,7 @@ void TEL_MessagePump(void) {
 
   MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
 
-  _clog("APP telephone started");
+  _log("APP telephone started");
 
   while(1) {
     len = xMessageBufferReceive(*pHandle, data, 100, portMAX_DELAY);
@@ -65,29 +65,30 @@ void TEL_MessagePump(void) {
       switch(data[0]) {
 
         case MSG_KBD: {
-          _clogu8("APP menu msg: key ", (uint8_t)(data[1]));
+          _log("APP menu msg: key %d", (uint8_t)(data[1]));
           TEL_KeyPressHandler((Key)data[1]);
           TEL_DrawHandler();
           break;
         } // case MSG_KBD
 
           case MSG_DRAW: {
-            _clog("APP menu msg: show");
+            _log("APP menu msg: show");
             TEL_DrawHandler();
             break;
           } // case MSG_DRAW
 
           case MSG_GSM_INPUT: {
             uint8_t i;
-            _clog("APP menu msg: gsm input");
+            _log("APP menu msg: gsm input");
             for (i = 0; i < len && i < 100; i ++)
               menu[g_selected].answer[i] = data[i];
+	    _log("GSM: %s", data[i]);
             TEL_DrawHandler();
             break;
           }
 
           case MSG_CLOSE: {
-            _clog("APP menu msg: close telephonet");
+            _log("APP menu msg: close telephonet");
 
             TEL_CloseHandler();
 
@@ -99,7 +100,7 @@ void TEL_MessagePump(void) {
           }
 
           default:
-            _clogu8("APP menu msg: not known", (uint8_t)(data[0]));
+            _log("APP menu msg: not known: %d", (uint8_t)(data[0]));
             break;
 
       } // switch
@@ -132,6 +133,7 @@ void TEL_KeyPressHandler(Key key) {
 }
 
 void TEL_DrawHandler(void) {
+  return;
   EPD_StartPartial();
   EPD_ContinuePartial("     telephone      ", 20, 1, 185);
 
