@@ -48,6 +48,9 @@ void GSM_Init(void) {
 
   USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 
+  PORTD.DIRSET = PIN4_bm; // CTS
+  PORTD.OUTSET = PIN4_bm; // CTS
+
   /*  GSM_SendCStr("AT");
 
   _clog("waiting for GSM responce");
@@ -73,6 +76,7 @@ void GSM_Init(void) {
 }
 
 ISR(USARTE0_RXC_vect) {
+  PORTD.OUTCLR = PIN4_bm; // CTS
   static volatile uint8_t i = 1;
   BaseType_t hptm = pdFALSE;
   rbuf[i] = USARTE0.DATA;
@@ -81,19 +85,25 @@ ISR(USARTE0_RXC_vect) {
   // CR -  carriage return - '\r' - 0xD - 13
   // LF - line feed(?) - '\n' - 0xA - 10
 
+  // CTS line - PD4 - make low when do not ready for receiving
+
   if (i >= READ_BUFFER_SIZE)
     i = 1;
 
-  if (rbuf[i] == 13) {
-    i = 1;
-    MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
-    if (*pHandle != NULL) {
-      rbuf[0] = MSG_GSM_INPUT;
-      xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
+
+  if (i > 4) {// <CR> <LF> <at_least_1_char> <CR> <LF>
+    if (rbuf[i - 1] == 13 && rbuf[i] == 10) {
+      i = 0; // will be inc'ed at the end of this function
+      MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_OFFSET;
+      if (*pHandle != NULL) {
+        rbuf[0] = MSG_GSM_INPUT;
+        xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
+      }
     }
   }
 
   i++;
+  PORTD.OUTSET = PIN4_bm; // CTS
   if (hptm != pdFALSE)
     taskYIELD();
 }
