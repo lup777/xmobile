@@ -2,6 +2,7 @@
 #include "spi.h"
 
 #include <avr/io.h>
+#include <avr/pgmspace.h>
 #include <string.h>
 
 #include "FreeRTOS.h"
@@ -28,6 +29,81 @@ static volatile uint8_t gi;
   CLK (clock) - PORTC 7 (SCK)
   DIN (data input) - PORTC 5 (MOSI)
 */
+
+inline void SPIC_Init(void) {
+  PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
+  EPD_CSHi(); // PIN4_bm
+  PORTA.DIRCLR = PIN3_bm;
+  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+
+  g_epd_tx_buffer_handle = xStreamBufferCreate(150, 1);
+
+  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
+    | SPI_MODE_0_gc;
+}
+
+ISR(SPIC_INT_vect) {
+  static SpiOrder order;
+  static sent_cnt = order.length; // they should be equal on start,
+                                  // even if order is not inited
+  BaseType_t hptw = pdFALSE;
+  size_t rec_bytes;
+
+  if (sent_cnt == order.length) {
+    rec_bytes = xMessageBufferReceiveFromISR(g_epd_tx_buffer_handle,
+                                             &order,
+                                             sizeof(order),
+                                             &hptw);
+    if (rec_bytes != sizeof(order)) { // last order was sent, no more to TX
+      // Stop transfering
+      // sent_cnt EQ order.length, so ...
+    } else {
+      sent_cnt = 0; // last order was sent full, ready to start TX the next one
+    }
+  }
+
+  if (sent_cnt < order.length ) {
+    EPD_SelectData();
+    SPIC.DATA = pgm_read_byte(data + sent_cnt);
+    sent_cnt ++;
+  } else { // all data from current order was sent
+           // Also it can be if we need to send only one byte.
+           // In this case we need only to drive CS hi.
+    EPD_CSHi(); // Stop transfering
+  }
+
+  if ( hptw != pdFALSE )
+    taskYIELD();
+}
+
+void EPD_SendFlash(const char* data) {
+  size_t bytes_sent;
+  size_t data_len = sizeof(data);
+  SpiOrder order;
+  order.buffer = data + 1; // first byte will be send from in this func
+  order.length = data_len - 1;
+
+  while( EPD_IsCsLow() ) {}
+
+  if (data_len - 1 > 0) {
+    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+                                    &order,
+                                    sizeof(order),
+                                    pdMS_TO_TICKS(2000));
+    if (bytes_sent != sizeof(order)) {
+      _log("[ERR] SPI_Send::xMessageBufferSend failed");
+      return;
+    }
+
+    EPD_CSLow();
+    EPD_SelectCommand();
+    SPIC.DATA = data[0];
+  }
+}
+
+bool EPD_IsCsLow(void) {
+  return (PORTC.OUT & PIN4_bm) == 0;
+}
 
 inline void EPD_CSLow(void) {
   if ((PORTC.OUT & PIN4_bm) != 0)
@@ -88,14 +164,6 @@ void EPD_SendData(uint8_t* arr, size_t len) {
 void EPD_DelayMs(uint16_t time) {
   const TickType_t xDelay = time / portTICK_PERIOD_MS;
   vTaskDelay(xDelay);
-}
-
-inline void SPIC_Init(void) {
-  PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
-  EPD_CSHi(); // PIN4_bm
-  PORTA.DIRCLR = PIN3_bm;
-  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
-    | SPI_MODE_0_gc;
 }
 
 inline void EPD_Reset(void) {
@@ -359,3 +427,10 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
   EPD_CSHi();
   //taskEXIT_CRITICAL();
 }
+
+const char display_update_control[] PROGMEM = {
+  DISPLAY_UPDATE_CONTROL_2, 0xC4};
+const char master_activation[] PROGMEM = {
+  MASTER_ACTIVATION};
+const char terminate_frame_read_write[] PROGMEM = {
+  TERMINATE_FRAME_READ_WRITE};

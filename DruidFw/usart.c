@@ -21,7 +21,7 @@ void USART0_SendBuf(char* str);
 void _log(const char *format, ...) {
   char buffer[LOG_BUFFER_LEN];
   memset(buffer, 0, LOG_BUFFER_LEN);
-  
+
   va_list args;
   va_start(args, format);
 
@@ -31,7 +31,7 @@ void _log(const char *format, ...) {
 			 args);
 
   va_end(args);
-  
+
   if (len + 2 <= LOG_BUFFER_LEN) {
     buffer[len] = '\n';
     buffer[len + 1] = '\r';
@@ -39,45 +39,24 @@ void _log(const char *format, ...) {
 
   taskENTER_CRITICAL();
   xStreamBufferSend(g_log_tx_buffer_handle,
-		    buffer,
-		    len + 2,
+		    buffer + 1, // first byte will be sent in next command
+		    len + 1, // buffer + <\n> + <\r> - <first byte>
 		    0);
   taskEXIT_CRITICAL();
-  USARTF0_DATA = 0;
+  USARTF0_DATA = buffer[0];
 }
 
 inline void USART0_init(void) {
-  // 1. Set the TxD pin value high, and optionally set the XCK low
-  PORTF.OUTSET = PIN3_bm;
-  // 2. Set the TxD and optionally the XCK pin as output.
-  PORTF.DIRSET = PIN3_bm;
-  // 3. Set the baud rate and frame format.
-  // Communication mode: Asynchronous USART
-  // Data bits: 8
-  // Stop bits: 1
-  // Parity: Disabled
+  PORTF.OUTSET = PIN3_bm; // TX
+  PORTF.DIRSET = PIN3_bm; // TX
   USARTF0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
-  // Receive complete interrupt: Low Level
-  // Transmit complete interrupt: Low level
-  // Data register empty interrupt: Disabled
   USARTF0.CTRLA |= USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_LO_gc | USART_DREINTLVL_OFF_gc;
-
-  // Required Baud rate: 9600
-  // Real Baud Rate: 9601.0 (x2 Mode), Error: 0.0 %
-  USARTF0.BAUDCTRLA = 25;
-  USARTF0.BAUDCTRLB = 0;//((0x09 << USART_BSCALE_bp) & USART_BSCALE_gm) | 0x0C;
-
-  // 4. Set the mode of operation (enables XCK pin output in synchronous mode).
-  // 5. Enable the transmitter or the receiver, depending on the usage.2.
+  USARTF0.BAUDCTRLA = 25; // 9600
+  USARTF0.BAUDCTRLB = 0;
 
   g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
 
-
-  // Receiver: On
-  // Transmitter: On
-  // Double transmission speed mode: On
-  // Multi-processor communication mode: Off
   USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
 

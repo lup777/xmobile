@@ -18,13 +18,6 @@ void GPIO_toggle_PA0(void);
 void _sleep(uint16_t time_ms);
 void KBD_Init(void);
 void TestApp1(void);
-/* GPIO
-   PORT (those bits controls GPIO lines):
-   DIR - direction
-   OUT - to write output value
-   IN - to read input value
-   PINnCTRL = configuration
- */
 
 // GLOBAL VARIABLES
 Context context;
@@ -89,20 +82,6 @@ int main(void) {
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++)
     context.mail[i] = NULL;
 
-  /*xTaskCreate( xLogTask,
-	       "UsartLogstask",
-         configMINIMAL_STACK_SIZE,
-	       NULL,
-	       1,
-	       &(context.log_task_handle) );*/
-
-  /*xTaskCreate(vUITask,
-              "UI tsak",
-              configMINIMAL_STACK_SIZE,
-              NULL,
-              1,
-              &(context.ui_task_handle));*/
-
   xTaskCreate( vTogglePA0Task,
                "blink_PORTA_0_task",
                configMINIMAL_STACK_SIZE,
@@ -115,7 +94,6 @@ int main(void) {
   return 0;
 }
 void _sleep(uint16_t time_ms) {
-  //TickType_t xDelay = time / portTICK_PERIOD_MS;
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
 }
 
@@ -144,7 +122,7 @@ static void vTogglePA0Task(void* pvParameters) {
 
   //APP_TelephoneStart();
   APP_MenuStart(menu);
-  
+
   for(;;) {
     _log("hello from main :) %s", "zzz");
     _sleep(1000);

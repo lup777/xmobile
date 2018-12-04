@@ -1,12 +1,15 @@
 // spi.h
 #pragma once
 
-#include <avr/io.h>
-#include <avr/pgmspace.h>
-
 #include "global.h"
 #include "display_data.h"
 #include "pgm.h"
+
+typedef struct struct_spi_order {
+  char* buffer;             // pointer to data
+  size_t lengh;             // buffer length
+  bool is_pgm;              // is buffer is in pgm
+} SpiOrder;
 
 typedef struct struct_ImagePack {
   const uint8_t* data;
@@ -43,6 +46,9 @@ typedef struct struct_ImagePack {
 #define SET_RAM_X_ADDRESS_COUNTER                   0x4E
 #define SET_RAM_Y_ADDRESS_COUNTER                   0x4F
 #define TERMINATE_FRAME_READ_WRITE                  0xFF
+
+bool EPD_IsCsLow(void);
+void EPD_SendFlash(const char* data);
 
 void EPD_Init(void);
 uint8_t SPIC_TransferByte(uint8_t data);
