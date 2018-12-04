@@ -15,7 +15,7 @@ volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
 static volatile uint8_t gi;
 
-inline void EPD_Init(void) {
+void EPD_Init(void) {
   SPIC_Init();
   _log("SPI init completed");
   gbackground = NULL;
@@ -28,13 +28,18 @@ inline void EPD_Init(void) {
   EPD_Reset();
 
   _log("EPD init");
-  EPD_CSLow();
-  EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
-  EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
-  EPD_SendDataByte(/*((EPD_HEIGHT - 1) >> 8) & 0xFF*/0x00);
-  EPD_SendDataByte(0x00); // GD = 0, SM = 0, TB = 0
-  EPD_CSHi();
-
+  //EPD_CSLow();
+  //EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
+  //EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
+  //EPD_SendDataByte(/*((EPD_HEIGHT - 1) >> 8) & 0xFF*/0x00);
+  //EPD_SendDataByte(0x00); // GD = 0, SM = 0, TB = 0
+  //EPD_CSHi();
+  {
+    const char data[] = {0xC7, 0x00, 0x00};
+    EPD_SendFromRam(DRIVER_OUTPUT_CONTROL, data);
+  }
+  
+  
   EPD_CSLow();
   EPD_SendCmdByte(BOOSTER_SOFT_START_CONTROL);
   EPD_SendDataByte(0xD7);
