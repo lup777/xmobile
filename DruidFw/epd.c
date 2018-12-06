@@ -28,44 +28,20 @@ void EPD_Init(void) {
   EPD_Reset();
 
   _log("EPD init");
-  //EPD_CSLow();
-  //EPD_SendCmdByte(DRIVER_OUTPUT_CONTROL);
-  //EPD_SendDataByte(/*(EPD_HEIGHT - 1) & 0xFF*/0xC7);
-  //EPD_SendDataByte(/*((EPD_HEIGHT - 1) >> 8) & 0xFF*/0x00);
-  //EPD_SendDataByte(0x00); // GD = 0, SM = 0, TB = 0
-  //EPD_CSHi();
   {
-    const char data[] = {0xC7, 0x00, 0x00};
-    EPD_SendFromRam(DRIVER_OUTPUT_CONTROL, data);
+    uint8_t data[3] = {0xC7, 0x00, 0x00};
+    EPD_SendFromRam(DRIVER_OUTPUT_CONTROL, data, 3);
   }
-  
-  
-  EPD_CSLow();
-  EPD_SendCmdByte(BOOSTER_SOFT_START_CONTROL);
-  EPD_SendDataByte(0xD7);
-  EPD_SendDataByte(0xD6);
-  EPD_SendDataByte(0x9D);
-  EPD_CSHi();
 
-  EPD_CSLow();
-  EPD_SendCmdByte(WRITE_VCOM_REGISTER);
-  EPD_SendDataByte(0xA8);
-  EPD_CSHi();
+  {
+    uint8_t data[3] = {0xD7, 0xD6, 0x9D};
+    EPD_SendFromRam(BOOSTER_SOFT_START_CONTROL, data, 3);
+  }
 
-  EPD_CSLow();
-  EPD_SendCmdByte(SET_DUMMY_LINE_PERIOD);
-  EPD_SendDataByte(0x1A);
-  EPD_CSHi();
-
-  EPD_CSLow();
-  EPD_SendCmdByte(SET_GATE_TIME);
-  EPD_SendDataByte(0x08);
-  EPD_CSHi();
-
-  EPD_CSLow();
-  EPD_SendCmdByte(DATA_ENTRY_MODE_SETTING);
-  EPD_SendDataByte(0x01); // 0x03
-  EPD_CSHi();
+  EPD_SendFromGen(WRITE_VCOM_REGISTER, 0xA8, 1);
+  EPD_SendFromGen(SET_DUMMY_LINE_PERIOD, 0x1A, 1);
+  EPD_SendFromGen(SET_GATE_TIME, 0x08, 1);
+  EPD_SendFromGen(DATA_ENTRY_MODE_SETTING, 0x01, 1);
 
   _log("EPD Init completed");
 
@@ -99,9 +75,9 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     uint8_t width = 1; // byte
     uint8_t height = 13; // bits
 
-      EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
+    EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
-  
+
     if (x > 0) {
       x -= 1;
     } else {
@@ -155,26 +131,15 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   xSemaphoreGive(gEpdMutex);
 }
 
-void EPD_UpdatePartial(void)
-{
-  EPD_CSLow();
-  EPD_SendCmdByte(0x22);
-  EPD_SendDataByte(0x04);
-  EPD_CSHi();
-
-  EPD_CSLow();
-  EPD_SendCmdByte(0x20);
-  EPD_CSHi();
-
-  EPD_CSLow();
-  EPD_SendCmdByte(0xFF);
-  EPD_CSHi();
+void EPD_UpdatePartial(void) {
+  EPD_SendFromGen(0x22, 0x04, 1);
+  EPD_SendFromRam(0x20, NULL, 0);
+  EPD_SendFromRam(0xFF, NULL, 0);
 }
 
 void EPD_ShowFullScreenImage(const uint8_t *image,
                              uint16_t xsize,
-                             uint16_t ysize)
-{
+                             uint16_t ysize) {
   _log("EPD show full screen image");
   //Get xbytes from xsize, rounding up
   uint8_t xbytes;
