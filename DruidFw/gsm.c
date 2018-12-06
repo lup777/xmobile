@@ -49,7 +49,7 @@ void GSM_Init(void) {
   PORTD.OUTSET = PIN4_bm; // CTS
 
   g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
- 
+
   USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
   _log("GSM init completed");
 }
@@ -89,14 +89,16 @@ ISR(USARTE0_RXC_vect) {
   if (i > 4) {// <CR> <LF> <at_least_1_char> <CR> <LF>
     if (rbuf[i - 1] == 13 && rbuf[i] == 10) {
       i = 0; // will be inc'ed at the end of this function
-      MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
-      if (*pHandle != NULL) {
-        rbuf[0] = MSG_GSM_INPUT;
+      for (uint8_t id = 0; id < MAILBOX_SIZE; id++) {
+        MessageBufferHandle_t* pHandle = context.mail + id;
+        if (*pHandle != NULL) {
+          rbuf[0] = MSG_GSM_INPUT;
 
-        UBaseType_t uxSavedInterruptStatus;
-        uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-        xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
-        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+          UBaseType_t uxSavedInterruptStatus;
+          uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+          xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
+          taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+        }
       }
     }
   }
