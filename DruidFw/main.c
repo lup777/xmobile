@@ -12,7 +12,7 @@
 #include "gsm.h"
 #include "menu.h"
 
-static void vTogglePA0Task(void* pvParameters);
+static void vMainTask(void* pvParameters);
 void gpio_init(void);
 void GPIO_toggle_PA0(void);
 void _sleep(uint16_t time_ms);
@@ -82,8 +82,8 @@ int main(void) {
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++)
     context.mail[i] = NULL;
 
-  xTaskCreate( vTogglePA0Task,
-               "blink_PORTA_0_task",
+  xTaskCreate( vMainTask,
+               "main_task",
                configMINIMAL_STACK_SIZE,
                NULL,
                1,
@@ -106,7 +106,7 @@ void TestApp1(void) {
   KBD_WaiteKey();
 }
 
-static void vTogglePA0Task(void* pvParameters) {
+static void vMainTask(void* pvParameters) {
   (void)(pvParameters);
 
   EPD_Init();
@@ -124,11 +124,6 @@ static void vTogglePA0Task(void* pvParameters) {
   APP_MenuStart(menu);
 
   for(;;) {
-    _log("hello from main :) %s", "zzz");
-    _sleep(1000);
-    SendGsm("AT");
-    _sleep(1000);
+    APP_MenuMessagePump();
   }
-  APP_MenuStart(menu);
-  APP_TelephoneStart();
 }

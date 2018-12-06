@@ -11,3 +11,4 @@ typedef struct struct_application {
 } App;
 
 void APP_MenuStart(App* menu);
+void APP_MenuMessagePump(void);
