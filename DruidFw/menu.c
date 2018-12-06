@@ -14,27 +14,19 @@
 static volatile int8_t i;
 App* gp_menu;
 
-void App_MenuThread(void* pvParameters);
 void APP_MenuMessagePump(void);
 void MENU_KeyPressHandler(Key key);
 void MENU_DrawHanadler(void);
 
 void APP_MenuStart(App* menu) {
   gp_menu = menu;
-  xTaskCreate(App_MenuThread, "menuTask", configMINIMAL_STACK_SIZE,
-              NULL, 1, NULL);
+
   context.active_app_id = MENU_MAILBOX_ID;
-  _sleep(100);
 
-  SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
-}
-
-void App_MenuThread(void* pvParameters) {
-  (void)(pvParameters);
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
   *pHandle = xMessageBufferCreate((size_t)50);
-  APP_MenuMessagePump();
-  _log("APP menu closed");
+
+  SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
 }
 
 void APP_MenuMessagePump(void) {
@@ -49,26 +41,27 @@ void APP_MenuMessagePump(void) {
     _log("APP menu msg received");
     if (len > 0) {
       switch(data[0]) {
-        case MSG_KBD: {
-          _log("APP menu msg: key: %d ", (uint8_t)(data[1]));
-          MENU_KeyPressHandler((Key)data[1]);
-          MENU_DrawHanadler();
-          break;
-        } // case MSG_KBD
+      case MSG_KBD: {
+        _log("APP menu msg: key: %d ", (uint8_t)(data[1]));
+        MENU_KeyPressHandler((Key)data[1]);
+        SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
+        break;
+      } // case MSG_KBD
 
-          case MSG_DRAW: {
-            _log("APP menu msg: show");
-            MENU_DrawHanadler();
-            break;
-          } // case MSG_DRAW
+      case MSG_DRAW: {
+        _log("APP menu msg: show");
+        MENU_DrawHanadler();
+        break;
+      } // case MSG_DRAW
 
-          default:
-            _log("APP menu msg: not known");
-            break;
+      default:
+        _log("APP menu msg: not known");
+        break;
 
       } // switch
     }
-  }
+  } // while(1)
+  _log("APP menu closed");
 }
 
 void MENU_KeyPressHandler(Key key) {
@@ -90,6 +83,7 @@ void MENU_KeyPressHandler(Key key) {
             context.active_app_id = gp_menu[i].id;
             SendAppMsg(MSG_DRAW, NULL, 0, gp_menu[i].id);
           }
+          //SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         }
         break;
       default:

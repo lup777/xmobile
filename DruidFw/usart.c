@@ -14,7 +14,6 @@
 #include "usart.h"
 #include "kbd.h"
 
-void USART0_SendBuf(char* str);
 
 #define LOG_BUFFER_LEN 100
 
@@ -84,43 +83,34 @@ ISR(USARTF0_RXC_vect) {
   } data;
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
-  MessageBufferHandle_t* pHandle = context.mail + context.active_app_id;
-  BaseType_t hptm1 = pdFALSE;
-  BaseType_t hptm2 = pdFALSE;
-
+  BaseType_t hptm = pdFALSE;
   UBaseType_t uxSavedInterruptStatus;
 
   if (data.key >= '0' && data.key <= '9') {
     data.key -= '0';
     data.id = MSG_KBD;
-    if (*pHandle != NULL) {
-      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm1);
-      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
+      MessageBufferHandle_t* pHandle = context.mail + i;
+      if (*pHandle != NULL) {
+        uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+        xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm);
+        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+      }
     }
 
   } else if (data.key == 'x') {
     data.id = MSG_CLOSE;
-    if (*pHandle != NULL) {
-      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm1);
-      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
-    }
 
-    data.id = MSG_DRAW;
-    pHandle = context.mail + MENU_MAILBOX_ID;
-    if (*pHandle != NULL) {
-      uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-      xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm2);
-      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+    for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
+      MessageBufferHandle_t* pHandle = context.mail + i;
+      if (*pHandle != NULL) {
+        uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
+        xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
+        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
+      }
     }
   }
 
-  if ( hptm1 != pdFALSE || hptm2 != pdFALSE )
+  if ( hptm != pdFALSE )
     taskYIELD();
-}
-
-inline void USART0_SendByte(char c) {
-  while( !(USARTF0_STATUS & USART_DREIF_bm) ); //Wait until DATA buffer is empty
-  USARTF0_DATA = c;
 }

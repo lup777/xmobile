@@ -7,8 +7,9 @@
 
 typedef struct struct_spi_order {
   uint8_t* buffer;             // pointer to data
-  size_t length;             // buffer length
-  bool is_pgm;              // is buffer is in pgm
+  size_t length;               // buffer length
+  bool is_pgm;                 // is buffer is in pgm
+  size_t repeat;               // how many times send buffer
 } SpiOrder;
 
 typedef struct struct_ImagePack {
@@ -53,8 +54,9 @@ extern MessageBufferHandle_t g_epd_tx_buffer_handle;
 
 bool EPD_IsCsLow(void);
 void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len);
-void EPD_SendFromFlash(uint8_t cmd, uint8_t* data, size_t data_len);
-  
+void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len);
+void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat);
+
 void EPD_Init(void);
 uint8_t SPIC_TransferByte(uint8_t data);
 void EPD_clear(void);
@@ -68,7 +70,6 @@ void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize, uint16_t YSize,
 void EPD_PowerOn(void);
 void EPD_PowerOff(void);
 void EPD_UpdateFull(void);
-void EPD_SendDataByte(uint8_t byte);
 void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 		       uint16_t RAM_YST,uint16_t RAM_YEND);
 
@@ -79,9 +80,6 @@ uint8_t SPIC_TransferByte(uint8_t data_out);
 void EPD_Reset(void);
 void SPIC_Init(void);
 void EPD_DelayMs(uint16_t time);
-void EPD_SendData(uint8_t* arr, size_t len);
-void EPD_SendCmd(uint8_t* arr, size_t len);
-void EPD_SendCmdByte(uint8_t byte);
 void EPD_SelectData(void);
 void EPD_SelectCommand(void);
 void EPD_ResetEnable(void);
