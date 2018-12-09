@@ -15,7 +15,7 @@
 #include "kbd.h"
 
 
-#define LOG_BUFFER_LEN 100
+#define LOG_BUFFER_LEN 35
 
 void _log(const char *format, ...) {
   char buffer[LOG_BUFFER_LEN];
@@ -24,16 +24,18 @@ void _log(const char *format, ...) {
   va_list args;
   va_start(args, format);
 
-  uint8_t len = snprintf(buffer,
-			 LOG_BUFFER_LEN,
-			 format,
-			 args);
-
+  uint8_t len = vsprintf(buffer,
+			  format,
+			  args);
+  
   va_end(args);
 
   if (len + 2 <= LOG_BUFFER_LEN) {
     buffer[len] = '\n';
     buffer[len + 1] = '\r';
+  } else {
+    buffer[LOG_BUFFER_LEN - 1] = '\n';
+    buffer[LOG_BUFFER_LEN - 2] = '\r';
   }
 
   taskENTER_CRITICAL();
@@ -43,6 +45,8 @@ void _log(const char *format, ...) {
 		    0);
   taskEXIT_CRITICAL();
   USARTF0_DATA = buffer[0];
+
+  //while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
 }
 
 inline void USART0_init(void) {
@@ -54,7 +58,7 @@ inline void USART0_init(void) {
   USARTF0.BAUDCTRLA = 25; // 9600
   USARTF0.BAUDCTRLB = 0;
 
-  g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
+  g_log_tx_buffer_handle = xStreamBufferCreate(1000, 1);
 
   USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
@@ -90,7 +94,7 @@ ISR(USARTF0_RXC_vect) {
     data.key -= '0';
     data.id = MSG_KBD;
     for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      MessageBufferHandle_t* pHandle = context.mail + i;
+      MessageBufferHandle_t* pHandle = &(context.mail[i]);
       if (*pHandle != NULL) {
         uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
         xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm);
@@ -102,7 +106,7 @@ ISR(USARTF0_RXC_vect) {
     data.id = MSG_CLOSE;
 
     for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      MessageBufferHandle_t* pHandle = context.mail + i;
+      MessageBufferHandle_t* pHandle = &(context.mail[i]);
       if (*pHandle != NULL) {
         uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
         xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);

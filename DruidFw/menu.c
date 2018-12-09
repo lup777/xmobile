@@ -92,7 +92,6 @@ void MENU_KeyPressHandler(Key key) {
 }
 
 void MENU_DrawHanadler(void) {
-  return;
   int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
   _log("menu size: %d ", menu_size);
 

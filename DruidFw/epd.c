@@ -32,7 +32,7 @@ void EPD_Init(void) {
     uint8_t data[3] = {0xC7, 0x00, 0x00};
     EPD_SendFromRam(DRIVER_OUTPUT_CONTROL, data, 3);
   }
-
+  
   {
     uint8_t data[3] = {0xD7, 0xD6, 0x9D};
     EPD_SendFromRam(BOOSTER_SOFT_START_CONTROL, data, 3);
@@ -45,7 +45,7 @@ void EPD_Init(void) {
 
   _log("EPD Init completed");
 
-  EPD_clear();
+  //EPD_clear();
 
   gEpdMutex = xSemaphoreCreateMutex();
 }

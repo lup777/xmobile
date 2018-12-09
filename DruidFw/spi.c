@@ -37,7 +37,7 @@ inline void SPIC_Init(void) {
   PORTA.DIRCLR = PIN3_bm;
   SPIC.INTCTRL = SPI_INTLVL_LO_gc;
 
-  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 15);
+  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 155);
 
   SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
     | SPI_MODE_0_gc;
@@ -78,10 +78,13 @@ ISR(SPIC_INT_vect) {
   // continue transferring
   if (sent_cnt < order.length) {
     EPD_SelectData();
-    if (order.is_pgm)
-      SPIC.DATA = pgm_read_byte(order.buffer + sent_cnt);
-    else
+    if (order.is_pgm) {
+      SPIC.DATA = pgm_read_byte(&(order.buffer[sent_cnt]));
+      //_log("--0x%02X", pgm_read_byte(&(order.buffer[sent_cnt])));
+    } else {
       SPIC.DATA = order.buffer[sent_cnt];
+      //_log("--0x%02X", order.buffer[sent_cnt]);
+    }
     sent_cnt ++;
   } else { // all data from current order was sent
            // Also it can be if we need to send only one byte.
@@ -94,6 +97,7 @@ ISR(SPIC_INT_vect) {
 }
 
 void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
+  //_log("EPD_SendFromFlash >>>");
   size_t bytes_sent;
   //size_t data_len = sizeof(data);
   SpiOrder order;
@@ -101,8 +105,6 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
   order.buffer = (uint8_t*)data;
   order.length = data_len;
   order.repeat = 1;
-
-  while( EPD_IsCsLow() ) {}
 
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
@@ -118,18 +120,20 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
     EPD_SelectCommand();
     SPIC.DATA = cmd;
   }
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
+
+  //_log("EPD_SendFromFlash <<<");
 }
 
 void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
+  //_log("EPD_SendFromGen >>>");
   size_t bytes_sent;
   SpiOrder order;
   order.is_pgm = false;
   order.buffer = g_spi_tx_buffer;  // first byte will be send from in this func
   order.length = 1;
   order.repeat = repeat;
-
-  while( EPD_IsCsLow() ) {}
-  _log("SPI send cmd");
 
   g_spi_tx_buffer[0] = example;
 
@@ -142,15 +146,20 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
       _log("[ERR] SPI_Send::xMessageBufferSend failed");
       return;
     }
-
-    EPD_CSLow();
-    EPD_SelectCommand();
-    SPIC.DATA = cmd;
   }
 
+  EPD_CSLow();
+  EPD_SelectCommand();
+  SPIC.DATA = cmd;
+
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
+
+  //_log("EPD_SendFromGen <<<");
 }
 
 void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
+  //_log("EPD_SendFromRam >>>");
   size_t bytes_sent;
   SpiOrder order;
   order.is_pgm = false;
@@ -163,9 +172,6 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
     return;
   }
 
-  while( EPD_IsCsLow() ) {}
-  _log("SPI send cmd");
-
   for(size_t i = 0; i < data_len; i++)
     g_spi_tx_buffer[i] = data[i];
 
@@ -174,15 +180,20 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
                                     &order,
                                     sizeof(order),
                                     pdMS_TO_TICKS(2000));
-    if (bytes_sent != sizeof(order)) {
-      _log("[ERR] SPI_Send::xMessageBufferSend failed");
+    if (bytes_sent != sizeof(SpiOrder)) {
+      _log("[SPI] xMessageBufferSend failed");
       return;
     }
-
-    EPD_CSLow();
-    EPD_SelectCommand();
-    SPIC.DATA = cmd;
   }
+
+  EPD_CSLow();
+  EPD_SelectCommand();
+  SPIC.DATA = cmd;
+
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
+
+  //_log("EPD_SendFromRam <<<");
 }
 
 bool EPD_IsCsLow(void) {

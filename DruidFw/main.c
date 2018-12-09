@@ -115,7 +115,7 @@ static void vMainTask(void* pvParameters) {
   EPD_ShowFullScreenImage(NULL/*ucDisplayFullLupImage*/, 200, 200);
   _sleep(3000);
 
-  GSM_Init();
+  //GSM_Init();
 
   _log("MAIN main task init completed");
 
