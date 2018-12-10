@@ -106,6 +106,16 @@ void TestApp1(void) {
 static void vMainTask(void* pvParameters) {
   (void)(pvParameters);
 
+  union {
+    uint16_t d;
+    uint8_t a;
+  } t;
+  t.d = 1;
+  if (t.a[0])
+    _log("little endian");
+  else
+    _log("big endian");
+
   EPD_Init();
   _sleep(100);
 
