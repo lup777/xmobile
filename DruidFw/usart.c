@@ -21,7 +21,7 @@ StreamBufferHandle_t g_log_tx_buffer_handle;
 
 void _log(const char *format, ...) {
   char buffer[LOG_BUFFER_LEN];
-  memset(buffer, 0, LOG_BUFFER_LEN);
+  //memset(buffer, 0, LOG_BUFFER_LEN);
 
   va_list args;
   va_start(args, format);
@@ -41,13 +41,14 @@ void _log(const char *format, ...) {
     buffer[LOG_BUFFER_LEN - 2] = '\r';
   }
 
-  taskENTER_CRITICAL();
+  //taskENTER_CRITICAL();
   xStreamBufferSend(g_log_tx_buffer_handle,
-		    buffer + 1, // first byte will be sent in next command
-		    len + 1, // buffer + <\n> + <\r> - <first byte>
+		    buffer, // first byte will be sent in next command
+		    len + 2, // buffer + <\n> + <\r> - <first byte>
 		    0);
-  taskEXIT_CRITICAL();
-  USARTF0_DATA = buffer[0];
+  //taskEXIT_CRITICAL();
+  //USARTF0_DATA = buffer[0];
+  USARTF0.CTRLA |= USART_DREINTLVL_LO_gc;
 
   //while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
 }
@@ -57,16 +58,17 @@ inline void USART0_init(void) {
   PORTF.DIRSET = PIN3_bm; // TX
   USARTF0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
-  USARTF0.CTRLA |= USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_LO_gc | USART_DREINTLVL_OFF_gc;
+  USARTF0.CTRLA = USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
   USARTF0.BAUDCTRLA = 25; // 9600
   USARTF0.BAUDCTRLB = 0;
 
   g_log_tx_buffer_handle = xStreamBufferCreate(1000, 1);
 
-  USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+  USARTF0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
 
-ISR(USARTF0_TXC_vect) {
+ISR(USARTF0_DRE_vect) {
+//ISR(USARTF0_TXC_vect) {
   char data;
   BaseType_t pxHPTW = pdFALSE;
   size_t read_count =
@@ -76,6 +78,8 @@ ISR(USARTF0_TXC_vect) {
 				&pxHPTW);
   if (read_count > 0)
     USARTF0_DATA = data;
+  else
+    USARTF0.CTRLA |= USART_DREINTLVL_OFF_gc;
 
   if (pxHPTW != pdFALSE )
     taskYIELD();

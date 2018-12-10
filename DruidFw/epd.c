@@ -11,6 +11,8 @@
 #include "spi.h"
 #include "fonts.h"
 
+#define _log(...)
+
 volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
 static volatile uint8_t gi;

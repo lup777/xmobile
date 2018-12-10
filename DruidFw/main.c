@@ -108,7 +108,7 @@ static void vMainTask(void* pvParameters) {
 
   union {
     uint16_t d;
-    uint8_t a;
+    uint8_t a[2];
   } t;
   t.d = 1;
   if (t.a[0])
@@ -119,7 +119,7 @@ static void vMainTask(void* pvParameters) {
   EPD_Init();
   _sleep(100);
 
-  EPD_ShowFullScreenImage(NULL/*ucDisplayFullLupImage*/, 200, 200);
+  EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
   _sleep(3000);
 
   //GSM_Init();

@@ -40,10 +40,10 @@ inline void SPIC_Init(void) {
   PORTA.DIRCLR = PIN3_bm;
   SPIC.INTCTRL = SPI_INTLVL_LO_gc;
 
-  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 155);
+  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 255);
   gh_spi_sem = xSemaphoreCreateMutex();
 
-  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
+  SPIC.CTRL = SPI_MASTER_bm /*| SPI_ENABLE_bm*/ | SPI_PRESCALER_DIV4_gc
     | SPI_MODE_0_gc;
 }
 
@@ -92,7 +92,8 @@ ISR(SPIC_INT_vect) {
            // Also it can be if we need to send only one byte.
            // In this case we need only to drive CS hi.
     EPD_CSHi(); // Stop transfering
-    xSemaphoreGiveFromISR(gh_spi_sem, &hptw2);
+    SPIC.CTRL &= ~SPI_ENABLE_bm;
+    //xSemaphoreGiveFromISR(gh_spi_sem, &hptw2);
   }
 
   if ( (hptw != pdFALSE) || (hptw2 != pdFALSE) )
@@ -109,14 +110,14 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
   order.length = data_len;
   order.repeat = 1;
 
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
+  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
 
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
                                     sizeof(order),
-                                    pdMS_TO_TICKS(2000));
+                                    /*pdMS_TO_TICKS(2000)*/0);
     if (bytes_sent != sizeof(order)) {
       _log("[ERR] SPI_Send::xMessageBufferSend failed");
       return;
@@ -124,10 +125,11 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
 
     EPD_CSLow();
     EPD_SelectCommand();
+    SPIC.CTRL |= SPI_ENABLE_bm;
     SPIC.DATA = cmd;
   }
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromFlash <<<");
 }
@@ -143,14 +145,14 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
 
   g_spi_tx_buffer[0] = example;
 
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
-
+  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
+ 
   if (repeat > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
                                     sizeof(order),
-                                    pdMS_TO_TICKS(2000));
+                                    /*pdMS_TO_TICKS(2000)*/0);
     if (bytes_sent != sizeof(order)) {
       _log("[ERR] SPI_Send::xMessageBufferSend failed");
       return;
@@ -159,10 +161,11 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
 
   EPD_CSLow();
   EPD_SelectCommand();
+  SPIC.CTRL |= SPI_ENABLE_bm;
   SPIC.DATA = cmd;
 
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromGen <<<");
 }
@@ -183,15 +186,15 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
 
   for(size_t i = 0; i < data_len; i++)
     g_spi_tx_buffer[i] = data[i];
-
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
-
+  
+  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
+  
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
                                     sizeof(order),
-                                    pdMS_TO_TICKS(2000));
+                                    /*pdMS_TO_TICKS(2000)*/0);
     if (bytes_sent != sizeof(SpiOrder)) {
       _log("[SPI] xMessageBufferSend failed");
       return;
@@ -200,10 +203,11 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
 
   EPD_CSLow();
   EPD_SelectCommand();
+  SPIC.CTRL |= SPI_ENABLE_bm;
   SPIC.DATA = cmd;
 
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromRam <<<");
 }
@@ -250,7 +254,7 @@ void EPD_DelayMs(uint16_t time) {
 }
 
 inline void EPD_Reset(void) {
-  _log("EPD Reset start");
+  //_log("EPD Reset start");
   EPD_ResetEnable();
   EPD_DelayMs(100);
   EPD_ResetDisable();
@@ -258,7 +262,7 @@ inline void EPD_Reset(void) {
 }
 
 void EPD_DisplayFrame(void) {
-  _log("EPD display frame");
+  //_log("EPD display frame");
 
   EPD_SendFromGen(DISPLAY_UPDATE_CONTROL_2, 0xC4, 1);
   EPD_SendFromRam(MASTER_ACTIVATION, NULL, 0);
@@ -268,7 +272,7 @@ void EPD_DisplayFrame(void) {
 }
 
 void EPD_WaitUntilIdle(void) {
-  _log("EPD waite busy");
+  //_log("EPD waite busy");
   while(EPD_Busy() == true) {      //LOW: idle, HIGH: busy
     EPD_DelayMs(100);
   }
@@ -277,7 +281,7 @@ void EPD_WaitUntilIdle(void) {
 void EPD_SetMemoryPointer(int x, int y) {
   EPD_WaitUntilIdle();
 
-  _log("EPD set memory pointer");
+  //_log("EPD set memory pointer");
 
   EPD_SendFromGen(SET_RAM_X_ADDRESS_COUNTER, (x >> 3) & 0xFF, 1);
 
@@ -288,7 +292,7 @@ void EPD_SetMemoryPointer(int x, int y) {
 }
 
 void EPD_ClearFrameMemory(uint8_t color) {
-  _log("EPD clear frame memory");
+  //_log("EPD clear frame memory");
   EPD_SetMemoryArea(0, 0, EPD_WIDTH - 1, EPD_HEIGHT - 1);
 
   EPD_SendFromGen(WRITE_RAM, color, EPD_WIDTH / 8 * EPD_HEIGHT);
@@ -296,7 +300,7 @@ void EPD_ClearFrameMemory(uint8_t color) {
 
 void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 		       uint16_t RAM_YST,uint16_t RAM_YEND) {
-  _log("EPD set memory area");
+  //_log("EPD set memory area");
 
   {
     uint8_t data[2] = {RAM_XST, RAM_XEND};
@@ -321,14 +325,14 @@ void EPD_SetMemoryArea(uint8_t  RAM_XST,uint8_t  RAM_XEND,
 }
 
 void EPD_SetLut(const uint8_t* lut) {
-  _log("EPD set lut");
+  //_log("EPD set lut");
 
   EPD_SendFromFlash(WRITE_LUT_REGISTER, lut, 30);
 }
 
 void EPD_clear(void) {
   // clear EPD
-  _log("EPD clear");
+  //_log("EPD clear");
   EPD_ClearFrameMemory(0xFF);   // bit set = white, bit reset = black
   EPD_DisplayFrame();
   EPD_ClearFrameMemory(0x00);   // bit set = white, bit reset = black
@@ -336,7 +340,7 @@ void EPD_clear(void) {
 }
 
 inline void EPD_PowerOn(void) {
-  _log("EPD power on");
+  //_log("EPD power on");
   EPD_SendFromGen(0x22, 0xC0, 1);
 
   EPD_SendFromRam(0x20, NULL, 0);
@@ -345,7 +349,7 @@ inline void EPD_PowerOn(void) {
 }
 
 inline void EPD_PowerOff(void) {
-  _log("EPD power off");
+  //_log("EPD power off");
 
   EPD_SendFromGen(0x22, 0xC0, 1);
 
@@ -355,7 +359,7 @@ inline void EPD_PowerOff(void) {
 }
 
 inline void EPD_UpdateFull(void) {
-  _log("EPD full update");
+  //_log("EPD full update");
 
   EPD_WaitUntilIdle(); // wait
 
@@ -369,7 +373,7 @@ inline void EPD_UpdateFull(void) {
 inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
                                            uint16_t YSize,
                                            const uint8_t  *image) {
-  _log("EPD load image to RAM");
+  //_log("EPD load image to RAM");
 
   //Convert Xsize from pixels to bytes, rounding up
   XSize = ( XSize + 7 ) >> 3;
