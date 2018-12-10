@@ -120,7 +120,7 @@ void TEL_KeyPressHandler(Key key) {
     } // case key2
 
     case key5: {
-      GSM_CallCmd(menu[g_selected].cmd);
+      SendGsm(menu[g_selected].cmd);
     } // case key5
     case key8: {
       if (g_selected > 0)

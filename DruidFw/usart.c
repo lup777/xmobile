@@ -81,16 +81,6 @@ ISR(USARTF0_TXC_vect) {
     taskYIELD();
 }
 
-#define SendMsg(HANDLE, DATA, SIZE) ({                                  \
-      BaseType_t hptm_ = pdFALSE;                                       \
-      UBaseType_t uxSavedInterruptStatus_;                              \
-                                                                        \
-      uxSavedInterruptStatus_ = taskENTER_CRITICAL_FROM_ISR();          \
-      xMessageBufferSendFromISR(HANDLE, DATA, SIZE, &hptm_);            \
-      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus_ );            \
-      (hptm_ == pdTRUE);                                                \
-    })
-
 ISR(USARTF0_RXC_vect) {
   struct {
     char id;

@@ -48,7 +48,7 @@ void GSM_Init(void) {
   PORTD.DIRSET = PIN4_bm; // CTS
   PORTD.OUTSET = PIN4_bm; // CTS
 
-  g_log_tx_buffer_handle = xStreamBufferCreate(150, 1);
+  g_log_tx_buffer_handle = xStreamBufferCreate(350, 1);
 
   USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
   _log("GSM init completed");
@@ -74,7 +74,7 @@ ISR(USARTE0_TXC_vect) {
 ISR(USARTE0_RXC_vect) {
   PORTD.OUTCLR = PIN4_bm; // CTS
   static volatile uint8_t i = 1;
-  BaseType_t hptm = pdFALSE;
+  bool need_yield = false;
   rbuf[i] = USARTE0.DATA;
 
   // "<CR><LF><response><CR><LF>"
@@ -89,31 +89,24 @@ ISR(USARTE0_RXC_vect) {
   if (i > 4) {// <CR> <LF> <at_least_1_char> <CR> <LF>
     if (rbuf[i - 1] == 13 && rbuf[i] == 10) {
       i = 0; // will be inc'ed at the end of this function
+      rbuf[0] = MSG_GSM_INPUT;
       for (uint8_t id = 0; id < MAILBOX_SIZE; id++) {
-        MessageBufferHandle_t* pHandle = context.mail + id;
-        if (*pHandle != NULL) {
-          rbuf[0] = MSG_GSM_INPUT;
-
-          UBaseType_t uxSavedInterruptStatus;
-          uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-          xMessageBufferSendFromISR(*pHandle, (void*)rbuf, (size_t)i, &hptm);
-          taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
-        }
+        need_yield |= SendMsg(context.mail[id], (void*)rbuf, (size_t)i);
       }
     }
   }
 
   i++;
   PORTD.OUTSET = PIN4_bm; // CTS
-  if (hptm != pdFALSE)
+  if (need_yield)
     taskYIELD();
 }
 
 void SendGsm(const char* msg) {
   taskENTER_CRITICAL();
   xStreamBufferSend(g_gsm_tx_buffer_handle,
-		    msg,
-		    strlen(msg),
+		    msg + 1,
+		    strlen(msg) - 1,
 		    0);
   const char eol = '\n';
   xStreamBufferSend(g_gsm_tx_buffer_handle,
@@ -121,7 +114,7 @@ void SendGsm(const char* msg) {
 		    1,
 		    0);
   taskEXIT_CRITICAL();
-  USARTF0_DATA = 0;
+  USARTE0_DATA = msg[0];
 }
 
 void GSM_CallCmd(const char* msg) {

@@ -83,7 +83,6 @@ void MENU_KeyPressHandler(Key key) {
             context.active_app_id = gp_menu[i].id;
             SendAppMsg(MSG_DRAW, NULL, 0, gp_menu[i].id);
           }
-          //SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         }
         break;
       default:

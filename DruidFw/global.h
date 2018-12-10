@@ -44,6 +44,18 @@ typedef struct struct_context {
 
 extern Context context;
 
+#define SendMsg(HANDLE, DATA, SIZE) ({                            \
+      BaseType_t hptm_ = pdFALSE;                                 \
+      UBaseType_t uxSavedInterruptStatus_;                        \
+      if (HANDLE == NULL) {                                       \
+        uxSavedInterruptStatus_ = taskENTER_CRITICAL_FROM_ISR();  \
+        xMessageBufferSendFromISR(HANDLE, DATA, SIZE, &hptm_);    \
+        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus_ );    \
+      }                                                           \
+      (hptm_ == pdTRUE);                                          \
+    })
+
+
 void _sleep(uint16_t time_ms);
 uint8_t _strlen(char * str);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
