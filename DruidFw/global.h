@@ -3,6 +3,7 @@
 #define __GLOBAL_H__
 
 #include <avr/io.h>
+#include <stdbool.h>
 
 #include "FreeRTOS.h"
 #include "message_buffer.h"
@@ -11,15 +12,7 @@
 
 #include "usart.h"
 
-typedef uint8_t bool;
-#define true 1
-#define false 0
-
 #define MENU_SIZE 5
-
-typedef uint8_t bool;
-#define false  0
-#define true   1
 
 typedef struct struct_gsm_data {
   uint8_t flags; // should be renamed
@@ -43,8 +36,6 @@ typedef struct struct_gsm_data {
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
   TaskHandle_t gsm_task_handle;
-  QueueHandle_t log_queue;
-  SemaphoreHandle_t ui_sem;
   GsmData gsm_data;
   MessageBufferHandle_t mail[MAILBOX_SIZE];
   uint8_t active_app_id;

@@ -7,7 +7,6 @@
 #include "epd.h"
 #include "pgm.h"
 #include "kbd.h"
-#include "ui.h"
 #include "telephone.h"
 #include "gsm.h"
 #include "menu.h"
@@ -74,8 +73,6 @@ int main(void) {
   gpio_init();
   USART0_init();
   KBD_Init();
-
-  context.ui_sem = xSemaphoreCreateBinary();
 
   context.active_app_id = MENU_MAILBOX_ID;
 

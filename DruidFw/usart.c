@@ -27,7 +27,7 @@ void _log(const char *format, ...) {
   uint8_t len = vsprintf(buffer,
 			  format,
 			  args);
-  
+
   va_end(args);
 
   if (len + 2 <= LOG_BUFFER_LEN) {
@@ -80,41 +80,40 @@ ISR(USARTF0_TXC_vect) {
     taskYIELD();
 }
 
+#define SendMsg(HANDLE, DATA, SIZE) ({                                  \
+      BaseType_t hptm_ = pdFALSE;                                       \
+      UBaseType_t uxSavedInterruptStatus_;                              \
+                                                                        \
+      uxSavedInterruptStatus_ = taskENTER_CRITICAL_FROM_ISR();          \
+      xMessageBufferSendFromISR(HANDLE, DATA, SIZE, &hptm_);            \
+      taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus_ );            \
+      (hptm_ == pdTRUE);                                                \
+    })
+
 ISR(USARTF0_RXC_vect) {
   struct {
     char id;
     char key;
   } data;
+
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
-  BaseType_t hptm = pdFALSE;
-  UBaseType_t uxSavedInterruptStatus;
+  bool need_yield = false;
 
   if (data.key >= '0' && data.key <= '9') {
     data.key -= '0';
     data.id = MSG_KBD;
     for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      MessageBufferHandle_t* pHandle = &(context.mail[i]);
-      if (*pHandle != NULL) {
-        uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-        xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(data), &hptm);
-        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
-      }
+      need_yield |= SendMsg(context.mail[i], (void*)&data, sizeof(data));
     }
-
   } else if (data.key == 'x') {
     data.id = MSG_CLOSE;
 
     for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      MessageBufferHandle_t* pHandle = &(context.mail[i]);
-      if (*pHandle != NULL) {
-        uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
-        xMessageBufferSendFromISR(*pHandle, (void*)&data, sizeof(char), &hptm);
-        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus );
-      }
+      need_yield |= SendMsg(context.mail[i], (void*)&(data.id), sizeof(char));
     }
   }
 
-  if ( hptm != pdFALSE )
+  if ( need_yield )
     taskYIELD();
 }

@@ -55,3 +55,5 @@
 18. [GSM] Use rtr/rts,dtr,cts to control usart queue
 
 19. [HW] Add lamp for error state (error indicator)
+
+20. [HW] Buttons for vol+-

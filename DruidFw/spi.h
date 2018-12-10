@@ -20,9 +20,8 @@ typedef struct struct_ImagePack {
   uint8_t y; // bits
 } Image;
 
-#define SPI_TX_BUFFER_SIZE 100
-extern uint8_t g_spi_tx_buffer[SPI_TX_BUFFER_SIZE];
-extern MessageBufferHandle_t g_epd_tx_buffer_handle;
+//extern uint8_t g_spi_tx_buffer[SPI_TX_BUFFER_SIZE];
+//extern MessageBufferHandle_t g_epd_tx_buffer_handle;
 
 // Display resolution
 #define EPD_WIDTH       200
@@ -60,9 +59,9 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat);
 void EPD_Init(void);
 uint8_t SPIC_TransferByte(uint8_t data);
 void EPD_clear(void);
-extern void EPD_ShowFullScreenImage(const uint8_t *image,
-                                    uint16_t xsize,
-                                    uint16_t ysize);
+void EPD_ShowFullScreenImage(const uint8_t *image,
+                             uint16_t xsize,
+                             uint16_t ysize);
 void EPD_WaitUntilIdle(void);
 void EPD_SetLut(const uint8_t* lut);
 void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize, uint16_t YSize,

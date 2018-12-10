@@ -60,7 +60,6 @@ usart.c \
 spi.c \
 pgm.c \
 kbd.c \
-ui.c \
 fonts.c \
 util.c \
 telephone.c \
@@ -79,6 +78,7 @@ $(PORT_DIR)/port.c \
 #$(DEMO_DIR)/integer.c \
 #$(DEMO_DIR)/PollQ.c \
 #$(DEMO_DIR)/comtest.c
+#ui.c
 
 #gsm.c
 #display.c \
