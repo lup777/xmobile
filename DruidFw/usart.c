@@ -17,6 +17,8 @@
 
 #define LOG_BUFFER_LEN 35
 
+StreamBufferHandle_t g_log_tx_buffer_handle;
+
 void _log(const char *format, ...) {
   char buffer[LOG_BUFFER_LEN];
   memset(buffer, 0, LOG_BUFFER_LEN);
@@ -24,9 +26,10 @@ void _log(const char *format, ...) {
   va_list args;
   va_start(args, format);
 
-  uint8_t len = vsprintf(buffer,
-			  format,
-			  args);
+  uint8_t len = vsnprintf(buffer,
+        (size_t)LOG_BUFFER_LEN,
+        format,
+        args);
 
   va_end(args);
 
@@ -62,8 +65,6 @@ inline void USART0_init(void) {
 
   USARTF0.CTRLB |= USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
-
-StreamBufferHandle_t g_log_tx_buffer_handle;
 
 ISR(USARTF0_TXC_vect) {
   char data;
