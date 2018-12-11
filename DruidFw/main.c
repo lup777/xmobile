@@ -117,10 +117,10 @@ static void vMainTask(void* pvParameters) {
     _log("big endian");
 
   EPD_Init();
-  _sleep(100);
+  //_sleep(100);
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
-  _sleep(3000);
+  //_sleep(3000);
 
   //GSM_Init();
 

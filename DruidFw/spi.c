@@ -43,7 +43,7 @@ inline void SPIC_Init(void) {
   g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 255);
   gh_spi_sem = xSemaphoreCreateMutex();
 
-  SPIC.CTRL = SPI_MASTER_bm /*| SPI_ENABLE_bm*/ | SPI_PRESCALER_DIV4_gc
+  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
     | SPI_MODE_0_gc;
 }
 
@@ -92,8 +92,8 @@ ISR(SPIC_INT_vect) {
            // Also it can be if we need to send only one byte.
            // In this case we need only to drive CS hi.
     EPD_CSHi(); // Stop transfering
-    SPIC.CTRL &= ~SPI_ENABLE_bm;
-    //xSemaphoreGiveFromISR(gh_spi_sem, &hptw2);
+    SPIC.INTCTRL = SPI_INTLVL_OFF_gc;
+    xSemaphoreGiveFromISR(gh_spi_sem, &hptw2);
   }
 
   if ( (hptw != pdFALSE) || (hptw2 != pdFALSE) )
@@ -110,8 +110,8 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
   order.length = data_len;
   order.repeat = 1;
 
-  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
+  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
 
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
@@ -125,11 +125,11 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
 
     EPD_CSLow();
     EPD_SelectCommand();
-    SPIC.CTRL |= SPI_ENABLE_bm;
+    SPIC.INTCTRL = SPI_INTLVL_LO_gc;
     SPIC.DATA = cmd;
   }
-  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  while( EPD_IsCsLow() ) {}
+  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  //while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromFlash <<<");
 }
@@ -145,8 +145,8 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
 
   g_spi_tx_buffer[0] = example;
 
-  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
+  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
  
   if (repeat > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
@@ -161,11 +161,11 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
 
   EPD_CSLow();
   EPD_SelectCommand();
-  SPIC.CTRL |= SPI_ENABLE_bm;
+  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
   SPIC.DATA = cmd;
 
-  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  while( EPD_IsCsLow() ) {}
+  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  //while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromGen <<<");
 }
@@ -184,12 +184,12 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
     return;
   }
 
+  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
+
   for(size_t i = 0; i < data_len; i++)
     g_spi_tx_buffer[i] = data[i];
-  
-  /*if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");*/
-  
+    
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
@@ -203,11 +203,11 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
 
   EPD_CSLow();
   EPD_SelectCommand();
-  SPIC.CTRL |= SPI_ENABLE_bm;
+  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
   SPIC.DATA = cmd;
 
-  while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  while( EPD_IsCsLow() ) {}
+  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  //while( EPD_IsCsLow() ) {}
 
   //_log("EPD_SendFromRam <<<");
 }
@@ -340,12 +340,13 @@ void EPD_clear(void) {
 }
 
 inline void EPD_PowerOn(void) {
-  //_log("EPD power on");
+  _log("EPD power on");
   EPD_SendFromGen(0x22, 0xC0, 1);
 
   EPD_SendFromRam(0x20, NULL, 0);
-
+  _log("waiting for epd power on");
   EPD_WaitUntilIdle();
+  _log("epd powered on");
 }
 
 inline void EPD_PowerOff(void) {

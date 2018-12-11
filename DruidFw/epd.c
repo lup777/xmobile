@@ -58,7 +58,7 @@ void EPD_StartPartial(void) {
     _log("EPD_StartPartial Failed to take mutex");
     return;
   }
-  EPD_WaitUntilIdle(); // wait
+  //EPD_WaitUntilIdle(); // wait
 
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
@@ -97,9 +97,7 @@ void EPD_StopPartial(void) {
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
-  _log("EPD Show partial image");
   //_sleep(200);
-  EPD_WaitUntilIdle(); // wait
   _log("EPD_StopPartial take mutex");
   if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
     _log("EPD_StartPartial Failed to take mutex");

@@ -70,9 +70,11 @@ void MENU_KeyPressHandler(Key key) {
   switch(key) {
       case key2:
         i--;
+	SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         break;
       case key8:
         i++;
+	SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         break;
       case key5:
         if (i >= 0 && i < menu_size) {

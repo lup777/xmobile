@@ -32,7 +32,6 @@ void _log(const char *format, ...) {
         args);
 
   va_end(args);
-
   if (len + 2 <= LOG_BUFFER_LEN) {
     buffer[len] = '\n';
     buffer[len + 1] = '\r';
@@ -41,13 +40,12 @@ void _log(const char *format, ...) {
     buffer[LOG_BUFFER_LEN - 2] = '\r';
   }
 
-  //taskENTER_CRITICAL();
+  taskENTER_CRITICAL();
   xStreamBufferSend(g_log_tx_buffer_handle,
 		    buffer, // first byte will be sent in next command
 		    len + 2, // buffer + <\n> + <\r> - <first byte>
 		    0);
-  //taskEXIT_CRITICAL();
-  //USARTF0_DATA = buffer[0];
+  taskEXIT_CRITICAL();
   USARTF0.CTRLA |= USART_DREINTLVL_LO_gc;
 
   //while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
@@ -58,10 +56,15 @@ inline void USART0_init(void) {
   PORTF.DIRSET = PIN3_bm; // TX
   USARTF0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
-  USARTF0.CTRLA = USART_RXCINTLVL_LO_gc | USART_TXCINTLVL_OFF_gc | USART_DREINTLVL_OFF_gc;
-  USARTF0.BAUDCTRLA = 25; // 9600
-  USARTF0.BAUDCTRLB = 0;
-
+  USARTF0.CTRLA = USART_RXCINTLVL_LO_gc
+    | USART_TXCINTLVL_OFF_gc
+    | USART_DREINTLVL_OFF_gc;
+  //USARTF0.BAUDCTRLA = 25; // 9600
+  //USARTF0.BAUDCTRLB = 0; // 9600
+  USARTF0.BAUDCTRLA = 19; // 115200
+  USARTF0.BAUDCTRLB = 0xC0; // 115200
+  //https://planetcalc.ru/747/
+  //https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
   g_log_tx_buffer_handle = xStreamBufferCreate(1000, 1);
 
   USARTF0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
@@ -76,8 +79,9 @@ ISR(USARTF0_DRE_vect) {
 				&data,           // buffer pointer
 				1,               // buffer length
 				&pxHPTW);
-  if (read_count > 0)
+  if (read_count == 1) {
     USARTF0_DATA = data;
+  }
   else
     USARTF0.CTRLA |= USART_DREINTLVL_OFF_gc;
 
@@ -90,7 +94,7 @@ ISR(USARTF0_RXC_vect) {
     char id;
     char key;
   } data;
-
+  _log("-");
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
   bool need_yield = false;
