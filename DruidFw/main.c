@@ -54,8 +54,9 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   }
 
   buf[0] = msg_id;
-  for (int i = 0; i < payload_len; i++)
-    buf[i + 1] = payload[i]; // copy payload
+  if (payload)
+    for (int i = 0; i < payload_len; i++)
+      buf[i + 1] = payload[i]; // copy payload
 
   size_t xBytesSent;
 

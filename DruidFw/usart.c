@@ -94,7 +94,7 @@ ISR(USARTF0_RXC_vect) {
     char id;
     char key;
   } data;
-  _log("-");
+  //_log("-");
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
   bool need_yield = false;
@@ -103,7 +103,7 @@ ISR(USARTF0_RXC_vect) {
     data.key -= '0';
     data.id = MSG_KBD;
     for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      need_yield |= SendMsg(context.mail[i], (void*)&data, sizeof(data));
+      need_yield |= SendMsg(context.mail[i], &data, sizeof(data));
     }
   } else if (data.key == 'x') {
     data.id = MSG_CLOSE;

@@ -44,7 +44,6 @@ void APP_MenuMessagePump(void) {
       case MSG_KBD: {
         _log("APP menu msg: key: %d ", (uint8_t)(data[1]));
         MENU_KeyPressHandler((Key)data[1]);
-        SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         break;
       } // case MSG_KBD
 
