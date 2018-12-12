@@ -57,3 +57,7 @@
 19. [HW] Add lamp for error state (error indicator)
 
 20. [HW] Buttons for vol+-
+
+21. [HW] Connect display to USART (SPI mode) to be able to use DMA
+
+22. [HW] SD card connect to USART (SPI mode) to be able to use DMA

@@ -1,4 +1,4 @@
-update=Сб 13 окт 2018 23:16:45
+update=Ср 12 дек 2018 16:00:59
 version=1
 last_client=kicad
 [pcbnew]
@@ -73,3 +73,4 @@ LibName31=XC6206P332MR
 LibName32=STF202-22T1G
 LibName33=MCP73871
 LibName34=switch1
+LibName35=SRAM
