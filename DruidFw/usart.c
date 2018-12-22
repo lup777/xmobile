@@ -22,6 +22,7 @@ StreamBufferHandle_t g_log_tx_buffer_handle;
 void _log(const char *format, ...) {
   char buffer[LOG_BUFFER_LEN];
   //memset(buffer, 0, LOG_BUFFER_LEN);
+  while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
 
   va_list args;
   va_start(args, format);
@@ -40,6 +41,7 @@ void _log(const char *format, ...) {
     buffer[LOG_BUFFER_LEN - 2] = '\r';
   }
 
+#if 0
   taskENTER_CRITICAL();
   xStreamBufferSend(g_log_tx_buffer_handle,
 		    buffer, // first byte will be sent in next command
@@ -47,8 +49,12 @@ void _log(const char *format, ...) {
 		    0);
   taskEXIT_CRITICAL();
   USARTF0.CTRLA |= USART_DREINTLVL_LO_gc;
-
-  //while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
+#else
+  for(uint8_t i = 0; i < len + 2; i ++) {
+    while((USARTF0.STATUS & USART_DREIF_bm) == 0) {};
+    USARTF0_DATA = buffer[i];
+  }
+#endif
 }
 
 inline void USART0_init(void) {
@@ -94,25 +100,15 @@ ISR(USARTF0_RXC_vect) {
     char id;
     char key;
   } data;
-  //_log("-");
+
   data.id = MSG_KBD;
   data.key = USARTF0_DATA;
   bool need_yield = false;
 
-  if (data.key >= '0' && data.key <= '9') {
-    data.key -= '0';
-    data.id = MSG_KBD;
-    for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      need_yield |= SendMsg(context.mail[i], &data, sizeof(data));
-    }
-  } else if (data.key == 'x') {
-    data.id = MSG_CLOSE;
-
-    for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-      need_yield |= SendMsg(context.mail[i], (void*)&(data.id), sizeof(char));
-    }
+  for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
+    need_yield = SendMsgISR(context.mail[i], &data, sizeof(data));
   }
-
+  
   if ( need_yield )
     taskYIELD();
 }

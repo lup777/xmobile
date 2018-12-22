@@ -15,7 +15,7 @@ static volatile int8_t i;
 App* gp_menu;
 
 void APP_MenuMessagePump(void);
-void MENU_KeyPressHandler(Key key);
+void MENU_KeyPressHandler(char key);
 void MENU_DrawHanadler(void);
 
 void APP_MenuStart(App* menu) {
@@ -24,7 +24,7 @@ void APP_MenuStart(App* menu) {
   context.active_app_id = MENU_MAILBOX_ID;
 
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
-  *pHandle = xMessageBufferCreate((size_t)50);
+  *pHandle = xMessageBufferCreate((size_t)150);
 
   SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
 }
@@ -37,13 +37,15 @@ void APP_MenuMessagePump(void) {
 
   _log("APP menu started");
   while(1) {
+    _log("MENU Waiting for msg");
     len = xMessageBufferReceive(*pHandle, data, 2, portMAX_DELAY);
     _log("APP menu msg received");
+
     if (len > 0) {
       switch(data[0]) {
       case MSG_KBD: {
         _log("APP menu msg: key: %d ", (uint8_t)(data[1]));
-        MENU_KeyPressHandler((Key)data[1]);
+        MENU_KeyPressHandler(data[1]);
         break;
       } // case MSG_KBD
 
@@ -63,19 +65,24 @@ void APP_MenuMessagePump(void) {
   _log("APP menu closed");
 }
 
-void MENU_KeyPressHandler(Key key) {
+void MENU_KeyPressHandler(char key) {
   int8_t menu_size = (int8_t)(sizeof(gp_menu) / sizeof(App));
 
   switch(key) {
-      case key2:
+      case '2':
+	_log("key 2");
         i--;
 	SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         break;
-      case key8:
+	
+      case '8':
+	_log("key 8");
         i++;
 	SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
         break;
-      case key5:
+	
+      case '5':
+	_log("key 5");
         if (i >= 0 && i < menu_size) {
           MessageBufferHandle_t handle = context.mail[gp_menu[i].id];
           if (handle == NULL) {
@@ -86,7 +93,9 @@ void MENU_KeyPressHandler(Key key) {
           }
         }
         break;
+	
       default:
+	_log("key %d", key);
         break;
     }
 }

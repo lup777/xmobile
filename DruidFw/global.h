@@ -44,7 +44,7 @@ typedef struct struct_context {
 
 extern Context context;
 
-#define SendMsg(HANDLE, DATA, SIZE) ({                            \
+#define SendMsgISR(HANDLE, DATA, SIZE) ({			  \
       BaseType_t hptm_ = pdFALSE;                                 \
       UBaseType_t uxSavedInterruptStatus_;                        \
       if (HANDLE != NULL) {                                       \

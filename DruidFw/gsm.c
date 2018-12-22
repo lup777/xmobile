@@ -91,7 +91,7 @@ ISR(USARTE0_RXC_vect) {
       i = 0; // will be inc'ed at the end of this function
       rbuf[0] = MSG_GSM_INPUT;
       for (uint8_t id = 0; id < MAILBOX_SIZE; id++) {
-        need_yield |= SendMsg(context.mail[id], (void*)rbuf, (size_t)i);
+        need_yield |= SendMsgISR(context.mail[id], (void*)rbuf, (size_t)i);
       }
     }
   }
