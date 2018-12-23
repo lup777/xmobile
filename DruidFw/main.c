@@ -61,11 +61,7 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   size_t xBytesSent;
 
   taskENTER_CRITICAL();
-  BaseType_t sa = xMessageBufferIsEmpty(context.mail[mailbox_id]);
-  if(sa == pdTRUE)
-    _log("buffer is empty" );
-  else
-    _log("buffer is not empty" );
+  _log("send to %p", context.mail[mailbox_id]);
   xBytesSent = xMessageBufferSend(context.mail[mailbox_id], buf,
                                   (size_t)payload_len + 1, 0);
   taskEXIT_CRITICAL();
@@ -139,4 +135,5 @@ static void vMainTask(void* pvParameters) {
   for(;;) {
     APP_MenuMessagePump();
   }
+  
 }

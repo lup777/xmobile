@@ -117,6 +117,22 @@ void SendGsm(const char* msg) {
   USARTE0_DATA = msg[0];
 }
 
+void SendGsmLen(const char* msg, uint8_t len) {
+  taskENTER_CRITICAL();
+  xStreamBufferSend(g_gsm_tx_buffer_handle,
+		    msg + 1,
+		    len - 1,
+		    0);
+  const char eol = '\n';
+  xStreamBufferSend(g_gsm_tx_buffer_handle,
+		    &eol,
+		    1,
+		    0);
+  taskEXIT_CRITICAL();
+  USARTE0_DATA = msg[0];
+}
+
+
 void GSM_CallCmd(const char* msg) {
   GSM_SendCStr(msg);
   char result_code;

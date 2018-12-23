@@ -43,8 +43,8 @@ inline void SPIC_Init(void) {
   g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 255);
   gh_spi_sem = xSemaphoreCreateMutex();
 
-  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm | SPI_PRESCALER_DIV4_gc
-    | SPI_MODE_0_gc;
+  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm /*| SPI_PRESCALER_DIV4_gc*/
+    | SPI_CLK2X_bm | SPI_MODE_0_gc;
 }
 
 ISR(SPIC_INT_vect) {

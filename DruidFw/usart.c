@@ -20,6 +20,7 @@
 StreamBufferHandle_t g_log_tx_buffer_handle;
 
 void _log(const char *format, ...) {
+  //return;
   char buffer[LOG_BUFFER_LEN];
   //memset(buffer, 0, LOG_BUFFER_LEN);
   while(xMessageBufferIsEmpty(g_log_tx_buffer_handle) != pdTRUE) {}
@@ -106,7 +107,7 @@ ISR(USARTF0_RXC_vect) {
   bool need_yield = false;
 
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
-    need_yield = SendMsgISR(context.mail[i], &data, sizeof(data));
+    need_yield |= SendMsgISR(context.mail[i], &data, sizeof(data));
   }
   
   if ( need_yield )

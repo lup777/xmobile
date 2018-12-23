@@ -16,3 +16,4 @@ extern StreamBufferHandle_t g_gsm_tx_buffer_handle;
 void GSM_Init(void);
 void GSM_CallCmd(const char* msg);
 void SendGsm(const char* msg);
+void SendGsmLen(const char* msg, uint8_t len);
