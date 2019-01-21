@@ -35,6 +35,7 @@ LIBS:MCP73871
 LIBS:switch1
 LIBS:SRAM
 LIBS:xmega128a1u_bga100
+LIBS:sim-holders
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END

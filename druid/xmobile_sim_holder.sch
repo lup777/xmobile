@@ -35,6 +35,7 @@ LIBS:MCP73871
 LIBS:switch1
 LIBS:SRAM
 LIBS:xmega128a1u_bga100
+LIBS:sim-holders
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END
@@ -236,4 +237,173 @@ Text Label 6825 2800 0    60   ~ 0
 GND
 Wire Wire Line
 	7100 3000 7100 3425
+$Comp
+L SIM800C U?
+U 1 1 5C46A8F4
+P 9400 3825
+F 0 "U?" H 9450 4800 60  0000 C CNN
+F 1 "SIM800C" H 8750 4800 60  0000 C CNN
+F 2 "" H 9400 3825 60  0000 C CNN
+F 3 "" H 9400 3825 60  0000 C CNN
+	1    9400 3825
+	1    0    0    -1  
+$EndComp
+$Comp
+L 78646-3001 U?
+U 1 1 5C46ADE6
+P 5175 5550
+F 0 "U?" H 5275 5350 60  0000 C CNN
+F 1 "78646-3001" H 5325 5500 60  0000 C CNN
+F 2 "" H 5175 5600 60  0000 C CNN
+F 3 "" H 5175 5600 60  0000 C CNN
+	1    5175 5550
+	1    0    0    -1  
+$EndComp
+Text Label 1500 4850 2    60   ~ 0
+SIM_VDD
+Text Label 8350 4300 2    60   ~ 0
+SIM_VDD
+Text Label 8350 4150 2    60   ~ 0
+SIM_CLK
+Text Label 1525 5450 2    60   ~ 0
+SIM_CLK
+Text Label 8350 4225 2    60   ~ 0
+SIM_RST
+Text Label 1525 5150 2    60   ~ 0
+SIM_RST
+Text Label 8350 4525 2    60   ~ 0
+GND
+Text Label 4575 5600 2    60   ~ 0
+GND
+Text Label 8350 4075 2    60   ~ 0
+SIM_DATA
+Text Label 1500 5800 2    60   ~ 0
+SIM_DATA
+$Comp
+L SMF05C D?
+U 1 1 5C46C4AB
+P 3650 6425
+F 0 "D?" H 3750 6650 60  0000 C CNN
+F 1 "SMF05C" H 3475 6650 60  0000 C CNN
+F 2 "semtech:SOT363" H 3640 6425 60  0000 C CNN
+F 3 "" H 3640 6425 60  0000 C CNN
+	1    3650 6425
+	0    1    1    0   
+$EndComp
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C46C6D5
+P 1925 5800
+F 0 "R?" V 2005 5800 40  0000 C CNN
+F 1 "51Omh" V 1932 5801 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 1855 5800 30  0000 C CNN
+F 3 "" H 1925 5800 30  0000 C CNN
+	1    1925 5800
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	2175 5800 4575 5800
+Wire Wire Line
+	3350 6200 3350 5800
+Connection ~ 3350 5800
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C46CACB
+P 2325 6400
+F 0 "C?" H 2325 6500 40  0000 L CNN
+F 1 "22pF" H 2331 6315 40  0000 L CNN
+F 2 "Capacitors_SMD:C_1206_HandSoldering" H 2363 6250 30  0000 C CNN
+F 3 "" H 2325 6400 60  0000 C CNN
+	1    2325 6400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2325 6200 2325 5800
+Connection ~ 2325 5800
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C46D160
+P 1925 5450
+F 0 "R?" V 2005 5450 40  0000 C CNN
+F 1 "51Omh" V 1932 5451 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 1855 5450 30  0000 C CNN
+F 3 "" H 1925 5450 30  0000 C CNN
+	1    1925 5450
+	0    1    1    0   
+$EndComp
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C46D2D8
+P 1925 5150
+F 0 "R?" V 2005 5150 40  0000 C CNN
+F 1 "51Omh" V 1932 5151 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 1855 5150 30  0000 C CNN
+F 3 "" H 1925 5150 30  0000 C CNN
+	1    1925 5150
+	0    1    1    0   
+$EndComp
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C46D4E7
+P 1925 4850
+F 0 "R?" V 2005 4850 40  0000 C CNN
+F 1 "51Omh" V 1932 4851 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 1855 4850 30  0000 C CNN
+F 3 "" H 1925 4850 30  0000 C CNN
+	1    1925 4850
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	1525 5450 1675 5450
+Wire Wire Line
+	1675 5150 1525 5150
+Wire Wire Line
+	1675 4850 1500 4850
+Wire Wire Line
+	1500 5800 1675 5800
+Wire Wire Line
+	2175 5450 2400 5450
+Wire Wire Line
+	2400 5450 2400 5500
+Wire Wire Line
+	2400 5500 4575 5500
+Wire Wire Line
+	2175 5150 4400 5150
+Wire Wire Line
+	4400 5150 4400 5400
+Wire Wire Line
+	4400 5400 4575 5400
+Wire Wire Line
+	2175 4850 4500 4850
+Wire Wire Line
+	4500 4850 4500 5300
+Wire Wire Line
+	4500 5300 4575 5300
+Wire Wire Line
+	3550 6200 3550 5500
+Connection ~ 3550 5500
+Wire Wire Line
+	3650 6200 3650 5150
+Connection ~ 3650 5150
+Wire Wire Line
+	3750 6200 3750 4850
+Connection ~ 3750 4850
+Text Label 3550 6800 3    60   ~ 0
+GND
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C46E5BE
+P 3100 7125
+F 0 "C?" H 3100 7225 40  0000 L CNN
+F 1 "22pF" H 3106 7040 40  0000 L CNN
+F 2 "Capacitors_SMD:C_1206_HandSoldering" H 3138 6975 30  0000 C CNN
+F 3 "" H 3100 7125 60  0000 C CNN
+	1    3100 7125
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3100 4850 3100 6925
+Connection ~ 3100 4850
+Text Label 3100 7325 3    60   ~ 0
+GND
 $EndSCHEMATC

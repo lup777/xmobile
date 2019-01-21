@@ -35,6 +35,7 @@ LIBS:MCP73871
 LIBS:switch1
 LIBS:SRAM
 LIBS:xmega128a1u_bga100
+LIBS:sim-holders
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END
@@ -53,12 +54,12 @@ $EndDescr
 $Comp
 L SIM800C U2
 U 1 1 59667E03
-P 30250 17650
-F 0 "U2" H 30300 18625 60  0000 C CNN
-F 1 "SIM800C" H 29600 18625 60  0000 C CNN
-F 2 "SIM800C_lup:SIM800C" H 30075 17850 60  0000 C CNN
-F 3 "" H 30250 17650 60  0000 C CNN
-	1    30250 17650
+P 18725 16350
+F 0 "U2" H 18775 17325 60  0000 C CNN
+F 1 "SIM800C" H 18075 17325 60  0000 C CNN
+F 2 "SIM800C_lup:SIM800C" H 18550 16550 60  0000 C CNN
+F 3 "" H 18725 16350 60  0000 C CNN
+	1    18725 16350
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -72,27 +73,27 @@ F 3 "" H 10025 10100 30  0000 C CNN
 	1    10025 10100
 	0    -1   -1   0   
 $EndComp
-Text Label 29200 17375 2    60   ~ 0
+Text Label 17675 16075 2    60   ~ 0
 GND
-Text Label 29200 17750 2    60   ~ 0
+Text Label 17675 16450 2    60   ~ 0
 GND
-Text Label 29200 18200 2    60   ~ 0
+Text Label 17675 16900 2    60   ~ 0
 GND
-Text Label 29200 18350 2    60   ~ 0
+Text Label 17675 17050 2    60   ~ 0
 GND
-Text Label 30900 17525 0    60   ~ 0
+Text Label 19375 16225 0    60   ~ 0
 GND
-Text Label 30900 17750 0    60   ~ 0
+Text Label 19375 16450 0    60   ~ 0
 GND
-Text Label 30900 17225 0    60   ~ 0
+Text Label 19375 15925 0    60   ~ 0
 GND
-Text Label 30900 17450 0    60   ~ 0
+Text Label 19375 16150 0    60   ~ 0
 3.7V
-Text Label 30900 17375 0    60   ~ 0
+Text Label 19375 16075 0    60   ~ 0
 3.7V
-Text Label 30900 17975 0    60   ~ 0
+Text Label 19375 16675 0    60   ~ 0
 GND
-Text Label 30900 17675 0    60   ~ 0
+Text Label 19375 16375 0    60   ~ 0
 GND
 Text Label 10275 10100 0    60   ~ 0
 3.3V
@@ -244,9 +245,9 @@ Text Label 34275 14800 0    60   ~ 0
 XMEGA_PE0_GPIO
 Text Label 29800 13450 0    60   ~ 0
 XMEGA_PE0_GPIO
-Text Label 29200 17000 2    60   ~ 0
+Text Label 17675 15700 2    60   ~ 0
 GSM_AT_RTS
-Text Label 29200 16850 2    60   ~ 0
+Text Label 17675 15550 2    60   ~ 0
 GSM_AT_TXD
 Text Label 33800 16450 0    60   ~ 0
 XMEGA_PE2_RXD0
@@ -264,9 +265,9 @@ Text Label 34150 15375 0    60   ~ 0
 XMEGA_PD3_GPIO
 Text Label 29800 12900 0    60   ~ 0
 XMEGA_PD3_GPIO
-Text Label 29200 17150 2    60   ~ 0
+Text Label 17675 15850 2    60   ~ 0
 GSM_AT_DCD
-Text Label 29200 16925 2    60   ~ 0
+Text Label 17675 15625 2    60   ~ 0
 GSM_AT_RXD
 $Comp
 L R-RESCUE-xmobile R16
@@ -298,11 +299,11 @@ Text Label 33300 16900 2    60   ~ 0
 GSM_AT_RI
 Text Label 33800 16900 0    60   ~ 0
 XMEGA_PD1_GPIO
-Text Label 29200 17075 2    60   ~ 0
+Text Label 17675 15775 2    60   ~ 0
 GSM_AT_CTS
-Text Label 29200 17225 2    60   ~ 0
+Text Label 17675 15925 2    60   ~ 0
 GSM_AT_DTR
-Text Label 29200 17300 2    60   ~ 0
+Text Label 17675 16000 2    60   ~ 0
 GSM_AT_RI
 Text Label 29800 12700 0    60   ~ 0
 XMEGA_PD1_GPIO
@@ -319,11 +320,11 @@ F 3 "DOCUMENTATION" H 22000 12425 50  0001 C CNN
 	1    22000 12425
 	1    0    0    -1  
 $EndComp
-Text Label 30900 18050 0    60   ~ 0
+Text Label 19375 16750 0    60   ~ 0
 GSM_USB_DN
 Text Label 21250 12425 2    60   ~ 0
 GSM_USB_DN
-Text Label 30900 18125 0    60   ~ 0
+Text Label 19375 16825 0    60   ~ 0
 GSM_USB_DP
 Text Label 21250 12525 2    60   ~ 0
 GSM_USB_DP
@@ -344,11 +345,11 @@ F 3 "" H 20800 11700 60  0000 C CNN
 $EndComp
 Text Label 20600 11700 2    60   ~ 0
 GND
-Text Label 30900 18200 0    60   ~ 0
+Text Label 19375 16900 0    60   ~ 0
 GSM_USB_VBUS
 Text Label 21250 12325 2    60   ~ 0
 GSM_USB_VBUS
-Text Label 30900 16925 0    60   ~ 0
+Text Label 19375 15625 0    60   ~ 0
 GSM_NETLIGHT
 $Comp
 L R-RESCUE-xmobile R3
@@ -444,34 +445,34 @@ F 3 "" H 21600 14525 30  0000 C CNN
 $EndComp
 Text Label 22475 15100 3    60   ~ 0
 GND
-Text Label 30900 17075 0    60   ~ 0
+Text Label 19375 15775 0    60   ~ 0
 GSM_POWER_KEY
 Text Label 22475 14325 0    60   ~ 0
 GSM_POWER_KEY
 Text Label 21350 14525 2    60   ~ 0
 XMEGA_PD0_GSM_POWER
-Text Label 29200 17825 2    60   ~ 0
+Text Label 17675 16525 2    60   ~ 0
 SIM_DET
-Text Label 29200 17900 2    60   ~ 0
+Text Label 17675 16600 2    60   ~ 0
 SIM_DATA
-Text Label 29200 17975 2    60   ~ 0
+Text Label 17675 16675 2    60   ~ 0
 SIM_CLK
-Text Label 29200 18050 2    60   ~ 0
+Text Label 17675 16750 2    60   ~ 0
 SIM_RST
-Text Label 29200 18125 2    60   ~ 0
+Text Label 17675 16825 2    60   ~ 0
 SIM_VDD
-NoConn ~ 30900 17150
-Text Label 30900 17600 0    60   ~ 0
+NoConn ~ 19375 15850
+Text Label 19375 16300 0    60   ~ 0
 GSM_ANT
 Text Label 22700 8550 2    60   ~ 0
 GSM_ANT
-Text Label 29200 17450 2    60   ~ 0
+Text Label 17675 16150 2    60   ~ 0
 GSM_MICP
-Text Label 29200 17525 2    60   ~ 0
+Text Label 17675 16225 2    60   ~ 0
 GSM_MICN
-Text Label 29200 17600 2    60   ~ 0
+Text Label 17675 16300 2    60   ~ 0
 GSM_SPKP
-Text Label 29200 17675 2    60   ~ 0
+Text Label 17675 16375 2    60   ~ 0
 GSM_SPKN
 $Sheet
 S 26100 17800 1425 450 
@@ -648,14 +649,14 @@ F 3 "" H 21100 8675 50  0000 C CNN
 	1    21100 8675
 	1    0    0    -1  
 $EndComp
-NoConn ~ 30900 16850
-Text Label 30900 17300 0    60   ~ 0
+NoConn ~ 19375 15550
+Text Label 19375 16000 0    60   ~ 0
 GND
-NoConn ~ 30900 17825
-NoConn ~ 30900 17900
-NoConn ~ 30900 18275
-NoConn ~ 30900 18350
-NoConn ~ 29200 18275
+NoConn ~ 19375 16525
+NoConn ~ 19375 16600
+NoConn ~ 19375 16975
+NoConn ~ 19375 17050
+NoConn ~ 17675 16975
 Text Label 22525 17100 0    60   ~ 0
 SIM_DET
 Text Label 21475 17000 2    60   ~ 0
@@ -668,7 +669,7 @@ Text Label 21475 16800 2    60   ~ 0
 SIM_VDD
 Text Label 22525 16900 0    60   ~ 0
 GND
-Text Label 30900 17000 0    60   ~ 0
+Text Label 19375 15700 0    60   ~ 0
 SIM_HOLDER_VDD_EXT
 Text Label 22525 17000 0    60   ~ 0
 SIM_HOLDER_VDD_EXT
@@ -982,7 +983,9 @@ A6
 Text Label 5050 5500 0    60   ~ 0
 A7
 Wire Wire Line
-	33425 14800 33650 14800
+	33425 14800 33500 14800
+Wire Wire Line
+	33500 14800 33650 14800
 Wire Wire Line
 	34150 14800 34275 14800
 Wire Wire Line
@@ -991,14 +994,18 @@ Wire Wire Line
 	33500 15050 33500 14800
 Connection ~ 33500 14800
 Wire Wire Line
-	33350 14225 33650 14225
+	33350 14225 33500 14225
+Wire Wire Line
+	33500 14225 33650 14225
 Wire Wire Line
 	33550 14450 33500 14450
 Wire Wire Line
 	33500 14450 33500 14225
 Connection ~ 33500 14225
 Wire Wire Line
-	33375 15375 33650 15375
+	33375 15375 33500 15375
+Wire Wire Line
+	33500 15375 33650 15375
 Wire Wire Line
 	33575 15625 33500 15625
 Wire Wire Line
@@ -1009,7 +1016,9 @@ Wire Wire Line
 Wire Wire Line
 	21250 11700 21250 12325
 Wire Wire Line
-	21000 11700 21875 11700
+	21000 11700 21250 11700
+Wire Wire Line
+	21250 11700 21875 11700
 Wire Wire Line
 	22750 12425 23025 12425
 Wire Wire Line
@@ -1028,7 +1037,9 @@ Wire Wire Line
 	23125 11925 23125 12525
 Connection ~ 21250 11700
 Wire Wire Line
-	24950 15950 25050 15950
+	24950 15950 25000 15950
+Wire Wire Line
+	25000 15950 25050 15950
 Wire Wire Line
 	25000 15950 25000 16025
 Connection ~ 25000 15950
@@ -1039,22 +1050,32 @@ Wire Wire Line
 Wire Wire Line
 	25350 15150 25350 15050
 Wire Wire Line
-	25000 16575 25425 16575
+	25000 16575 25350 16575
+Wire Wire Line
+	25350 16575 25425 16575
 Wire Wire Line
 	25000 16575 25000 16525
 Connection ~ 25350 16575
 Wire Wire Line
-	22475 14725 22475 15100
+	22475 14725 22475 14925
+Wire Wire Line
+	22475 14925 22475 15100
 Connection ~ 22475 14925
 Wire Wire Line
-	21850 14525 22175 14525
+	21850 14525 21975 14525
+Wire Wire Line
+	21975 14525 22175 14525
 Wire Wire Line
 	21975 14925 21975 14525
 Connection ~ 21975 14525
 Wire Wire Line
-	9775 10100 9300 10100
+	9775 10100 9550 10100
 Wire Wire Line
-	9550 9950 9550 10525
+	9550 10100 9300 10100
+Wire Wire Line
+	9550 9950 9550 10100
+Wire Wire Line
+	9550 10100 9550 10525
 Connection ~ 9550 10100
 Wire Wire Line
 	20775 8675 21100 8675
@@ -1108,7 +1129,9 @@ Wire Wire Line
 	28700 9750 28700 9575
 Connection ~ 28700 9575
 Wire Wire Line
-	28600 9250 28600 9750
+	28600 9250 28600 9575
+Wire Wire Line
+	28600 9575 28600 9750
 Connection ~ 28600 9575
 Wire Wire Line
 	28400 9750 28400 9575
@@ -1140,7 +1163,37 @@ Wire Wire Line
 Wire Wire Line
 	27050 14250 27400 14250
 Wire Wire Line
-	27600 9575 29300 9575
+	27600 9575 28100 9575
+Wire Wire Line
+	28100 9575 28200 9575
+Wire Wire Line
+	28200 9575 28225 9575
+Wire Wire Line
+	28225 9575 28300 9575
+Wire Wire Line
+	28300 9575 28350 9575
+Wire Wire Line
+	28350 9575 28400 9575
+Wire Wire Line
+	28400 9575 28475 9575
+Wire Wire Line
+	28475 9575 28500 9575
+Wire Wire Line
+	28500 9575 28600 9575
+Wire Wire Line
+	28600 9575 28700 9575
+Wire Wire Line
+	28700 9575 28725 9575
+Wire Wire Line
+	28725 9575 28800 9575
+Wire Wire Line
+	28800 9575 28850 9575
+Wire Wire Line
+	28850 9575 28900 9575
+Wire Wire Line
+	28900 9575 28975 9575
+Wire Wire Line
+	28975 9575 29300 9575
 Wire Wire Line
 	29300 9575 29300 9525
 Wire Wire Line
@@ -1148,7 +1201,13 @@ Wire Wire Line
 Wire Wire Line
 	29150 9750 29150 9675
 Wire Wire Line
-	30625 8925 30625 9975
+	30625 8925 30625 9000
+Wire Wire Line
+	30625 9000 30625 9300
+Wire Wire Line
+	30625 9300 30625 9675
+Wire Wire Line
+	30625 9675 30625 9975
 Wire Wire Line
 	29050 9625 30100 9625
 Wire Wire Line
