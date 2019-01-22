@@ -285,8 +285,6 @@ Text HLabel 8050 2250 2    60   Output ~ 0
 3.3V
 Text HLabel 6875 5250 2    60   Output ~ 0
 3.7V
-Text HLabel 5500 4025 0    60   Output ~ 0
-GND
 Connection ~ 5650 4025
 Connection ~ 4500 2250
 $Comp
@@ -353,4 +351,6 @@ Wire Wire Line
 Wire Wire Line
 	4700 5600 4700 5875
 Connection ~ 4700 5875
+Text GLabel 5500 4025 0    60   Input ~ 0
+GND
 $EndSCHEMATC
