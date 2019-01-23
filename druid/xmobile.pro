@@ -1,4 +1,4 @@
-update=Пн 21 янв 2019 14:09:31
+update=Ср 23 янв 2019 13:24:58
 version=1
 last_client=kicad
 [pcbnew]
@@ -76,3 +76,4 @@ LibName34=switch1
 LibName35=SRAM
 LibName36=xmega128a1u_bga100
 LibName37=sim-holders
+LibName38=max7370

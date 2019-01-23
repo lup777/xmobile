@@ -36,12 +36,13 @@ LIBS:switch1
 LIBS:SRAM
 LIBS:xmega128a1u_bga100
 LIBS:sim-holders
+LIBS:max7370
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 4 5
+Sheet 3 5
 Title ""
 Date ""
 Rev ""
@@ -281,10 +282,6 @@ F 3 "" H 4500 2250 60  0001 C CNN
 	1    4500 2250
 	1    0    0    -1  
 $EndComp
-Text HLabel 8050 2250 2    60   Output ~ 0
-3.3V
-Text HLabel 6875 5250 2    60   Output ~ 0
-3.7V
 Connection ~ 5650 4025
 Connection ~ 4500 2250
 $Comp
@@ -353,4 +350,8 @@ Wire Wire Line
 Connection ~ 4700 5875
 Text GLabel 5500 4025 0    60   Input ~ 0
 GND
+Text GLabel 8050 2250 2    60   Input ~ 0
+3.3V
+Text GLabel 6875 5250 2    60   Input ~ 0
+3.7V
 $EndSCHEMATC
