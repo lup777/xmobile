@@ -68,30 +68,30 @@ Text Label 10275 10100 0    60   ~ 0
 $Comp
 L CONN_8 P3
 U 1 1 5974D7B3
-P 15400 1275
-F 0 "P3" V 15350 1275 60  0000 C CNN
-F 1 "CONN_8" V 15450 1275 60  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight" H 15400 1275 60  0001 C CNN
-F 3 "" H 15400 1275 60  0001 C CNN
-F 4 "EPD display connector" V 15575 1275 60  0000 C CNN "description"
-	1    15400 1275
+P 13525 7500
+F 0 "P3" V 13475 7500 60  0000 C CNN
+F 1 "CONN_8" V 13575 7500 60  0000 C CNN
+F 2 "Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight" H 13525 7500 60  0001 C CNN
+F 3 "" H 13525 7500 60  0001 C CNN
+F 4 "EPD display connector" V 13700 7500 60  0000 C CNN "description"
+	1    13525 7500
 	1    0    0    -1  
 $EndComp
-Text Label 15050 925  2    60   ~ 0
+Text Label 13175 7150 2    60   ~ 0
 EPD_BUSY
-Text Label 15050 1025 2    60   ~ 0
+Text Label 13175 7250 2    60   ~ 0
 EPD_RST
-Text Label 15050 1125 2    60   ~ 0
+Text Label 13175 7350 2    60   ~ 0
 EPD_DC
-Text Label 15050 1225 2    60   ~ 0
+Text Label 13175 7450 2    60   ~ 0
 EPD_CS
-Text Label 15050 1325 2    60   ~ 0
+Text Label 13175 7550 2    60   ~ 0
 EPD_CLK
-Text Label 15050 1425 2    60   ~ 0
+Text Label 13175 7650 2    60   ~ 0
 EPD_DIN
-Text Label 15050 1525 2    60   ~ 0
+Text Label 13175 7750 2    60   ~ 0
 GND
-Text Label 15050 1625 2    60   ~ 0
+Text Label 13175 7850 2    60   ~ 0
 3.3V
 Text Label 29800 12150 0    60   ~ 0
 EPD_CS
@@ -130,7 +130,7 @@ F4 "AUDIO_SPKP" I L 14025 5050 60
 F5 "AUDIO_SPKN" I L 14025 4925 60 
 $EndSheet
 $Sheet
-S 550  10925 500  150 
+S 14400 9675 500  150 
 U 5A9FCB78
 F0 "xmega_power" 60
 F1 "xmega_power.sch" 60
@@ -153,41 +153,25 @@ GND
 Text Label 8600 9900 2    60   ~ 0
 GND
 $Sheet
-S 13175 6900 650  675 
+S 13125 6125 525  400 
 U 5AA512DD
 F0 "xmobile_keyboard" 60
 F1 "xmobile_keyboard.sch" 60
-F2 "in1" I L 13175 7050 60 
-F3 "in2" I L 13175 7200 60 
-F4 "in3" I L 13175 7350 60 
-F5 "out1" O R 13825 7050 60 
-F6 "out2" O R 13825 7200 60 
-F7 "out3" O R 13825 7350 60 
-F8 "GND" B R 13825 7475 60 
+F2 "SDA" B L 13125 6200 60 
+F3 "SCL" B L 13125 6300 60 
+F4 "INT" O L 13125 6400 60 
 $EndSheet
-Text Label 13175 7050 2    60   ~ 0
-KBD_IN_1
 Text Label 29800 13100 0    60   ~ 0
 KBD_IN_1
 Text Label 29800 13200 0    60   ~ 0
 KBD_IN_2
-Text Label 13175 7200 2    60   ~ 0
-KBD_IN_2
 Text Label 29800 13300 0    60   ~ 0
-KBD_IN_3
-Text Label 13175 7350 2    60   ~ 0
 KBD_IN_3
 Text Label 29800 11750 0    60   ~ 0
 KBD_OUT_1
-Text Label 13825 7050 0    60   ~ 0
-KBD_OUT_1
 Text Label 29800 11850 0    60   ~ 0
 KBD_OUT_2
-Text Label 13825 7200 0    60   ~ 0
-KBD_OUT_2
 Text Label 29800 11950 0    60   ~ 0
-KBD_OUT_3
-Text Label 13825 7350 0    60   ~ 0
 KBD_OUT_3
 Text Label 29800 12600 0    60   ~ 0
 XMEGA_PD0_GSM_POWER
@@ -229,8 +213,6 @@ Text Label 8600 10000 2    60   ~ 0
 GND
 NoConn ~ 8600 10100
 NoConn ~ 9300 9900
-Text Label 13825 7475 0    60   ~ 0
-GND
 NoConn ~ 34200 11550
 NoConn ~ 9650 10775
 NoConn ~ 9650 10525
@@ -869,9 +851,9 @@ Text Label 3400 5350 2    60   ~ 0
 D1
 Text Label 3400 5450 2    60   ~ 0
 D0
-Text GLabel 825  10675 0    60   Input ~ 0
+Text GLabel 14675 9425 0    60   Input ~ 0
 3.3V
-Text Label 825  10675 0    60   ~ 0
+Text Label 14675 9425 0    60   ~ 0
 3.3V
 Wire Wire Line
 	9300 10100 9775 10100
@@ -1131,4 +1113,115 @@ Connection ~ 9300 3100
 Connection ~ 9400 3100
 Text Label 9500 3100 0    60   ~ 0
 3.3V
+Text Label 10800 6600 0    60   ~ 0
+EPD_RST
+Text Label 10800 6700 0    60   ~ 0
+EPD_BUSY
+Text Label 10800 6900 0    60   ~ 0
+EPD_DC
+Text Label 10800 4800 0    60   ~ 0
+EPD_CS
+Text Label 10800 4700 0    60   ~ 0
+EPD_CLK
+Text Label 10800 4500 0    60   ~ 0
+EPD_DIN
+Text Label 13125 6200 2    60   ~ 0
+KBD_SDA
+Text Label 13125 6300 2    60   ~ 0
+KBD_SCL
+Text Label 13125 6400 2    60   ~ 0
+KBD_INT
+Text Label 10800 5100 0    60   ~ 0
+KBD_SCL
+Text Label 10800 5200 0    60   ~ 0
+KBD_SDA
+Text Label 10800 7000 0    60   ~ 0
+KBD_INT
+$Comp
+L TEST_1P J?
+U 1 1 5C4B9CCC
+P 11625 4600
+F 0 "J?" H 11625 4870 50  0000 C CNN
+F 1 "TP_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
+F 2 "" H 11825 4600 50  0001 C CNN
+F 3 "" H 11825 4600 50  0001 C CNN
+	1    11625 4600
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10800 4600 11625 4600
+Text GLabel 15225 9425 0    60   Input ~ 0
+GND
+Text Label 15225 9425 0    60   ~ 0
+GND
+Text Label 12875 3550 0    60   ~ 0
+GSM_STATUS
+Text Label 10800 6800 0    60   ~ 0
+GSM_STATUS
+$Comp
+L Micro_SD_Card J?
+U 1 1 5C4DB2CD
+P 4075 8950
+F 0 "J?" H 3425 9550 50  0000 C CNN
+F 1 "Micro_SD_Card" H 4725 9550 50  0000 R CNN
+F 2 "microSD:microSD-noname" H 5225 9250 50  0001 C CNN
+F 3 "" H 4075 8950 50  0001 C CNN
+	1    4075 8950
+	1    0    0    -1  
+$EndComp
+Text Label 3175 9150 2    60   ~ 0
+GND
+Text Label 3175 9050 2    60   ~ 0
+microSD_SCLK
+Text Label 1650 8950 2    60   ~ 0
+3.3V
+Text Label 3175 9250 2    60   ~ 0
+microSD_DO
+Text Label 3175 8750 2    60   ~ 0
+microSD_CS
+Text Label 3175 8850 2    60   ~ 0
+microSD_DI
+NoConn ~ 3175 8650
+NoConn ~ 3175 9350
+Text Label 1825 9525 3    60   ~ 0
+GND
+$Comp
+L C C?
+U 1 1 5C4DFD85
+P 1975 9100
+F 0 "C?" H 2000 9200 50  0000 L CNN
+F 1 "C" H 2000 9000 50  0000 L CNN
+F 2 "0.1u" H 2150 9075 50  0000 C CNN
+F 3 "" H 1975 9100 50  0001 C CNN
+	1    1975 9100
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP C?
+U 1 1 5C4DFEA4
+P 1650 9100
+F 0 "C?" H 1675 9200 50  0000 L CNN
+F 1 "CP" H 1675 9000 50  0000 L CNN
+F 2 "10-100u" H 1475 9000 50  0000 C CNN
+F 3 "" H 1650 9100 50  0001 C CNN
+	1    1650 9100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1650 8950 3175 8950
+Wire Wire Line
+	1650 9250 1975 9250
+Wire Wire Line
+	1825 9525 1825 9250
+Connection ~ 1825 9250
+Connection ~ 1975 8950
+NoConn ~ 4875 9550
+Text Label 10800 4100 0    60   ~ 0
+microSD_DI
+Text Label 10800 4300 0    60   ~ 0
+microSD_SCLK
+Text Label 10800 4200 0    60   ~ 0
+microSD_DO
+Text Label 10800 8000 0    60   ~ 0
+microSD_CS
 $EndSCHEMATC

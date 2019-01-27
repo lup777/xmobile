@@ -283,6 +283,192 @@ F 3 "" H 9325 5275 60  0001 C CNN
 	1    9325 5275
 	1    0    0    -1  
 $EndComp
+Entry Wire Line
+	6075 4750 6175 4850
+Entry Wire Line
+	6075 3925 6175 4025
+Entry Wire Line
+	6075 3150 6175 3250
+Entry Wire Line
+	6075 2300 6175 2400
+Entry Wire Line
+	6075 1450 6175 1550
+Text Label 6175 2400 0    60   ~ 0
+R1
+Text Label 6175 3250 0    60   ~ 0
+R2
+Text Label 6175 4025 0    60   ~ 0
+R3
+Text Label 6175 4850 0    60   ~ 0
+R4
+Text Label 6175 1550 0    60   ~ 0
+R0
+Entry Wire Line
+	9750 5625 9850 5725
+Entry Wire Line
+	8900 5625 9000 5725
+Entry Wire Line
+	8050 5625 8150 5725
+Entry Wire Line
+	7150 5625 7250 5725
+Text Label 7150 5600 0    60   ~ 0
+C0
+Text Label 8050 5625 0    60   ~ 0
+C1
+Text Label 9750 5600 0    60   ~ 0
+C3
+Text Label 8900 5600 0    60   ~ 0
+C2
+Entry Wire Line
+	1300 2950 1400 3050
+Entry Wire Line
+	1300 3050 1400 3150
+Entry Wire Line
+	1300 3150 1400 3250
+Entry Wire Line
+	1300 3250 1400 3350
+Entry Wire Line
+	1300 3350 1400 3450
+Text Label 1475 3050 0    60   ~ 0
+R0
+Text Label 1475 3150 0    60   ~ 0
+R1
+Text Label 1475 3250 0    60   ~ 0
+R2
+Text Label 1475 3350 0    60   ~ 0
+R3
+Text Label 1475 3450 0    60   ~ 0
+R4
+Entry Wire Line
+	3575 3050 3675 3150
+Entry Wire Line
+	3575 3150 3675 3250
+Entry Wire Line
+	3575 3250 3675 3350
+Entry Wire Line
+	3575 3350 3675 3450
+Text Label 3350 3050 0    60   ~ 0
+C0
+Text Label 3350 3150 0    60   ~ 0
+C1
+Text Label 3350 3250 0    60   ~ 0
+C2
+Text Label 3350 3350 0    60   ~ 0
+C3
+Text GLabel 1075 7350 0    60   Input ~ 0
+3.3V
+Text Label 1075 7350 0    60   ~ 0
+3.3V
+Text Label 1050 3850 2    60   ~ 0
+3.3V
+Text GLabel 1075 7550 0    60   Input ~ 0
+GND
+Text Label 1075 7550 0    60   ~ 0
+GND
+Text Label 1800 4250 2    60   ~ 0
+GND
+NoConn ~ 1800 3650
+NoConn ~ 1800 3750
+NoConn ~ 1800 3550
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C49881F
+P 4300 3175
+F 0 "R?" V 4380 3175 40  0000 C CNN
+F 1 "10k" V 4307 3176 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4230 3175 30  0000 C CNN
+F 3 "" H 4300 3175 30  0000 C CNN
+	1    4300 3175
+	1    0    0    -1  
+$EndComp
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C498A3D
+P 4600 3175
+F 0 "R?" V 4680 3175 40  0000 C CNN
+F 1 "10k" V 4607 3176 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4530 3175 30  0000 C CNN
+F 3 "" H 4600 3175 30  0000 C CNN
+	1    4600 3175
+	1    0    0    -1  
+$EndComp
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C498AB7
+P 4900 3175
+F 0 "R?" V 4980 3175 40  0000 C CNN
+F 1 "10k" V 4907 3176 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 4830 3175 30  0000 C CNN
+F 3 "" H 4900 3175 30  0000 C CNN
+	1    4900 3175
+	1    0    0    -1  
+$EndComp
+Text Label 4600 2550 0    60   ~ 0
+3.3V
+Text Label 3300 4150 0    60   ~ 0
+GND
+Text HLabel 4300 3850 2    60   BiDi ~ 0
+SDA
+Text HLabel 4600 3950 2    60   BiDi ~ 0
+SCL
+Text HLabel 4900 4050 2    60   Output ~ 0
+INT
+$Comp
+L C >0.1mk
+U 1 1 5C4C0DA8
+P 1400 4150
+F 0 ">0.1mk" H 1425 4250 50  0000 L CNN
+F 1 "C" H 1425 4050 50  0000 L CNN
+F 2 "" H 1438 4000 50  0001 C CNN
+F 3 "" H 1400 4150 50  0001 C CNN
+F 4 "close to chip" H 1400 4150 60  0001 C CNN "note"
+	1    1400 4150
+	1    0    0    -1  
+$EndComp
+$Comp
+L C >0.1mk
+U 1 1 5C4C0F77
+P 1050 4150
+F 0 ">0.1mk" H 1075 4250 50  0000 L CNN
+F 1 "C" H 1075 4050 50  0000 L CNN
+F 2 "" H 1088 4000 50  0001 C CNN
+F 3 "" H 1050 4150 50  0001 C CNN
+F 4 "close to chip" H 1050 4150 60  0001 C CNN "note"
+	1    1050 4150
+	1    0    0    -1  
+$EndComp
+Text Label 1400 4300 3    60   ~ 0
+GND
+Text Label 1050 4300 3    60   ~ 0
+GND
+Text Label 1400 3950 2    60   ~ 0
+3.3V
+Text Notes 4975 4175 0    60   ~ 0
+Active low
+$Comp
+L LED D?
+U 1 1 5C4C2FCD
+P 2575 5400
+F 0 "D?" H 2575 5500 50  0000 C CNN
+F 1 "LED" H 2575 5300 50  0000 C CNN
+F 2 "" H 2575 5400 50  0001 C CNN
+F 3 "" H 2575 5400 50  0001 C CNN
+	1    2575 5400
+	0    -1   -1   0   
+$EndComp
+Text Label 2575 5250 0    60   ~ 0
+3.3V
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C4C321E
+P 2575 5950
+F 0 "R?" V 2655 5950 40  0000 C CNN
+F 1 "1k" V 2582 5951 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2505 5950 30  0000 C CNN
+F 3 "" H 2575 5950 30  0000 C CNN
+	1    2575 5950
+	1    0    0    -1  
+$EndComp
 Wire Wire Line
 	6375 1975 6375 1550
 Connection ~ 6375 1550
@@ -413,60 +599,14 @@ Wire Wire Line
 	6175 4025 8975 4025
 Wire Wire Line
 	6175 4850 8975 4850
-Entry Wire Line
-	6075 4750 6175 4850
-Entry Wire Line
-	6075 3925 6175 4025
-Entry Wire Line
-	6075 3150 6175 3250
-Entry Wire Line
-	6075 2300 6175 2400
-Entry Wire Line
-	6075 1450 6175 1550
 Wire Bus Line
 	6075 1300 6075 4750
-Text Label 6175 2400 0    60   ~ 0
-R1
-Text Label 6175 3250 0    60   ~ 0
-R2
-Text Label 6175 4025 0    60   ~ 0
-R3
-Text Label 6175 4850 0    60   ~ 0
-R4
-Text Label 6175 1550 0    60   ~ 0
-R0
 Connection ~ 9750 5375
 Connection ~ 8900 5375
 Connection ~ 8050 5375
 Connection ~ 7150 5375
-Entry Wire Line
-	9750 5625 9850 5725
-Entry Wire Line
-	8900 5625 9000 5725
-Entry Wire Line
-	8050 5625 8150 5725
-Entry Wire Line
-	7150 5625 7250 5725
-Text Label 7150 5600 0    60   ~ 0
-C0
-Text Label 8050 5625 0    60   ~ 0
-C1
-Text Label 9750 5600 0    60   ~ 0
-C3
-Text Label 8900 5600 0    60   ~ 0
-C2
 Wire Bus Line
 	1300 1300 6075 1300
-Entry Wire Line
-	1300 2950 1400 3050
-Entry Wire Line
-	1300 3050 1400 3150
-Entry Wire Line
-	1300 3150 1400 3250
-Entry Wire Line
-	1300 3250 1400 3350
-Entry Wire Line
-	1300 3350 1400 3450
 Wire Wire Line
 	1400 3050 1800 3050
 Wire Wire Line
@@ -477,16 +617,6 @@ Wire Wire Line
 	1400 3350 1800 3350
 Wire Wire Line
 	1400 3450 1800 3450
-Text Label 1475 3050 0    60   ~ 0
-R0
-Text Label 1475 3150 0    60   ~ 0
-R1
-Text Label 1475 3250 0    60   ~ 0
-R2
-Text Label 1475 3350 0    60   ~ 0
-R3
-Text Label 1475 3450 0    60   ~ 0
-R4
 Wire Wire Line
 	3300 3050 3575 3050
 Wire Wire Line
@@ -495,22 +625,6 @@ Wire Wire Line
 	3300 3250 3575 3250
 Wire Wire Line
 	3300 3350 3575 3350
-Entry Wire Line
-	3575 3050 3675 3150
-Entry Wire Line
-	3575 3150 3675 3250
-Entry Wire Line
-	3575 3250 3675 3350
-Entry Wire Line
-	3575 3350 3675 3450
-Text Label 3350 3050 0    60   ~ 0
-C0
-Text Label 3350 3150 0    60   ~ 0
-C1
-Text Label 3350 3250 0    60   ~ 0
-C2
-Text Label 3350 3350 0    60   ~ 0
-C3
 Wire Bus Line
 	9850 5725 5875 5725
 Wire Bus Line
@@ -521,39 +635,132 @@ Wire Bus Line
 	3675 1475 3675 3450
 Wire Bus Line
 	1300 1300 1300 3350
-Text GLabel 1075 7350 0    60   Input ~ 0
-3.3V
-Text Label 1075 7350 0    60   ~ 0
-3.3V
-Text Label 1800 3850 2    60   ~ 0
-3.3V
-Text Label 1800 3950 2    60   ~ 0
-3.3V
-Text GLabel 1075 7550 0    60   Input ~ 0
-GND
-Text Label 1075 7550 0    60   ~ 0
-GND
-Text Label 1800 4250 2    60   ~ 0
-GND
 Wire Wire Line
 	1800 4050 1800 4250
 Connection ~ 1800 4150
-NoConn ~ 1800 3650
-NoConn ~ 1800 3750
-NoConn ~ 3300 3550
-NoConn ~ 3300 3750
-NoConn ~ 3300 3650
-NoConn ~ 1800 3550
-NoConn ~ 3300 3450
+Wire Wire Line
+	4300 2550 4900 2550
+Wire Wire Line
+	4300 2550 4300 2925
+Wire Wire Line
+	4600 2925 4600 2550
+Wire Wire Line
+	4900 2550 4900 2925
+Connection ~ 4600 2550
+Wire Wire Line
+	4300 3425 4300 3850
+Wire Wire Line
+	4300 3850 3300 3850
+Wire Wire Line
+	3300 3950 4600 3950
+Wire Wire Line
+	4600 3950 4600 3425
+Wire Wire Line
+	3300 4050 4900 4050
+Wire Wire Line
+	4900 4050 4900 3425
+Wire Wire Line
+	1400 4000 1400 3950
+Wire Wire Line
+	1400 3950 1800 3950
+Wire Wire Line
+	1050 4000 1050 3850
+Wire Wire Line
+	1050 3850 1800 3850
+Wire Wire Line
+	2575 5550 2575 5700
+$Comp
+L LED D?
+U 1 1 5C4C4192
+P 3050 5400
+F 0 "D?" H 3050 5500 50  0000 C CNN
+F 1 "LED" H 3050 5300 50  0000 C CNN
+F 2 "" H 3050 5400 50  0001 C CNN
+F 3 "" H 3050 5400 50  0001 C CNN
+	1    3050 5400
+	0    -1   -1   0   
+$EndComp
+Text Label 3050 5250 0    60   ~ 0
+3.3V
 $Comp
 L R-RESCUE-xmobile R?
-U 1 1 5C4C3645
-P 3000 5025
-F 0 "R?" V 3080 5025 40  0000 C CNN
-F 1 "10kOmh" V 3007 5026 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 2930 5025 30  0000 C CNN
-F 3 "" H 3000 5025 30  0000 C CNN
-	1    3000 5025
-	-1   0    0    1   
+U 1 1 5C4C4199
+P 3050 5950
+F 0 "R?" V 3130 5950 40  0000 C CNN
+F 1 "1k" V 3057 5951 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 2980 5950 30  0000 C CNN
+F 3 "" H 3050 5950 30  0000 C CNN
+	1    3050 5950
+	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	3050 5550 3050 5700
+$Comp
+L LED D?
+U 1 1 5C4C43FA
+P 3450 5400
+F 0 "D?" H 3450 5500 50  0000 C CNN
+F 1 "LED" H 3450 5300 50  0000 C CNN
+F 2 "" H 3450 5400 50  0001 C CNN
+F 3 "" H 3450 5400 50  0001 C CNN
+	1    3450 5400
+	0    -1   -1   0   
+$EndComp
+Text Label 3450 5250 0    60   ~ 0
+3.3V
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C4C4401
+P 3450 5950
+F 0 "R?" V 3530 5950 40  0000 C CNN
+F 1 "1k" V 3457 5951 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 3380 5950 30  0000 C CNN
+F 3 "" H 3450 5950 30  0000 C CNN
+	1    3450 5950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 5550 3450 5700
+$Comp
+L LED D?
+U 1 1 5C4C4408
+P 3925 5400
+F 0 "D?" H 3925 5500 50  0000 C CNN
+F 1 "LED" H 3925 5300 50  0000 C CNN
+F 2 "" H 3925 5400 50  0001 C CNN
+F 3 "" H 3925 5400 50  0001 C CNN
+	1    3925 5400
+	0    -1   -1   0   
+$EndComp
+Text Label 3925 5250 0    60   ~ 0
+3.3V
+$Comp
+L R-RESCUE-xmobile R?
+U 1 1 5C4C440F
+P 3925 5950
+F 0 "R?" V 4005 5950 40  0000 C CNN
+F 1 "1k" V 3932 5951 40  0000 C CNN
+F 2 "Resistors_SMD:R_0603_HandSoldering" V 3855 5950 30  0000 C CNN
+F 3 "" H 3925 5950 30  0000 C CNN
+	1    3925 5950
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3925 5550 3925 5700
+Text Label 2575 6200 0    60   ~ 0
+LED1
+Text Label 3050 6200 0    60   ~ 0
+LED2
+Text Label 3450 6200 0    60   ~ 0
+LED3
+Text Label 3925 6200 0    60   ~ 0
+LED4
+Text Label 3300 3450 0    60   ~ 0
+LED1
+Text Label 3300 3550 0    60   ~ 0
+LED2
+Text Label 3300 3650 0    60   ~ 0
+LED3
+Text Label 3300 3750 0    60   ~ 0
+LED4
 $EndSCHEMATC

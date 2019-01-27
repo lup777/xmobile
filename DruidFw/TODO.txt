@@ -20,18 +20,18 @@
 
 6. [EPD] Try to remove divider in EPD SPI config to increase speed
 
-7. [HW] Add: some leds for notifications: incoming call, calendar notifications
+7.+[HW] Add: some leds for notifications: incoming call, calendar notifications
 
 8. [HW] Add:
-        - SIM holder for micro SIM
-        - microSD card slot
-        - + 7 buttons (o, *, #, <, >, up, down)
-        - power tumbler(s)
-        - RTC (maybe it exists in XMega)
-        - external RAM
+        + SIM holder for micro SIM
+        + microSD card slot
+        + + 7 buttons (o, *, #, <, >, up, down)
+        + power tumbler(s) (not on the board)
+        + RTC (exists in SIM800) add TPs for RTS BAT
+        + external RAM
         - external flash memory (program mem) is it possible
         - buttary charger
-        - test points
+        + test points
 
 9. [HW] 4 layer at least. external layers are only for contact pads and test points.
         Two interlan layers are for lines.
@@ -44,7 +44,7 @@
 
 13. [HW] Holl for antenna soldering
 
-14. [HW] Use GSm module with FM radio if it can work with user diaposon
+14. [HW]-Use GSm module with FM radio if it can work with user diaposon
 
 15. [HW] Vibro
 
@@ -58,7 +58,7 @@
 
 20. [HW] Buttons for vol+-
 
-21. [HW] Connect display to USART (SPI mode) to be able to use DMA
+21.+[HW] Connect display to USART (SPI mode) to be able to use DMA
 
 22. [HW] SD card connect to USART (SPI mode) to be able to use DMA
 

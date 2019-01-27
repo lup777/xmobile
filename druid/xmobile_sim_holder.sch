@@ -241,7 +241,7 @@ GSM_VBAT
 Text Label 10425 3775 1    60   ~ 0
 GSM_VBAT
 $Comp
-L LED D?
+L LED-RESCUE-xmobile D?
 U 1 1 5C46F9F6
 P 10425 3975
 F 0 "D?" H 10425 4075 50  0000 C CNN
@@ -532,7 +532,7 @@ GND
 Text Label 7275 3400 0    60   ~ 0
 GND
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C481A0A
 P 7850 3775
 F 0 "W?" H 7850 3835 50  0000 C CNN
@@ -564,7 +564,6 @@ Antenna TP should be close to module\nand far from power and sim holder.
 NoConn ~ 7275 3700
 NoConn ~ 7275 4150
 NoConn ~ 7275 4225
-NoConn ~ 8275 4200
 Text Label 7275 3025 0    60   ~ 0
 GSM_VBAT
 NoConn ~ 7275 2875
@@ -693,7 +692,7 @@ F 3 "DOCUMENTATION" H 8625 1850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L USB_A P?
+L USB_A-RESCUE-xmobile P?
 U 1 1 5C499B15
 P 9925 1950
 F 0 "P?" H 10125 1750 50  0000 C CNN
