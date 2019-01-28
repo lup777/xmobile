@@ -446,7 +446,7 @@ Text Label 1400 3950 2    60   ~ 0
 Text Notes 4975 4175 0    60   ~ 0
 Active low
 $Comp
-L LED D?
+L LED-RESCUE-xmobile D?
 U 1 1 5C4C2FCD
 P 2575 5400
 F 0 "D?" H 2575 5500 50  0000 C CNN
@@ -670,7 +670,7 @@ Wire Wire Line
 Wire Wire Line
 	2575 5550 2575 5700
 $Comp
-L LED D?
+L LED-RESCUE-xmobile D?
 U 1 1 5C4C4192
 P 3050 5400
 F 0 "D?" H 3050 5500 50  0000 C CNN
@@ -696,7 +696,7 @@ $EndComp
 Wire Wire Line
 	3050 5550 3050 5700
 $Comp
-L LED D?
+L LED-RESCUE-xmobile D?
 U 1 1 5C4C43FA
 P 3450 5400
 F 0 "D?" H 3450 5500 50  0000 C CNN
@@ -722,7 +722,7 @@ $EndComp
 Wire Wire Line
 	3450 5550 3450 5700
 $Comp
-L LED D?
+L LED-RESCUE-xmobile D?
 U 1 1 5C4C4408
 P 3925 5400
 F 0 "D?" H 3925 5500 50  0000 C CNN
