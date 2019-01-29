@@ -109,20 +109,9 @@ U 5A9FCB78
 F0 "xmega_power" 60
 F1 "xmega_power.sch" 60
 $EndSheet
-$Comp
-L AVR-PDI-6 CON1
-U 1 1 5AA047A2
-P 9650 10650
-F 0 "CON1" H 9570 10890 50  0000 C CNN
-F 1 "AVR-PDI-6" H 9440 10405 50  0000 L BNN
-F 2 "Connectors_JAE:JAE_LY20-06P-2T_2x03x2.00mm_Straight" V 10100 10700 50  0000 C CNN
-F 3 "" H 9650 10650 60  0001 C CNN
-	1    9650 10650
-	0    1    1    0   
-$EndComp
-Text Label 9750 10775 3    60   ~ 0
+Text Label 9650 10700 1    60   ~ 0
 3.3V
-Text Label 9550 10775 3    60   ~ 0
+Text Label 9450 10700 1    60   ~ 0
 GND
 Text Label 8700 10100 2    60   ~ 0
 GND
@@ -135,8 +124,6 @@ F2 "SDA" B L 13125 6200 60
 F3 "SCL" B L 13125 6300 60 
 F4 "INT" O L 13125 6400 60 
 $EndSheet
-NoConn ~ 9650 10775
-NoConn ~ 9650 10525
 Text Label 9975 10325 0    60   ~ 0
 PDI_D
 Text Label 9550 9950 1    60   ~ 0
@@ -509,10 +496,10 @@ Text Label 14675 9425 0    60   ~ 0
 Wire Wire Line
 	9300 10100 9775 10100
 Wire Wire Line
-	9550 9950 9550 10525
+	9550 9950 9550 10700
 Connection ~ 9550 10100
 Wire Wire Line
-	9750 10525 9750 10325
+	9750 10325 9750 10700
 Wire Wire Line
 	9750 10325 9975 10325
 Wire Wire Line
@@ -714,7 +701,7 @@ U 1 1 5C4DB2CD
 P 4075 8950
 F 0 "J?" H 3425 9550 50  0000 C CNN
 F 1 "Micro_SD_Card" H 4725 9550 50  0000 R CNN
-F 2 "microSD:microSD-noname" H 5225 9250 50  0001 C CNN
+F 2 "microSD:microSD-noname" H 4075 8200 50  0000 C CNN
 F 3 "" H 4075 8950 50  0001 C CNN
 	1    4075 8950
 	1    0    0    -1  
@@ -784,5 +771,16 @@ F 2 "druid:button_4pin_7,5x5" H 8975 9950 50  0000 C CNN
 F 3 "" H 9000 10100 50  0000 C CNN
 	1    9000 10100
 	1    0    0    -1  
+$EndComp
+$Comp
+L Conn_01x04 J?
+U 1 1 5C50A6E4
+P 9650 10900
+F 0 "J?" H 9650 11100 50  0000 C CNN
+F 1 "Conn_01x04" V 9750 10850 50  0000 C CNN
+F 2 "" H 9650 10900 50  0001 C CNN
+F 3 "" H 9650 10900 50  0001 C CNN
+	1    9650 10900
+	0    1    1    0   
 $EndComp
 $EndSCHEMATC
