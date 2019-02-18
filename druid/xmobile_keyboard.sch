@@ -37,6 +37,7 @@ LIBS:SRAM
 LIBS:xmega128a1u_bga100
 LIBS:sim-holders
 LIBS:max7370
+LIBS:tp4056
 LIBS:xmobile-cache
 EELAYER 25 0
 EELAYER END
