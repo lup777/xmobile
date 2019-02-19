@@ -316,9 +316,9 @@ Wire Wire Line
 	4325 2450 4775 2450
 Text Label 5175 2450 0    60   ~ 0
 GND
-Text Notes 5100 2600 0    60   ~ 0
+Text Notes 5175 2625 0    60   ~ 0
 BAT-
-Text Notes 4850 2600 2    60   ~ 0
+Text Notes 4800 2625 2    60   ~ 0
 BAT+\n
 $Comp
 L LED-RESCUE-xmobile D?
@@ -326,8 +326,10 @@ U 1 1 5C6AA662
 P 2325 2300
 F 0 "D?" H 2325 2400 50  0000 C CNN
 F 1 "red" H 2325 2200 50  0000 C CNN
-F 2 "" H 2325 2300 50  0001 C CNN
-F 3 "" H 2325 2300 50  0001 C CNN
+F 2 "LEDs:LED_0402" H 2325 2300 50  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2325 2300 50  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNOGPWK3jFzCB54s8pBFBg3g%3d%3d" H 2325 2300 60  0001 C CNN "example"
+F 5 "0402 In" H 2175 2400 30  0000 C CNN "case"
 	1    2325 2300
 	0    -1   -1   0   
 $EndComp
@@ -337,8 +339,10 @@ U 1 1 5C6AA7C8
 P 2025 2300
 F 0 "D?" H 2025 2400 50  0000 C CNN
 F 1 "green" H 2025 2200 50  0000 C CNN
-F 2 "" H 2025 2300 50  0001 C CNN
-F 3 "" H 2025 2300 50  0001 C CNN
+F 2 "LEDs:LED_0402" H 2025 2300 50  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2025 2300 50  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12M2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNWFfaRj%2fRvVAAroms6JXrzA%3d%3d" H 2025 2300 60  0001 C CNN "example"
+F 5 "0402 In" H 1875 2400 30  0000 C CNN "case"
 	1    2025 2300
 	0    -1   -1   0   
 $EndComp
@@ -463,32 +467,10 @@ Wire Wire Line
 	4325 5650 4775 5650
 Text Label 5175 5650 0    60   ~ 0
 GND
-Text Notes 5100 5800 0    60   ~ 0
+Text Notes 5175 5825 0    60   ~ 0
 BAT-
-Text Notes 4875 5800 2    60   ~ 0
+Text Notes 4825 5825 2    60   ~ 0
 BAT+\n
-$Comp
-L LED-RESCUE-xmobile D?
-U 1 1 5C6B0922
-P 2325 5500
-F 0 "D?" H 2325 5600 50  0000 C CNN
-F 1 "red" H 2325 5400 50  0000 C CNN
-F 2 "" H 2325 5500 50  0001 C CNN
-F 3 "" H 2325 5500 50  0001 C CNN
-	1    2325 5500
-	0    -1   -1   0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D?
-U 1 1 5C6B0928
-P 2025 5500
-F 0 "D?" H 2025 5600 50  0000 C CNN
-F 1 "green" H 2025 5400 50  0000 C CNN
-F 2 "" H 2025 5500 50  0001 C CNN
-F 3 "" H 2025 5500 50  0001 C CNN
-	1    2025 5500
-	0    -1   -1   0   
-$EndComp
 $Comp
 L R R?
 U 1 1 5C6B092E
@@ -578,24 +560,30 @@ F 3 "" H 2150 1450 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6B9CD1
 P 4975 2450
+AR Path="/5C6B9CD1" Ref="W?"  Part="1" 
+AR Path="/5A9FCB78/5C6B9CD1" Ref="W?"  Part="1" 
 F 0 "W?" H 4975 2510 50  0000 C CNN
 F 1 "TEST_BAT_1" H 4975 2380 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 5225 2600 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 5225 2600 50  0001 C CNN
 F 3 "" H 4975 2450 50  0000 C CNN
+F 4 "2 pads" H 4975 2575 30  0000 C CNN "case"
 	1    4975 2450
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6BA4AE
 P 4975 5650
+AR Path="/5C6BA4AE" Ref="W?"  Part="1" 
+AR Path="/5A9FCB78/5C6BA4AE" Ref="W?"  Part="1" 
 F 0 "W?" H 4975 5710 50  0000 C CNN
 F 1 "TEST_BAT2" H 4975 5580 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 5275 5800 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 5275 5800 50  0001 C CNN
 F 3 "" H 4975 5650 50  0000 C CNN
+F 4 "2 pads" H 4975 5775 30  0000 C CNN "case"
 	1    4975 5650
 	1    0    0    -1  
 $EndComp
@@ -605,8 +593,9 @@ U 1 1 5C6C9437
 P 2650 1325
 F 0 "W?" H 2650 1595 50  0000 C CNN
 F 1 "TEST_BAT_1_CHARGE" H 2650 1525 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 1675 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 1675 50  0001 C CNN
 F 3 "" H 2850 1325 50  0000 C CNN
+F 4 "1 pad" H 2775 1450 30  0000 C CNN "case"
 	1    2650 1325
 	1    0    0    -1  
 $EndComp
@@ -617,10 +606,37 @@ U 1 1 5C6C9C6E
 P 2650 4525
 F 0 "W?" H 2650 4795 50  0000 C CNN
 F 1 "TEST_BAT_2_CHARGE" H 2650 4725 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 4875 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 4875 50  0001 C CNN
 F 3 "" H 2850 4525 50  0000 C CNN
+F 4 "1 pad" H 2800 4650 30  0000 C CNN "case"
 	1    2650 4525
 	1    0    0    -1  
 $EndComp
 Connection ~ 2650 4650
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6CA596
+P 2025 5500
+F 0 "D?" H 2025 5600 50  0000 C CNN
+F 1 "green" H 2025 5400 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 2025 5500 50  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2025 5500 50  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12M2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNWFfaRj%2fRvVAAroms6JXrzA%3d%3d" H 2025 5500 60  0001 C CNN "example"
+F 5 "0402 In" H 1875 5600 30  0000 C CNN "case"
+	1    2025 5500
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6CB16E
+P 2325 5500
+F 0 "D?" H 2325 5600 50  0000 C CNN
+F 1 "red" H 2325 5400 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 2325 5500 50  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2325 5500 50  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNOGPWK3jFzCB54s8pBFBg3g%3d%3d" H 2325 5500 60  0001 C CNN "example"
+F 5 "0402 In" H 2175 5600 30  0000 C CNN "case"
+	1    2325 5500
+	0    -1   -1   0   
+$EndComp
 $EndSCHEMATC

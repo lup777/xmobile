@@ -1,4 +1,4 @@
-update=Пн 18 фев 2019 10:55:09
+update=Вт 19 фев 2019 22:42:06
 version=1
 last_client=kicad
 [pcbnew]

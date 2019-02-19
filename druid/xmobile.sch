@@ -793,7 +793,7 @@ Wire Wire Line
 Text Label 7100 7200 2    60   ~ 0
 GND
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6C0FE4
 P 9900 10350
 F 0 "W?" H 9900 10410 50  0000 C CNN
@@ -805,7 +805,7 @@ F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6C18FA
 P 9525 10700
 F 0 "W?" H 9525 10760 50  0000 C CNN

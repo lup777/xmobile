@@ -88,47 +88,16 @@ GND
 Text Label 5650 1750 1    60   ~ 0
 GND
 $Comp
-L LED-RESCUE-xmobile D6
-U 1 1 5A9F1A37
-P 7100 1900
-F 0 "D6" H 7100 2000 50  0000 C CNN
-F 1 "LED BLUE" H 7100 1800 50  0000 C CNN
-F 2 "" H 7100 1900 60  0000 C CNN
-F 3 "" H 7100 1900 60  0000 C CNN
-	1    7100 1900
-	0    1    1    0   
-$EndComp
-$Comp
 L LED-RESCUE-xmobile D2
 U 1 1 5A9F1A3E
 P 6725 1900
 F 0 "D2" H 6725 2000 50  0000 C CNN
 F 1 "LED BLUE" H 6725 1800 50  0000 C CNN
-F 2 "" H 6725 1900 60  0000 C CNN
-F 3 "" H 6725 1900 60  0000 C CNN
+F 2 "LEDs:LED_0402" H 6725 1900 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 6725 1900 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 6725 1900 60  0001 C CNN "example"
+F 5 "0402 In" H 6575 2000 30  0000 C CNN "case"
 	1    6725 1900
-	0    -1   -1   0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D7
-U 1 1 5A9F1A45
-P 7100 3000
-F 0 "D7" H 7100 3100 50  0000 C CNN
-F 1 "LED BLUE" H 7100 2900 50  0000 C CNN
-F 2 "" H 7100 3000 60  0000 C CNN
-F 3 "" H 7100 3000 60  0000 C CNN
-	1    7100 3000
-	0    1    1    0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D3
-U 1 1 5A9F1A4C
-P 6725 3000
-F 0 "D3" H 6725 3100 50  0000 C CNN
-F 1 "LED BLUE" H 6725 2900 50  0000 C CNN
-F 2 "" H 6725 3000 60  0000 C CNN
-F 3 "" H 6725 3000 60  0000 C CNN
-	1    6725 3000
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
@@ -183,50 +152,6 @@ Text Label 6400 4300 1    60   ~ 0
 GND
 Text Label 5900 4300 1    60   ~ 0
 GND
-$Comp
-L LED-RESCUE-xmobile D8
-U 1 1 5A9F1ADC
-P 7350 4450
-F 0 "D8" H 7350 4550 50  0000 C CNN
-F 1 "LED BLUE" H 7350 4350 50  0000 C CNN
-F 2 "" H 7350 4450 60  0000 C CNN
-F 3 "" H 7350 4450 60  0000 C CNN
-	1    7350 4450
-	0    1    1    0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D4
-U 1 1 5A9F1AE3
-P 6975 4450
-F 0 "D4" H 6975 4550 50  0000 C CNN
-F 1 "LED BLUE" H 6975 4350 50  0000 C CNN
-F 2 "" H 6975 4450 60  0000 C CNN
-F 3 "" H 6975 4450 60  0000 C CNN
-	1    6975 4450
-	0    -1   -1   0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D9
-U 1 1 5A9F1AEA
-P 7350 5550
-F 0 "D9" H 7350 5650 50  0000 C CNN
-F 1 "LED BLUE" H 7350 5450 50  0000 C CNN
-F 2 "" H 7350 5550 60  0000 C CNN
-F 3 "" H 7350 5550 60  0000 C CNN
-	1    7350 5550
-	0    1    1    0   
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D5
-U 1 1 5A9F1AF1
-P 6975 5550
-F 0 "D5" H 6975 5650 50  0000 C CNN
-F 1 "LED BLUE" H 6975 5450 50  0000 C CNN
-F 2 "" H 6975 5550 60  0000 C CNN
-F 3 "" H 6975 5550 60  0000 C CNN
-	1    6975 5550
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	4025 4700 4025 4800
 Wire Wire Line
@@ -284,13 +209,16 @@ AUDIO_SPKN
 Wire Wire Line
 	7100 2700 7100 2850
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6D0927
 P 7500 2450
+AR Path="/5C6D0927" Ref="W?"  Part="1" 
+AR Path="/5A9ED5F5/5C6D0927" Ref="W?"  Part="1" 
 F 0 "W?" H 7500 2510 50  0000 C CNN
 F 1 "MIC" H 7500 2380 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 7450 2600 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 7450 2600 50  0001 C CNN
 F 3 "" H 7500 2450 50  0000 C CNN
+F 4 "2 pads" H 7500 2550 30  0000 C CNN "case"
 	1    7500 2450
 	0    1    1    0   
 $EndComp
@@ -301,13 +229,16 @@ Wire Wire Line
 Wire Wire Line
 	7500 2200 7500 2250
 $Comp
-L TEST W?
+L TEST-RESCUE-xmobile W?
 U 1 1 5C6D0EE0
 P 7650 5000
+AR Path="/5C6D0EE0" Ref="W?"  Part="1" 
+AR Path="/5A9ED5F5/5C6D0EE0" Ref="W?"  Part="1" 
 F 0 "W?" H 7650 5060 50  0000 C CNN
 F 1 "SPK" H 7650 4930 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 7600 5150 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 7600 5150 50  0001 C CNN
 F 3 "" H 7650 5000 50  0000 C CNN
+F 4 "2 pads" H 7650 5100 30  0000 C CNN "case"
 	1    7650 5000
 	0    1    1    0   
 $EndComp
@@ -528,5 +459,96 @@ F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs
 F 5 "0402 In" H 4625 5350 30  0000 C CNN "case"
 	1    4525 5500
 	1    0    0    -1  
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C7622
+P 7100 1900
+F 0 "D?" H 7100 2000 50  0000 C CNN
+F 1 "LED BLUE" H 7100 1800 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 7100 1900 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 7100 1900 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 7100 1900 60  0001 C CNN "example"
+F 5 "0402 In" H 6950 2000 30  0000 C CNN "case"
+	1    7100 1900
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C77F4
+P 7100 3000
+F 0 "D?" H 7100 3100 50  0000 C CNN
+F 1 "LED BLUE" H 7100 2900 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 7100 3000 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 7100 3000 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 7100 3000 60  0001 C CNN "example"
+F 5 "0402 In" H 6950 3100 30  0000 C CNN "case"
+	1    7100 3000
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C796F
+P 6725 3000
+F 0 "D?" H 6725 3100 50  0000 C CNN
+F 1 "LED BLUE" H 6725 2900 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 6725 3000 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 6725 3000 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 6725 3000 60  0001 C CNN "example"
+F 5 "0402 In" H 6575 3100 30  0000 C CNN "case"
+	1    6725 3000
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C7BA9
+P 6975 4450
+F 0 "D?" H 6975 4550 50  0000 C CNN
+F 1 "LED BLUE" H 6975 4350 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 6975 4450 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 6975 4450 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 6975 4450 60  0001 C CNN "example"
+F 5 "0402 In" H 6825 4550 30  0000 C CNN "case"
+	1    6975 4450
+	0    -1   -1   0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C7D73
+P 7350 4450
+F 0 "D?" H 7350 4550 50  0000 C CNN
+F 1 "LED BLUE" H 7350 4350 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 7350 4450 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 7350 4450 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 7350 4450 60  0001 C CNN "example"
+F 5 "0402 In" H 7200 4550 30  0000 C CNN "case"
+	1    7350 4450
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C7FDB
+P 7350 5550
+F 0 "D?" H 7350 5650 50  0000 C CNN
+F 1 "LED BLUE" H 7350 5450 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 7350 5550 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 7350 5550 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 7350 5550 60  0001 C CNN "example"
+F 5 "0402 In" H 7200 5650 30  0000 C CNN "case"
+	1    7350 5550
+	0    1    1    0   
+$EndComp
+$Comp
+L LED-RESCUE-xmobile D?
+U 1 1 5C6C809E
+P 6975 5550
+F 0 "D?" H 6975 5650 50  0000 C CNN
+F 1 "LED BLUE" H 6975 5450 50  0000 C CNN
+F 2 "LEDs:LED_0402" H 6975 5550 60  0001 C CNN
+F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 6975 5550 60  0001 C CNN
+F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 6975 5550 60  0001 C CNN "example"
+F 5 "0402 In" H 6825 5650 30  0000 C CNN "case"
+	1    6975 5550
+	0    -1   -1   0   
 $EndComp
 $EndSCHEMATC
