@@ -280,17 +280,6 @@ F 3 "" H 5750 3700 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	3825 2050 6300 2050
-$Comp
-L CONN_01X02 P9
-U 1 1 5AB7EB32
-P 4825 2800
-F 0 "P9" H 4825 2950 50  0000 C CNN
-F 1 "CONN_01X02" V 4925 2800 50  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" V 5025 3325 50  0000 C CNN
-F 3 "" H 4825 2800 50  0000 C CNN
-	1    4825 2800
-	0    1    1    0   
-$EndComp
 Text GLabel 5600 3700 0    60   Input ~ 0
 GND
 Text GLabel 9400 2050 2    60   Input ~ 0
@@ -325,13 +314,11 @@ Wire Wire Line
 	4325 2350 4325 2450
 Wire Wire Line
 	4325 2450 4775 2450
-Wire Wire Line
-	4775 2450 4775 2600
-Text Label 4875 2600 0    60   ~ 0
+Text Label 5175 2450 0    60   ~ 0
 GND
-Text Notes 4875 2675 0    60   ~ 0
+Text Notes 5100 2600 0    60   ~ 0
 BAT-
-Text Notes 4775 2625 2    60   ~ 0
+Text Notes 4850 2600 2    60   ~ 0
 BAT+\n
 $Comp
 L LED-RESCUE-xmobile D?
@@ -414,29 +401,7 @@ Wire Wire Line
 Connection ~ 2650 2050
 Text Label 3325 3000 3    60   ~ 0
 GND
-$Comp
-L TEST_1P W?
-U 1 1 5C6AC0DE
-P 2650 1450
-F 0 "W?" H 2650 1720 50  0000 C CNN
-F 1 "BAT_CHARGE_+" H 2650 1650 50  0000 C CNN
-F 2 "" H 2850 1450 50  0000 C CNN
-F 3 "" H 2850 1450 50  0000 C CNN
-	1    2650 1450
-	1    0    0    -1  
-$EndComp
-$Comp
-L TEST_1P W?
-U 1 1 5C6AC3A7
-P 3275 1450
-F 0 "W?" H 3275 1720 50  0000 C CNN
-F 1 "BAT_CHARGE_-" H 3275 1650 50  0000 C CNN
-F 2 "" H 3475 1450 50  0000 C CNN
-F 3 "" H 3475 1450 50  0000 C CNN
-	1    3275 1450
-	1    0    0    -1  
-$EndComp
-Text Label 3275 1450 3    60   ~ 0
+Text Label 3050 1450 0    60   ~ 0
 GND
 $Comp
 L R R?
@@ -471,17 +436,6 @@ F 3 "" H 2450 4650 60  0001 C CNN
 $EndComp
 Connection ~ 4325 5250
 $Comp
-L CONN_01X02 P?
-U 1 1 5C6B0909
-P 4825 6000
-F 0 "P?" H 4825 6150 50  0000 C CNN
-F 1 "CONN_01X02" V 4925 6000 50  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" V 5025 6525 50  0000 C CNN
-F 3 "" H 4825 6000 50  0000 C CNN
-	1    4825 6000
-	0    1    1    0   
-$EndComp
-$Comp
 L TP4056 U?
 U 1 1 5C6B090F
 P 3325 5450
@@ -509,13 +463,11 @@ Wire Wire Line
 	4325 5550 4325 5650
 Wire Wire Line
 	4325 5650 4775 5650
-Wire Wire Line
-	4775 5650 4775 5800
-Text Label 4875 5800 0    60   ~ 0
+Text Label 5175 5650 0    60   ~ 0
 GND
-Text Notes 4875 5875 0    60   ~ 0
+Text Notes 5100 5800 0    60   ~ 0
 BAT-
-Text Notes 4775 5825 2    60   ~ 0
+Text Notes 4875 5800 2    60   ~ 0
 BAT+\n
 $Comp
 L LED-RESCUE-xmobile D?
@@ -598,29 +550,7 @@ Wire Wire Line
 Connection ~ 2650 5250
 Text Label 3325 6200 3    60   ~ 0
 GND
-$Comp
-L TEST_1P W?
-U 1 1 5C6B094E
-P 2650 4650
-F 0 "W?" H 2650 4920 50  0000 C CNN
-F 1 "BAT_CHARGE_2_+" H 2650 4850 50  0000 C CNN
-F 2 "" H 2850 4650 50  0000 C CNN
-F 3 "" H 2850 4650 50  0000 C CNN
-	1    2650 4650
-	1    0    0    -1  
-$EndComp
-$Comp
-L TEST_1P W?
-U 1 1 5C6B0954
-P 3350 4650
-F 0 "W?" H 3350 4920 50  0000 C CNN
-F 1 "BAT_CHARGE_2_-" H 3350 4850 50  0000 C CNN
-F 2 "" H 3550 4650 50  0000 C CNN
-F 3 "" H 3550 4650 50  0000 C CNN
-	1    3350 4650
-	1    0    0    -1  
-$EndComp
-Text Label 3350 4650 3    60   ~ 0
+Text Label 3050 4650 0    60   ~ 0
 GND
 $Comp
 L R R?
@@ -649,6 +579,50 @@ F 1 "PWR_FLAG" H 2150 1630 50  0000 C CNN
 F 2 "" H 2150 1450 50  0000 C CNN
 F 3 "" H 2150 1450 50  0000 C CNN
 	1    2150 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST W?
+U 1 1 5C6B9CD1
+P 4975 2450
+F 0 "W?" H 4975 2510 50  0000 C CNN
+F 1 "BAT_1" H 4975 2380 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 5225 2600 50  0000 C CNN
+F 3 "" H 4975 2450 50  0000 C CNN
+	1    4975 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST W?
+U 1 1 5C6BA4AE
+P 4975 5650
+F 0 "W?" H 4975 5710 50  0000 C CNN
+F 1 "BAT2" H 4975 5580 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 5275 5800 50  0000 C CNN
+F 3 "" H 4975 5650 50  0000 C CNN
+	1    4975 5650
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST W?
+U 1 1 5C6BB1A8
+P 2850 1450
+F 0 "W?" H 2850 1510 50  0000 C CNN
+F 1 "BAT_CHARGE_1" H 2875 1575 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 3125 1650 50  0000 C CNN
+F 3 "" H 2850 1450 50  0000 C CNN
+	1    2850 1450
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST W?
+U 1 1 5C6BB612
+P 2850 4650
+F 0 "W?" H 2850 4710 50  0000 C CNN
+F 1 "BAT_CHARGE_2" H 2875 4775 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 3100 4850 50  0000 C CNN
+F 3 "" H 2850 4650 50  0000 C CNN
+	1    2850 4650
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
