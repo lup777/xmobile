@@ -59,8 +59,10 @@ U 1 1 5A9F1A09
 P 5650 1950
 F 0 "C10" H 5650 2050 40  0000 L CNN
 F 1 "10pF" H 5656 1865 40  0000 L CNN
-F 2 "" H 5688 1800 30  0000 C CNN
-F 3 "" H 5650 1950 60  0000 C CNN
+F 2 "Capacitors_SMD:C_0402" H 5688 1800 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5500 2475 60  0001 C CNN
+F 4 "0402 In" H 5750 1800 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5650 1950 60  0001 C CNN "example"
 	1    5650 1950
 	1    0    0    -1  
 $EndComp
@@ -70,53 +72,11 @@ U 1 1 5A9F1A10
 P 6150 1950
 F 0 "C16" H 6150 2050 40  0000 L CNN
 F 1 "33pF" H 6156 1865 40  0000 L CNN
-F 2 "" H 6188 1800 30  0000 C CNN
-F 3 "" H 6150 1950 60  0000 C CNN
+F 2 "Capacitors_SMD:C_0402" H 6175 2125 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6150 1950 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6150 1950 60  0001 C CNN "example"
+F 5 "0402 In" H 6250 1800 30  0000 C CNN "case"
 	1    6150 1950
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C11
-U 1 1 5A9F1A17
-P 5650 2450
-F 0 "C11" H 5650 2550 40  0000 L CNN
-F 1 "10pF" H 5656 2365 40  0000 L CNN
-F 2 "" H 5688 2300 30  0000 C CNN
-F 3 "" H 5650 2450 60  0000 C CNN
-	1    5650 2450
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C17
-U 1 1 5A9F1A1E
-P 6150 2450
-F 0 "C17" H 6150 2550 40  0000 L CNN
-F 1 "33pF" H 6156 2365 40  0000 L CNN
-F 2 "" H 6188 2300 30  0000 C CNN
-F 3 "" H 6150 2450 60  0000 C CNN
-	1    6150 2450
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C18
-U 1 1 5A9F1A25
-P 6150 2950
-F 0 "C18" H 6150 3050 40  0000 L CNN
-F 1 "33pF" H 6156 2865 40  0000 L CNN
-F 2 "" H 6188 2800 30  0000 C CNN
-F 3 "" H 6150 2950 60  0000 C CNN
-	1    6150 2950
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C12
-U 1 1 5A9F1A2C
-P 5650 2950
-F 0 "C12" H 5650 3050 40  0000 L CNN
-F 1 "10pF" H 5656 2865 40  0000 L CNN
-F 2 "" H 5688 2800 30  0000 C CNN
-F 3 "" H 5650 2950 60  0000 C CNN
-	1    5650 2950
 	1    0    0    -1  
 $EndComp
 Text Label 5650 3150 3    60   ~ 0
@@ -188,15 +148,11 @@ Wire Wire Line
 Wire Wire Line
 	6725 2050 6725 2200
 Wire Wire Line
-	5650 2200 7100 2200
-Wire Wire Line
-	7100 2050 7100 2325
+	5650 2200 7500 2200
 Wire Wire Line
 	6725 2700 6725 2850
 Wire Wire Line
-	5650 2700 7100 2700
-Wire Wire Line
-	7100 2525 7100 2800
+	5650 2700 7500 2700
 Wire Wire Line
 	6725 3150 6725 3300
 Wire Wire Line
@@ -209,89 +165,8 @@ Connection ~ 6150 2700
 Connection ~ 5650 2700
 Connection ~ 6725 2200
 Connection ~ 6725 2700
-$Comp
-L CONN_2 P4
-U 1 1 5A9F1A73
-P 7625 2425
-F 0 "P4" V 7575 2425 40  0000 C CNN
-F 1 "CONN_MICROPHONE" V 7775 2425 40  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" H 7625 2425 60  0001 C CNN
-F 3 "" H 7625 2425 60  0001 C CNN
-	1    7625 2425
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7100 2325 7275 2325
 Connection ~ 7100 2200
-Wire Wire Line
-	7275 2525 7100 2525
 Connection ~ 7100 2700
-$Comp
-L C-RESCUE-xmobile C4
-U 1 1 5A9F1A80
-P 4025 4500
-F 0 "C4" H 4025 4600 40  0000 L CNN
-F 1 "10pF" H 4031 4415 40  0000 L CNN
-F 2 "" H 4063 4350 30  0000 C CNN
-F 3 "" H 4025 4500 60  0000 C CNN
-	1    4025 4500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C7
-U 1 1 5A9F1A87
-P 4525 4500
-F 0 "C7" H 4525 4600 40  0000 L CNN
-F 1 "33pF" H 4531 4415 40  0000 L CNN
-F 2 "" H 4563 4350 30  0000 C CNN
-F 3 "" H 4525 4500 60  0000 C CNN
-	1    4525 4500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C5
-U 1 1 5A9F1A8E
-P 4025 5000
-F 0 "C5" H 4025 5100 40  0000 L CNN
-F 1 "10pF" H 4031 4915 40  0000 L CNN
-F 2 "" H 4063 4850 30  0000 C CNN
-F 3 "" H 4025 5000 60  0000 C CNN
-	1    4025 5000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C8
-U 1 1 5A9F1A95
-P 4525 5000
-F 0 "C8" H 4525 5100 40  0000 L CNN
-F 1 "33pF" H 4531 4915 40  0000 L CNN
-F 2 "" H 4563 4850 30  0000 C CNN
-F 3 "" H 4525 5000 60  0000 C CNN
-	1    4525 5000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C9
-U 1 1 5A9F1A9C
-P 4525 5500
-F 0 "C9" H 4525 5600 40  0000 L CNN
-F 1 "33pF" H 4531 5415 40  0000 L CNN
-F 2 "" H 4563 5350 30  0000 C CNN
-F 3 "" H 4525 5500 60  0000 C CNN
-	1    4525 5500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C6
-U 1 1 5A9F1AA3
-P 4025 5500
-F 0 "C6" H 4025 5600 40  0000 L CNN
-F 1 "10pF" H 4031 5415 40  0000 L CNN
-F 2 "" H 4063 5350 30  0000 C CNN
-F 3 "" H 4025 5500 60  0000 C CNN
-	1    4025 5500
-	1    0    0    -1  
-$EndComp
 Text Label 4025 5700 3    60   ~ 0
 GND
 Text Label 4525 5700 3    60   ~ 0
@@ -300,72 +175,6 @@ Text Label 4525 4300 1    60   ~ 0
 GND
 Text Label 4025 4300 1    60   ~ 0
 GND
-$Comp
-L C-RESCUE-xmobile C13
-U 1 1 5A9F1AAE
-P 5900 4500
-F 0 "C13" H 5900 4600 40  0000 L CNN
-F 1 "10pF" H 5906 4415 40  0000 L CNN
-F 2 "" H 5938 4350 30  0000 C CNN
-F 3 "" H 5900 4500 60  0000 C CNN
-	1    5900 4500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C19
-U 1 1 5A9F1AB5
-P 6400 4500
-F 0 "C19" H 6400 4600 40  0000 L CNN
-F 1 "33pF" H 6406 4415 40  0000 L CNN
-F 2 "" H 6438 4350 30  0000 C CNN
-F 3 "" H 6400 4500 60  0000 C CNN
-	1    6400 4500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C14
-U 1 1 5A9F1ABC
-P 5900 5000
-F 0 "C14" H 5900 5100 40  0000 L CNN
-F 1 "10pF" H 5906 4915 40  0000 L CNN
-F 2 "" H 5938 4850 30  0000 C CNN
-F 3 "" H 5900 5000 60  0000 C CNN
-	1    5900 5000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C20
-U 1 1 5A9F1AC3
-P 6400 5000
-F 0 "C20" H 6400 5100 40  0000 L CNN
-F 1 "33pF" H 6406 4915 40  0000 L CNN
-F 2 "" H 6438 4850 30  0000 C CNN
-F 3 "" H 6400 5000 60  0000 C CNN
-	1    6400 5000
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C21
-U 1 1 5A9F1ACA
-P 6400 5500
-F 0 "C21" H 6400 5600 40  0000 L CNN
-F 1 "33pF" H 6406 5415 40  0000 L CNN
-F 2 "" H 6438 5350 30  0000 C CNN
-F 3 "" H 6400 5500 60  0000 C CNN
-	1    6400 5500
-	1    0    0    -1  
-$EndComp
-$Comp
-L C-RESCUE-xmobile C15
-U 1 1 5A9F1AD1
-P 5900 5500
-F 0 "C15" H 5900 5600 40  0000 L CNN
-F 1 "10pF" H 5906 5415 40  0000 L CNN
-F 2 "" H 5938 5350 30  0000 C CNN
-F 3 "" H 5900 5500 60  0000 C CNN
-	1    5900 5500
-	1    0    0    -1  
-$EndComp
 Text Label 5900 5700 3    60   ~ 0
 GND
 Text Label 6400 5700 3    60   ~ 0
@@ -441,17 +250,11 @@ Wire Wire Line
 Wire Wire Line
 	7350 4150 7350 4300
 Wire Wire Line
-	6975 4600 6975 4750
-Wire Wire Line
-	4025 4750 7350 4750
-Wire Wire Line
-	7350 4600 7350 4875
+	6975 4750 6975 4600
 Wire Wire Line
 	6975 5250 6975 5400
 Wire Wire Line
-	4025 5250 7350 5250
-Wire Wire Line
-	7350 5075 7350 5400
+	4025 5250 7650 5250
 Wire Wire Line
 	6975 5700 6975 5850
 Wire Wire Line
@@ -464,22 +267,7 @@ Connection ~ 6400 5250
 Connection ~ 5900 5250
 Connection ~ 6975 4750
 Connection ~ 6975 5250
-$Comp
-L CONN_2 P5
-U 1 1 5A9F1B24
-P 7875 4975
-F 0 "P5" V 7825 4975 40  0000 C CNN
-F 1 "CONN_MICROPHONE" V 8025 4975 40  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" H 7875 4975 60  0001 C CNN
-F 3 "" H 7875 4975 60  0001 C CNN
-	1    7875 4975
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7350 4875 7525 4875
 Connection ~ 7350 4750
-Wire Wire Line
-	7525 5075 7350 5075
 Connection ~ 7350 5250
 Connection ~ 4525 4750
 Connection ~ 4525 5250
@@ -494,5 +282,251 @@ AUDIO_SPKP
 Text HLabel 4025 5250 0    60   Input ~ 0
 AUDIO_SPKN
 Wire Wire Line
-	7100 2825 7100 2850
+	7100 2700 7100 2850
+$Comp
+L TEST W?
+U 1 1 5C6D0927
+P 7500 2450
+F 0 "W?" H 7500 2510 50  0000 C CNN
+F 1 "MIC" H 7500 2380 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 7450 2600 50  0000 C CNN
+F 3 "" H 7500 2450 50  0000 C CNN
+	1    7500 2450
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7100 2200 7100 2050
+Wire Wire Line
+	7500 2700 7500 2650
+Wire Wire Line
+	7500 2200 7500 2250
+$Comp
+L TEST W?
+U 1 1 5C6D0EE0
+P 7650 5000
+F 0 "W?" H 7650 5060 50  0000 C CNN
+F 1 "SPK" H 7650 4930 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 7600 5150 50  0000 C CNN
+F 3 "" H 7650 5000 50  0000 C CNN
+	1    7650 5000
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7650 5250 7650 5200
+Wire Wire Line
+	7350 5400 7350 5250
+Wire Wire Line
+	7650 4750 7650 4800
+Wire Wire Line
+	7350 4750 7350 4600
+Wire Wire Line
+	4025 4750 7650 4750
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D694B
+P 5650 2450
+F 0 "C?" H 5650 2550 40  0000 L CNN
+F 1 "10pF" H 5656 2365 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5688 2300 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5500 2975 60  0001 C CNN
+F 4 "0402 In" H 5750 2300 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5650 2450 60  0001 C CNN "example"
+	1    5650 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6A3D
+P 5650 2950
+F 0 "C?" H 5650 3050 40  0000 L CNN
+F 1 "10pF" H 5656 2865 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5688 2800 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5500 3475 60  0001 C CNN
+F 4 "0402 In" H 5750 2800 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5650 2950 60  0001 C CNN "example"
+	1    5650 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6B0E
+P 6150 2450
+F 0 "C?" H 6150 2550 40  0000 L CNN
+F 1 "33pF" H 6156 2365 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6175 2625 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6150 2450 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6150 2450 60  0001 C CNN "example"
+F 5 "0402 In" H 6250 2300 30  0000 C CNN "case"
+	1    6150 2450
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6B9B
+P 6150 2950
+F 0 "C?" H 6150 3050 40  0000 L CNN
+F 1 "33pF" H 6156 2865 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6175 3125 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6150 2950 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6150 2950 60  0001 C CNN "example"
+F 5 "0402 In" H 6250 2800 30  0000 C CNN "case"
+	1    6150 2950
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6CC6
+P 5900 4500
+F 0 "C?" H 5900 4600 40  0000 L CNN
+F 1 "10pF" H 5906 4415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5938 4350 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5750 5025 60  0001 C CNN
+F 4 "0402 In" H 6000 4350 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5900 4500 60  0001 C CNN "example"
+	1    5900 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6D99
+P 6400 4500
+F 0 "C?" H 6400 4600 40  0000 L CNN
+F 1 "33pF" H 6406 4415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6425 4675 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6400 4500 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6400 4500 60  0001 C CNN "example"
+F 5 "0402 In" H 6500 4350 30  0000 C CNN "case"
+	1    6400 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6EE0
+P 5900 5000
+F 0 "C?" H 5900 5100 40  0000 L CNN
+F 1 "10pF" H 5906 4915 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5938 4850 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5750 5525 60  0001 C CNN
+F 4 "0402 In" H 6000 4850 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5900 5000 60  0001 C CNN "example"
+	1    5900 5000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D6F6B
+P 5900 5500
+F 0 "C?" H 5900 5600 40  0000 L CNN
+F 1 "10pF" H 5906 5415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 5938 5350 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 5750 6025 60  0001 C CNN
+F 4 "0402 In" H 6000 5350 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 5900 5500 60  0001 C CNN "example"
+	1    5900 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D7042
+P 6400 5000
+F 0 "C?" H 6400 5100 40  0000 L CNN
+F 1 "33pF" H 6406 4915 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6425 5175 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6400 5000 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6400 5000 60  0001 C CNN "example"
+F 5 "0402 In" H 6500 4850 30  0000 C CNN "case"
+	1    6400 5000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D70D1
+P 6400 5500
+F 0 "C?" H 6400 5600 40  0000 L CNN
+F 1 "33pF" H 6406 5415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 6425 5675 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 6400 5500 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 6400 5500 60  0001 C CNN "example"
+F 5 "0402 In" H 6500 5350 30  0000 C CNN "case"
+	1    6400 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D7206
+P 4025 4500
+F 0 "C?" H 4025 4600 40  0000 L CNN
+F 1 "10pF" H 4031 4415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4063 4350 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 3875 5025 60  0001 C CNN
+F 4 "0402 In" H 4125 4350 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 4025 4500 60  0001 C CNN "example"
+	1    4025 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D72FB
+P 4025 5000
+F 0 "C?" H 4025 5100 40  0000 L CNN
+F 1 "10pF" H 4031 4915 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4063 4850 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 3875 5525 60  0001 C CNN
+F 4 "0402 In" H 4125 4850 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 4025 5000 60  0001 C CNN "example"
+	1    4025 5000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D7388
+P 4025 5500
+F 0 "C?" H 4025 5600 40  0000 L CNN
+F 1 "10pF" H 4031 5415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4063 5350 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 3875 6025 60  0001 C CNN
+F 4 "0402 In" H 4125 5350 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 4025 5500 60  0001 C CNN "example"
+	1    4025 5500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D77F5
+P 4525 4500
+F 0 "C?" H 4525 4600 40  0000 L CNN
+F 1 "33pF" H 4531 4415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4550 4675 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 4525 4500 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 4525 4500 60  0001 C CNN "example"
+F 5 "0402 In" H 4625 4350 30  0000 C CNN "case"
+	1    4525 4500
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D78F0
+P 4525 5000
+F 0 "C?" H 4525 5100 40  0000 L CNN
+F 1 "33pF" H 4531 4915 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4550 5175 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 4525 5000 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 4525 5000 60  0001 C CNN "example"
+F 5 "0402 In" H 4625 4850 30  0000 C CNN "case"
+	1    4525 5000
+	1    0    0    -1  
+$EndComp
+$Comp
+L C-RESCUE-xmobile C?
+U 1 1 5C6D7979
+P 4525 5500
+F 0 "C?" H 4525 5600 40  0000 L CNN
+F 1 "33pF" H 4531 5415 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4550 5675 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 4525 5500 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 4525 5500 60  0001 C CNN "example"
+F 5 "0402 In" H 4625 5350 30  0000 C CNN "case"
+	1    4525 5500
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

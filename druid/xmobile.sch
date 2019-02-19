@@ -59,8 +59,10 @@ U 1 1 5967CB22
 P 10025 10100
 F 0 "R6" V 10105 10100 40  0000 C CNN
 F 1 "10k" V 10032 10101 40  0000 C CNN
-F 2 "" V 9955 10100 30  0000 C CNN
-F 3 "" H 10025 10100 30  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 9955 10100 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" V 10200 9750 30  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 10025 10100 60  0001 C CNN "example"
+F 5 "0402 In" V 9950 10100 30  0000 C CNN "case"
 	1    10025 10100
 	0    -1   -1   0   
 $EndComp
@@ -72,9 +74,9 @@ U 1 1 5974D7B3
 P 13525 7500
 F 0 "P3" V 13475 7500 60  0000 C CNN
 F 1 "CONN_8" V 13575 7500 60  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight" H 13525 7500 60  0001 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x08" V 13700 7450 60  0000 C CNN
 F 3 "" H 13525 7500 60  0001 C CNN
-F 4 "EPD display connector" V 13700 7500 60  0000 C CNN "description"
+F 4 "EPD display connector" V 13700 7500 60  0001 C CNN "description"
 	1    13525 7500
 	1    0    0    -1  
 $EndComp
@@ -110,9 +112,9 @@ U 5A9FCB78
 F0 "xmega_power" 60
 F1 "xmega_power.sch" 60
 $EndSheet
-Text Label 9650 10700 1    60   ~ 0
+Text Label 9725 10700 0    60   ~ 0
 3.3V
-Text Label 9450 10700 1    60   ~ 0
+Text Label 9325 10700 2    60   ~ 0
 GND
 Text Label 8700 10100 2    60   ~ 0
 GND
@@ -125,7 +127,7 @@ F2 "SDA" B L 13125 6200 60
 F3 "SCL" B L 13125 6300 60 
 F4 "INT" O L 13125 6400 60 
 $EndSheet
-Text Label 9975 10325 0    60   ~ 0
+Text Label 10100 10350 0    60   ~ 0
 PDI_D
 Text Label 9550 9950 1    60   ~ 0
 PDI_C
@@ -496,13 +498,7 @@ Text Label 14675 9425 0    60   ~ 0
 3.3V
 Wire Wire Line
 	9300 10100 9775 10100
-Wire Wire Line
-	9550 9950 9550 10700
 Connection ~ 9550 10100
-Wire Wire Line
-	9750 10325 9750 10700
-Wire Wire Line
-	9750 10325 9975 10325
 Wire Wire Line
 	12875 4675 14025 4675
 Wire Wire Line
@@ -680,9 +676,10 @@ L TEST_1P J?
 U 1 1 5C4B9CCC
 P 11625 4600
 F 0 "J?" H 11625 4870 50  0000 C CNN
-F 1 "TP_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
-F 2 "" H 11825 4600 50  0001 C CNN
+F 1 "TEST_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
+F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 11650 4925 50  0001 C CNN
 F 3 "" H 11825 4600 50  0001 C CNN
+F 4 "1 pad" H 11625 4925 30  0000 C CNN "case"
 	1    11625 4600
 	0    1    1    0   
 $EndComp
@@ -728,9 +725,11 @@ L C C?
 U 1 1 5C4DFD85
 P 1975 9100
 F 0 "C?" H 2000 9200 50  0000 L CNN
-F 1 "0.1u" H 2000 9000 50  0000 L CNN
-F 2 "" H 2150 9075 50  0000 C CNN
-F 3 "" H 1975 9100 50  0001 C CNN
+F 1 "0.1u" H 2100 9100 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 2175 9375 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/cx5r-776519.pdf" H 1975 9100 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/AVX/04026D104KAT4A?qs=sGAEpiMZZMs0AnBnWHyRQPg4iYkCw7IMED%2f4kpqgf7w%3d" H 1975 9100 60  0001 C CNN "example"
+F 5 "0402 In" H 2100 9025 30  0000 C CNN "case"
 	1    1975 9100
 	1    0    0    -1  
 $EndComp
@@ -739,9 +738,11 @@ L CP C?
 U 1 1 5C4DFEA4
 P 1650 9100
 F 0 "C?" H 1675 9200 50  0000 L CNN
-F 1 "10-100u" H 1275 9000 50  0000 L CNN
-F 2 "" H 1475 9000 50  0000 C CNN
-F 3 "" H 1650 9100 50  0001 C CNN
+F 1 "33u" H 1400 9100 50  0000 L CNN
+F 2 "Capacitors_SMD:c_elec_5x5.3" H 1200 8875 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/315/ABA0000C1145-947633.pdf" H 1650 9100 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Panasonic/EEE-0JA330WR?qs=sGAEpiMZZMsh%252b1woXyUXj65gIueAj9S3%2f2x%2f8oLKGVE%3d" H 1650 9100 60  0001 C CNN "example"
+F 5 "5x5,3mm" H 1525 9025 30  0000 C CNN "case"
 	1    1650 9100
 	1    0    0    -1  
 $EndComp
@@ -768,30 +769,22 @@ U 1 1 5C505516
 P 9000 10100
 F 0 "SW?" H 9150 10210 50  0000 C CNN
 F 1 "SW_PUSH" H 9000 10020 50  0000 C CNN
-F 2 "druid:button_4pin_7,5x5" H 8975 9950 50  0000 C CNN
+F 2 "druid:button_4pin_7,5x5" H 8975 9950 50  0001 C CNN
 F 3 "" H 9000 10100 50  0000 C CNN
+F 4 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.search0604.3.313.5a9f5cbe3LNMTR&ws_ab_test=searchweb0_0%2Csearchweb201602_6_10065_10068_319_317_10696_10084_453_10083_454_10618_10304_10307_10820_10821_10301_537_536_10902_10843_10059_10884_10887_321_322_10103%2Csearchweb201603_51%2CppcSwitch_0&algo_pvid=b432da11-c10a-421f-96ee-7905deee8d06&algo_expid=b432da11-c10a-421f-96ee-7905deee8d06-45" H 9000 10100 60  0001 C CNN "example"
+F 5 "4x4x0,8" H 9000 10100 30  0000 C CNN "case"
 	1    9000 10100
 	1    0    0    -1  
-$EndComp
-$Comp
-L Conn_01x04 J?
-U 1 1 5C50A6E4
-P 9650 10900
-F 0 "J?" H 9650 11100 50  0000 C CNN
-F 1 "Conn_01x04" V 9750 10850 50  0000 C CNN
-F 2 "" H 9650 10900 50  0001 C CNN
-F 3 "" H 9650 10900 50  0001 C CNN
-	1    9650 10900
-	0    1    1    0   
 $EndComp
 $Comp
 L TEST_2P J?
 U 1 1 5C561693
 P 7300 7200
 F 0 "J?" H 7300 7260 50  0000 C CNN
-F 1 "TP_VIBRO" H 7300 7130 50  0000 C CNN
-F 2 "" H 7300 7200 50  0001 C CNN
+F 1 "TEST_VIBRO" H 7300 7130 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 6925 7025 50  0001 C CNN
 F 3 "" H 7300 7200 50  0001 C CNN
+F 4 "2 pads" H 7300 7075 30  0000 C CNN "case"
 	1    7300 7200
 	1    0    0    -1  
 $EndComp
@@ -799,4 +792,54 @@ Wire Wire Line
 	7500 7200 7800 7200
 Text Label 7100 7200 2    60   ~ 0
 GND
+$Comp
+L TEST W?
+U 1 1 5C6C0FE4
+P 9900 10350
+F 0 "W?" H 9900 10410 50  0000 C CNN
+F 1 "TEST_PDI" H 9900 10280 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 10150 10200 50  0001 C CNN
+F 3 "" H 9900 10350 50  0000 C CNN
+F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
+	1    9900 10350
+	1    0    0    -1  
+$EndComp
+$Comp
+L TEST W?
+U 1 1 5C6C18FA
+P 9525 10700
+F 0 "W?" H 9525 10760 50  0000 C CNN
+F 1 "TEST_XMEGA_PWR" H 9525 10630 50  0000 C CNN
+F 2 "Measurement_Points:Test_Point_2Pads" H 9625 10550 50  0001 C CNN
+F 3 "" H 9525 10700 50  0000 C CNN
+F 4 "2 pads" H 9525 10575 30  0000 C CNN "case"
+	1    9525 10700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9550 10350 9700 10350
+Wire Wire Line
+	9550 9950 9550 10350
+NoConn ~ 10800 4900
+NoConn ~ 10800 5000
+NoConn ~ 10800 5400
+NoConn ~ 10800 5500
+NoConn ~ 10800 5600
+NoConn ~ 10800 5700
+NoConn ~ 10800 5800
+NoConn ~ 10800 5900
+NoConn ~ 10800 6000
+NoConn ~ 10800 6100
+NoConn ~ 10800 6300
+NoConn ~ 10800 6400
+NoConn ~ 10800 6500
+NoConn ~ 10800 7400
+NoConn ~ 10800 7500
+NoConn ~ 10800 7600
+NoConn ~ 10800 7700
+NoConn ~ 7800 7300
+NoConn ~ 7800 7400
+NoConn ~ 7800 7500
+NoConn ~ 7800 7700
+NoConn ~ 7800 7800
 $EndSCHEMATC
