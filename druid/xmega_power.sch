@@ -58,9 +58,10 @@ L INDUCTOR L2
 U 1 1 5A9FD1C0
 P 9100 2050
 F 0 "L2" V 9050 2050 40  0000 C CNN
-F 1 "10mk" V 9200 2050 40  0000 C CNN
+F 1 "10u" V 9200 2050 40  0000 C CNN
 F 2 "" H 9100 2050 60  0000 C CNN
-F 3 "" H 9100 2050 60  0000 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/product-1022158.pdf" H 9100 2050 60  0000 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/1276AS-H-100M%3dP2?qs=sGAEpiMZZMsg%252by3WlYCkUwoncuxJKc7T%2ffTlu7eSjNI%3d" V 9100 2050 60  0001 C CNN "example"
 	1    9100 2050
 	0    1    1    0   
 $EndComp
@@ -69,9 +70,11 @@ L C-RESCUE-xmobile C31
 U 1 1 5A9FD1C7
 P 8600 2600
 F 0 "C31" H 8600 2700 40  0000 L CNN
-F 1 "100n" H 8606 2515 40  0000 L CNN
-F 2 "" H 8638 2450 30  0000 C CNN
-F 3 "" H 8600 2600 60  0000 C CNN
+F 1 "0,1p" H 8606 2515 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 8638 2450 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/c02e-1068346.pdf" H 8600 2600 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GJM1555C1HR10WB01D?qs=sGAEpiMZZMs0AnBnWHyRQNchIam%2fLmo3tiNUbw4QmZU%3d" H 8600 2600 60  0001 C CNN "example"
+F 5 "0402 In" H 8625 2450 30  0000 C CNN "case"
 	1    8600 2600
 	-1   0    0    1   
 $EndComp
@@ -80,9 +83,11 @@ L C-RESCUE-xmobile C30
 U 1 1 5A9FD1CE
 P 8300 2600
 F 0 "C30" H 8300 2700 40  0000 L CNN
-F 1 "47mk" H 8306 2515 40  0000 L CNN
-F 2 "" H 8338 2450 30  0000 C CNN
-F 3 "" H 8300 2600 60  0000 C CNN
+F 1 "47u" H 8306 2515 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0603" H 8338 2450 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/ZRB18AR60J476ME01-01-1065054.pdf" H 8300 2600 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/ZRB18AR60J476ME01L?qs=sGAEpiMZZMs0AnBnWHyRQO9VYadaKTO%252bP4WrvUq8FwyMAQotVEzL0w%3d%3d" H 8300 2600 60  0001 C CNN "example"
+F 5 "0603 In" H 8325 2450 30  0000 C CNN "case"
 	1    8300 2600
 	-1   0    0    1   
 $EndComp
@@ -91,9 +96,11 @@ L C-RESCUE-xmobile C29
 U 1 1 5A9FD1D5
 P 8025 2600
 F 0 "C29" H 8025 2700 40  0000 L CNN
-F 1 "1mk (ceramic)" H 8031 2515 40  0000 L CNN
-F 2 "" H 8063 2450 30  0000 C CNN
-F 3 "" H 8025 2600 60  0000 C CNN
+F 1 "1u" H 8031 2515 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 8063 2450 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 8025 2600 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM152R60J105ME15D?qs=sGAEpiMZZMs0AnBnWHyRQFv7x1xn%252bYFdnvIvPkVU8UD1CmfL1E6gmw%3d%3d" H 8025 2600 60  0001 C CNN "example"
+F 5 "0402 In" H 8050 2450 30  0000 C CNN "case"
 	1    8025 2600
 	-1   0    0    1   
 $EndComp
@@ -109,35 +116,15 @@ F 3 "" H 5750 3800 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C25
-U 1 1 5A9FD1E9
-P 7475 5575
-F 0 "C25" H 7475 5675 40  0000 L CNN
-F 1 "100mk (tantal)" H 7325 5450 40  0000 L CNN
-F 2 "" H 7513 5425 30  0000 C CNN
-F 3 "" H 7475 5575 60  0000 C CNN
-	1    7475 5575
-	-1   0    0    1   
-$EndComp
-$Comp
-L C-RESCUE-xmobile C26
-U 1 1 5A9FD1F0
-P 7950 5575
-F 0 "C26" H 7950 5675 40  0000 L CNN
-F 1 "10mk (ceramic)" H 7750 5500 40  0000 L CNN
-F 2 "" H 7988 5425 30  0000 C CNN
-F 3 "" H 7950 5575 60  0000 C CNN
-	1    7950 5575
-	-1   0    0    1   
-$EndComp
-$Comp
 L C-RESCUE-xmobile C27
 U 1 1 5A9FD1F7
 P 8375 5575
 F 0 "C27" H 8375 5675 40  0000 L CNN
 F 1 "33p" H 8381 5490 40  0000 L CNN
 F 2 "" H 8413 5425 30  0000 C CNN
-F 3 "" H 8375 5575 60  0000 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 8375 5575 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 8375 5575 60  0001 C CNN "example"
+F 5 "0402 In" H 8400 5425 30  0000 C CNN "case"
 	1    8375 5575
 	-1   0    0    1   
 $EndComp
@@ -147,8 +134,10 @@ U 1 1 5A9FD1FE
 P 8750 5575
 F 0 "C28" H 8750 5675 40  0000 L CNN
 F 1 "10p" H 8756 5490 40  0000 L CNN
-F 2 "" H 8788 5425 30  0000 C CNN
-F 3 "" H 8750 5575 60  0000 C CNN
+F 2 "Capacitors_SMD:C_0402" H 8788 5425 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 8750 5575 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 8750 5575 60  0001 C CNN "example"
+F 5 "0402 In" H 8775 5425 30  0000 C CNN "case"
 	1    8750 5575
 	-1   0    0    1   
 $EndComp
@@ -158,8 +147,10 @@ U 1 1 5A9FD205
 P 7050 2100
 F 0 "U4" H 7050 2000 50  0000 C CNN
 F 1 "XC6206P332MR" H 7050 2400 50  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 7075 1800 50  0000 C CNN
-F 3 "DOCUMENTATION" H 7050 2100 50  0001 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23" H 7075 1800 50  0001 C CNN
+F 3 "https://www.torexsemi.com/file/xc6206/XC6206.pdf" H 7050 2100 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Torex-Semiconductor/XC6206P332MR-G?qs=%2fha2pyFadujKR1ng7kOnkt2m1eqUI4JxTF4iTczT8BCZBroFPKl6%2fA%3d%3d" H 7050 2100 60  0001 C CNN "example"
+F 5 "SOT-23" H 7050 2100 30  0000 C CNN "case"
 	1    7050 2100
 	1    0    0    -1  
 $EndComp
@@ -179,10 +170,12 @@ $Comp
 L ZENER-RESCUE-xmobile D11
 U 1 1 5A9FD218
 P 9075 5575
-F 0 "D11" H 9075 5675 50  0000 C CNN
+F 0 "D11" V 8975 5650 50  0000 C CNN
 F 1 "ZENER" H 9075 5475 40  0000 C CNN
-F 2 "" H 9075 5575 60  0000 C CNN
-F 3 "" H 9075 5575 60  0000 C CNN
+F 2 "Diodes_SMD:SMA_Standard" H 9075 5575 60  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/308/1SMA5913BT3-D-1360201.pdf" H 9075 5575 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/ON-Semiconductor/1SMA5918BT3G?qs=sGAEpiMZZMtQ8nqTKtFS%2fJ7m6e1KBCgu1vB5isutOYc%3d" H 9075 5575 60  0001 C CNN "example"
+F 5 "SMA 403D" V 9200 5575 30  0000 C CNN "case "
 	1    9075 5575
 	0    -1   -1   0   
 $EndComp
@@ -214,10 +207,10 @@ Wire Wire Line
 Wire Wire Line
 	3825 5250 9400 5250
 Wire Wire Line
-	7475 5775 7475 5875
+	7475 5675 7475 5875
 Connection ~ 7475 5875
 Wire Wire Line
-	7950 5875 7950 5775
+	7950 5725 7950 5875
 Connection ~ 7950 5875
 Wire Wire Line
 	8375 5875 8375 5775
@@ -226,10 +219,10 @@ Wire Wire Line
 	8750 5875 8750 5775
 Connection ~ 8750 5875
 Wire Wire Line
-	7475 5375 7475 5250
+	7475 5250 7475 5475
 Connection ~ 7475 5250
 Wire Wire Line
-	7950 5375 7950 5250
+	7950 5250 7950 5425
 Connection ~ 7950 5250
 Wire Wire Line
 	8375 5375 8375 5250
@@ -292,24 +285,15 @@ U 1 1 5C6A7D13
 P 3325 2250
 F 0 "U?" H 3275 2100 60  0000 C CNN
 F 1 "TP4056" H 3275 2200 60  0000 C CNN
-F 2 "SOP8:SOP8" H 3300 2000 60  0000 C CNN
-F 3 "" H 3375 2250 60  0000 C CNN
+F 2 "SOP8:SOP8" H 3300 2000 60  0001 C CNN
+F 3 "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf" H 3375 2250 60  0001 C CNN
+F 4 "SOP-8" H 3300 2300 30  0000 C CNN "case"
+F 5 "https://ru.aliexpress.com/item/20-TP4056-TP4056/32965308715.html?spm=a2g0v.search0604.3.19.3b7342ceZ2YQqe&s=p&ws_ab_test=searchweb0_0%2Csearchweb201602_6_10065_10068_319_317_10696_10084_453_10083_454_10618_10304_10307_10820_10821_10301_537_536_10902_10843_10059_10884_10887_321_322_10103%2Csearchweb201603_51%2CppcSwitch_0&algo_pvid=d8dbfd72-123f-4196-8109-e7e6d3afca91&algo_expid=d8dbfd72-123f-4196-8109-e7e6d3afca91-2" H 3325 2250 60  0001 C CNN "example"
 	1    3325 2250
 	1    0    0    -1  
 $EndComp
 Text Label 3825 2600 0    60   ~ 0
 GND
-$Comp
-L C C?
-U 1 1 5C6A9C76
-P 4325 2200
-F 0 "C?" H 4350 2300 50  0000 L CNN
-F 1 "10u" H 4350 2100 50  0000 L CNN
-F 2 "" H 4363 2050 50  0000 C CNN
-F 3 "" H 4325 2200 50  0000 C CNN
-	1    4325 2200
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4325 2350 4325 2450
 Wire Wire Line
@@ -391,8 +375,10 @@ U 1 1 5C6AB784
 P 2150 1600
 F 0 "C?" H 2175 1700 50  0000 L CNN
 F 1 "10u" H 2175 1500 50  0000 L CNN
-F 2 "" H 2188 1450 50  0000 C CNN
-F 3 "" H 2150 1600 50  0000 C CNN
+F 2 "Capacitors_SMD:C_0402" H 2188 1450 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 2150 1600 50  0001 C CNN
+F 4 "0402 In" H 2050 1675 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 2150 1600 60  0001 C CNN "example"
 	1    2150 1600
 	1    0    0    -1  
 $EndComp
@@ -450,17 +436,6 @@ F 3 "" H 3375 5450 60  0000 C CNN
 $EndComp
 Text Label 3825 5800 0    60   ~ 0
 GND
-$Comp
-L C C?
-U 1 1 5C6B0916
-P 4325 5400
-F 0 "C?" H 4350 5500 50  0000 L CNN
-F 1 "10u" H 4350 5300 50  0000 L CNN
-F 2 "" H 4363 5250 50  0000 C CNN
-F 3 "" H 4325 5400 50  0000 C CNN
-	1    4325 5400
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	4325 5550 4325 5650
 Wire Wire Line
@@ -510,17 +485,6 @@ Wire Wire Line
 Wire Wire Line
 	2325 5350 2325 5250
 Connection ~ 2325 5250
-$Comp
-L C C?
-U 1 1 5C6B0943
-P 2150 4800
-F 0 "C?" H 2175 4900 50  0000 L CNN
-F 1 "10u" H 2175 4700 50  0000 L CNN
-F 2 "" H 2188 4650 50  0000 C CNN
-F 3 "" H 2150 4800 50  0000 C CNN
-	1    2150 4800
-	1    0    0    -1  
-$EndComp
 Text Label 2150 4950 3    60   ~ 0
 GND
 Wire Wire Line
@@ -638,5 +602,70 @@ F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sG
 F 5 "0402 In" H 2175 5600 30  0000 C CNN "case"
 	1    2325 5500
 	0    -1   -1   0   
+$EndComp
+$Comp
+L C C?
+U 1 1 5C6D036E
+P 2150 4800
+F 0 "C?" H 2175 4900 50  0000 L CNN
+F 1 "10u" H 2175 4700 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 2188 4650 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 2150 4800 50  0001 C CNN
+F 4 "0402 In" H 2050 4875 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 2150 4800 60  0001 C CNN "example"
+	1    2150 4800
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C?
+U 1 1 5C6D0763
+P 4325 5400
+F 0 "C?" H 4350 5500 50  0000 L CNN
+F 1 "10u" H 4350 5300 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4363 5250 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 4325 5400 50  0001 C CNN
+F 4 "0402 In" H 4225 5475 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 4325 5400 60  0001 C CNN "example"
+	1    4325 5400
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C?
+U 1 1 5C6D0925
+P 4325 2200
+F 0 "C?" H 4350 2300 50  0000 L CNN
+F 1 "10u" H 4350 2100 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 4363 2050 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 4325 2200 50  0001 C CNN
+F 4 "0402 In" H 4225 2275 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 4325 2200 60  0001 C CNN "example"
+	1    4325 2200
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C?
+U 1 1 5C6D24E8
+P 7950 5575
+F 0 "C?" H 7975 5675 50  0000 L CNN
+F 1 "10u" H 7975 5475 50  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 7988 5425 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 7950 5575 50  0001 C CNN
+F 4 "0402 In" H 7850 5650 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 7950 5575 60  0001 C CNN "example"
+	1    7950 5575
+	1    0    0    -1  
+$EndComp
+$Comp
+L CP_Small C?
+U 1 1 5C6D2D36
+P 7475 5575
+F 0 "C?" H 7485 5645 50  0000 L CNN
+F 1 "100u (tantal)" H 7275 5500 50  0000 L CNN
+F 2 "0603_In_tantalum:C_0603" H 7475 5575 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/f98-775787.pdf" H 7475 5575 50  0001 C CNN
+F 4 "0603 In Polar" H 7450 5700 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/AVX/F980J107MMAAXE?qs=OIhlmDO%252boa7CbJsh7hWANA%3d%3d" H 7475 5575 60  0001 C CNN "example"
+	1    7475 5575
+	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
