@@ -57,11 +57,12 @@ $Comp
 L INDUCTOR L2
 U 1 1 5A9FD1C0
 P 9100 2050
-F 0 "L2" V 9050 2050 40  0000 C CNN
+F 0 "L2" V 9025 1925 40  0000 C CNN
 F 1 "10u" V 9200 2050 40  0000 C CNN
-F 2 "" H 9100 2050 60  0000 C CNN
-F 3 "https://eu.mouser.com/datasheet/2/281/product-1022158.pdf" H 9100 2050 60  0000 C CNN
+F 2 "inductor_1210_In:I_1210" H 9100 2050 60  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/281/product-1022158.pdf" H 9100 2050 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/1276AS-H-100M%3dP2?qs=sGAEpiMZZMsg%252by3WlYCkUwoncuxJKc7T%2ffTlu7eSjNI%3d" V 9100 2050 60  0001 C CNN "example"
+F 5 "1210 In" V 9025 2100 30  0000 C CNN "case"
 	1    9100 2050
 	0    1    1    0   
 $EndComp
@@ -332,23 +333,14 @@ F 5 "0402 In" H 1875 2400 30  0000 C CNN "case"
 $EndComp
 $Comp
 L R R?
-U 1 1 5C6AAFC7
-P 2475 2600
-F 0 "R?" V 2555 2600 50  0000 C CNN
-F 1 "1k" V 2475 2600 50  0000 C CNN
-F 2 "" V 2405 2600 50  0000 C CNN
-F 3 "" H 2475 2600 50  0000 C CNN
-	1    2475 2600
-	0    1    1    0   
-$EndComp
-$Comp
-L R R?
 U 1 1 5C6AB0B6
 P 2175 2700
 F 0 "R?" V 2255 2700 50  0000 C CNN
 F 1 "1k" V 2175 2700 50  0000 C CNN
-F 2 "" V 2105 2700 50  0000 C CNN
-F 3 "" H 2175 2700 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 2105 2700 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2175 2700 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2175 2700 60  0001 C CNN "example"
+F 5 "0402 in" V 2100 2700 30  0000 C CNN "case"
 	1    2175 2700
 	0    1    1    0   
 $EndComp
@@ -397,8 +389,10 @@ U 1 1 5C6AC8FB
 P 3950 2950
 F 0 "R?" V 4030 2950 50  0000 C CNN
 F 1 "1.2k" V 3950 2950 50  0000 C CNN
-F 2 "" V 3880 2950 50  0000 C CNN
-F 3 "" H 3950 2950 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 3880 2950 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3950 2950 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K20FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWRBT%2frAKZHAM%3d" V 3950 2950 60  0001 C CNN "example"
+F 5 "0402 In" V 3875 2950 30  0000 C CNN "case"
 	1    3950 2950
 	-1   0    0    1   
 $EndComp
@@ -423,17 +417,6 @@ F 3 "" H 2450 4650 60  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 4325 5250
-$Comp
-L TP4056 U?
-U 1 1 5C6B090F
-P 3325 5450
-F 0 "U?" H 3275 5300 60  0000 C CNN
-F 1 "TP4056" H 3275 5400 60  0000 C CNN
-F 2 "SOP8:SOP8" H 3300 5200 60  0000 C CNN
-F 3 "" H 3375 5450 60  0000 C CNN
-	1    3325 5450
-	1    0    0    -1  
-$EndComp
 Text Label 3825 5800 0    60   ~ 0
 GND
 Wire Wire Line
@@ -446,28 +429,6 @@ Text Notes 5175 5825 0    60   ~ 0
 BAT-
 Text Notes 4825 5825 2    60   ~ 0
 BAT+\n
-$Comp
-L R R?
-U 1 1 5C6B092E
-P 2475 5800
-F 0 "R?" V 2555 5800 50  0000 C CNN
-F 1 "1k" V 2475 5800 50  0000 C CNN
-F 2 "" V 2405 5800 50  0000 C CNN
-F 3 "" H 2475 5800 50  0000 C CNN
-	1    2475 5800
-	0    1    1    0   
-$EndComp
-$Comp
-L R R?
-U 1 1 5C6B0934
-P 2175 5900
-F 0 "R?" V 2255 5900 50  0000 C CNN
-F 1 "1k" V 2175 5900 50  0000 C CNN
-F 2 "" V 2105 5900 50  0000 C CNN
-F 3 "" H 2175 5900 50  0000 C CNN
-	1    2175 5900
-	0    1    1    0   
-$EndComp
 Wire Wire Line
 	2325 5350 2775 5350
 Wire Wire Line
@@ -494,17 +455,6 @@ Wire Wire Line
 Connection ~ 2650 5250
 Text Label 3325 6200 3    60   ~ 0
 GND
-$Comp
-L R R?
-U 1 1 5C6B095B
-P 3950 6150
-F 0 "R?" V 4030 6150 50  0000 C CNN
-F 1 "1.2k" V 3950 6150 50  0000 C CNN
-F 2 "" V 3880 6150 50  0000 C CNN
-F 3 "" H 3950 6150 50  0000 C CNN
-	1    3950 6150
-	-1   0    0    1   
-$EndComp
 Text Label 3950 6300 3    60   ~ 0
 GND
 Wire Wire Line
@@ -666,6 +616,71 @@ F 3 "https://eu.mouser.com/datasheet/2/40/f98-775787.pdf" H 7475 5575 50  0001 C
 F 4 "0603 In Polar" H 7450 5700 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/AVX/F980J107MMAAXE?qs=OIhlmDO%252boa7CbJsh7hWANA%3d%3d" H 7475 5575 60  0001 C CNN "example"
 	1    7475 5575
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R?
+U 1 1 5C6E4482
+P 2475 2600
+F 0 "R?" V 2555 2600 50  0000 C CNN
+F 1 "1k" V 2475 2600 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 2405 2600 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2475 2600 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2475 2600 60  0001 C CNN "example"
+F 5 "0402 in" V 2400 2600 30  0000 C CNN "case"
+	1    2475 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5C6E463E
+P 2175 5900
+F 0 "R?" V 2255 5900 50  0000 C CNN
+F 1 "1k" V 2175 5900 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 2105 5900 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2175 5900 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2175 5900 60  0001 C CNN "example"
+F 5 "0402 in" V 2100 5900 30  0000 C CNN "case"
+	1    2175 5900
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5C6E49C1
+P 2475 5800
+F 0 "R?" V 2555 5800 50  0000 C CNN
+F 1 "1k" V 2475 5800 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 2405 5800 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2475 5800 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2475 5800 60  0001 C CNN "example"
+F 5 "0402 in" V 2400 5800 30  0000 C CNN "case"
+	1    2475 5800
+	0    1    1    0   
+$EndComp
+$Comp
+L R R?
+U 1 1 5C6E5065
+P 3950 6150
+F 0 "R?" V 4030 6150 50  0000 C CNN
+F 1 "1.2k" V 3950 6150 50  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 3880 6150 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3950 6150 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K20FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWRBT%2frAKZHAM%3d" V 3950 6150 60  0001 C CNN "example"
+F 5 "0402 In" V 3875 6150 30  0000 C CNN "case"
+	1    3950 6150
+	-1   0    0    1   
+$EndComp
+$Comp
+L TP4056 U?
+U 1 1 5C6E5C3E
+P 3325 5450
+F 0 "U?" H 3275 5300 60  0000 C CNN
+F 1 "TP4056" H 3275 5400 60  0000 C CNN
+F 2 "SOP8:SOP8" H 3300 5200 60  0001 C CNN
+F 3 "https://dlnmh9ip6v2uc.cloudfront.net/datasheets/Prototyping/TP4056.pdf" H 3375 5450 60  0001 C CNN
+F 4 "SOP-8" H 3300 5500 30  0000 C CNN "case"
+F 5 "https://ru.aliexpress.com/item/20-TP4056-TP4056/32965308715.html?spm=a2g0v.search0604.3.19.3b7342ceZ2YQqe&s=p&ws_ab_test=searchweb0_0%2Csearchweb201602_6_10065_10068_319_317_10696_10084_453_10083_454_10618_10304_10307_10820_10821_10301_537_536_10902_10843_10059_10884_10887_321_322_10103%2Csearchweb201603_51%2CppcSwitch_0&algo_pvid=d8dbfd72-123f-4196-8109-e7e6d3afca91&algo_expid=d8dbfd72-123f-4196-8109-e7e6d3afca91-2" H 3325 5450 60  0001 C CNN "example"
+	1    3325 5450
 	1    0    0    -1  
 $EndComp
 $EndSCHEMATC

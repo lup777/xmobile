@@ -137,8 +137,10 @@ U 1 1 5C118522
 P 4250 5200
 F 0 "U?" H 4250 5000 60  0000 C CNN
 F 1 "CY62158EV30LL-45BVXI" H 4250 5150 39  0000 C CNN
-F 2 "druid:48-ball_VFBGA_6x8x1mm_BV48BZ48" H 4475 3925 60  0000 C CNN
-F 3 "" H 4300 4250 60  0000 C CNN
+F 2 "druid:48-ball_VFBGA_6x8x1mm_BV48BZ48" H 4475 3925 60  0001 C CNN
+F 3 "https://www.cypress.com/file/43811/download" H 4300 4250 60  0001 C CNN
+F 4 "VFBGA48" H 4250 5250 30  0000 C CNN "case"
+F 5 "https://eu.mouser.com/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45BVXI?qs=sGAEpiMZZMt9mBA6nIyysIT6PXTPi%2fj%2fhnigerrGPws%3d" H 4250 5200 60  0001 C CNN "example"
 	1    4250 5200
 	1    0    0    -1  
 $EndComp
@@ -148,8 +150,10 @@ U 1 1 5C19D697
 P 9300 5600
 F 0 "U?" H 9300 4450 60  0000 C CNN
 F 1 "XMega128A1U_BGA100" H 9350 4900 60  0000 C CNN
-F 2 "druid:BGA100_9x9x1.2_pitch-0.80mm" H 9400 5150 60  0000 C CNN
-F 3 "" H 9700 7400 60  0000 C CNN
+F 2 "druid:BGA100_9x9x1.2_pitch-0.80mm" H 9400 5150 60  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/268/Atmel-8385-8-and-16-bit-AVR-Microcontroller-ATxmeg-1315775.pdf" H 9700 7400 60  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Microchip-Technology-Atmel/ATXMEGA128A1U-C7U?qs=sGAEpiMZZMvqv2n3s2xjsVQIURldyCCHGWx9j4DhqLs%3d" H 9300 5600 60  0001 C CNN "example"
+F 5 "VFBGA100" H 9300 5600 30  0000 C CNN "case"
 	1    9300 5600
 	1    0    0    -1  
 $EndComp
