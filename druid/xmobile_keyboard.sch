@@ -1,45 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:xmobile-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:XC6206P332MR
-LIBS:STF202-22T1G
-LIBS:MCP73871
-LIBS:switch1
-LIBS:SRAM
-LIBS:xmega128a1u_bga100
-LIBS:sim-holders
-LIBS:max7370
-LIBS:tp4056
+EESchema Schematic File Version 4
 LIBS:xmobile-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -54,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MAX7370 U?
+L xmobile-rescue:MAX7370 U?
 U 1 1 5C4B05E9
 P 2600 3750
 F 0 "U?" H 2600 3600 60  0000 C CNN
@@ -154,7 +115,7 @@ NoConn ~ 1800 3650
 NoConn ~ 1800 3750
 NoConn ~ 1800 3550
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C49881F
 P 4300 3175
 F 0 "R?" V 4380 3175 40  0000 C CNN
@@ -177,7 +138,7 @@ SCL
 Text HLabel 4900 4050 2    60   Output ~ 0
 INT
 $Comp
-L C 1u
+L xmobile-rescue:C 1u
 U 1 1 5C4C0F77
 P 1050 4150
 F 0 "1u" H 1075 4250 50  0000 L CNN
@@ -199,7 +160,7 @@ Text Label 1400 3950 2    60   ~ 0
 Text Notes 4975 4175 0    60   ~ 0
 Active low
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C4C2FCD
 P 2575 5400
 F 0 "D?" H 2575 5500 50  0000 C CNN
@@ -214,7 +175,7 @@ $EndComp
 Text Label 2575 5250 0    60   ~ 0
 3.3V
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C4C321E
 P 2575 5950
 F 0 "R?" V 2655 5950 40  0000 C CNN
@@ -369,7 +330,7 @@ Wire Wire Line
 Wire Wire Line
 	2575 5550 2575 5700
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C4C4192
 P 3050 5400
 F 0 "D?" H 3050 5500 50  0000 C CNN
@@ -386,7 +347,7 @@ Text Label 3050 5250 0    60   ~ 0
 Wire Wire Line
 	3050 5550 3050 5700
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C4C43FA
 P 3450 5400
 F 0 "D?" H 3450 5500 50  0000 C CNN
@@ -403,7 +364,7 @@ Text Label 3450 5250 0    60   ~ 0
 Wire Wire Line
 	3450 5550 3450 5700
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C4C4408
 P 3925 5400
 F 0 "D?" H 3925 5500 50  0000 C CNN
@@ -436,7 +397,7 @@ LED3
 Text Label 3300 3750 0    60   ~ 0
 LED4
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C4FFA32
 P 6675 1975
 F 0 "SW?" H 6825 2085 50  0000 C CNN
@@ -507,7 +468,7 @@ Connection ~ 9750 5175
 Wire Wire Line
 	9750 1975 9750 5625
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DCE7B
 P 7575 1975
 F 0 "SW?" H 7725 2085 50  0000 C CNN
@@ -520,7 +481,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DCF38
 P 8425 1975
 F 0 "SW?" H 8575 2085 50  0000 C CNN
@@ -533,7 +494,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD084
 P 6675 2775
 F 0 "SW?" H 6825 2885 50  0000 C CNN
@@ -546,7 +507,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD126
 P 7575 2775
 F 0 "SW?" H 7725 2885 50  0000 C CNN
@@ -559,7 +520,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD1D1
 P 8425 2775
 F 0 "SW?" H 8575 2885 50  0000 C CNN
@@ -572,7 +533,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD300
 P 9275 1975
 F 0 "SW?" H 9425 2085 50  0000 C CNN
@@ -585,7 +546,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD3BD
 P 9275 2775
 F 0 "SW?" H 9425 2885 50  0000 C CNN
@@ -598,7 +559,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD583
 P 6675 3700
 F 0 "SW?" H 6825 3810 50  0000 C CNN
@@ -611,7 +572,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD636
 P 6675 4375
 F 0 "SW?" H 6825 4485 50  0000 C CNN
@@ -624,7 +585,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD6E4
 P 7575 4375
 F 0 "SW?" H 7725 4485 50  0000 C CNN
@@ -637,7 +598,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD787
 P 7575 3700
 F 0 "SW?" H 7725 3810 50  0000 C CNN
@@ -650,7 +611,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD88C
 P 8425 3700
 F 0 "SW?" H 8575 3810 50  0000 C CNN
@@ -663,7 +624,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DD941
 P 8425 4375
 F 0 "SW?" H 8575 4485 50  0000 C CNN
@@ -676,7 +637,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDA70
 P 9275 3700
 F 0 "SW?" H 9425 3810 50  0000 C CNN
@@ -689,7 +650,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDB57
 P 9275 4425
 F 0 "SW?" H 9425 4535 50  0000 C CNN
@@ -702,7 +663,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDCFE
 P 6675 5175
 F 0 "SW?" H 6825 5285 50  0000 C CNN
@@ -715,7 +676,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDDAF
 P 7575 5175
 F 0 "SW?" H 7725 5285 50  0000 C CNN
@@ -728,7 +689,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDEF8
 P 8425 5175
 F 0 "SW?" H 8575 5285 50  0000 C CNN
@@ -741,7 +702,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DDFAF
 P 9275 5175
 F 0 "SW?" H 9425 5285 50  0000 C CNN
@@ -754,7 +715,7 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L C 1u?
+L xmobile-rescue:C 1u?
 U 1 1 5C6E6190
 P 1400 4150
 F 0 "1u?" H 1425 4250 50  0000 L CNN
@@ -768,7 +729,7 @@ F 6 "0402 In" H 1300 4075 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C6E6DE1
 P 3050 5950
 F 0 "R?" V 3130 5950 40  0000 C CNN
@@ -781,7 +742,7 @@ F 5 "0402 In" V 2975 5950 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C6E6E9E
 P 3450 5950
 F 0 "R?" V 3530 5950 40  0000 C CNN
@@ -794,7 +755,7 @@ F 5 "0402 In" V 3375 5950 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C6E7B9A
 P 4600 3175
 F 0 "R?" V 4680 3175 40  0000 C CNN
@@ -807,7 +768,7 @@ F 5 "0402 In" V 4525 3175 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C6E7C9E
 P 4900 3175
 F 0 "R?" V 4980 3175 40  0000 C CNN
@@ -820,7 +781,7 @@ F 5 "0402 In" V 4825 3175 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C6E62AB
 P 3925 5950
 F 0 "R?" V 4005 5950 40  0000 C CNN

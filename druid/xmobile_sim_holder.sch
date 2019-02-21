@@ -1,45 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:xmobile-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:XC6206P332MR
-LIBS:STF202-22T1G
-LIBS:MCP73871
-LIBS:switch1
-LIBS:SRAM
-LIBS:xmega128a1u_bga100
-LIBS:sim-holders
-LIBS:max7370
-LIBS:tp4056
+EESchema Schematic File Version 4
 LIBS:xmobile-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -56,7 +17,7 @@ $EndDescr
 Text Label 5325 700  0    60   ~ 0
 GND
 $Comp
-L SIM800C U?
+L xmobile-rescue:SIM800C U?
 U 1 1 5C46A8F4
 P 6625 3525
 F 0 "U?" H 6675 4500 60  0000 C CNN
@@ -67,7 +28,7 @@ F 3 "" H 6625 3525 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L 78646-3001 U?
+L xmobile-rescue:78646-3001 U?
 U 1 1 5C46ADE6
 P 4775 5775
 F 0 "U?" H 4875 5575 60  0000 C CNN
@@ -98,7 +59,7 @@ SIM_DATA
 Text Label 1100 6025 2    60   ~ 0
 SIM_DATA
 $Comp
-L SMF05C D?
+L xmobile-rescue:SMF05C D?
 U 1 1 5C46C4AB
 P 3250 6650
 F 0 "D?" H 3350 6875 60  0000 C CNN
@@ -109,7 +70,7 @@ F 3 "" H 3240 6650 60  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C46C6D5
 P 1525 6025
 F 0 "R?" V 1605 6025 40  0000 C CNN
@@ -125,7 +86,7 @@ Wire Wire Line
 	2950 6425 2950 6025
 Connection ~ 2950 6025
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C46CACB
 P 1925 6625
 F 0 "C?" H 1925 6725 40  0000 L CNN
@@ -139,7 +100,7 @@ Wire Wire Line
 	1925 6425 1925 6025
 Connection ~ 1925 6025
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C46D160
 P 1525 5675
 F 0 "R?" V 1605 5675 40  0000 C CNN
@@ -150,7 +111,7 @@ F 3 "" H 1525 5675 30  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C46D2D8
 P 1525 5375
 F 0 "R?" V 1605 5375 40  0000 C CNN
@@ -161,7 +122,7 @@ F 3 "" H 1525 5375 30  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C46D4E7
 P 1525 5075
 F 0 "R?" V 1605 5075 40  0000 C CNN
@@ -209,7 +170,7 @@ Connection ~ 3350 5075
 Text Label 3150 7025 3    60   ~ 0
 GND
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C46E5BE
 P 2700 7350
 F 0 "C?" H 2700 7450 40  0000 L CNN
@@ -225,7 +186,7 @@ Connection ~ 2700 5075
 Text Label 2700 7550 3    60   ~ 0
 GND
 $Comp
-L BC850 Q?
+L xmobile-rescue:BC850 Q?
 U 1 1 5C46E88A
 P 10325 5250
 F 0 "Q?" H 10525 5325 50  0000 L CNN
@@ -242,7 +203,7 @@ GSM_VBAT
 Text Label 10425 3875 1    60   ~ 0
 GSM_VBAT
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C46F9F6
 P 10425 4025
 F 0 "D?" H 10425 4125 50  0000 C CNN
@@ -253,7 +214,7 @@ F 3 "" H 10425 4025 50  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C46FC7D
 P 10425 4625
 F 0 "R?" V 10505 4625 40  0000 C CNN
@@ -264,7 +225,7 @@ F 3 "" H 10425 4625 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C4702F9
 P 9900 5625
 F 0 "R?" V 9980 5625 40  0000 C CNN
@@ -291,7 +252,7 @@ Wire Wire Line
 Wire Wire Line
 	10425 4175 10425 4375
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C470F26
 P 9475 5250
 F 0 "R?" V 9555 5250 40  0000 C CNN
@@ -307,7 +268,7 @@ NETLIGHT
 Text Label 7275 2800 0    60   ~ 0
 NETLIGHT
 $Comp
-L BC850 Q?
+L xmobile-rescue:BC850 Q?
 U 1 1 5C473781
 P 7750 5250
 F 0 "Q?" H 7950 5325 50  0000 L CNN
@@ -318,7 +279,7 @@ F 3 "" H 7750 5250 50  0000 L CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C4739DE
 P 6800 5250
 F 0 "R?" V 6880 5250 40  0000 C CNN
@@ -329,7 +290,7 @@ F 3 "" H 6800 5250 30  0000 C CNN
 	0    -1   -1   0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C473BE2
 P 7450 5600
 F 0 "R?" V 7530 5600 40  0000 C CNN
@@ -383,7 +344,7 @@ GND
 Text Label 5575 3625 2    60   ~ 0
 GND
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47BC42
 P 4475 2875
 F 0 "R?" V 4555 2875 40  0000 C CNN
@@ -400,7 +361,7 @@ Wire Wire Line
 Wire Wire Line
 	5075 3175 5575 3175
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47CD2E
 P 3200 2650
 F 0 "R?" V 3280 2650 40  0000 C CNN
@@ -422,7 +383,7 @@ Wire Wire Line
 	3600 2850 3600 2650
 Connection ~ 3600 2650
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47D122
 P 3600 3100
 F 0 "R?" V 3680 3100 40  0000 C CNN
@@ -433,7 +394,7 @@ F 3 "" H 3600 3100 30  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47D858
 P 4450 2450
 F 0 "R?" V 4530 2450 40  0000 C CNN
@@ -450,7 +411,7 @@ Wire Wire Line
 Wire Wire Line
 	5225 3025 5575 3025
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47DF7C
 P 4450 1625
 F 0 "R?" V 4530 1625 40  0000 C CNN
@@ -467,7 +428,7 @@ Wire Wire Line
 Wire Wire Line
 	5300 1625 4700 1625
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47E9C4
 P 3000 1425
 F 0 "R?" V 3080 1425 40  0000 C CNN
@@ -478,7 +439,7 @@ F 3 "" H 3000 1425 30  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47EDF5
 P 3400 1800
 F 0 "R?" V 3480 1800 40  0000 C CNN
@@ -500,7 +461,7 @@ Wire Wire Line
 	5375 2875 5575 2875
 Connection ~ 3400 1425
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47FAB8
 P 6450 950
 F 0 "R?" V 6530 950 40  0000 C CNN
@@ -511,7 +472,7 @@ F 3 "" H 6450 950 30  0000 C CNN
 	0    1    1    0   
 $EndComp
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C47FCB5
 P 6050 1300
 F 0 "R?" V 6130 1300 40  0000 C CNN
@@ -533,7 +494,7 @@ GND
 Text Label 7275 3400 0    60   ~ 0
 GND
 $Comp
-L TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W?
 U 1 1 5C481A0A
 P 7850 3775
 F 0 "W?" H 7850 3835 50  0000 C CNN
@@ -546,7 +507,7 @@ $EndComp
 Wire Wire Line
 	7275 3775 7650 3775
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C481C47
 P 9600 3475
 F 0 "W?" H 9600 3745 50  0000 C CNN
@@ -567,7 +528,7 @@ Text Label 7275 3025 0    60   ~ 0
 GSM_VBAT
 NoConn ~ 7275 2875
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C483444
 P 4900 4150
 F 0 "W?" H 4900 4420 50  0000 C CNN
@@ -581,7 +542,7 @@ Wire Wire Line
 	4900 4150 5575 4150
 NoConn ~ 5575 3700
 $Comp
-L R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C48469B
 P 6100 2100
 F 0 "R?" V 6180 2100 40  0000 C CNN
@@ -603,7 +564,7 @@ NoConn ~ 3050 6425
 Text GLabel 5325 700  0    60   Input ~ 0
 GND
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C490798
 P 6700 950
 F 0 "W?" H 6700 1220 50  0000 C CNN
@@ -614,7 +575,7 @@ F 3 "" H 6900 950 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C491932
 P 2750 1425
 F 0 "W?" H 2750 1695 50  0000 C CNN
@@ -625,7 +586,7 @@ F 3 "" H 2950 1425 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C491C83
 P 2950 2650
 F 0 "W?" H 2950 2920 50  0000 C CNN
@@ -636,7 +597,7 @@ F 3 "" H 3150 2650 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C4925FE
 P 4200 1625
 F 0 "W?" H 4200 1895 50  0000 C CNN
@@ -647,7 +608,7 @@ F 3 "" H 4400 1625 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C49272C
 P 4200 2450
 F 0 "W?" H 4200 2720 50  0000 C CNN
@@ -658,7 +619,7 @@ F 3 "" H 4400 2450 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C4928AD
 P 4225 2875
 F 0 "W?" H 4225 3145 50  0000 C CNN
@@ -669,7 +630,7 @@ F 3 "" H 4425 2875 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TEST_1P W?
+L xmobile-rescue:TEST_1P W?
 U 1 1 5C492A5F
 P 6350 2100
 F 0 "W?" H 6350 2370 50  0000 C CNN
@@ -680,7 +641,7 @@ F 3 "" H 6550 2100 50  0000 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L STF202-22T1G U?
+L xmobile-rescue:STF202-22T1G U?
 U 1 1 5C497719
 P 8625 1850
 F 0 "U?" H 8625 1750 50  0000 C CNN
@@ -691,7 +652,7 @@ F 3 "DOCUMENTATION" H 8625 1850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L USB_A-RESCUE-xmobile P?
+L xmobile-rescue:USB_A-RESCUE-xmobile P?
 U 1 1 5C499B15
 P 9925 1950
 F 0 "P?" H 10125 1750 50  0000 C CNN
@@ -720,7 +681,7 @@ Wire Wire Line
 Wire Wire Line
 	7800 1750 7875 1750
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C49B02E
 P 10625 1700
 F 0 "C?" H 10625 1800 40  0000 L CNN

@@ -1,45 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:xmobile-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:XC6206P332MR
-LIBS:STF202-22T1G
-LIBS:MCP73871
-LIBS:switch1
-LIBS:SRAM
-LIBS:xmega128a1u_bga100
-LIBS:sim-holders
-LIBS:max7370
-LIBS:tp4056
+EESchema Schematic File Version 4
 LIBS:xmobile-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -54,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L R-RESCUE-xmobile R6
+L xmobile-rescue:R-RESCUE-xmobile R6
 U 1 1 5967CB22
 P 10025 10100
 F 0 "R6" V 10105 10100 40  0000 C CNN
@@ -69,7 +30,7 @@ $EndComp
 Text Label 10275 10100 0    60   ~ 0
 3.3V
 $Comp
-L CONN_8 P3
+L xmobile-rescue:CONN_8 P3
 U 1 1 5974D7B3
 P 13525 7500
 F 0 "P3" V 13475 7500 60  0000 C CNN
@@ -132,7 +93,7 @@ PDI_D
 Text Label 9550 9950 1    60   ~ 0
 PDI_C
 $Comp
-L CY62158EV30LL-45BVXI U?
+L xmobile-rescue:CY62158EV30LL-45BVXI U?
 U 1 1 5C118522
 P 4250 5200
 F 0 "U?" H 4250 5000 60  0000 C CNN
@@ -145,7 +106,7 @@ F 5 "https://eu.mouser.com/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45B
 	1    0    0    -1  
 $EndComp
 $Comp
-L XMega128A1U_BGA100 U?
+L xmobile-rescue:XMega128A1U_BGA100 U?
 U 1 1 5C19D697
 P 9300 5600
 F 0 "U?" H 9300 4450 60  0000 C CNN
@@ -501,7 +462,7 @@ Text GLabel 14675 9425 0    60   Input ~ 0
 Text Label 14675 9425 0    60   ~ 0
 3.3V
 Wire Wire Line
-	9300 10100 9775 10100
+	9300 10100 9550 10100
 Connection ~ 9550 10100
 Wire Wire Line
 	12875 4675 14025 4675
@@ -527,8 +488,6 @@ Wire Wire Line
 	7800 6000 7600 6000
 Wire Wire Line
 	7800 6100 7600 6100
-Wire Bus Line
-	7500 5300 7500 6000
 Wire Wire Line
 	7800 6300 7600 6300
 Wire Wire Line
@@ -545,8 +504,6 @@ Wire Wire Line
 	7800 6900 7600 6900
 Wire Wire Line
 	7800 7000 7600 7000
-Wire Bus Line
-	7500 6150 7500 6900
 Wire Wire Line
 	7800 5200 7600 5200
 Wire Wire Line
@@ -571,10 +528,6 @@ Wire Wire Line
 	7800 3700 7600 3700
 Wire Wire Line
 	7800 3600 7600 3600
-Wire Bus Line
-	7500 4800 7500 5125
-Wire Bus Line
-	7500 3500 7500 4200
 Wire Wire Line
 	3400 5450 3200 5450
 Wire Wire Line
@@ -632,15 +585,9 @@ Wire Wire Line
 Wire Wire Line
 	3400 5650 3200 5650
 Wire Bus Line
-	5325 4900 5325 5700
-Wire Bus Line
-	3950 6350 4750 6350
-Wire Bus Line
-	3100 5350 3100 4650
-Wire Bus Line
 	3100 5550 3100 5450
 Wire Wire Line
-	8600 3100 9500 3100
+	8600 3100 8700 3100
 Connection ~ 8700 3100
 Connection ~ 8800 3100
 Connection ~ 8900 3100
@@ -676,7 +623,7 @@ KBD_SDA
 Text Label 10800 7000 0    60   ~ 0
 KBD_INT
 $Comp
-L TEST_1P J?
+L xmobile-rescue:TEST_1P J?
 U 1 1 5C4B9CCC
 P 11625 4600
 F 0 "J?" H 11625 4870 50  0000 C CNN
@@ -698,7 +645,7 @@ GSM_STATUS
 Text Label 10800 6800 0    60   ~ 0
 GSM_STATUS
 $Comp
-L Micro_SD_Card J?
+L xmobile-rescue:Micro_SD_Card J?
 U 1 1 5C4DB2CD
 P 4075 8950
 F 0 "J?" H 3425 9550 50  0000 C CNN
@@ -725,7 +672,7 @@ NoConn ~ 3175 9350
 Text Label 1825 9525 3    60   ~ 0
 GND
 $Comp
-L C C?
+L xmobile-rescue:C C?
 U 1 1 5C4DFD85
 P 1975 9100
 F 0 "C?" H 2000 9200 50  0000 L CNN
@@ -738,7 +685,7 @@ F 5 "0402 In" H 2100 9025 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L CP C?
+L xmobile-rescue:CP C?
 U 1 1 5C4DFEA4
 P 1650 9100
 F 0 "C?" H 1675 9200 50  0000 L CNN
@@ -751,9 +698,9 @@ F 5 "5x5,3mm" H 1525 9025 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1650 8950 3175 8950
+	1650 8950 1975 8950
 Wire Wire Line
-	1650 9250 1975 9250
+	1650 9250 1825 9250
 Wire Wire Line
 	1825 9525 1825 9250
 Connection ~ 1825 9250
@@ -768,7 +715,7 @@ microSD_DO
 Text Label 10800 8000 0    60   ~ 0
 microSD_CS
 $Comp
-L SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C505516
 P 9000 10100
 F 0 "SW?" H 9150 10210 50  0000 C CNN
@@ -781,7 +728,7 @@ F 5 "4x4x0,8" H 9000 10100 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST_2P J?
+L xmobile-rescue:TEST_2P J?
 U 1 1 5C561693
 P 7300 7200
 F 0 "J?" H 7300 7260 50  0000 C CNN
@@ -797,7 +744,7 @@ Wire Wire Line
 Text Label 7100 7200 2    60   ~ 0
 GND
 $Comp
-L TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W?
 U 1 1 5C6C0FE4
 P 9900 10350
 F 0 "W?" H 9900 10410 50  0000 C CNN
@@ -809,7 +756,7 @@ F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W?
 U 1 1 5C6C18FA
 P 9525 10700
 F 0 "W?" H 9525 10760 50  0000 C CNN
@@ -823,7 +770,7 @@ $EndComp
 Wire Wire Line
 	9550 10350 9700 10350
 Wire Wire Line
-	9550 9950 9550 10350
+	9550 9950 9550 10100
 NoConn ~ 10800 4900
 NoConn ~ 10800 5000
 NoConn ~ 10800 5400
@@ -846,4 +793,42 @@ NoConn ~ 7800 7400
 NoConn ~ 7800 7500
 NoConn ~ 7800 7700
 NoConn ~ 7800 7800
+Wire Wire Line
+	9550 10100 9775 10100
+Wire Wire Line
+	9550 10100 9550 10350
+Wire Wire Line
+	8700 3100 8800 3100
+Wire Wire Line
+	8800 3100 8900 3100
+Wire Wire Line
+	8900 3100 9000 3100
+Wire Wire Line
+	9000 3100 9100 3100
+Wire Wire Line
+	9100 3100 9200 3100
+Wire Wire Line
+	9200 3100 9300 3100
+Wire Wire Line
+	9300 3100 9400 3100
+Wire Wire Line
+	9400 3100 9500 3100
+Wire Wire Line
+	1825 9250 1975 9250
+Wire Wire Line
+	1975 8950 3175 8950
+Wire Bus Line
+	7500 4800 7500 5125
+Wire Bus Line
+	7500 5300 7500 6000
+Wire Bus Line
+	7500 3500 7500 4200
+Wire Bus Line
+	3100 4650 3100 5350
+Wire Bus Line
+	7500 6150 7500 6900
+Wire Bus Line
+	5325 4900 5325 5700
+Wire Bus Line
+	3950 6350 4750 6350
 $EndSCHEMATC

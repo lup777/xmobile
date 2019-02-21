@@ -1,0 +1,3 @@
+(sym_lib_table
+  (lib (name xmobile-rescue)(type Legacy)(uri ${KIPRJMOD}/xmobile-rescue.lib)(options "")(descr ""))
+)

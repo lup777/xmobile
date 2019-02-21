@@ -1,45 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:xmobile-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:XC6206P332MR
-LIBS:STF202-22T1G
-LIBS:MCP73871
-LIBS:switch1
-LIBS:SRAM
-LIBS:xmega128a1u_bga100
-LIBS:sim-holders
-LIBS:max7370
-LIBS:tp4056
+EESchema Schematic File Version 4
 LIBS:xmobile-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
@@ -54,7 +15,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L C-RESCUE-xmobile C10
+L xmobile-rescue:C-RESCUE-xmobile C10
 U 1 1 5A9F1A09
 P 5650 1950
 F 0 "C10" H 5650 2050 40  0000 L CNN
@@ -67,7 +28,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C16
+L xmobile-rescue:C-RESCUE-xmobile C16
 U 1 1 5A9F1A10
 P 6150 1950
 F 0 "C16" H 6150 2050 40  0000 L CNN
@@ -88,7 +49,7 @@ GND
 Text Label 5650 1750 1    60   ~ 0
 GND
 $Comp
-L LED-RESCUE-xmobile D2
+L xmobile-rescue:LED-RESCUE-xmobile D2
 U 1 1 5A9F1A3E
 P 6725 1900
 F 0 "D2" H 6725 2000 50  0000 C CNN
@@ -209,7 +170,7 @@ AUDIO_SPKN
 Wire Wire Line
 	7100 2700 7100 2850
 $Comp
-L TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W?
 U 1 1 5C6D0927
 P 7500 2450
 AR Path="/5C6D0927" Ref="W?"  Part="1" 
@@ -229,7 +190,7 @@ Wire Wire Line
 Wire Wire Line
 	7500 2200 7500 2250
 $Comp
-L TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W?
 U 1 1 5C6D0EE0
 P 7650 5000
 AR Path="/5C6D0EE0" Ref="W?"  Part="1" 
@@ -253,7 +214,7 @@ Wire Wire Line
 Wire Wire Line
 	4025 4750 7650 4750
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D694B
 P 5650 2450
 F 0 "C?" H 5650 2550 40  0000 L CNN
@@ -266,7 +227,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6A3D
 P 5650 2950
 F 0 "C?" H 5650 3050 40  0000 L CNN
@@ -279,7 +240,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6B0E
 P 6150 2450
 F 0 "C?" H 6150 2550 40  0000 L CNN
@@ -292,7 +253,7 @@ F 5 "0402 In" H 6250 2300 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6B9B
 P 6150 2950
 F 0 "C?" H 6150 3050 40  0000 L CNN
@@ -305,7 +266,7 @@ F 5 "0402 In" H 6250 2800 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6CC6
 P 5900 4500
 F 0 "C?" H 5900 4600 40  0000 L CNN
@@ -318,7 +279,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6D99
 P 6400 4500
 F 0 "C?" H 6400 4600 40  0000 L CNN
@@ -331,7 +292,7 @@ F 5 "0402 In" H 6500 4350 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6EE0
 P 5900 5000
 F 0 "C?" H 5900 5100 40  0000 L CNN
@@ -344,7 +305,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D6F6B
 P 5900 5500
 F 0 "C?" H 5900 5600 40  0000 L CNN
@@ -357,7 +318,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D7042
 P 6400 5000
 F 0 "C?" H 6400 5100 40  0000 L CNN
@@ -370,7 +331,7 @@ F 5 "0402 In" H 6500 4850 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D70D1
 P 6400 5500
 F 0 "C?" H 6400 5600 40  0000 L CNN
@@ -383,7 +344,7 @@ F 5 "0402 In" H 6500 5350 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D7206
 P 4025 4500
 F 0 "C?" H 4025 4600 40  0000 L CNN
@@ -396,7 +357,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D72FB
 P 4025 5000
 F 0 "C?" H 4025 5100 40  0000 L CNN
@@ -409,7 +370,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D7388
 P 4025 5500
 F 0 "C?" H 4025 5600 40  0000 L CNN
@@ -422,7 +383,7 @@ F 5 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnW
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D77F5
 P 4525 4500
 F 0 "C?" H 4525 4600 40  0000 L CNN
@@ -435,7 +396,7 @@ F 5 "0402 In" H 4625 4350 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D78F0
 P 4525 5000
 F 0 "C?" H 4525 5100 40  0000 L CNN
@@ -448,7 +409,7 @@ F 5 "0402 In" H 4625 4850 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C?
 U 1 1 5C6D7979
 P 4525 5500
 F 0 "C?" H 4525 5600 40  0000 L CNN
@@ -461,7 +422,7 @@ F 5 "0402 In" H 4625 5350 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C7622
 P 7100 1900
 F 0 "D?" H 7100 2000 50  0000 C CNN
@@ -474,7 +435,7 @@ F 5 "0402 In" H 6950 2000 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C77F4
 P 7100 3000
 F 0 "D?" H 7100 3100 50  0000 C CNN
@@ -487,7 +448,7 @@ F 5 "0402 In" H 6950 3100 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C796F
 P 6725 3000
 F 0 "D?" H 6725 3100 50  0000 C CNN
@@ -500,7 +461,7 @@ F 5 "0402 In" H 6575 3100 30  0000 C CNN "case"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C7BA9
 P 6975 4450
 F 0 "D?" H 6975 4550 50  0000 C CNN
@@ -513,7 +474,7 @@ F 5 "0402 In" H 6825 4550 30  0000 C CNN "case"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C7D73
 P 7350 4450
 F 0 "D?" H 7350 4550 50  0000 C CNN
@@ -526,7 +487,7 @@ F 5 "0402 In" H 7200 4550 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C7FDB
 P 7350 5550
 F 0 "D?" H 7350 5650 50  0000 C CNN
@@ -539,7 +500,7 @@ F 5 "0402 In" H 7200 5650 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L LED-RESCUE-xmobile D?
+L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C6C809E
 P 6975 5550
 F 0 "D?" H 6975 5650 50  0000 C CNN
