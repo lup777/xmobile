@@ -17,3 +17,5 @@ a
 *.bck
 *.kicad_pcb-bak
 .#*
+rescue-backup/*
+rescue-backup

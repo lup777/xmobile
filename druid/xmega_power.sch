@@ -142,7 +142,7 @@ F 5 "SMA 403D" V 9200 5575 30  0000 C CNN "case "
 	0    -1   -1   0   
 $EndComp
 Wire Wire Line
-	7800 2050 8800 2050
+	7800 2050 8025 2050
 Wire Wire Line
 	8600 3050 8600 2800
 Wire Wire Line
@@ -159,7 +159,7 @@ Wire Wire Line
 Wire Wire Line
 	5750 3800 5750 3700
 Wire Wire Line
-	5600 3700 5925 3700
+	5600 3700 5750 3700
 Wire Wire Line
 	8025 2050 8025 2400
 Wire Wire Line
@@ -167,10 +167,9 @@ Wire Wire Line
 Wire Wire Line
 	8600 2400 8600 2050
 Wire Wire Line
-	3825 5250 9400 5250
+	3825 5250 4325 5250
 Wire Wire Line
 	7475 5675 7475 5875
-Connection ~ 7475 5875
 Wire Wire Line
 	7950 5725 7950 5875
 Connection ~ 7950 5875
@@ -196,7 +195,6 @@ Wire Wire Line
 	9075 5250 9075 5375
 Wire Wire Line
 	9075 5875 9075 5775
-Connection ~ 9075 5875
 Connection ~ 9075 5250
 $Comp
 L xmobile-rescue:+BATT #PWR05
@@ -234,7 +232,7 @@ F 3 "" H 5750 3700 50  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	3825 2050 6300 2050
+	3825 2050 4325 2050
 Text GLabel 5600 3700 0    60   Input ~ 0
 GND
 Text GLabel 9400 2050 2    60   Input ~ 0
@@ -316,7 +314,7 @@ Wire Wire Line
 Wire Wire Line
 	2025 2700 2025 2450
 Wire Wire Line
-	2025 2050 2775 2050
+	2025 2050 2325 2050
 Wire Wire Line
 	2025 2050 2025 2150
 Wire Wire Line
@@ -338,9 +336,9 @@ $EndComp
 Text Label 2150 1750 3    60   ~ 0
 GND
 Wire Wire Line
-	2150 1450 2650 1450
+	2150 1450 2450 1450
 Wire Wire Line
-	2650 1325 2650 2050
+	2650 1325 2650 1450
 Connection ~ 2650 2050
 Text Label 3325 3000 3    60   ~ 0
 GND
@@ -365,7 +363,7 @@ Wire Wire Line
 	3950 2700 3950 2800
 Connection ~ 2450 1450
 Wire Wire Line
-	7475 5875 9075 5875
+	7475 5875 7950 5875
 $Comp
 L xmobile-rescue:+BATT #PWR?
 U 1 1 5C6B0901
@@ -401,7 +399,7 @@ Wire Wire Line
 Wire Wire Line
 	2025 5900 2025 5650
 Wire Wire Line
-	2025 5250 2775 5250
+	2025 5250 2325 5250
 Wire Wire Line
 	2025 5250 2025 5350
 Wire Wire Line
@@ -410,9 +408,9 @@ Connection ~ 2325 5250
 Text Label 2150 4950 3    60   ~ 0
 GND
 Wire Wire Line
-	2150 4650 2650 4650
+	2150 4650 2450 4650
 Wire Wire Line
-	2650 4525 2650 5250
+	2650 4525 2650 4650
 Connection ~ 2650 5250
 Text Label 3325 6200 3    60   ~ 0
 GND
@@ -644,4 +642,48 @@ F 5 "https://ru.aliexpress.com/item/20-TP4056-TP4056/32965308715.html?spm=a2g0v.
 	1    3325 5450
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	8300 2050 8600 2050
+Wire Wire Line
+	8600 2050 8800 2050
+Wire Wire Line
+	8025 2050 8300 2050
+Wire Wire Line
+	7950 5875 8375 5875
+Wire Wire Line
+	8375 5875 8750 5875
+Wire Wire Line
+	8750 5875 9075 5875
+Wire Wire Line
+	7475 5250 7950 5250
+Wire Wire Line
+	7950 5250 8375 5250
+Wire Wire Line
+	8375 5250 8750 5250
+Wire Wire Line
+	8750 5250 9075 5250
+Wire Wire Line
+	9075 5250 9400 5250
+Wire Wire Line
+	5750 3700 5925 3700
+Wire Wire Line
+	4325 2050 6300 2050
+Wire Wire Line
+	2325 2050 2650 2050
+Wire Wire Line
+	2650 2050 2775 2050
+Wire Wire Line
+	2450 1450 2650 1450
+Wire Wire Line
+	4325 5250 7475 5250
+Wire Wire Line
+	2325 5250 2650 5250
+Wire Wire Line
+	2650 5250 2775 5250
+Wire Wire Line
+	2450 4650 2650 4650
+Wire Wire Line
+	2650 1450 2650 2050
+Wire Wire Line
+	2650 4650 2650 5250
 $EndSCHEMATC

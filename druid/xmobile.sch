@@ -35,9 +35,10 @@ U 1 1 5974D7B3
 P 13525 7500
 F 0 "P3" V 13475 7500 60  0000 C CNN
 F 1 "CONN_8" V 13575 7500 60  0000 C CNN
-F 2 "Pin_Headers:Pin_Header_Straight_1x08" V 13700 7450 60  0000 C CNN
+F 2 "Connector_Pin_Header_1.00mm:PinHeader_1x08_P1.00mm_Vertical" V 13700 7450 60  0001 C CNN
 F 3 "" H 13525 7500 60  0001 C CNN
 F 4 "EPD display connector" V 13700 7500 60  0001 C CNN "description"
+F 5 "pin header 1.00mm" V 13675 7500 30  0000 C CNN "case"
 	1    13525 7500
 	1    0    0    -1  
 $EndComp
@@ -650,8 +651,10 @@ U 1 1 5C4DB2CD
 P 4075 8950
 F 0 "J?" H 3425 9550 50  0000 C CNN
 F 1 "Micro_SD_Card" H 4725 9550 50  0000 R CNN
-F 2 "microSD:microSD-noname" H 4075 8200 50  0000 C CNN
-F 3 "" H 4075 8950 50  0001 C CNN
+F 2 "Connector_Card:microSD_HC_Wuerth_693072010801" H 4075 8200 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/445/693072010801-336093.pdf" H 4075 8950 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Wurth-Electronics/693072010801?qs=sGAEpiMZZMuJakaoiLiBpiVYNV8REXtFk03jtifiNMv8wsb977CC%2fA%3d%3d" H 4075 8950 50  0001 C CNN "example"
+F 5 "8 pin microSD" H 4350 8925 30  0000 C CNN "case"
 	1    4075 8950
 	1    0    0    -1  
 $EndComp

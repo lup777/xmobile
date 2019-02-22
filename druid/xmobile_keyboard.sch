@@ -198,13 +198,12 @@ Wire Wire Line
 Connection ~ 8125 1550
 Wire Wire Line
 	8975 1550 8975 1975
-Connection ~ 8975 1550
 Wire Wire Line
-	7150 1975 7150 5625
+	7150 1975 7150 2775
 Wire Wire Line
-	8050 1975 8050 5625
+	8050 1975 8050 2775
 Wire Wire Line
-	8900 1975 8900 5625
+	8900 1975 8900 2775
 Wire Wire Line
 	6375 2775 6375 2400
 Connection ~ 6375 2400
@@ -225,10 +224,8 @@ Wire Wire Line
 Connection ~ 8125 2400
 Wire Wire Line
 	8975 2400 8975 2775
-Connection ~ 8975 2400
 Wire Wire Line
 	8975 3250 8975 3700
-Connection ~ 8975 3250
 Wire Wire Line
 	6375 4375 6375 4025
 Connection ~ 6375 4025
@@ -240,7 +237,6 @@ Wire Wire Line
 Connection ~ 8125 4025
 Wire Wire Line
 	8975 4025 8975 4425
-Connection ~ 8975 4025
 Wire Wire Line
 	6375 5175 6375 4850
 Connection ~ 6375 4850
@@ -252,19 +248,16 @@ Wire Wire Line
 Connection ~ 8125 4850
 Wire Wire Line
 	8975 4850 8975 5175
-Connection ~ 8975 4850
 Wire Wire Line
-	6175 1550 8975 1550
+	6175 1550 6375 1550
 Wire Wire Line
-	6175 2400 8975 2400
+	6175 2400 6375 2400
 Wire Wire Line
-	6175 3250 8975 3250
+	6175 3250 6375 3250
 Wire Wire Line
-	6175 4025 8975 4025
+	6175 4025 6375 4025
 Wire Wire Line
-	6175 4850 8975 4850
-Wire Bus Line
-	6075 1300 6075 4750
+	6175 4850 6375 4850
 Wire Bus Line
 	1300 1300 6075 1300
 Wire Wire Line
@@ -286,20 +279,14 @@ Wire Wire Line
 Wire Wire Line
 	3300 3350 3575 3350
 Wire Bus Line
-	9850 5725 5875 5725
-Wire Bus Line
 	5875 5725 5875 1475
 Wire Bus Line
 	5875 1475 3675 1475
-Wire Bus Line
-	3675 1475 3675 3450
-Wire Bus Line
-	1300 1300 1300 3350
 Wire Wire Line
-	1800 4050 1800 4250
+	1800 4050 1800 4150
 Connection ~ 1800 4150
 Wire Wire Line
-	4300 2550 4900 2550
+	4300 2550 4600 2550
 Wire Wire Line
 	4300 2550 4300 2925
 Wire Wire Line
@@ -466,7 +453,7 @@ Wire Wire Line
 	9575 5175 9750 5175
 Connection ~ 9750 5175
 Wire Wire Line
-	9750 1975 9750 5625
+	9750 1975 9750 2775
 $Comp
 L xmobile-rescue:SW_PUSH SW?
 U 1 1 5C6DCE7B
@@ -793,4 +780,78 @@ F 5 "0402 In" V 3850 5950 30  0000 C CNN "case"
 	1    3925 5950
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6375 1550 7275 1550
+Wire Wire Line
+	7275 1550 8125 1550
+Wire Wire Line
+	8125 1550 8975 1550
+Wire Wire Line
+	6375 2400 7275 2400
+Wire Wire Line
+	7275 2400 8125 2400
+Wire Wire Line
+	6375 3250 7275 3250
+Wire Wire Line
+	7275 3250 8125 3250
+Wire Wire Line
+	8125 3250 8975 3250
+Wire Wire Line
+	8125 2400 8975 2400
+Wire Wire Line
+	6375 4025 7275 4025
+Wire Wire Line
+	7275 4025 8125 4025
+Wire Wire Line
+	8125 4025 8975 4025
+Wire Wire Line
+	6375 4850 7275 4850
+Wire Wire Line
+	7275 4850 8125 4850
+Wire Wire Line
+	8125 4850 8975 4850
+Wire Wire Line
+	1800 4150 1800 4250
+Wire Wire Line
+	4600 2550 4900 2550
+Wire Wire Line
+	7150 3700 7150 4375
+Wire Wire Line
+	8050 3700 8050 4375
+Wire Wire Line
+	8900 3700 8900 4375
+Wire Wire Line
+	9750 3700 9750 4425
+Wire Wire Line
+	9750 2775 9750 3700
+Wire Wire Line
+	8900 2775 8900 3700
+Wire Wire Line
+	8050 2775 8050 3700
+Wire Wire Line
+	7150 2775 7150 3700
+Wire Wire Line
+	9750 4425 9750 5175
+Wire Wire Line
+	8900 4375 8900 5175
+Wire Wire Line
+	8050 4375 8050 5175
+Wire Wire Line
+	7150 4375 7150 5175
+Wire Wire Line
+	7150 5175 7150 5625
+Wire Wire Line
+	8050 5175 8050 5625
+Wire Wire Line
+	8900 5175 8900 5625
+Wire Wire Line
+	9750 5175 9750 5625
+Wire Bus Line
+	5875 5725 9850 5725
+Wire Bus Line
+	3675 1475 3675 3450
+Wire Bus Line
+	1300 1300 1300 3350
+Wire Bus Line
+	6075 1300 6075 4750
 $EndSCHEMATC
