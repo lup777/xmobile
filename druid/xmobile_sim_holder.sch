@@ -277,8 +277,10 @@ U 1 1 5C47D122
 P 3600 3100
 F 0 "R22" V 3680 3100 40  0000 C CNN
 F 1 "5.6k" V 3607 3101 40  0000 C CNN
-F 2 "" V 3530 3100 30  0000 C CNN
-F 3 "" H 3600 3100 30  0000 C CNN
+F 2 "Resistors_SMD:R_0402" V 3530 3100 30  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/315/AOA0000C307-1149632.pdf" H 3600 3100 30  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/Panasonic/ERA-2AEB562X?qs=sGAEpiMZZMtlubZbdhIBILRDuhBknqQkIY4D4uMGNNo%3d" V 3600 3100 50  0001 C CNN "example"
+F 5 "0402 In" V 3525 3100 30  0000 C CNN "case"
 	1    3600 3100
 	-1   0    0    1   
 $EndComp

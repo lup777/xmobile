@@ -83,7 +83,7 @@ U 1 1 5A9FD1F7
 P 8375 5575
 F 0 "C29" H 8375 5675 40  0000 L CNN
 F 1 "33p" H 8381 5490 40  0000 L CNN
-F 2 "" H 8413 5425 30  0000 C CNN
+F 2 "Capacitors_SMD:C_0402" H 8413 5425 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 8375 5575 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 8375 5575 60  0001 C CNN "example"
 F 5 "0402 In" H 8400 5425 30  0000 C CNN "case"
@@ -137,7 +137,8 @@ F 1 "ZENER" H 9075 5475 40  0000 C CNN
 F 2 "Diodes_SMD:SMA_Standard" H 9075 5575 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/308/1SMA5913BT3-D-1360201.pdf" H 9075 5575 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ON-Semiconductor/1SMA5918BT3G?qs=sGAEpiMZZMtQ8nqTKtFS%2fJ7m6e1KBCgu1vB5isutOYc%3d" H 9075 5575 60  0001 C CNN "example"
-F 5 "SMA 403D" V 9200 5575 30  0000 C CNN "case "
+F 5 "" V 9200 5575 30  0000 C CNN "case "
+F 6 "SMA 403D" H 0   0   50  0001 C CNN "case"
 	1    9075 5575
 	0    -1   -1   0   
 $EndComp
