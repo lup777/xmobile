@@ -15,10 +15,10 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R6
+L xmobile-rescue:R-RESCUE-xmobile R1
 U 1 1 5967CB22
 P 10025 10100
-F 0 "R6" V 10105 10100 40  0000 C CNN
+F 0 "R1" V 10105 10100 40  0000 C CNN
 F 1 "10k" V 10032 10101 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 9955 10100 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" V 10200 9750 30  0001 C CNN
@@ -30,10 +30,10 @@ $EndComp
 Text Label 10275 10100 0    60   ~ 0
 3.3V
 $Comp
-L xmobile-rescue:CONN_8 P3
+L xmobile-rescue:CONN_8 P1
 U 1 1 5974D7B3
 P 13525 7500
-F 0 "P3" V 13475 7500 60  0000 C CNN
+F 0 "P1" V 13475 7500 60  0000 C CNN
 F 1 "CONN_8" V 13575 7500 60  0000 C CNN
 F 2 "Connector_Pin_Header_1.00mm:PinHeader_1x08_P1.00mm_Vertical" V 13700 7450 60  0001 C CNN
 F 3 "" H 13525 7500 60  0001 C CNN
@@ -94,10 +94,10 @@ PDI_D
 Text Label 9550 9950 1    60   ~ 0
 PDI_C
 $Comp
-L xmobile-rescue:CY62158EV30LL-45BVXI U?
+L xmobile-rescue:CY62158EV30LL-45BVXI U1
 U 1 1 5C118522
 P 4250 5200
-F 0 "U?" H 4250 5000 60  0000 C CNN
+F 0 "U1" H 4250 5000 60  0000 C CNN
 F 1 "CY62158EV30LL-45BVXI" H 4250 5150 39  0000 C CNN
 F 2 "druid:48-ball_VFBGA_6x8x1mm_BV48BZ48" H 4475 3925 60  0001 C CNN
 F 3 "https://www.cypress.com/file/43811/download" H 4300 4250 60  0001 C CNN
@@ -107,10 +107,10 @@ F 5 "https://eu.mouser.com/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45B
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:XMega128A1U_BGA100 U?
+L xmobile-rescue:XMega128A1U_BGA100 U2
 U 1 1 5C19D697
 P 9300 5600
-F 0 "U?" H 9300 4450 60  0000 C CNN
+F 0 "U2" H 9300 4450 60  0000 C CNN
 F 1 "XMega128A1U_BGA100" H 9350 4900 60  0000 C CNN
 F 2 "druid:BGA100_9x9x1.2_pitch-0.80mm" H 9400 5150 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/268/Atmel-8385-8-and-16-bit-AVR-Microcontroller-ATxmeg-1315775.pdf" H 9700 7400 60  0001 C CNN
@@ -212,9 +212,9 @@ PDI_C
 Text Label 9500 8500 3    60   ~ 0
 PDI_D
 Text Label 3850 4350 1    60   ~ 0
-+3.3V_filtered
+3.3V
 Text Label 3950 4350 1    60   ~ 0
-+3.3V_filtered
+3.3V
 Text Label 4550 4350 1    60   ~ 0
 GND
 Text Label 4450 4350 1    60   ~ 0
@@ -624,10 +624,10 @@ KBD_SDA
 Text Label 10800 7000 0    60   ~ 0
 KBD_INT
 $Comp
-L xmobile-rescue:TEST_1P J?
+L xmobile-rescue:TEST_1P J3
 U 1 1 5C4B9CCC
 P 11625 4600
-F 0 "J?" H 11625 4870 50  0000 C CNN
+F 0 "J3" H 11625 4870 50  0000 C CNN
 F 1 "TEST_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 11650 4925 50  0001 C CNN
 F 3 "" H 11825 4600 50  0001 C CNN
@@ -637,19 +637,19 @@ F 4 "1 pad" H 11625 4925 30  0000 C CNN "case"
 $EndComp
 Wire Wire Line
 	10800 4600 11625 4600
-Text GLabel 15225 9425 0    60   Input ~ 0
+Text GLabel 15500 9425 0    60   Input ~ 0
 GND
-Text Label 15225 9425 0    60   ~ 0
+Text Label 15500 9425 0    60   ~ 0
 GND
 Text Label 12875 3550 0    60   ~ 0
 GSM_STATUS
 Text Label 10800 6800 0    60   ~ 0
 GSM_STATUS
 $Comp
-L xmobile-rescue:Micro_SD_Card J?
+L xmobile-rescue:Micro_SD_Card J1
 U 1 1 5C4DB2CD
 P 4075 8950
-F 0 "J?" H 3425 9550 50  0000 C CNN
+F 0 "J1" H 3425 9550 50  0000 C CNN
 F 1 "Micro_SD_Card" H 4725 9550 50  0000 R CNN
 F 2 "Connector_Card:microSD_HC_Wuerth_693072010801" H 4075 8200 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/445/693072010801-336093.pdf" H 4075 8950 50  0001 C CNN
@@ -675,10 +675,10 @@ NoConn ~ 3175 9350
 Text Label 1825 9525 3    60   ~ 0
 GND
 $Comp
-L xmobile-rescue:C C?
+L xmobile-rescue:C C2
 U 1 1 5C4DFD85
 P 1975 9100
-F 0 "C?" H 2000 9200 50  0000 L CNN
+F 0 "C2" H 2000 9200 50  0000 L CNN
 F 1 "0.1u" H 2100 9100 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0402" H 2175 9375 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/40/cx5r-776519.pdf" H 1975 9100 50  0001 C CNN
@@ -688,10 +688,10 @@ F 5 "0402 In" H 2100 9025 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:CP C?
+L xmobile-rescue:CP C1
 U 1 1 5C4DFEA4
 P 1650 9100
-F 0 "C?" H 1675 9200 50  0000 L CNN
+F 0 "C1" H 1675 9200 50  0000 L CNN
 F 1 "33u" H 1400 9100 50  0000 L CNN
 F 2 "Capacitors_SMD:c_elec_5x5.3" H 1200 8875 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/315/ABA0000C1145-947633.pdf" H 1650 9100 50  0001 C CNN
@@ -718,10 +718,10 @@ microSD_DO
 Text Label 10800 8000 0    60   ~ 0
 microSD_CS
 $Comp
-L xmobile-rescue:SW_PUSH SW?
+L xmobile-rescue:SW_PUSH SW1
 U 1 1 5C505516
 P 9000 10100
-F 0 "SW?" H 9150 10210 50  0000 C CNN
+F 0 "SW1" H 9150 10210 50  0000 C CNN
 F 1 "SW_PUSH" H 9000 10020 50  0000 C CNN
 F 2 "druid:button_4pin_7,5x5" H 8975 9950 50  0001 C CNN
 F 3 "" H 9000 10100 50  0000 C CNN
@@ -731,10 +731,10 @@ F 5 "4x4x0,8" H 9000 10100 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:TEST_2P J?
+L xmobile-rescue:TEST_2P J2
 U 1 1 5C561693
 P 7300 7200
-F 0 "J?" H 7300 7260 50  0000 C CNN
+F 0 "J2" H 7300 7260 50  0000 C CNN
 F 1 "TEST_VIBRO" H 7300 7130 50  0000 C CNN
 F 2 "Measurement_Points:Test_Point_2Pads" H 6925 7025 50  0001 C CNN
 F 3 "" H 7300 7200 50  0001 C CNN
@@ -747,10 +747,10 @@ Wire Wire Line
 Text Label 7100 7200 2    60   ~ 0
 GND
 $Comp
-L xmobile-rescue:TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W2
 U 1 1 5C6C0FE4
 P 9900 10350
-F 0 "W?" H 9900 10410 50  0000 C CNN
+F 0 "W2" H 9900 10410 50  0000 C CNN
 F 1 "TEST_PDI" H 9900 10280 50  0000 C CNN
 F 2 "Measurement_Points:Test_Point_2Pads" H 10150 10200 50  0001 C CNN
 F 3 "" H 9900 10350 50  0000 C CNN
@@ -759,10 +759,10 @@ F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W1
 U 1 1 5C6C18FA
 P 9525 10700
-F 0 "W?" H 9525 10760 50  0000 C CNN
+F 0 "W1" H 9525 10760 50  0000 C CNN
 F 1 "TEST_XMEGA_PWR" H 9525 10630 50  0000 C CNN
 F 2 "Measurement_Points:Test_Point_2Pads" H 9625 10550 50  0001 C CNN
 F 3 "" H 9525 10700 50  0000 C CNN
@@ -820,6 +820,19 @@ Wire Wire Line
 	1825 9250 1975 9250
 Wire Wire Line
 	1975 8950 3175 8950
+$Comp
+L xmobile-rescue:PWR_FLAG #FLG0101
+U 1 1 5C7368D2
+P 14975 9425
+F 0 "#FLG0101" H 14975 9520 50  0001 C CNN
+F 1 "PWR_FLAG" H 14975 9649 50  0000 C CNN
+F 2 "" H 14975 9425 50  0000 C CNN
+F 3 "" H 14975 9425 50  0000 C CNN
+	1    14975 9425
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14675 9425 14975 9425
 Wire Bus Line
 	7500 4800 7500 5125
 Wire Bus Line

@@ -14,13 +14,13 @@ Comment2 ""
 Comment3 ""
 Comment4 ""
 $EndDescr
-Text Label 5325 700  0    60   ~ 0
+Text Label 10200 6400 0    60   ~ 0
 GND
 $Comp
-L xmobile-rescue:SIM800C U?
+L xmobile-rescue:SIM800C U8
 U 1 1 5C46A8F4
 P 6625 3525
-F 0 "U?" H 6675 4500 60  0000 C CNN
+F 0 "U8" H 6675 4500 60  0000 C CNN
 F 1 "SIM800C" H 5975 4500 60  0000 C CNN
 F 2 "druid:SIM800C" H 6500 3475 60  0001 C CNN
 F 3 "https://www.elecrow.com/download/SIM800C_Hardware_Design_V1.02.pdf" H 6625 3525 60  0001 C CNN
@@ -30,10 +30,10 @@ F 5 "SIM800C LCC" H 6425 3550 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:78646-3001 U?
+L xmobile-rescue:78646-3001 U7
 U 1 1 5C46ADE6
 P 4775 5775
-F 0 "U?" H 4875 5575 60  0000 C CNN
+F 0 "U7" H 4875 5575 60  0000 C CNN
 F 1 "78646-3001" H 4925 5725 60  0000 C CNN
 F 2 "druid:molex-microSIM_SD-78646-001" H 4850 5400 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/276/0786463001_MEMORY_CARD_SOCKET-152580.pdf" H 4775 5825 60  0001 C CNN
@@ -63,10 +63,10 @@ SIM_DATA
 Text Label 1100 6025 2    60   ~ 0
 SIM_DATA
 $Comp
-L xmobile-rescue:SMF05C D?
+L xmobile-rescue:SMF05C D18
 U 1 1 5C46C4AB
 P 3250 6650
-F 0 "D?" V 3325 6875 60  0000 C CNN
+F 0 "D18" V 3325 6875 60  0000 C CNN
 F 1 "SMF05C" V 3500 6750 60  0000 C CNN
 F 2 "semtech:SOT363" H 3250 6975 60  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/308/SMF05C-D-100912.pdf" H 3240 6650 60  0001 C CNN
@@ -81,10 +81,10 @@ Wire Wire Line
 	2950 6425 2950 6025
 Connection ~ 2950 6025
 $Comp
-L xmobile-rescue:C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C32
 U 1 1 5C46CACB
 P 1925 6625
-F 0 "C?" H 1925 6725 40  0000 L CNN
+F 0 "C32" H 1925 6725 40  0000 L CNN
 F 1 "22p" H 1931 6540 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0402" H 1963 6475 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/281/GCQ1555C1HR51WB01-01-1154307.pdf" H 1925 6625 60  0001 C CNN
@@ -97,10 +97,10 @@ Wire Wire Line
 	1925 6425 1925 6025
 Connection ~ 1925 6025
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R15
 U 1 1 5C46D4E7
 P 1525 5075
-F 0 "R?" V 1605 5075 40  0000 C CNN
+F 0 "R15" V 1605 5075 40  0000 C CNN
 F 1 "51" V 1532 5076 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 1455 5075 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 1525 5075 30  0001 C CNN
@@ -113,8 +113,6 @@ Wire Wire Line
 	1125 5675 1275 5675
 Wire Wire Line
 	1275 5375 1125 5375
-Wire Wire Line
-	1275 5075 1100 5075
 Wire Wire Line
 	1100 6025 1275 6025
 Wire Wire Line
@@ -156,10 +154,10 @@ GSM_VBAT
 Text Label 10425 3875 1    60   ~ 0
 GSM_VBAT
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R32
 U 1 1 5C4702F9
 P 9900 5625
-F 0 "R?" V 9980 5625 40  0000 C CNN
+F 0 "R32" V 9980 5625 40  0000 C CNN
 F 1 "47k" V 9907 5626 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 9830 5625 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/rcse3-1013761.pdf" H 9900 5625 30  0001 C CNN
@@ -190,10 +188,10 @@ NETLIGHT
 Text Label 7275 2800 0    60   ~ 0
 NETLIGHT
 $Comp
-L xmobile-rescue:BC850 Q?
+L xmobile-rescue:BC850 Q1
 U 1 1 5C473781
 P 7750 5250
-F 0 "Q?" H 7950 5325 50  0000 L CNN
+F 0 "Q1" H 7950 5325 50  0000 L CNN
 F 1 "BC850" H 7950 5250 50  0000 L CNN
 F 2 "SOT:SOT-23" H 7950 5175 50  0001 L CIN
 F 3 "https://www.mouser.co.uk/datasheet/2/308/BC850-1300034.pdf" H 7750 5250 50  0001 L CNN
@@ -203,10 +201,10 @@ F 5 "SOT-23" H 8025 5150 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R29
 U 1 1 5C4739DE
 P 6800 5250
-F 0 "R?" V 6880 5250 40  0000 C CNN
+F 0 "R29" V 6880 5250 40  0000 C CNN
 F 1 "4.7K" V 6807 5251 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 6730 5250 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 6800 5250 30  0001 C CNN
@@ -274,10 +272,10 @@ Wire Wire Line
 	3600 2850 3600 2650
 Connection ~ 3600 2650
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R22
 U 1 1 5C47D122
 P 3600 3100
-F 0 "R?" V 3680 3100 40  0000 C CNN
+F 0 "R22" V 3680 3100 40  0000 C CNN
 F 1 "5.6k" V 3607 3101 40  0000 C CNN
 F 2 "" V 3530 3100 30  0000 C CNN
 F 3 "" H 3600 3100 30  0000 C CNN
@@ -297,10 +295,10 @@ Wire Wire Line
 Wire Wire Line
 	5300 1625 4700 1625
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R21
 U 1 1 5C47EDF5
 P 3400 1800
-F 0 "R?" V 3480 1800 40  0000 C CNN
+F 0 "R21" V 3480 1800 40  0000 C CNN
 F 1 "5.6k" V 3407 1801 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 3330 1800 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/315/AOA0000C304-1149620.pdf" H 3400 1800 30  0001 C CNN
@@ -321,10 +319,10 @@ Wire Wire Line
 	5375 2875 5575 2875
 Connection ~ 3400 1425
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R26
 U 1 1 5C47FCB5
 P 6050 1300
-F 0 "R?" V 6130 1300 40  0000 C CNN
+F 0 "R26" V 6130 1300 40  0000 C CNN
 F 1 "5.6k" V 6057 1301 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 5980 1300 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/447/PYu-RC_Group_51_RoHS_L_10-1527934.pdf" H 6050 1300 30  0001 C CNN
@@ -345,10 +343,10 @@ GND
 Text Label 7275 3400 0    60   ~ 0
 GND
 $Comp
-L xmobile-rescue:TEST-RESCUE-xmobile W?
+L xmobile-rescue:TEST-RESCUE-xmobile W17
 U 1 1 5C481A0A
 P 7850 3775
-F 0 "W?" H 7850 3835 50  0000 C CNN
+F 0 "W17" H 7850 3835 50  0000 C CNN
 F 1 "TP_RTC_BAT" H 7850 3705 50  0000 C CNN
 F 2 "Measurement_Points:Test_Point_2Pads" H 7850 3775 50  0001 C CNN
 F 3 "" H 7850 3775 50  0000 C CNN
@@ -359,10 +357,10 @@ $EndComp
 Wire Wire Line
 	7275 3775 7650 3775
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W18
 U 1 1 5C481C47
 P 9600 3475
-F 0 "W?" V 9600 3725 50  0000 C CNN
+F 0 "W18" V 9600 3725 50  0000 C CNN
 F 1 "TP_GSM_ANT" V 9500 3700 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 9800 3475 50  0001 C CNN
 F 3 "" H 9800 3475 50  0000 C CNN
@@ -381,10 +379,10 @@ Text Label 7275 3025 0    60   ~ 0
 GSM_VBAT
 NoConn ~ 7275 2875
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W14
 U 1 1 5C483444
 P 4900 4150
-F 0 "W?" V 4900 4400 50  0000 C CNN
+F 0 "W14" V 4900 4400 50  0000 C CNN
 F 1 "TP_BT_ANT" V 5000 4275 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 5100 4150 50  0001 C CNN
 F 3 "" H 5100 4150 50  0000 C CNN
@@ -404,13 +402,13 @@ Wire Wire Line
 Wire Wire Line
 	5450 2800 5450 950 
 NoConn ~ 3050 6425
-Text GLabel 5325 700  0    60   Input ~ 0
+Text GLabel 10200 6400 0    60   Input ~ 0
 GND
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W16
 U 1 1 5C490798
 P 6700 950
-F 0 "W?" H 6700 1220 50  0000 C CNN
+F 0 "W16" H 6700 1220 50  0000 C CNN
 F 1 "TP_UART_RXD" H 6700 1150 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 6900 950 50  0001 C CNN
 F 3 "" H 6900 950 50  0000 C CNN
@@ -419,10 +417,10 @@ F 4 "1 pad" H 6575 1075 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W9
 U 1 1 5C491932
 P 2750 1425
-F 0 "W?" H 2750 1695 50  0000 C CNN
+F 0 "W9" H 2750 1695 50  0000 C CNN
 F 1 "TP_UART_RTS" H 2750 1625 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2950 1425 50  0001 C CNN
 F 3 "" H 2950 1425 50  0001 C CNN
@@ -431,10 +429,10 @@ F 4 "1 pad" H 2875 1550 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W10
 U 1 1 5C491C83
 P 2950 2650
-F 0 "W?" H 2950 2920 50  0000 C CNN
+F 0 "W10" H 2950 2920 50  0000 C CNN
 F 1 "TP_UART_DTR" H 2950 2850 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 3150 2650 50  0001 C CNN
 F 3 "" H 3150 2650 50  0000 C CNN
@@ -443,10 +441,10 @@ F 4 "1 pad" H 3075 2775 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W11
 U 1 1 5C4925FE
 P 4200 1625
-F 0 "W?" H 4200 1895 50  0000 C CNN
+F 0 "W11" H 4200 1895 50  0000 C CNN
 F 1 "TP_UART_CTS" H 4200 1825 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 4400 1625 50  0001 C CNN
 F 3 "" H 4325 1750 30  0001 C CNN
@@ -455,10 +453,10 @@ F 4 "1 pad" H 4325 1750 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W12
 U 1 1 5C49272C
 P 4200 2450
-F 0 "W?" H 4200 2720 50  0000 C CNN
+F 0 "W12" H 4200 2720 50  0000 C CNN
 F 1 "TP_UART_DCD" H 4200 2650 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 4400 2450 50  0001 C CNN
 F 3 "" H 4400 2450 50  0000 C CNN
@@ -467,10 +465,10 @@ F 4 "1 pad" H 4075 2575 30  0000 C CNN "case"
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W13
 U 1 1 5C4928AD
 P 4225 2875
-F 0 "W?" H 4225 3145 50  0000 C CNN
+F 0 "W13" H 4225 3145 50  0000 C CNN
 F 1 "TP_UART_RI" H 4225 3075 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 4425 2875 50  0001 C CNN
 F 3 "" H 4425 2875 50  0000 C CNN
@@ -479,10 +477,10 @@ F 4 "1 pad" H 4350 3000 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:TEST_1P W?
+L xmobile-rescue:TEST_1P W15
 U 1 1 5C492A5F
 P 6350 2100
-F 0 "W?" H 6350 2370 50  0000 C CNN
+F 0 "W15" H 6350 2370 50  0000 C CNN
 F 1 "TP_USART_TXD" H 6350 2300 50  0000 C CNN
 F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 6550 2100 50  0001 C CNN
 F 3 "" H 6550 2100 50  0000 C CNN
@@ -491,55 +489,29 @@ F 4 "1 pad" H 6225 2225 30  0000 C CNN "case"
 	-1   0    0    1   
 $EndComp
 $Comp
-L xmobile-rescue:STF202-22T1G U?
+L xmobile-rescue:STF202-22T1G U9
 U 1 1 5C497719
-P 8625 1850
-F 0 "U?" H 8625 1750 50  0000 C CNN
-F 1 "STF202-22T1G" H 8625 2050 50  0000 C CNN
-F 2 "druid:TSOP-6_CASE-318G-02" H 8600 1500 50  0001 C CNN
-F 3 "https://www.mouser.co.uk/datasheet/2/308/STF202-22T1-D-117165.pdf" H 8625 1850 50  0001 C CNN
-F 4 "https://www.mouser.co.uk/ProductDetail/ON-Semiconductor/STF202-22T1G?qs=%2fha2pyFadujRFaXPnV9RsTetlaFPPaXSz4EERle60zyiot5T0fRtTg%3d%3d" H 8625 1850 50  0001 C CNN "example"
-F 5 "TSOP-6" H 8625 1850 30  0000 C CNN "case"
-	1    8625 1850
+P 8900 1225
+F 0 "U9" H 8900 1125 50  0000 C CNN
+F 1 "STF202-22T1G" H 8900 1425 50  0000 C CNN
+F 2 "druid:TSOP-6_CASE-318G-02" H 8875 875 50  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/308/STF202-22T1-D-117165.pdf" H 8900 1225 50  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/ON-Semiconductor/STF202-22T1G?qs=%2fha2pyFadujRFaXPnV9RsTetlaFPPaXSz4EERle60zyiot5T0fRtTg%3d%3d" H 8900 1225 50  0001 C CNN "example"
+F 5 "TSOP-6" H 8900 1225 30  0000 C CNN "case"
+	1    8900 1225
 	1    0    0    -1  
 $EndComp
-$Comp
-L xmobile-rescue:USB_A-RESCUE-xmobile P?
-U 1 1 5C499B15
-P 9925 1950
-F 0 "P?" H 10125 1750 50  0000 C CNN
-F 1 "microUSB" H 9875 2150 50  0000 C CNN
-F 2 "Connectors_USB:USB_Micro-B_Molex_47346-0001" H 9850 2200 50  0001 C CNN
-F 3 "https://www.mouser.co.uk/datasheet/2/276/0473460001_IO_CONNECTORS-229243.pdf" V 9875 1850 50  0001 C CNN
-F 4 "https://www.mouser.co.uk/ProductDetail/Molex/47346-0001?qs=%2fha2pyFaduiJWkclJ6vmoxPm1IDZfDKPxl9YVM5WTkQ%3d" H 9925 1950 50  0001 C CNN "example"
-F 5 "microUSB-B" V 9625 1950 30  0000 C CNN "case"
-	1    9925 1950
-	0    1    1    0   
-$EndComp
 Wire Wire Line
-	9625 1850 9375 1850
+	9900 1225 9650 1225
 Wire Wire Line
-	9625 1950 9375 1950
+	9900 1325 9650 1325
 Wire Wire Line
-	9625 2050 9475 2050
+	9900 1125 9850 1125
 Wire Wire Line
-	9475 2050 9475 1750
+	9850 1125 9850 875 
 Wire Wire Line
-	9475 1750 9375 1750
-Wire Wire Line
-	9625 1750 9575 1750
-Wire Wire Line
-	9575 1750 9575 1500
-Wire Wire Line
-	7800 1500 9575 1500
-Wire Wire Line
-	7800 1750 7875 1750
-Connection ~ 9575 1500
-Text Label 10625 1900 3    60   ~ 0
-GND
-Wire Wire Line
-	7800 1750 7800 1500
-Text Label 10025 2250 3    60   ~ 0
+	8075 1125 8150 1125
+Text Label 9300 2025 3    60   ~ 0
 GND
 Text Label 7275 4075 0    60   ~ 0
 USB_VBUS
@@ -547,11 +519,11 @@ Text Label 7275 3925 0    60   ~ 0
 USB_DN
 Text Label 7275 4000 0    60   ~ 0
 USB_DP
-Text Label 7800 1750 2    60   ~ 0
+Text Label 8150 1325 2    60   ~ 0
 USB_VBUS
-Text Label 7875 1850 2    60   ~ 0
+Text Label 8075 1125 2    60   ~ 0
 USB_DN
-Text Label 7875 1950 2    60   ~ 0
+Text Label 8150 1225 2    60   ~ 0
 USB_DP
 Text HLabel 2750 1425 0    60   Input ~ 0
 UART_RTS
@@ -610,14 +582,14 @@ Wire Wire Line
 Wire Wire Line
 	6050 950  6200 950 
 Wire Wire Line
-	9575 1500 10625 1500
+	9850 875  10200 875 
 $Comp
 L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C71520A
 P 6450 950
 AR Path="/5AA512DD/5C71520A" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C71520A" Ref="R?"  Part="1" 
-F 0 "R?" V 6530 950 40  0000 C CNN
+AR Path="/5A9F76AF/5C71520A" Ref="R28"  Part="1" 
+F 0 "R28" V 6530 950 40  0000 C CNN
 F 1 "1k" V 6457 951 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 6380 950 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 6450 950 30  0001 C CNN
@@ -631,8 +603,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C719371
 P 6100 2100
 AR Path="/5AA512DD/5C719371" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C719371" Ref="R?"  Part="1" 
-F 0 "R?" V 6180 2100 40  0000 C CNN
+AR Path="/5A9F76AF/5C719371" Ref="R27"  Part="1" 
+F 0 "R27" V 6180 2100 40  0000 C CNN
 F 1 "1k" V 6107 2101 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 6030 2100 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 6100 2100 30  0001 C CNN
@@ -646,8 +618,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C71959A
 P 3000 1425
 AR Path="/5AA512DD/5C71959A" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C71959A" Ref="R?"  Part="1" 
-F 0 "R?" V 3080 1425 40  0000 C CNN
+AR Path="/5A9F76AF/5C71959A" Ref="R19"  Part="1" 
+F 0 "R19" V 3080 1425 40  0000 C CNN
 F 1 "1k" V 3007 1426 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 2930 1425 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3000 1425 30  0001 C CNN
@@ -661,8 +633,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C7198C3
 P 4450 1625
 AR Path="/5AA512DD/5C7198C3" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C7198C3" Ref="R?"  Part="1" 
-F 0 "R?" V 4530 1625 40  0000 C CNN
+AR Path="/5A9F76AF/5C7198C3" Ref="R23"  Part="1" 
+F 0 "R23" V 4530 1625 40  0000 C CNN
 F 1 "1k" V 4457 1626 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 4380 1625 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 4450 1625 30  0001 C CNN
@@ -676,8 +648,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C719981
 P 4450 2450
 AR Path="/5AA512DD/5C719981" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C719981" Ref="R?"  Part="1" 
-F 0 "R?" V 4530 2450 40  0000 C CNN
+AR Path="/5A9F76AF/5C719981" Ref="R24"  Part="1" 
+F 0 "R24" V 4530 2450 40  0000 C CNN
 F 1 "1k" V 4457 2451 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 4380 2450 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 4450 2450 30  0001 C CNN
@@ -691,8 +663,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C719AE7
 P 3200 2650
 AR Path="/5AA512DD/5C719AE7" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C719AE7" Ref="R?"  Part="1" 
-F 0 "R?" V 3280 2650 40  0000 C CNN
+AR Path="/5A9F76AF/5C719AE7" Ref="R20"  Part="1" 
+F 0 "R20" V 3280 2650 40  0000 C CNN
 F 1 "1k" V 3207 2651 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 3130 2650 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3200 2650 30  0001 C CNN
@@ -706,8 +678,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C719C45
 P 4475 2875
 AR Path="/5AA512DD/5C719C45" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C719C45" Ref="R?"  Part="1" 
-F 0 "R?" V 4555 2875 40  0000 C CNN
+AR Path="/5A9F76AF/5C719C45" Ref="R25"  Part="1" 
+F 0 "R25" V 4555 2875 40  0000 C CNN
 F 1 "1k" V 4482 2876 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 4405 2875 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 4475 2875 30  0001 C CNN
@@ -721,8 +693,8 @@ L xmobile-rescue:R-RESCUE-xmobile R?
 U 1 1 5C719D47
 P 10425 4625
 AR Path="/5AA512DD/5C719D47" Ref="R?"  Part="1" 
-AR Path="/5A9F76AF/5C719D47" Ref="R?"  Part="1" 
-F 0 "R?" V 10505 4625 40  0000 C CNN
+AR Path="/5A9F76AF/5C719D47" Ref="R33"  Part="1" 
+F 0 "R33" V 10505 4625 40  0000 C CNN
 F 1 "1k" V 10432 4626 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 10355 4625 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 10425 4625 30  0001 C CNN
@@ -736,8 +708,8 @@ L xmobile-rescue:LED-RESCUE-xmobile D?
 U 1 1 5C71F808
 P 10425 4025
 AR Path="/5AA512DD/5C71F808" Ref="D?"  Part="1" 
-AR Path="/5A9F76AF/5C71F808" Ref="D?"  Part="1" 
-F 0 "D?" H 10425 4125 50  0000 C CNN
+AR Path="/5A9F76AF/5C71F808" Ref="D19"  Part="1" 
+F 0 "D19" H 10425 4125 50  0000 C CNN
 F 1 "LED WHITE" H 10425 3925 50  0000 C CNN
 F 2 "LEDs_git:LED_0402" H 10425 4025 50  0001 C CNN
 F 3 "https://media.osram.info/media/resource/hires/osram-dam-2493126/LW%20QH8G.pdf" H 10425 4025 50  0001 C CNN
@@ -749,10 +721,10 @@ $EndComp
 Wire Wire Line
 	3450 2650 3600 2650
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R30
 U 1 1 5C722A7C
 P 7450 5600
-F 0 "R?" V 7530 5600 40  0000 C CNN
+F 0 "R30" V 7530 5600 40  0000 C CNN
 F 1 "47k" V 7457 5601 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 7380 5600 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/rcse3-1013761.pdf" H 7450 5600 30  0001 C CNN
@@ -762,10 +734,10 @@ F 5 "0402 In" V 7375 5600 30  0000 C CNN "case"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R31
 U 1 1 5C72346E
 P 9475 5250
-F 0 "R?" V 9555 5250 40  0000 C CNN
+F 0 "R31" V 9555 5250 40  0000 C CNN
 F 1 "4.7K" V 9482 5251 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 9405 5250 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 9475 5250 30  0001 C CNN
@@ -775,10 +747,10 @@ F 5 "0402 In" V 9400 5250 30  0000 C CNN "case"
 	0    -1   -1   0   
 $EndComp
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R16
 U 1 1 5C7250BC
 P 1525 5375
-F 0 "R?" V 1605 5375 40  0000 C CNN
+F 0 "R16" V 1605 5375 40  0000 C CNN
 F 1 "51" V 1532 5376 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 1455 5375 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 1525 5375 30  0001 C CNN
@@ -788,10 +760,10 @@ F 5 "0402 In" V 1450 5375 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R17
 U 1 1 5C725134
 P 1525 5675
-F 0 "R?" V 1605 5675 40  0000 C CNN
+F 0 "R17" V 1605 5675 40  0000 C CNN
 F 1 "51" V 1532 5676 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 1455 5675 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 1525 5675 30  0001 C CNN
@@ -801,10 +773,10 @@ F 5 "0402 In" V 1450 5675 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L xmobile-rescue:R-RESCUE-xmobile R?
+L xmobile-rescue:R-RESCUE-xmobile R18
 U 1 1 5C7251B4
 P 1525 6025
-F 0 "R?" V 1605 6025 40  0000 C CNN
+F 0 "R18" V 1605 6025 40  0000 C CNN
 F 1 "51" V 1532 6026 40  0000 C CNN
 F 2 "Resistors_SMD:R_0402" V 1455 6025 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/427/crcwce3-1223726.pdf" H 1525 6025 30  0001 C CNN
@@ -814,10 +786,10 @@ F 5 "0402 In" V 1450 6025 30  0000 C CNN "case"
 	0    1    1    0   
 $EndComp
 $Comp
-L xmobile-rescue:C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C33
 U 1 1 5C726DB2
 P 2700 7350
-F 0 "C?" H 2700 7450 40  0000 L CNN
+F 0 "C33" H 2700 7450 40  0000 L CNN
 F 1 "22p" H 2706 7265 40  0000 L CNN
 F 2 "Capacitors_SMD:C_0402" H 2738 7200 30  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/281/GCQ1555C1HR51WB01-01-1154307.pdf" H 2700 7350 60  0001 C CNN
@@ -829,23 +801,23 @@ $EndComp
 Wire Wire Line
 	2700 5075 2700 7150
 $Comp
-L xmobile-rescue:C-RESCUE-xmobile C?
+L xmobile-rescue:C-RESCUE-xmobile C34
 U 1 1 5C727ED4
-P 10625 1700
-F 0 "C?" H 10625 1800 40  0000 L CNN
-F 1 "22p" H 10631 1615 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 10663 1550 30  0001 C CNN
-F 3 "https://www.mouser.co.uk/datasheet/2/281/GCQ1555C1HR51WB01-01-1154307.pdf" H 10625 1700 60  0001 C CNN
-F 4 "https://www.mouser.co.uk/ProductDetail/Murata-Electronics/GCQ1555C1H220FB01D?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPPyyCqh504D8PFlcqJ5QQ8Xw%3d%3d" H 10625 1700 50  0001 C CNN "example"
-F 5 "0402 In" H 10525 1625 30  0000 C CNN "case"
-	1    10625 1700
+P 9300 1825
+F 0 "C34" H 9300 1925 40  0000 L CNN
+F 1 "22p" H 9306 1740 40  0000 L CNN
+F 2 "Capacitors_SMD:C_0402" H 9338 1675 30  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/281/GCQ1555C1HR51WB01-01-1154307.pdf" H 9300 1825 60  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/Murata-Electronics/GCQ1555C1H220FB01D?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPPyyCqh504D8PFlcqJ5QQ8Xw%3d%3d" H 9300 1825 50  0001 C CNN "example"
+F 5 "0402 In" H 9200 1750 30  0000 C CNN "case"
+	1    9300 1825
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:BC850 Q?
+L xmobile-rescue:BC850 Q2
 U 1 1 5C73005B
 P 10325 5250
-F 0 "Q?" H 10525 5325 50  0000 L CNN
+F 0 "Q2" H 10525 5325 50  0000 L CNN
 F 1 "BC850" H 10525 5250 50  0000 L CNN
 F 2 "SOT:SOT-23" H 10525 5175 50  0001 L CIN
 F 3 "https://www.mouser.co.uk/datasheet/2/308/BC850-1300034.pdf" H 10325 5250 50  0001 L CNN
@@ -854,4 +826,44 @@ F 5 "SOT-23" H 10600 5150 30  0000 C CNN "case"
 	1    10325 5250
 	1    0    0    -1  
 $EndComp
+Text GLabel 9300 6400 0    60   Input ~ 0
+3.7V
+Text Label 9300 6400 0    60   ~ 0
+GSM_VBAT
+Wire Wire Line
+	1100 5075 1275 5075
+$Comp
+L Connector:USB_B_Micro J4
+U 1 1 5C70D478
+P 10200 1325
+F 0 "J4" H 9971 1193 50  0000 R CNN
+F 1 "USB_B_Micro" H 9971 1284 50  0000 R CNN
+F 2 "Connectors_USB:USB_Micro-B_Molex_47346-0001" H 10350 1275 50  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/276/0473460001_IO_CONNECTORS-229243.pdf" H 10350 1275 50  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/Molex/47346-0001?qs=%2fha2pyFaduiJWkclJ6vmoxPm1IDZfDKPxl9YVM5WTkQ%3d" H 10200 1325 50  0001 C CNN "example"
+F 5 "microUSB-B" H 9971 1360 30  0000 R CNN "case"
+	1    10200 1325
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	9900 1525 9700 1525
+Wire Wire Line
+	9700 1525 9700 1625
+Wire Wire Line
+	9700 1625 9300 1625
+Wire Wire Line
+	9300 1625 8150 1625
+Wire Wire Line
+	8150 1625 8150 1325
+Connection ~ 9300 1625
+Wire Wire Line
+	9650 1125 9850 1125
+Connection ~ 9850 1125
+Wire Wire Line
+	10200 925  10200 875 
+Connection ~ 10200 875 
+Wire Wire Line
+	10200 875  10300 875 
+Wire Wire Line
+	10300 925  10300 875 
 $EndSCHEMATC
