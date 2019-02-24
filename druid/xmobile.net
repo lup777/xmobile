@@ -1,7 +1,7 @@
 (export (version D)
   (design
-    (source /home/alexander/src/xmobile/druid/xmobile.sch)
-    (date "Пт 22 фев 2019 14:53:35")
+    (source /home/lup/src/xmobile/druid/xmobile.sch)
+    (date "Пн 25 фев 2019 00:41:17")
     (tool "Eeschema 5.0.2")
     (sheet (number 1) (name /) (tstamps /)
       (title_block
@@ -1081,7 +1081,7 @@
       (tstamp 5C46ADE6))
     (comp (ref D18)
       (value SMF05C)
-      (footprint semtech:SOT363)
+      (footprint TO_SOT_Packages_SMD:SOT-363_SC-70-6)
       (datasheet https://www.mouser.co.uk/datasheet/2/308/SMF05C-D-100912.pdf)
       (fields
         (field (name case) SOT-363)
@@ -1436,27 +1436,10 @@
       (fields
         (field (name case) microUSB-B)
         (field (name example) https://www.mouser.co.uk/ProductDetail/Molex/47346-0001?qs=%2fha2pyFaduiJWkclJ6vmoxPm1IDZfDKPxl9YVM5WTkQ%3d))
-      (libsource (lib Connector) (part USB_B_Micro) (description "USB Micro Type B connector"))
+      (libsource (lib xmobile-rescue) (part USB_B_Micro-Connector) (description ""))
       (sheetpath (names /xmobile_GSM/) (tstamps /5A9F76AF/))
       (tstamp 5C70D478)))
   (libparts
-    (libpart (lib Connector) (part USB_B_Micro)
-      (aliases
-        (alias USB_B_Mini))
-      (description "USB Micro Type B connector")
-      (docs ~)
-      (footprints
-        (fp USB*))
-      (fields
-        (field (name Reference) J)
-        (field (name Value) USB_B_Micro))
-      (pins
-        (pin (num 1) (name VBUS) (type power_out))
-        (pin (num 2) (name D-) (type passive))
-        (pin (num 3) (name D+) (type passive))
-        (pin (num 4) (name ID) (type passive))
-        (pin (num 5) (name GND) (type power_out))
-        (pin (num 6) (name Shield) (type passive))))
     (libpart (lib xmobile-rescue) (part 78646-3001)
       (fields
         (field (name Reference) U)
@@ -1779,6 +1762,19 @@
         (pin (num 6) (name STDBY) (type output))
         (pin (num 7) (name CHRG) (type output))
         (pin (num 8) (name CE) (type input))))
+    (libpart (lib xmobile-rescue) (part USB_B_Micro-Connector)
+      (footprints
+        (fp USB*))
+      (fields
+        (field (name Reference) J)
+        (field (name Value) USB_B_Micro-Connector))
+      (pins
+        (pin (num 1) (name VBUS) (type power_out))
+        (pin (num 2) (name D-) (type passive))
+        (pin (num 3) (name D+) (type passive))
+        (pin (num 4) (name ID) (type passive))
+        (pin (num 5) (name GND) (type power_out))
+        (pin (num 6) (name Shield) (type passive))))
     (libpart (lib xmobile-rescue) (part XC6206P332MR)
       (fields
         (field (name Reference) U)
@@ -1906,10 +1902,8 @@
         (pin (num 1) (name A) (type passive))
         (pin (num 2) (name K) (type passive)))))
   (libraries
-    (library (logical Connector)
-      (uri /usr/local/share/kicad/library/Connector.lib))
     (library (logical xmobile-rescue)
-      (uri /home/alexander/src/xmobile/druid/xmobile-rescue.lib)))
+      (uri /home/lup/src/xmobile/druid/xmobile-rescue.lib)))
   (nets
     (net (code 1) (name /D0)
       (node (ref U1) (pin 1C))

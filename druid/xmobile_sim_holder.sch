@@ -66,9 +66,9 @@ $Comp
 L xmobile-rescue:SMF05C D18
 U 1 1 5C46C4AB
 P 3250 6650
-F 0 "D18" V 3325 6875 60  0000 C CNN
+F 0 "D18" V 3325 6925 60  0000 C CNN
 F 1 "SMF05C" V 3500 6750 60  0000 C CNN
-F 2 "semtech:SOT363" H 3250 6975 60  0001 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-363_SC-70-6" H 3250 6975 60  0001 C CNN
 F 3 "https://www.mouser.co.uk/datasheet/2/308/SMF05C-D-100912.pdf" H 3240 6650 60  0001 C CNN
 F 4 "https://www.mouser.co.uk/ProductDetail/ON-Semiconductor/SMF05CT1G?qs=sGAEpiMZZMtqO%252bWUGLBzeAEUVu%2fYzK%252bE" H 3250 6650 50  0001 C CNN "example"
 F 5 "SOT-363" V 3475 6375 30  0000 C CNN "case"
@@ -835,9 +835,11 @@ GSM_VBAT
 Wire Wire Line
 	1100 5075 1275 5075
 $Comp
-L Connector:USB_B_Micro J4
+L xmobile-rescue:USB_B_Micro-Connector J4
 U 1 1 5C70D478
 P 10200 1325
+AR Path="/5C70D478" Ref="J4"  Part="1" 
+AR Path="/5A9F76AF/5C70D478" Ref="J4"  Part="1" 
 F 0 "J4" H 9971 1193 50  0000 R CNN
 F 1 "USB_B_Micro" H 9971 1284 50  0000 R CNN
 F 2 "Connectors_USB:USB_Micro-B_Molex_47346-0001" H 10350 1275 50  0001 C CNN
