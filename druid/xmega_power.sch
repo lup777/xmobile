@@ -20,7 +20,7 @@ U 1 1 5A9FD1C0
 P 9100 2050
 F 0 "L1" V 9025 1925 40  0000 C CNN
 F 1 "10u" V 9200 2050 40  0000 C CNN
-F 2 "inductor_1210_In:I_1210" H 9100 2050 60  0001 C CNN
+F 2 "Inductor_SMD:L_1210_3225Metric" H 9100 2050 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/product-1022158.pdf" H 9100 2050 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/1276AS-H-100M%3dP2?qs=sGAEpiMZZMsg%252by3WlYCkUwoncuxJKc7T%2ffTlu7eSjNI%3d" V 9100 2050 60  0001 C CNN "example"
 F 5 "1210 In" V 9025 2100 30  0000 C CNN "case"
@@ -33,7 +33,7 @@ U 1 1 5A9FD1C7
 P 8600 2600
 F 0 "C30" H 8600 2700 40  0000 L CNN
 F 1 "0,1p" H 8606 2515 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 8638 2450 30  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8638 2450 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/c02e-1068346.pdf" H 8600 2600 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GJM1555C1HR10WB01D?qs=sGAEpiMZZMs0AnBnWHyRQNchIam%2fLmo3tiNUbw4QmZU%3d" H 8600 2600 60  0001 C CNN "example"
 F 5 "0402 In" H 8625 2450 30  0000 C CNN "case"
@@ -46,7 +46,7 @@ U 1 1 5A9FD1CE
 P 8300 2600
 F 0 "C28" H 8300 2700 40  0000 L CNN
 F 1 "47u" H 8306 2515 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0603" H 8338 2450 30  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 8338 2450 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/ZRB18AR60J476ME01-01-1065054.pdf" H 8300 2600 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/ZRB18AR60J476ME01L?qs=sGAEpiMZZMs0AnBnWHyRQO9VYadaKTO%252bP4WrvUq8FwyMAQotVEzL0w%3d%3d" H 8300 2600 60  0001 C CNN "example"
 F 5 "0603 In" H 8325 2450 30  0000 C CNN "case"
@@ -59,7 +59,7 @@ U 1 1 5A9FD1D5
 P 8025 2600
 F 0 "C27" H 8025 2700 40  0000 L CNN
 F 1 "1u" H 8031 2515 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 8063 2450 30  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8063 2450 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 8025 2600 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM152R60J105ME15D?qs=sGAEpiMZZMs0AnBnWHyRQFv7x1xn%252bYFdnvIvPkVU8UD1CmfL1E6gmw%3d%3d" H 8025 2600 60  0001 C CNN "example"
 F 5 "0402 In" H 8050 2450 30  0000 C CNN "case"
@@ -83,7 +83,7 @@ U 1 1 5A9FD1F7
 P 8375 5575
 F 0 "C29" H 8375 5675 40  0000 L CNN
 F 1 "33p" H 8381 5490 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 8413 5425 30  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8413 5425 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/212/KEM_C1023_X7R_AUTO_SMD-1093309.pdf" H 8375 5575 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/KEMET/C0402C330J9RACAUTO?qs=sGAEpiMZZMs0AnBnWHyRQB295tntAovfdTfJuYu7h0zCBKUrKoz%252bFQ%3d%3d" H 8375 5575 60  0001 C CNN "example"
 F 5 "0402 In" H 8400 5425 30  0000 C CNN "case"
@@ -96,7 +96,7 @@ U 1 1 5A9FD1FE
 P 8750 5575
 F 0 "C31" H 8750 5675 40  0000 L CNN
 F 1 "10p" H 8756 5490 40  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 8788 5425 30  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 8788 5425 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/40/C0GNP0-Dielectric-951274.pdf" H 8750 5575 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/AVX/04026A100JAT2A?qs=sGAEpiMZZMs0AnBnWHyRQKJCfzG%2fi9wHQ0Xs5mzrghpcPP2bNIxEUw%3d%3d" H 8750 5575 60  0001 C CNN "example"
 F 5 "0402 In" H 8775 5425 30  0000 C CNN "case"
@@ -109,7 +109,7 @@ U 1 1 5A9FD205
 P 7050 2100
 F 0 "U5" H 7050 2000 50  0000 C CNN
 F 1 "XC6206P332MR" H 7050 2400 50  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 7075 1800 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 7075 1800 50  0001 C CNN
 F 3 "https://www.torexsemi.com/file/xc6206/XC6206.pdf" H 7050 2100 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Torex-Semiconductor/XC6206P332MR-G?qs=%2fha2pyFadujKR1ng7kOnkt2m1eqUI4JxTF4iTczT8BCZBroFPKl6%2fA%3d%3d" H 7050 2100 60  0001 C CNN "example"
 F 5 "SOT-23" H 7050 2100 30  0000 C CNN "case"
@@ -134,11 +134,10 @@ U 1 1 5A9FD218
 P 9075 5575
 F 0 "D13" V 8975 5650 50  0000 C CNN
 F 1 "ZENER" H 9075 5475 40  0000 C CNN
-F 2 "Diodes_SMD:SMA_Standard" H 9075 5575 60  0001 C CNN
+F 2 "Diode_SMD:D_SMA" H 9075 5575 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/308/1SMA5913BT3-D-1360201.pdf" H 9075 5575 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ON-Semiconductor/1SMA5918BT3G?qs=sGAEpiMZZMtQ8nqTKtFS%2fJ7m6e1KBCgu1vB5isutOYc%3d" H 9075 5575 60  0001 C CNN "example"
-F 5 "" V 9200 5575 30  0000 C CNN "case "
-F 6 "SMA 403D" H 0   0   50  0001 C CNN "case"
+F 5 "SMA 403D" H 0   0   50  0001 C CNN "case"
 	1    9075 5575
 	0    -1   -1   0   
 $EndComp
@@ -238,7 +237,7 @@ U 1 1 5C6AA662
 P 2325 2300
 F 0 "D11" H 2325 2400 50  0000 C CNN
 F 1 "red" H 2325 2200 50  0000 C CNN
-F 2 "LEDs:LED_0402" H 2325 2300 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 2325 2300 50  0001 C CNN
 F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2325 2300 50  0001 C CNN
 F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNOGPWK3jFzCB54s8pBFBg3g%3d%3d" H 2325 2300 60  0001 C CNN "example"
 F 5 "0402 In" H 2175 2400 30  0000 C CNN "case"
@@ -251,7 +250,7 @@ U 1 1 5C6AA7C8
 P 2025 2300
 F 0 "D9" H 2025 2400 50  0000 C CNN
 F 1 "green" H 2025 2200 50  0000 C CNN
-F 2 "LEDs:LED_0402" H 2025 2300 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 2025 2300 50  0001 C CNN
 F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2025 2300 50  0001 C CNN
 F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12M2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNWFfaRj%2fRvVAAroms6JXrzA%3d%3d" H 2025 2300 60  0001 C CNN "example"
 F 5 "0402 In" H 1875 2400 30  0000 C CNN "case"
@@ -264,7 +263,7 @@ U 1 1 5C6AB0B6
 P 2175 2700
 F 0 "R2" V 2255 2700 50  0000 C CNN
 F 1 "1k" V 2175 2700 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2105 2700 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2105 2700 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2175 2700 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2175 2700 60  0001 C CNN "example"
 F 5 "0402 in" V 2100 2700 30  0000 C CNN "case"
@@ -294,7 +293,7 @@ U 1 1 5C6AB784
 P 2150 1600
 F 0 "C21" H 2175 1700 50  0000 L CNN
 F 1 "10u" H 2175 1500 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 2188 1450 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2188 1450 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 2150 1600 50  0001 C CNN
 F 4 "0402 In" H 2050 1675 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 2150 1600 60  0001 C CNN "example"
@@ -314,7 +313,7 @@ U 1 1 5C6AC8FB
 P 3950 2950
 F 0 "R6" V 4030 2950 50  0000 C CNN
 F 1 "1.2k" V 3950 2950 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 3880 2950 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3880 2950 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3950 2950 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K20FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWRBT%2frAKZHAM%3d" V 3950 2950 60  0001 C CNN "example"
 F 5 "0402 In" V 3875 2950 30  0000 C CNN "case"
@@ -380,7 +379,7 @@ AR Path="/5C6B9CD1" Ref="W?"  Part="1"
 AR Path="/5A9FCB78/5C6B9CD1" Ref="W7"  Part="1" 
 F 0 "W7" H 4975 2510 50  0000 C CNN
 F 1 "TEST_BAT_1" H 4975 2380 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 5225 2600 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 5225 2600 50  0001 C CNN
 F 3 "" H 4975 2450 50  0000 C CNN
 F 4 "2 pads" H 4975 2575 30  0000 C CNN "case"
 	1    4975 2450
@@ -394,7 +393,7 @@ AR Path="/5C6BA4AE" Ref="W?"  Part="1"
 AR Path="/5A9FCB78/5C6BA4AE" Ref="W8"  Part="1" 
 F 0 "W8" H 4975 5710 50  0000 C CNN
 F 1 "TEST_BAT2" H 4975 5580 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 5275 5800 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 5275 5800 50  0001 C CNN
 F 3 "" H 4975 5650 50  0000 C CNN
 F 4 "2 pads" H 4975 5775 30  0000 C CNN "case"
 	1    4975 5650
@@ -406,7 +405,7 @@ U 1 1 5C6C9437
 P 2650 1325
 F 0 "W5" H 2650 1595 50  0000 C CNN
 F 1 "TEST_BAT_1_CHARGE" H 2650 1525 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 1675 50  0001 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 2700 1675 50  0001 C CNN
 F 3 "" H 2850 1325 50  0000 C CNN
 F 4 "1 pad" H 2775 1450 30  0000 C CNN "case"
 	1    2650 1325
@@ -419,7 +418,7 @@ U 1 1 5C6C9C6E
 P 2650 4525
 F 0 "W6" H 2650 4795 50  0000 C CNN
 F 1 "TEST_BAT_2_CHARGE" H 2650 4725 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 2700 4875 50  0001 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 2700 4875 50  0001 C CNN
 F 3 "" H 2850 4525 50  0000 C CNN
 F 4 "1 pad" H 2800 4650 30  0000 C CNN "case"
 	1    2650 4525
@@ -432,7 +431,7 @@ U 1 1 5C6CA596
 P 2025 5500
 F 0 "D10" H 2025 5600 50  0000 C CNN
 F 1 "green" H 2025 5400 50  0000 C CNN
-F 2 "LEDs:LED_0402" H 2025 5500 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 2025 5500 50  0001 C CNN
 F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2025 5500 50  0001 C CNN
 F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12M2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNWFfaRj%2fRvVAAroms6JXrzA%3d%3d" H 2025 5500 60  0001 C CNN "example"
 F 5 "0402 In" H 1875 5600 30  0000 C CNN "case"
@@ -445,7 +444,7 @@ U 1 1 5C6CB16E
 P 2325 5500
 F 0 "D12" H 2325 5600 50  0000 C CNN
 F 1 "red" H 2325 5400 50  0000 C CNN
-F 2 "LEDs:LED_0402" H 2325 5500 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 2325 5500 50  0001 C CNN
 F 3 "https://ru.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2325 5500 50  0001 C CNN
 F 4 "https://ru.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNOGPWK3jFzCB54s8pBFBg3g%3d%3d" H 2325 5500 60  0001 C CNN "example"
 F 5 "0402 In" H 2175 5600 30  0000 C CNN "case"
@@ -458,7 +457,7 @@ U 1 1 5C6D036E
 P 2150 4800
 F 0 "C22" H 2175 4900 50  0000 L CNN
 F 1 "10u" H 2175 4700 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 2188 4650 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2188 4650 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 2150 4800 50  0001 C CNN
 F 4 "0402 In" H 2050 4875 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 2150 4800 60  0001 C CNN "example"
@@ -471,7 +470,7 @@ U 1 1 5C6D0763
 P 4325 5400
 F 0 "C24" H 4350 5500 50  0000 L CNN
 F 1 "10u" H 4350 5300 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 4363 5250 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4363 5250 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 4325 5400 50  0001 C CNN
 F 4 "0402 In" H 4225 5475 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 4325 5400 60  0001 C CNN "example"
@@ -484,7 +483,7 @@ U 1 1 5C6D0925
 P 4325 2200
 F 0 "C23" H 4350 2300 50  0000 L CNN
 F 1 "10u" H 4350 2100 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 4363 2050 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 4363 2050 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 4325 2200 50  0001 C CNN
 F 4 "0402 In" H 4225 2275 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 4325 2200 60  0001 C CNN "example"
@@ -497,7 +496,7 @@ U 1 1 5C6D24E8
 P 7950 5575
 F 0 "C26" H 7975 5675 50  0000 L CNN
 F 1 "10u" H 7975 5475 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 7988 5425 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 7988 5425 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 7950 5575 50  0001 C CNN
 F 4 "0402 In" H 7850 5650 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM155C80J106ME11J?qs=sGAEpiMZZMs0AnBnWHyRQN7%2fAA2D2lPP8PNgAVsimC2C1etn3MYH0g%3d%3d" H 7950 5575 60  0001 C CNN "example"
@@ -510,7 +509,7 @@ U 1 1 5C6D2D36
 P 7475 5575
 F 0 "C25" H 7485 5645 50  0000 L CNN
 F 1 "100u (tantal)" H 7275 5500 50  0000 L CNN
-F 2 "0603_In_tantalum:C_0603" H 7475 5575 50  0001 C CNN
+F 2 "Capacitor_Tantalum_SMD:CP_EIA-1608-10_AVX-L" H 7475 5575 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/40/f98-775787.pdf" H 7475 5575 50  0001 C CNN
 F 4 "0603 In Polar" H 7450 5700 30  0000 C CNN "case"
 F 5 "https://eu.mouser.com/ProductDetail/AVX/F980J107MMAAXE?qs=OIhlmDO%252boa7CbJsh7hWANA%3d%3d" H 7475 5575 60  0001 C CNN "example"
@@ -523,7 +522,7 @@ U 1 1 5C6E4482
 P 2475 2600
 F 0 "R4" V 2555 2600 50  0000 C CNN
 F 1 "1k" V 2475 2600 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2405 2600 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2405 2600 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2475 2600 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2475 2600 60  0001 C CNN "example"
 F 5 "0402 in" V 2400 2600 30  0000 C CNN "case"
@@ -536,7 +535,7 @@ U 1 1 5C6E463E
 P 2175 5900
 F 0 "R3" V 2255 5900 50  0000 C CNN
 F 1 "1k" V 2175 5900 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2105 5900 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2105 5900 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2175 5900 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2175 5900 60  0001 C CNN "example"
 F 5 "0402 in" V 2100 5900 30  0000 C CNN "case"
@@ -549,7 +548,7 @@ U 1 1 5C6E49C1
 P 2475 5800
 F 0 "R5" V 2555 5800 50  0000 C CNN
 F 1 "1k" V 2475 5800 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2405 5800 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2405 5800 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2475 5800 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2475 5800 60  0001 C CNN "example"
 F 5 "0402 in" V 2400 5800 30  0000 C CNN "case"
@@ -562,7 +561,7 @@ U 1 1 5C6E5065
 P 3950 6150
 F 0 "R7" V 4030 6150 50  0000 C CNN
 F 1 "1.2k" V 3950 6150 50  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 3880 6150 50  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3880 6150 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3950 6150 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K20FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWRBT%2frAKZHAM%3d" V 3950 6150 60  0001 C CNN "example"
 F 5 "0402 In" V 3875 6150 30  0000 C CNN "case"

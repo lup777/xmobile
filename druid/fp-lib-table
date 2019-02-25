@@ -1,0 +1,4 @@
+(fp_lib_table
+  (lib (name druid_root)(type KiCad)(uri /home/alexander/src/xmobile/druid)(options "")(descr ""))
+  (lib (name druid)(type KiCad)(uri ${KIPRJMOD}/druid.pretty)(options "")(descr ""))
+)

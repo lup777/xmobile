@@ -120,7 +120,7 @@ U 1 1 5C49881F
 P 4300 3175
 F 0 "R12" V 4380 3175 40  0000 C CNN
 F 1 "10k" V 4307 3176 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4230 3175 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 4230 3175 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" H 4300 3175 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 4300 3175 60  0001 C CNN "example"
 F 5 "0402 In" V 4225 3175 30  0000 C CNN "case"
@@ -143,7 +143,7 @@ U 1 1 5C4C0F77
 P 1050 4150
 F 0 "1u1" H 1075 4250 50  0000 L CNN
 F 1 "C" H 1075 4050 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 1088 4000 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1088 4000 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 1050 4150 50  0001 C CNN
 F 4 "close to chip" H 1050 4150 60  0001 C CNN "note"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM152R60J105ME15D?qs=sGAEpiMZZMs0AnBnWHyRQFv7x1xn%252bYFdnvIvPkVU8UD1CmfL1E6gmw%3d%3d" H 1050 4150 60  0001 C CNN "example"
@@ -165,7 +165,7 @@ U 1 1 5C4C2FCD
 P 2575 5400
 F 0 "D14" H 2575 5500 50  0000 C CNN
 F 1 "LED BLUE" H 2575 5300 50  0000 C CNN
-F 2 "LEDs_git:LED_0402" H 2575 5400 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 2575 5400 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 2575 5400 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SMLP13BC8TT86?qs=sGAEpiMZZMuCm2JlHBGefhkTP7nu0Fg7%2fyfWOmjl5dYVsL3Njh32dw%3d%3d" H 2575 5400 60  0001 C CNN "example"
 F 5 "0402 In" H 2425 5500 30  0000 C CNN "case"
@@ -180,7 +180,7 @@ U 1 1 5C4C321E
 P 2575 5950
 F 0 "R8" V 2655 5950 40  0000 C CNN
 F 1 "1k" V 2582 5951 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2505 5950 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2505 5950 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 2575 5950 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 2575 5950 60  0001 C CNN "example"
 F 5 "0402 In" V 2500 5950 30  0000 C CNN "case"
@@ -322,7 +322,7 @@ U 1 1 5C4C4192
 P 3050 5400
 F 0 "D15" H 3050 5500 50  0000 C CNN
 F 1 "LED GREEN" H 3050 5300 50  0000 C CNN
-F 2 "LEDs_git:LED_0402" H 3050 5400 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 3050 5400 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 3050 5400 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P13PTT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzN4Th3QTRUboF5qJIQuUKd%2fg%3d%3d" H 3050 5400 60  0001 C CNN "example"
 F 5 "0402 In" H 2900 5500 30  0000 C CNN "case"
@@ -339,7 +339,7 @@ U 1 1 5C4C43FA
 P 3450 5400
 F 0 "D16" H 3450 5500 50  0000 C CNN
 F 1 "LED RED" H 3450 5300 50  0000 C CNN
-F 2 "LEDs_git:LED_0402" H 3450 5400 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 3450 5400 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sml-p1-e-1139198.pdf" H 3450 5400 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SML-P12U2TT86R?qs=sGAEpiMZZMuCm2JlHBGefsrOrFaWoqzNOGPWK3jFzCB54s8pBFBg3g%3d%3d" H 3450 5400 60  0001 C CNN "example"
 F 5 "0402 In" H 3300 5500 30  0000 C CNN "case"
@@ -356,7 +356,7 @@ U 1 1 5C4C4408
 P 3925 5400
 F 0 "D17" H 3925 5500 50  0000 C CNN
 F 1 "LED WHITE" H 3925 5300 50  0000 C CNN
-F 2 "LEDs_git:LED_0402" H 3925 5400 50  0001 C CNN
+F 2 "LED_SMD:LED_0402_1005Metric" H 3925 5400 50  0001 C CNN
 F 3 "https://media.osram.info/media/resource/hires/osram-dam-2493126/LW%20QH8G.pdf" H 3925 5400 50  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/OSRAM-Opto-Semiconductors/LW-QH8G-Q2OO-3K5L?qs=sGAEpiMZZMuCm2JlHBGefutc4sI%252bRg9%2fGvzrBju18VEuEONgNlSGyQ%3d%3d" H 3925 5400 60  0001 C CNN "example"
 F 5 "0402 In" H 3775 5500 30  0000 C CNN "case"
@@ -707,7 +707,7 @@ U 1 1 5C6E6190
 P 1400 4150
 F 0 "1u2" H 1425 4250 50  0000 L CNN
 F 1 "C" H 1425 4050 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 1438 4000 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 1438 4000 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 1400 4150 50  0001 C CNN
 F 4 "close to chip" H 1400 4150 60  0001 C CNN "note"
 F 5 "https://eu.mouser.com/ProductDetail/Murata-Electronics/GRM152R60J105ME15D?qs=sGAEpiMZZMs0AnBnWHyRQFv7x1xn%252bYFdnvIvPkVU8UD1CmfL1E6gmw%3d%3d" H 1400 4150 60  0001 C CNN "example"
@@ -721,7 +721,7 @@ U 1 1 5C6E6DE1
 P 3050 5950
 F 0 "R9" V 3130 5950 40  0000 C CNN
 F 1 "1k" V 3057 5951 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 2980 5950 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 2980 5950 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3050 5950 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 3050 5950 60  0001 C CNN "example"
 F 5 "0402 In" V 2975 5950 30  0000 C CNN "case"
@@ -734,7 +734,7 @@ U 1 1 5C6E6E9E
 P 3450 5950
 F 0 "R10" V 3530 5950 40  0000 C CNN
 F 1 "1k" V 3457 5951 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 3380 5950 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3380 5950 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3450 5950 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 3450 5950 60  0001 C CNN "example"
 F 5 "0402 In" V 3375 5950 30  0000 C CNN "case"
@@ -747,7 +747,7 @@ U 1 1 5C6E7B9A
 P 4600 3175
 F 0 "R13" V 4680 3175 40  0000 C CNN
 F 1 "10k" V 4607 3176 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4530 3175 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 4530 3175 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" H 4600 3175 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 4600 3175 60  0001 C CNN "example"
 F 5 "0402 In" V 4525 3175 30  0000 C CNN "case"
@@ -760,7 +760,7 @@ U 1 1 5C6E7C9E
 P 4900 3175
 F 0 "R14" V 4980 3175 40  0000 C CNN
 F 1 "10k" V 4907 3176 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 4830 3175 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 4830 3175 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" H 4900 3175 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 4900 3175 60  0001 C CNN "example"
 F 5 "0402 In" V 4825 3175 30  0000 C CNN "case"
@@ -773,7 +773,7 @@ U 1 1 5C6E62AB
 P 3925 5950
 F 0 "R11" V 4005 5950 40  0000 C CNN
 F 1 "1k" V 3932 5951 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 3855 5950 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 3855 5950 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/427/crcwce3-1223726.pdf" H 3925 5950 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Vishay/CRCW04021K00FKEDC?qs=sGAEpiMZZMtlubZbdhIBIIZe04wfiaJWtbhT4BxhiTc%3d" V 3925 5950 60  0001 C CNN "example"
 F 5 "0402 In" V 3850 5950 30  0000 C CNN "case"

@@ -20,7 +20,7 @@ U 1 1 5967CB22
 P 10025 10100
 F 0 "R1" V 10105 10100 40  0000 C CNN
 F 1 "10k" V 10032 10101 40  0000 C CNN
-F 2 "Resistors_SMD:R_0402" V 9955 10100 30  0001 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 9955 10100 30  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" V 10200 9750 30  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 10025 10100 60  0001 C CNN "example"
 F 5 "0402 In" V 9950 10100 30  0000 C CNN "case"
@@ -35,7 +35,7 @@ U 1 1 5974D7B3
 P 13525 7500
 F 0 "P1" V 13475 7500 60  0000 C CNN
 F 1 "CONN_8" V 13575 7500 60  0000 C CNN
-F 2 "Connector_Pin_Header_1.00mm:PinHeader_1x08_P1.00mm_Vertical" V 13700 7450 60  0001 C CNN
+F 2 "Connector_PinHeader_1.00mm:PinHeader_1x08_P1.00mm_Vertical" V 13700 7450 60  0001 C CNN
 F 3 "" H 13525 7500 60  0001 C CNN
 F 4 "EPD display connector" V 13700 7500 60  0001 C CNN "description"
 F 5 "pin header 1.00mm" V 13675 7500 30  0000 C CNN "case"
@@ -629,7 +629,7 @@ U 1 1 5C4B9CCC
 P 11625 4600
 F 0 "J3" H 11625 4870 50  0000 C CNN
 F 1 "TEST_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
-F 2 "Measurement_Points:Measurement_Point_Square-TH_Small" H 11650 4925 50  0001 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 11650 4925 50  0001 C CNN
 F 3 "" H 11825 4600 50  0001 C CNN
 F 4 "1 pad" H 11625 4925 30  0000 C CNN "case"
 	1    11625 4600
@@ -672,42 +672,23 @@ Text Label 3175 8850 2    60   ~ 0
 microSD_DI
 NoConn ~ 3175 8650
 NoConn ~ 3175 9350
-Text Label 1825 9525 3    60   ~ 0
+Text Label 1825 9250 3    60   ~ 0
 GND
 $Comp
 L xmobile-rescue:C C2
 U 1 1 5C4DFD85
-P 1975 9100
-F 0 "C2" H 2000 9200 50  0000 L CNN
-F 1 "0.1u" H 2100 9100 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0402" H 2175 9375 50  0001 C CNN
-F 3 "https://eu.mouser.com/datasheet/2/40/cx5r-776519.pdf" H 1975 9100 50  0001 C CNN
-F 4 "https://eu.mouser.com/ProductDetail/AVX/04026D104KAT4A?qs=sGAEpiMZZMs0AnBnWHyRQPg4iYkCw7IMED%2f4kpqgf7w%3d" H 1975 9100 60  0001 C CNN "example"
-F 5 "0402 In" H 2100 9025 30  0000 C CNN "case"
-	1    1975 9100
-	1    0    0    -1  
-$EndComp
-$Comp
-L xmobile-rescue:CP C1
-U 1 1 5C4DFEA4
-P 1650 9100
-F 0 "C1" H 1675 9200 50  0000 L CNN
-F 1 "33u" H 1400 9100 50  0000 L CNN
-F 2 "Capacitors_SMD:c_elec_5x5.3" H 1200 8875 50  0001 C CNN
-F 3 "https://eu.mouser.com/datasheet/2/315/ABA0000C1145-947633.pdf" H 1650 9100 50  0001 C CNN
-F 4 "https://eu.mouser.com/ProductDetail/Panasonic/EEE-0JA330WR?qs=sGAEpiMZZMsh%252b1woXyUXj65gIueAj9S3%2f2x%2f8oLKGVE%3d" H 1650 9100 60  0001 C CNN "example"
-F 5 "5x5,3mm" H 1525 9025 30  0000 C CNN "case"
-	1    1650 9100
+P 1825 9100
+F 0 "C2" H 1850 9200 50  0000 L CNN
+F 1 "0.1u" H 1950 9100 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2025 9375 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/cx5r-776519.pdf" H 1825 9100 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/AVX/04026D104KAT4A?qs=sGAEpiMZZMs0AnBnWHyRQPg4iYkCw7IMED%2f4kpqgf7w%3d" H 1825 9100 60  0001 C CNN "example"
+F 5 "0402 In" H 1950 9025 30  0000 C CNN "case"
+	1    1825 9100
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	1650 8950 1975 8950
-Wire Wire Line
-	1650 9250 1825 9250
-Wire Wire Line
-	1825 9525 1825 9250
-Connection ~ 1825 9250
-Connection ~ 1975 8950
+	1650 8950 1825 8950
 NoConn ~ 4875 9550
 Text Label 10800 4100 0    60   ~ 0
 microSD_DI
@@ -736,7 +717,7 @@ U 1 1 5C561693
 P 7300 7200
 F 0 "J2" H 7300 7260 50  0000 C CNN
 F 1 "TEST_VIBRO" H 7300 7130 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 6925 7025 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 6925 7025 50  0001 C CNN
 F 3 "" H 7300 7200 50  0001 C CNN
 F 4 "2 pads" H 7300 7075 30  0000 C CNN "case"
 	1    7300 7200
@@ -752,7 +733,7 @@ U 1 1 5C6C0FE4
 P 9900 10350
 F 0 "W2" H 9900 10410 50  0000 C CNN
 F 1 "TEST_PDI" H 9900 10280 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 10150 10200 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 10150 10200 50  0001 C CNN
 F 3 "" H 9900 10350 50  0000 C CNN
 F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
 	1    9900 10350
@@ -764,7 +745,7 @@ U 1 1 5C6C18FA
 P 9525 10700
 F 0 "W1" H 9525 10760 50  0000 C CNN
 F 1 "TEST_XMEGA_PWR" H 9525 10630 50  0000 C CNN
-F 2 "Measurement_Points:Test_Point_2Pads" H 9625 10550 50  0001 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 9625 10550 50  0001 C CNN
 F 3 "" H 9525 10700 50  0000 C CNN
 F 4 "2 pads" H 9525 10575 30  0000 C CNN "case"
 	1    9525 10700
@@ -816,10 +797,6 @@ Wire Wire Line
 	9300 3100 9400 3100
 Wire Wire Line
 	9400 3100 9500 3100
-Wire Wire Line
-	1825 9250 1975 9250
-Wire Wire Line
-	1975 8950 3175 8950
 $Comp
 L xmobile-rescue:PWR_FLAG #FLG0101
 U 1 1 5C7368D2
@@ -847,4 +824,7 @@ Wire Bus Line
 	5325 4900 5325 5700
 Wire Bus Line
 	3950 6350 4750 6350
+Connection ~ 1825 8950
+Wire Wire Line
+	1825 8950 3175 8950
 $EndSCHEMATC
