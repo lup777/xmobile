@@ -1,4 +1,4 @@
-(pcb /home/alexander/src/xmobile/druid/xmobile.dsn
+(pcb /home/lup/src/xmobile/druid/xmobile.dsn
   (parser
     (string_quote ")
     (space_in_quoted_tokens on)
@@ -26,19 +26,43 @@
         (index 2)
       )
     )
-    (layer B.Cu
+    (layer In3.Cu
       (type signal)
       (property
         (index 3)
+      )
+    )
+    (layer In4.Cu
+      (type signal)
+      (property
+        (index 4)
+      )
+    )
+    (layer In5.Cu
+      (type signal)
+      (property
+        (index 5)
+      )
+    )
+    (layer In6.Cu
+      (type signal)
+      (property
+        (index 6)
+      )
+    )
+    (layer B.Cu
+      (type signal)
+      (property
+        (index 7)
       )
     )
     (boundary
       (path pcb 0  187452 -134747  145542 -134747  145542 -72898  187452 -72898
             187452 -134747)
     )
-    (via "Via[0-3]_800:400_um")
+    (via "Via[0-7]_800:400_um")
     (rule
-      (width 250)
+      (width 150)
       (clearance 200.1)
       (clearance 200.1 (type default_smd))
       (clearance 50 (type smd_smd))
@@ -932,6 +956,10 @@
       (shape (circle F.Cu 1400))
       (shape (circle In1.Cu 1400))
       (shape (circle In2.Cu 1400))
+      (shape (circle In3.Cu 1400))
+      (shape (circle In4.Cu 1400))
+      (shape (circle In5.Cu 1400))
+      (shape (circle In6.Cu 1400))
       (shape (circle B.Cu 1400))
       (attach off)
     )
@@ -959,6 +987,10 @@
       (shape (path F.Cu 850  0 0  0 0))
       (shape (path In1.Cu 850  0 0  0 0))
       (shape (path In2.Cu 850  0 0  0 0))
+      (shape (path In3.Cu 850  0 0  0 0))
+      (shape (path In4.Cu 850  0 0  0 0))
+      (shape (path In5.Cu 850  0 0  0 0))
+      (shape (path In6.Cu 850  0 0  0 0))
       (shape (path B.Cu 850  0 0  0 0))
       (attach off)
     )
@@ -1058,6 +1090,10 @@
       (shape (rect F.Cu -425 -425 425 425))
       (shape (rect In1.Cu -425 -425 425 425))
       (shape (rect In2.Cu -425 -425 425 425))
+      (shape (rect In3.Cu -425 -425 425 425))
+      (shape (rect In4.Cu -425 -425 425 425))
+      (shape (rect In5.Cu -425 -425 425 425))
+      (shape (rect In6.Cu -425 -425 425 425))
       (shape (rect B.Cu -425 -425 425 425))
       (attach off)
     )
@@ -1069,6 +1105,10 @@
       (shape (rect F.Cu -500 -500 500 500))
       (shape (rect In1.Cu -500 -500 500 500))
       (shape (rect In2.Cu -500 -500 500 500))
+      (shape (rect In3.Cu -500 -500 500 500))
+      (shape (rect In4.Cu -500 -500 500 500))
+      (shape (rect In5.Cu -500 -500 500 500))
+      (shape (rect In6.Cu -500 -500 500 500))
       (shape (rect B.Cu -500 -500 500 500))
       (attach off)
     )
@@ -1096,10 +1136,14 @@
       (shape (rect F.Cu -850 -700 850 700))
       (attach off)
     )
-    (padstack "Via[0-3]_800:400_um"
+    (padstack "Via[0-7]_800:400_um"
       (shape (circle F.Cu 800))
       (shape (circle In1.Cu 800))
       (shape (circle In2.Cu 800))
+      (shape (circle In3.Cu 800))
+      (shape (circle In4.Cu 800))
+      (shape (circle In5.Cu 800))
+      (shape (circle In6.Cu 800))
       (shape (circle B.Cu 800))
       (attach off)
     )
@@ -1536,26 +1580,17 @@
       "Net-(C27-Pad2)" "Net-(C32-Pad1)" "Net-(C33-Pad1)" "Net-(D1-Pad2)" "Net-(D10-Pad1)"
       "Net-(D11-Pad1)" "Net-(D12-Pad1)" "Net-(D14-Pad1)" "Net-(D15-Pad1)"
       "Net-(D16-Pad1)" "Net-(D17-Pad1)" "Net-(D18-Pad3)" "Net-(D18-Pad4)"
-      "Net-(D18-Pad5)" "Net-(D19-Pad1)" "Net-(D2-Pad1)" "Net-(D3-Pad2)" "Net-(D4-Pad1)"
-      "Net-(D9-Pad1)" "Net-(J1-Pad1)" "Net-(J1-Pad8)" "Net-(J1-Pad9)" "Net-(J2-Pad2)"
-      "Net-(J3-Pad1)" "Net-(J4-Pad2)" "Net-(J4-Pad3)" "Net-(J4-Pad4)" "Net-(Q1-Pad1)"
-      "Net-(Q2-Pad1)" "Net-(Q2-Pad3)" "Net-(R19-Pad1)" "Net-(R2-Pad1)" "Net-(R20-Pad1)"
-      "Net-(R23-Pad1)" "Net-(R24-Pad1)" "Net-(R25-Pad1)" "Net-(R26-Pad2)"
-      "Net-(R27-Pad2)" "Net-(R3-Pad1)" "Net-(R4-Pad1)" "Net-(R5-Pad1)" "Net-(R6-Pad2)"
-      "Net-(R7-Pad2)" "Net-(U2-PadE2)" "Net-(U2-PadE3)" "Net-(U2-PadE6)" "Net-(U2-PadE7)"
-      "Net-(U2-PadE8)" "Net-(U2-PadE9)" "Net-(U2-PadF1)" "Net-(U2-PadF2)"
-      "Net-(U2-PadF5)" "Net-(U2-PadF6)" "Net-(U2-PadG4)" "Net-(U2-PadG5)"
-      "Net-(U2-PadH3)" "Net-(U2-PadH4)" "Net-(U2-PadH5)" "Net-(U2-PadJ3)"
-      "Net-(U2-PadJ4)" "Net-(U2-PadJ5)" "Net-(U2-PadJ6)" "Net-(U2-PadK1)"
-      "Net-(U2-PadK2)" "Net-(U2-PadK5)" "Net-(U6-PadA2)" "Net-(U6-PadA3)"
-      "Net-(U6-PadB2)" "Net-(U7-Pad6)" "Net-(U8-Pad14)" "Net-(U8-Pad20)" "Net-(U8-Pad22)"
-      "Net-(U8-Pad23)" "Net-(U8-Pad28)" "Net-(U8-Pad29)" "Net-(U8-Pad32)"
-      "Net-(U8-Pad40)"
+      "Net-(D19-Pad1)" "Net-(D2-Pad1)" "Net-(D3-Pad2)" "Net-(D4-Pad1)" "Net-(D9-Pad1)"
+      "Net-(J1-Pad9)" "Net-(J2-Pad2)" "Net-(J3-Pad1)" "Net-(J4-Pad2)" "Net-(J4-Pad3)"
+      "Net-(J4-Pad4)" "Net-(Q1-Pad1)" "Net-(Q2-Pad1)" "Net-(Q2-Pad3)" "Net-(R19-Pad1)"
+      "Net-(R2-Pad1)" "Net-(R20-Pad1)" "Net-(R23-Pad1)" "Net-(R24-Pad1)" "Net-(R25-Pad1)"
+      "Net-(R26-Pad2)" "Net-(R27-Pad2)" "Net-(R3-Pad1)" "Net-(R4-Pad1)" "Net-(R5-Pad1)"
+      "Net-(R6-Pad2)" "Net-(R7-Pad2)" "Net-(U8-Pad20)" "Net-(U8-Pad28)" "Net-(U8-Pad32)"
       (circuit
-        (use_via Via[0-3]_800:400_um)
+        (use_via Via[0-7]_800:400_um)
       )
       (rule
-        (width 250)
+        (width 150)
         (clearance 200.1)
       )
     )

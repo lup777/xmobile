@@ -20,10 +20,10 @@ U 1 1 5C4B05E9
 P 2600 3750
 F 0 "U6" H 2600 3600 60  0000 C CNN
 F 1 "MAX7370" H 2600 4150 60  0000 C CNN
-F 2 "druid:W252F2+1_21-0453" H 2575 3100 60  0001 C CNN
+F 2 "Housings_DFN_QFN:QFN-24-1EP_4x4mm_Pitch0.5mm" H 2575 3100 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/256/MAX7370-1514852.pdf" H 3550 3650 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Maxim-Integrated/MAX7370ETG%2b?qs=sGAEpiMZZMsE420DPIasPtOxRlHUUjJIUcrVTuCuU7c%3d" H 2600 3750 60  0001 C CNN "example"
-F 5 "TQFN-EP-24" H 2600 3750 30  0000 C CNN "case"
+F 5 "TQFN-24" H 2600 3750 30  0000 C CNN "case"
 	1    2600 3750
 	1    0    0    -1  
 $EndComp
@@ -109,7 +109,7 @@ Text GLabel 1075 7550 0    60   Input ~ 0
 GND
 Text Label 1075 7550 0    60   ~ 0
 GND
-Text Label 1800 4250 2    60   ~ 0
+Text Label 1800 4150 2    60   ~ 0
 GND
 NoConn ~ 1800 3650
 NoConn ~ 1800 3750
@@ -284,7 +284,6 @@ Wire Bus Line
 	5875 1475 3675 1475
 Wire Wire Line
 	1800 4050 1800 4150
-Connection ~ 1800 4150
 Wire Wire Line
 	4300 2550 4600 2550
 Wire Wire Line
@@ -810,8 +809,6 @@ Wire Wire Line
 	7275 4850 8125 4850
 Wire Wire Line
 	8125 4850 8975 4850
-Wire Wire Line
-	1800 4150 1800 4250
 Wire Wire Line
 	4600 2550 4900 2550
 Wire Wire Line

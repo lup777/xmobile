@@ -98,11 +98,11 @@ L xmobile-rescue:CY62158EV30LL-45BVXI U1
 U 1 1 5C118522
 P 4250 5200
 F 0 "U1" H 4250 5000 60  0000 C CNN
-F 1 "CY62158EV30LL-45BVXI" H 4250 5150 39  0000 C CNN
-F 2 "druid:48-ball_VFBGA_6x8x1mm_BV48BZ48" H 4475 3925 60  0001 C CNN
+F 1 "CY62158EV30LL-45ZSXIT" H 4250 5150 39  0000 C CNN
+F 2 "druid:TSOPII_44_pin" H 4475 3925 60  0001 C CNN
 F 3 "https://www.cypress.com/file/43811/download" H 4300 4250 60  0001 C CNN
-F 4 "VFBGA48" H 4250 5250 30  0000 C CNN "case"
-F 5 "https://eu.mouser.com/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45BVXI?qs=sGAEpiMZZMt9mBA6nIyysIT6PXTPi%2fj%2fhnigerrGPws%3d" H 4250 5200 60  0001 C CNN "example"
+F 4 "TSOPII_44pin" H 4250 5250 30  0000 C CNN "case"
+F 5 "https://www.mouser.co.uk/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45ZSXIT?qs=sGAEpiMZZMt9mBA6nIyysIT6PXTPi%2Fj%2F1XazRTiHOZY%3D" H 4250 5200 60  0001 C CNN "example"
 	1    4250 5200
 	1    0    0    -1  
 $EndComp
@@ -810,6 +810,9 @@ F 3 "" H 14975 9425 50  0000 C CNN
 $EndComp
 Wire Wire Line
 	14675 9425 14975 9425
+Connection ~ 1825 8950
+Wire Wire Line
+	1825 8950 3175 8950
 Wire Bus Line
 	7500 4800 7500 5125
 Wire Bus Line
@@ -824,7 +827,4 @@ Wire Bus Line
 	5325 4900 5325 5700
 Wire Bus Line
 	3950 6350 4750 6350
-Connection ~ 1825 8950
-Wire Wire Line
-	1825 8950 3175 8950
 $EndSCHEMATC
