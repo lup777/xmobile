@@ -106,19 +106,6 @@ F 5 "https://www.mouser.co.uk/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-
 	1    4250 5200
 	1    0    0    -1  
 $EndComp
-$Comp
-L xmobile-rescue:XMega128A1U_BGA100 U2
-U 1 1 5C19D697
-P 9300 5600
-F 0 "U2" H 9300 4450 60  0000 C CNN
-F 1 "XMega128A1U_BGA100" H 9350 4900 60  0000 C CNN
-F 2 "druid:BGA100_9x9x1.2_pitch-0.80mm" H 9400 5150 60  0001 C CNN
-F 3 "https://eu.mouser.com/datasheet/2/268/Atmel-8385-8-and-16-bit-AVR-Microcontroller-ATxmeg-1315775.pdf" H 9700 7400 60  0001 C CNN
-F 4 "https://eu.mouser.com/ProductDetail/Microchip-Technology-Atmel/ATXMEGA128A1U-C7U?qs=sGAEpiMZZMvqv2n3s2xjsVQIURldyCCHGWx9j4DhqLs%3d" H 9300 5600 60  0001 C CNN "example"
-F 5 "VFBGA100" H 9300 5600 30  0000 C CNN "case"
-	1    9300 5600
-	1    0    0    -1  
-$EndComp
 Text Label 7800 6300 2    60   ~ 0
 A0
 Text Label 7800 6400 2    60   ~ 0
@@ -587,16 +574,6 @@ Wire Wire Line
 	3400 5650 3200 5650
 Wire Bus Line
 	3100 5550 3100 5450
-Wire Wire Line
-	8600 3100 8700 3100
-Connection ~ 8700 3100
-Connection ~ 8800 3100
-Connection ~ 8900 3100
-Connection ~ 9000 3100
-Connection ~ 9100 3100
-Connection ~ 9200 3100
-Connection ~ 9300 3100
-Connection ~ 9400 3100
 Text Label 9500 3100 0    60   ~ 0
 3.3V
 Text Label 10800 6600 0    60   ~ 0
@@ -781,22 +758,6 @@ Wire Wire Line
 	9550 10100 9775 10100
 Wire Wire Line
 	9550 10100 9550 10350
-Wire Wire Line
-	8700 3100 8800 3100
-Wire Wire Line
-	8800 3100 8900 3100
-Wire Wire Line
-	8900 3100 9000 3100
-Wire Wire Line
-	9000 3100 9100 3100
-Wire Wire Line
-	9100 3100 9200 3100
-Wire Wire Line
-	9200 3100 9300 3100
-Wire Wire Line
-	9300 3100 9400 3100
-Wire Wire Line
-	9400 3100 9500 3100
 $Comp
 L xmobile-rescue:PWR_FLAG #FLG0101
 U 1 1 5C7368D2
@@ -813,6 +774,45 @@ Wire Wire Line
 Connection ~ 1825 8950
 Wire Wire Line
 	1825 8950 3175 8950
+$Comp
+L xmobile-rescue:XMega128A1U_TQFP100 U2
+U 1 1 5C772B8C
+P 9300 5600
+F 0 "U2" H 9275 5600 60  0000 C CNN
+F 1 "XMega128A1U_TQFP100" H 9300 5250 60  0001 C CNN
+F 2 "Package_QFP:TQFP-100_14x14mm_P0.5mm" H 9350 7400 60  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/268/Atmel-8385-8-and-16-bit-AVR-Microcontroller-ATxmeg-1315775.pdf" H 9350 7400 60  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/Microchip-Technology-Atmel/ATXMEGA128A1U-AU?qs=sGAEpiMZZMuur7c7MCGU2B0A76QkTCM%252B" H 9300 5600 50  0001 C CNN "example"
+F 5 "TQFP-100_14x14mm_0,5mm" H 9300 5300 30  0000 C CNN "case"
+	1    9300 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8600 3100 8700 3100
+Wire Wire Line
+	9400 3100 9500 3100
+Wire Wire Line
+	8700 3100 8800 3100
+Connection ~ 8700 3100
+Wire Wire Line
+	8800 3100 8900 3100
+Connection ~ 8800 3100
+Wire Wire Line
+	8900 3100 9000 3100
+Connection ~ 8900 3100
+Wire Wire Line
+	9000 3100 9100 3100
+Connection ~ 9000 3100
+Wire Wire Line
+	9100 3100 9200 3100
+Connection ~ 9100 3100
+Wire Wire Line
+	9200 3100 9300 3100
+Connection ~ 9200 3100
+Wire Wire Line
+	9300 3100 9400 3100
+Connection ~ 9300 3100
+Connection ~ 9400 3100
 Wire Bus Line
 	7500 4800 7500 5125
 Wire Bus Line

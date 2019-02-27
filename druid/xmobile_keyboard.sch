@@ -20,10 +20,10 @@ U 1 1 5C4B05E9
 P 2600 3750
 F 0 "U6" H 2600 3600 60  0000 C CNN
 F 1 "MAX7370" H 2600 4150 60  0000 C CNN
-F 2 "Housings_DFN_QFN:QFN-24-1EP_4x4mm_Pitch0.5mm" H 2575 3100 60  0001 C CNN
+F 2 "Package_DFN_QFN:QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.7mm" H 2575 3100 60  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/256/MAX7370-1514852.pdf" H 3550 3650 60  0001 C CNN
 F 4 "https://eu.mouser.com/ProductDetail/Maxim-Integrated/MAX7370ETG%2b?qs=sGAEpiMZZMsE420DPIasPtOxRlHUUjJIUcrVTuCuU7c%3d" H 2600 3750 60  0001 C CNN "example"
-F 5 "TQFN-24" H 2600 3750 30  0000 C CNN "case"
+F 5 "TQFN-24_4x4mm_P0,5mm" H 2600 3750 30  0000 C CNN "case"
 	1    2600 3750
 	1    0    0    -1  
 $EndComp
@@ -138,11 +138,11 @@ SCL
 Text HLabel 4900 4050 2    60   Output ~ 0
 INT
 $Comp
-L xmobile-rescue:C 1u1
+L xmobile-rescue:C C1
 U 1 1 5C4C0F77
 P 1050 4150
-F 0 "1u1" H 1075 4250 50  0000 L CNN
-F 1 "C" H 1075 4050 50  0000 L CNN
+F 0 "C1" H 1075 4250 50  0000 L CNN
+F 1 "1u" H 1075 4050 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 1088 4000 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 1050 4150 50  0001 C CNN
 F 4 "close to chip" H 1050 4150 60  0001 C CNN "note"
@@ -701,11 +701,11 @@ F 5 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.searc
 	1    0    0    -1  
 $EndComp
 $Comp
-L xmobile-rescue:C 1u2
+L xmobile-rescue:C C35
 U 1 1 5C6E6190
 P 1400 4150
-F 0 "1u2" H 1425 4250 50  0000 L CNN
-F 1 "C" H 1425 4050 50  0000 L CNN
+F 0 "C35" H 1425 4250 50  0000 L CNN
+F 1 "1u" H 1425 4050 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0402_1005Metric" H 1438 4000 50  0001 C CNN
 F 3 "https://eu.mouser.com/datasheet/2/281/murata_03052018_GRM_Series_1-1310166.pdf" H 1400 4150 50  0001 C CNN
 F 4 "close to chip" H 1400 4150 60  0001 C CNN "note"
