@@ -1,0 +1,110 @@
+
+(rules PCB xmobile
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout off)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 9026)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.8)
+      (against_preferred_direction_trace_costs 3.4)
+    )
+    (layer_rule In1.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 1.6)
+    )
+    (layer_rule In2.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 2.6)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.8)
+      (against_preferred_direction_trace_costs 2.4)
+    )
+  )
+  (rule
+    (width 250.0)
+    (clear 200.2)
+    (clear 125.0 (type smd_to_turn_gap))
+    (clear 50.0 (type smd_smd))
+  )
+  (padstack "Via[0-3]_800:400_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle In1.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle In2.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-3]_800:400_um" "Via[0-3]_800:400_um" default
+  )
+  (via 
+    "Via[0-3]_800:400_um-kicad_default" "Via[0-3]_800:400_um" "kicad_default"
+  )
+  (via_rule
+    default "Via[0-3]_800:400_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-3]_800:400_um-kicad_default"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 250.0)
+    )
+    (circuit 
+      (use_layer F.Cu In1.Cu In2.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    3.3V GND "/audio/AUDIO_SPKP" "/audio/AUDIO_SPKN" "/audio/AUDIO_MICP" "/audio/AUDIO_MICN" "Net-(C21-Pad1)" "Net-(C22-Pad1)"
+    "Net-(C23-Pad1)" "Net-(C23-Pad2)" "Net-(C24-Pad2)" 3.7V "Net-(C27-Pad2)" "Net-(C32-Pad1)" "Net-(C33-Pad1)" "/xmobile_GSM/USB_VBUS"
+    "Net-(D1-Pad2)" "Net-(D2-Pad1)" "Net-(D3-Pad2)" "Net-(D4-Pad1)" "Net-(D9-Pad1)" "Net-(D10-Pad1)" "Net-(D11-Pad1)" "Net-(D12-Pad1)"
+    "Net-(D14-Pad1)" "Net-(D15-Pad1)" "Net-(D16-Pad1)" "Net-(D17-Pad1)" "Net-(D18-Pad3)" "Net-(D18-Pad4)" "Net-(D19-Pad1)" "/xmobile_GSM/GSM_VBAT"
+    "Net-(J1-Pad9)" "/microSD_DO" "/microSD_SCLK" "/microSD_DI" "/microSD_CS" "Net-(J2-Pad2)" "Net-(J3-Pad1)" "Net-(J4-Pad2)"
+    "Net-(J4-Pad3)" "Net-(J4-Pad4)" "/EPD_BUSY" "/EPD_RST" "/EPD_DC" "/EPD_CS" "/EPD_CLK" "/EPD_DIN"
+    "/xmobile_GSM/PWRKEY" "Net-(Q1-Pad1)" "Net-(Q2-Pad1)" "Net-(Q2-Pad3)" "/PDI_C" "Net-(R2-Pad1)" "Net-(R3-Pad1)" "Net-(R4-Pad1)"
+    "Net-(R5-Pad1)" "Net-(R6-Pad2)" "Net-(R7-Pad2)" "/xmobile_keyboard/LED1" "/xmobile_keyboard/LED2" "/xmobile_keyboard/LED3" "/xmobile_keyboard/LED4" "/KBD_SDA"
+    "/KBD_SCL" "/KBD_INT" "/xmobile_GSM/SIM_VDD" "/xmobile_GSM/SIM_RST" "/xmobile_GSM/SIM_CLK" "/xmobile_GSM/SIM_DATA" "/GSM_RTS" "Net-(R19-Pad1)"
+    "/GSM_DTR" "Net-(R20-Pad1)" "/GSM_CTS" "Net-(R23-Pad1)" "Net-(R24-Pad1)" "/GSM_DCD" "Net-(R25-Pad1)" "/GSM_RI"
+    "Net-(R26-Pad2)" "Net-(R27-Pad2)" "/GSM_TXD" "/GSM_RXD" "/GSM_PWRKEY" "/xmobile_GSM/NETLIGHT" "/xmobile_keyboard/R0" "/xmobile_keyboard/C0"
+    "/xmobile_keyboard/R1" "/xmobile_keyboard/R2" "/xmobile_keyboard/R3" "/xmobile_keyboard/R4" "/xmobile_keyboard/C1" "/xmobile_keyboard/C2" "/xmobile_keyboard/C3" /OE
+    /A0 /A1 /A2 /CE2 /A3 /A4 /CE1 /D0
+    /A5 /A6 /D4 /D1 /A17 /A7 /D5 /D2
+    /A16 /D6 /D3 /A14 /A15 /D7 /A12 /A13
+    /WE /A18 /A8 /A9 /A10 /A11 /A19 "/PDI_D"
+    "/GSM_STATUS" "Net-(U8-Pad20)" "/xmobile_GSM/USB_DP" "/xmobile_GSM/USB_DN" "Net-(U8-Pad28)" "Net-(U8-Pad32)"
+    (clearance_class "kicad_default")
+    (via_rule kicad_default)
+    (rule
+      (width 250.0)
+    )
+    (circuit 
+      (use_layer F.Cu In1.Cu In2.Cu B.Cu)
+    )
+  )
+)
