@@ -29,19 +29,6 @@ F 5 "0402 In" V 9950 10100 30  0000 C CNN "case"
 $EndComp
 Text Label 10275 10100 0    60   ~ 0
 3.3V
-$Comp
-L xmobile-rescue:CONN_8 P1
-U 1 1 5974D7B3
-P 13525 7500
-F 0 "P1" V 13475 7500 60  0000 C CNN
-F 1 "CONN_8" V 13575 7500 60  0000 C CNN
-F 2 "Connector_PinHeader_1.00mm:PinHeader_1x08_P1.00mm_Vertical" V 13700 7450 60  0001 C CNN
-F 3 "" H 13525 7500 60  0001 C CNN
-F 4 "EPD display connector" V 13700 7500 60  0001 C CNN "description"
-F 5 "pin header 1.00mm" V 13675 7500 30  0000 C CNN "case"
-	1    13525 7500
-	1    0    0    -1  
-$EndComp
 Text Label 13175 7150 2    60   ~ 0
 EPD_BUSY
 Text Label 13175 7250 2    60   ~ 0
@@ -813,6 +800,132 @@ Wire Wire Line
 	9300 3100 9400 3100
 Connection ~ 9300 3100
 Connection ~ 9400 3100
+$Comp
+L xmobile-rescue:TEST_1P J5
+U 1 1 5C7A3241
+P 13400 7850
+F 0 "J5" H 13400 8120 50  0000 C CNN
+F 1 "EPD_1" H 13400 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13425 8175 50  0001 C CNN
+F 3 "" H 13600 7850 50  0001 C CNN
+F 4 "1 pad" H 13400 8175 30  0000 C CNN "case"
+	1    13400 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J6
+U 1 1 5C7A34B4
+P 13500 7850
+F 0 "J6" H 13500 8120 50  0000 C CNN
+F 1 "EPD_1" H 13500 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13525 8175 50  0001 C CNN
+F 3 "" H 13700 7850 50  0001 C CNN
+F 4 "1 pad" H 13500 8175 30  0000 C CNN "case"
+	1    13500 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J7
+U 1 1 5C7A34E6
+P 13600 7850
+F 0 "J7" H 13600 8120 50  0000 C CNN
+F 1 "EPD_1" H 13600 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13625 8175 50  0001 C CNN
+F 3 "" H 13800 7850 50  0001 C CNN
+F 4 "1 pad" H 13600 8175 30  0000 C CNN "case"
+	1    13600 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J8
+U 1 1 5C7A351A
+P 13700 7850
+F 0 "J8" H 13700 8120 50  0000 C CNN
+F 1 "EPD_1" H 13700 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13725 8175 50  0001 C CNN
+F 3 "" H 13900 7850 50  0001 C CNN
+F 4 "1 pad" H 13700 8175 30  0000 C CNN "case"
+	1    13700 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J9
+U 1 1 5C7A986E
+P 13800 7850
+F 0 "J9" H 13800 8120 50  0000 C CNN
+F 1 "EPD_1" H 13800 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13825 8175 50  0001 C CNN
+F 3 "" H 14000 7850 50  0001 C CNN
+F 4 "1 pad" H 13800 8175 30  0000 C CNN "case"
+	1    13800 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J10
+U 1 1 5C7A98AE
+P 13900 7850
+F 0 "J10" H 13900 8120 50  0000 C CNN
+F 1 "EPD_1" H 13900 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13925 8175 50  0001 C CNN
+F 3 "" H 14100 7850 50  0001 C CNN
+F 4 "1 pad" H 13900 8175 30  0000 C CNN "case"
+	1    13900 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J11
+U 1 1 5C7A98EC
+P 14000 7850
+F 0 "J11" H 14000 8120 50  0000 C CNN
+F 1 "EPD_1" H 14000 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 14025 8175 50  0001 C CNN
+F 3 "" H 14200 7850 50  0001 C CNN
+F 4 "1 pad" H 14000 8175 30  0000 C CNN "case"
+	1    14000 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J12
+U 1 1 5C7A9928
+P 14100 7850
+F 0 "J12" H 14100 8120 50  0000 C CNN
+F 1 "EPD_1" H 14100 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 14125 8175 50  0001 C CNN
+F 3 "" H 14300 7850 50  0001 C CNN
+F 4 "1 pad" H 14100 8175 30  0000 C CNN "case"
+	1    14100 7850
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	13175 7850 13400 7850
+Wire Wire Line
+	13175 7750 13500 7750
+Wire Wire Line
+	13500 7750 13500 7850
+Wire Wire Line
+	13175 7650 13600 7650
+Wire Wire Line
+	13600 7650 13600 7850
+Wire Wire Line
+	13175 7550 13700 7550
+Wire Wire Line
+	13700 7550 13700 7850
+Wire Wire Line
+	13175 7450 13800 7450
+Wire Wire Line
+	13800 7450 13800 7850
+Wire Wire Line
+	13175 7350 13900 7350
+Wire Wire Line
+	13900 7350 13900 7850
+Wire Wire Line
+	13175 7250 14000 7250
+Wire Wire Line
+	14000 7250 14000 7850
+Wire Wire Line
+	13175 7150 14100 7150
+Wire Wire Line
+	14100 7150 14100 7850
 Wire Bus Line
 	7500 4800 7500 5125
 Wire Bus Line

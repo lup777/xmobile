@@ -3,7 +3,7 @@
    No need to wait transfer complete if we have something to do.
    a. send 1st byte
    b. prepare 2nd byte while 1st is in transfer process.
-   c. send 2nd byte
+   +c. send 2nd byte
    d. prepare 3rd byte while 2nd is in transfer process...
 
 2. [LOG] log("abc"); place const string of such logs in PROGMEM. Something like this.
@@ -30,36 +30,36 @@
         + RTC (exists in SIM800) add TPs for RTS BAT
         + external RAM
         - external flash memory (program mem) is it possible
-        - buttary charger
+        + buttary charger. Reuslt: 2 chargers
         + test points
 
-9. [HW] 4 layer at least. external layers are only for contact pads and test points.
-        Two interlan layers are for lines.
+9.+[HW] 4 layer at least. external layers are only for contact pads and test points.
+        Two interlan layers are for lines. Result: Not exactly, but 4 layers
 
-10. [HW] [KBD] Add resistors to graund
+10.+[HW] [KBD] Add resistors to graund. Result: use kbd controller
 
-11. [HW] Hols for mounting
+11.+[HW] Hols for mounting
 
-12. [HW] Druid logo
+12.-[HW] Druid logo. Result: just text, maybe need picture?
 
-13. [HW] Holl for antenna soldering
+13.+[HW] Holl for antenna soldering
 
-14. [HW]-Use GSm module with FM radio if it can work with user diaposon
+14.-[HW]-Use GSm module with FM radio if it can work with user diaposon. Result: next time
 
-15. [HW] Vibro
+15.+[HW] Vibro. Result: just pints for connecting
 
-16. [HW] Button for screen refresh
+16.+[HW] Button for screen refresh. Result: a lot of buttons :)
 
-17. [HW] Button for Telephone application start
+17.+[HW] Button for Telephone application start
 
 18. [GSM] Use rtr/rts,dtr,cts to control usart queue
 
-19. [HW] Add lamp for error state (error indicator)
+19.+[HW] Add lamp for error state (error indicator)
 
-20. [HW] Buttons for vol+-
+20.+[HW] Buttons for vol+-
 
 21.+[HW] Connect display to USART (SPI mode) to be able to use DMA
 
-22. [HW] SD card connect to USART (SPI mode) to be able to use DMA
+22.+[HW] SD card connect to USART (SPI mode) to be able to use DMA
 
 // EBI 4-port: https://www.avrfreaks.net/forum/xmega-au-four-port-ebi
