@@ -7,7 +7,7 @@
 #include "epd.h"
 #include "pgm.h"
 #include "kbd.h"
-#include "telephone.h"
+//#include "telephone.h"
 #include "gsm.h"
 #include "menu.h"
 
@@ -23,7 +23,7 @@ Context context;
 
 
 static App menu[MENU_SIZE] = {
-  {APP_TelephoneStart, TELEPHONE_MAILBOX_ID,  "telephone      "},
+  {TestApp1, NOT_EXISTS_ID,                   "telephone      "},
   {TestApp1, NOT_EXISTS_ID,                   "calendar       "},
   {TestApp1, NOT_EXISTS_ID,                   "reader         "},
   {TestApp1, NOT_EXISTS_ID,                   "snake          "},
@@ -61,7 +61,7 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   size_t xBytesSent;
 
   taskENTER_CRITICAL();
-  _log("send to %p", context.mail[mailbox_id]);
+  //_log("send to %p", context.mail[mailbox_id]);
   xBytesSent = xMessageBufferSend(context.mail[mailbox_id], buf,
                                   (size_t)payload_len + 1, 0);
   taskEXIT_CRITICAL();
@@ -72,6 +72,15 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
 }
 
 int main(void) {
+
+  //OSC_PLLCTRL = 0x16;  // 2 * 16 = 32MGz
+  OSC_CTRL = OSC_RC32MEN_bm;
+  
+  while( !( OSC_STATUS & OSC_RC32MRDY_bm ) ); // waite while 32MGXz osc ready
+
+  CCP = CCP_IOREG_gc;
+  CLK_CTRL = CLK_SCLKSEL_RC32M_gc;
+  
   gpio_init();
   USART0_init();
   KBD_Init();
@@ -122,12 +131,11 @@ static void vMainTask(void* pvParameters) {
   //_sleep(100);
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
+  
   //_sleep(3000);
 
   //GSM_Init();
-
   _log("MAIN main task init completed");
-
 
   //APP_TelephoneStart();
   APP_MenuStart(menu);
@@ -135,5 +143,7 @@ static void vMainTask(void* pvParameters) {
   for(;;) {
     APP_MenuMessagePump();
   }
+  APP_MenuStart(menu);
+  APP_MenuMessagePump();
   
 }

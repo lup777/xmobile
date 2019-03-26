@@ -62,7 +62,6 @@ pgm.c \
 kbd.c \
 fonts.c \
 util.c \
-telephone.c \
 gsm.c \
 menu.c \
 epd.c \
@@ -79,6 +78,7 @@ $(PORT_DIR)/port.c \
 #$(DEMO_DIR)/PollQ.c \
 #$(DEMO_DIR)/comtest.c
 #ui.c
+#telephone.c \
 
 #gsm.c
 #display.c \

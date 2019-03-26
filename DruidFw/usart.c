@@ -66,10 +66,16 @@ inline void USART0_init(void) {
   USARTF0.CTRLA = USART_RXCINTLVL_LO_gc
     | USART_TXCINTLVL_OFF_gc
     | USART_DREINTLVL_OFF_gc;
-  //USARTF0.BAUDCTRLA = 25; // 9600
-  //USARTF0.BAUDCTRLB = 0; // 9600
-  USARTF0.BAUDCTRLA = 19; // 115200
-  USARTF0.BAUDCTRLB = 0xC0; // 115200
+  //USARTF0.BAUDCTRLA = 25; // 9600  - 2MGz internal osc
+  //USARTF0.BAUDCTRLB = 0; // 9600  - 2MGz internal osc
+  //USARTF0.BAUDCTRLA = 19; // 115200 - 2MGz internal osc
+  //USARTF0.BAUDCTRLB = 0xC0; // 115200  - 2MGz internal osc
+
+  uint16_t bsel = 1079;
+  uint8_t bscale = 5;
+  USARTF0.BAUDCTRLA = bsel & 0xff; // 115200  - 32MGz internal osc
+  USARTF0.BAUDCTRLB =
+    (bsel >> 8) | ((16 - bscale) << 4); // 115200  - 32MGz internal osc
   //https://planetcalc.ru/747/
   //https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
   g_log_tx_buffer_handle = xStreamBufferCreate(1000, 1);
