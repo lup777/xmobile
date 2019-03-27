@@ -17,9 +17,54 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
       buffer[i] = 0xFF;
   }
+  //RenderDot(event->pos().x()-8, event->pos().y()-13);
+  RenderLine(0, 0,
+             event->pos().x(), event->pos().y());
 
   RenderChar('a', event->pos().x()-8, event->pos().y()-13);
+  RenderChar('a', event->pos().x()-16, event->pos().y()-13);
+  RenderChar('a', event->pos().x()-24, event->pos().y()-13);
+  RenderChar('a', event->pos().x()-32, event->pos().y()-13);
+
+  RenderChar('a', event->pos().x()-8, event->pos().y()-26);
+  RenderChar('a', event->pos().x()-16, event->pos().y()-26);
+  RenderChar('a', event->pos().x()-24, event->pos().y()-26);
+  RenderChar('a', event->pos().x()-32, event->pos().y()-26);
+
+  RenderChar('a', event->pos().x()-8, event->pos().y()-39);
+  RenderChar('a', event->pos().x()-16, event->pos().y()-39);
+  RenderChar('a', event->pos().x()-24, event->pos().y()-39);
+  RenderChar('a', event->pos().x()-32, event->pos().y()-39);
   this->update();
+}
+
+void MainWindow::RenderDot(byte x, byte y) {
+  if (y > BUFFER_ROWS || x > (BUFFER_COLS * 8))
+    return;
+
+  byte row_byte = x / 8;
+  byte shift_bits = x - (row_byte * 8);
+
+  byte left_mask = ~(0x01 << (shift_bits));
+
+  size_t left_byte_id = row_byte + (y * BUFFER_COLS);
+
+  if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE))
+    buffer[left_byte_id] &= left_mask;
+}
+
+void MainWindow::RenderLine(byte x, byte y, byte ex, byte ey) {
+  float dx = ex - x;
+  float dy = ey - y;
+
+  float steps = sqrt(pow(dx,2) + pow(dy,2));
+
+  float step_x = dx / steps;
+  float step_y = dy / steps;
+
+  for (size_t i = 0 ; i < steps; i++) {
+    RenderDot(x+(step_x*i), y+(step_y*i));
+  }
 }
 
 void MainWindow::RenderChar(char ch, unsigned char x, unsigned char y) {

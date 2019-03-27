@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QMouseEvent>
+#include <math.h>
 
 #define BUFFER_ROWS 200
 #define BUFFER_COLS 25
@@ -27,6 +28,8 @@ public:
   void mouseMoveEvent(QMouseEvent* event);
 
   void RenderChar(char ch, unsigned char x, unsigned char y);
+  void RenderDot(byte x, byte y);
+  void RenderLine(byte x, byte y, byte ex, byte ey);
 
 private:
   Ui::MainWindow *ui;
