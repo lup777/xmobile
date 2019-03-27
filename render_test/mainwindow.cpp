@@ -10,15 +10,16 @@ MainWindow::MainWindow(QWidget *parent) :
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
       buffer[i] = 0xFF;
     }
-
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
       buffer[i] = 0xFF;
   }
+  zone.clear();
+
   //RenderDot(event->pos().x()-8, event->pos().y()-13);
-  RenderLine(0, 0,
+  RenderLine(40, 20,
              event->pos().x(), event->pos().y());
 
   RenderChar('a', event->pos().x()-8, event->pos().y()-13);
@@ -35,7 +36,17 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   RenderChar('a', event->pos().x()-16, event->pos().y()-39);
   RenderChar('a', event->pos().x()-24, event->pos().y()-39);
   RenderChar('a', event->pos().x()-32, event->pos().y()-39);
+
+  RenderZone();
+
   this->update();
+}
+
+void MainWindow::RenderZone() {
+  RenderLine(zone.x(), zone.y(), zone.x(), zone.ey()-1);
+  RenderLine(zone.x(), zone.ey()-1, zone.ex()-1, zone.ey()-1);
+  RenderLine(zone.ex()-1, zone.ey()-1, zone.ex()-1, zone.y());
+  RenderLine(zone.ex()-1, zone.y(), zone.x(), zone.y());
 }
 
 void MainWindow::RenderDot(byte x, byte y) {
@@ -51,6 +62,8 @@ void MainWindow::RenderDot(byte x, byte y) {
 
   if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE))
     buffer[left_byte_id] &= left_mask;
+
+  zone.update(x, y);
 }
 
 void MainWindow::RenderLine(byte x, byte y, byte ex, byte ey) {
@@ -80,11 +93,17 @@ void MainWindow::RenderChar(char ch, unsigned char x, unsigned char y) {
     size_t left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
     size_t right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
 
-    if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE))
+    if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE)) {
       buffer[left_byte_id] &= left_mask;
+      zone.update(row_byte * 8, y);
+      zone.update(row_byte * 8, y+13);
+    }
 
-    if ((right_byte_id > 0) && (right_byte_id < BUFFER_SIZE ))
+    if ((right_byte_id > 0) && (right_byte_id < BUFFER_SIZE )) {
       buffer[right_byte_id] &= right_mask;
+      zone.update(row_byte * 8, y);
+      zone.update(row_byte * 8, y+13);
+    }
   }
 }
 
