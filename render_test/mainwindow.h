@@ -6,9 +6,11 @@
 #include <QMouseEvent>
 #include <math.h>
 
-#define BUFFER_ROWS 200
-#define BUFFER_COLS 25
+#define ZOOM 1
+#define BUFFER_ROWS (200 * ZOOM)
+#define BUFFER_COLS (25 * ZOOM)
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
+
 
 typedef unsigned char byte;
 typedef struct UpdatedZoneClass {
@@ -66,10 +68,11 @@ public:
   void paintEvent(QPaintEvent *);
   void mouseMoveEvent(QMouseEvent* event);
 
-  void RenderChar(char ch, unsigned char x, unsigned char y);
+  void RenderChar(const byte* ch, unsigned char x, unsigned char y);
   void RenderDot(byte x, byte y);
   void RenderLine(byte x, byte y, byte ex, byte ey);
   void RenderZone();
+  void RenderCircle(byte x, byte y, byte r);
 
 private:
   Ui::MainWindow *ui;
