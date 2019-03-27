@@ -6,9 +6,11 @@
 #include <QMouseEvent>
 
 #define BUFFER_ROWS 200
-#define BUFFER_COLS 24
+#define BUFFER_COLS 25
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
+
 typedef unsigned char byte;
+
 namespace Ui {
   class MainWindow;
 }
