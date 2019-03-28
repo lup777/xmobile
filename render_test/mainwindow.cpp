@@ -165,7 +165,7 @@ void MainWindow::paintEvent(QPaintEvent *) {
   }
   QPen pen(Qt::red, 1, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
   p.setPen(pen);
-  p.drawRect(zone.x()+REPLACE_X, zone.y()+REPLACE_Y, zone.ex()-zone.x(), zone.ey()-zone.y());
+  p.drawRect((zone.x()*ZOOM)+REPLACE_X, (zone.y()*ZOOM)+REPLACE_Y, (zone.ex()-zone.x())*ZOOM, (zone.ey()-zone.y())*ZOOM);
 }
 
 MainWindow::~MainWindow()

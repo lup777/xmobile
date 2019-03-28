@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <math.h>
 
-#define ZOOM 1
+#define ZOOM 2
 #define BUFFER_ROWS (200 )
 #define BUFFER_COLS (25 )
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
