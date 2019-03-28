@@ -7,9 +7,13 @@
 #include <math.h>
 
 #define ZOOM 1
-#define BUFFER_ROWS (200 * ZOOM)
-#define BUFFER_COLS (25 * ZOOM)
+#define BUFFER_ROWS (200 )
+#define BUFFER_COLS (25 )
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
+
+#define REPLACE_X 40
+#define REPLACE_Y 40
+#define MARGIN 40
 
 
 typedef unsigned char byte;
@@ -18,7 +22,7 @@ typedef struct UpdatedZoneClass {
     clear();
   }
   void clear() {
-    x_ = y_ = 200;
+    x_ = y_ = BUFFER_ROWS;
     ex_ = ey_ = 0;
   }
 
@@ -32,6 +36,15 @@ typedef struct UpdatedZoneClass {
       ex_ = x;
     if (ey_ < y)
       ey_ = y;
+
+    /*if (x_ < 0)
+      x_ = 0;
+    if (y_ < 0)
+      y_ = 0;*/
+    if (ex_ > (BUFFER_COLS * 8)-1)
+      ex_ = (BUFFER_COLS * 8)-1;
+    if (ey_ > BUFFER_ROWS)
+      ey_ = BUFFER_ROWS;
   }
 
   byte x() {
