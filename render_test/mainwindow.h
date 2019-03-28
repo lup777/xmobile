@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <math.h>
 
-#define ZOOM 2
+#define ZOOM 1
 #define BUFFER_ROWS (200 )
 #define BUFFER_COLS (25 )
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
@@ -18,6 +18,8 @@
 #define DRAW_FULL_BUFFER 1
 
 typedef unsigned char byte;
+typedef unsigned short word;
+
 typedef struct UpdatedZoneClass {
   UpdatedZoneClass() {
     clear();
@@ -88,6 +90,7 @@ public:
   void RenderZone();
   void RenderCircle(byte x, byte y, byte r);
   void RenderRectangle(byte x, byte y, byte x1, byte y1);
+  void RenderSubBuffer(byte x, byte y, byte dx, byte dy, const byte* subbuffer);
 
 private:
   Ui::MainWindow *ui;

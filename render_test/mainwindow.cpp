@@ -30,10 +30,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
       buffer[i] = 0xFF;
   }
-  /*RenderLine(0, 0, (BUFFER_COLS * 8)-1, 0); //BUFFER_ROWS
-  RenderLine((BUFFER_COLS * 8)-1, 0, (BUFFER_COLS * 8)-1, BUFFER_ROWS-1);
-  RenderLine((BUFFER_COLS * 8)-1, BUFFER_ROWS, 0, BUFFER_ROWS-1);
-  RenderLine(0, BUFFER_ROWS-1, 0, 0);*/
+
   RenderRectangle(0, 0, (BUFFER_COLS * 8) - 1, BUFFER_ROWS - 1);
 
   zone.clear();
@@ -42,21 +39,19 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   RenderCircle(64,60,30);
   RenderCircle(64,60,25);
   RenderCircle(70,70,25);
+
   RenderLine(40, 20, mx, my);
+  RenderLine(mx, my, mx+50, my-10);
 
-  const unsigned char ch1[13] = {0xCF, 0xCF, 0xC7, 0xD3, 0xD9, 0x00, 0x00, 0xDF, 0xDF, 0xDF, 0xFF, 0xFF, 0xFF};
-  const unsigned char ch2[13] = {0xE3, 0xC1, 0xC9, 0xE3, 0xF3, 0x61, 0x0C, 0x1C, 0x00, 0x61, 0xFF, 0xFF, 0xFF};
+  const byte sub_test[7*13] = {0xFF, 0xFF, 0x00, 0x00, 0x8F, 0xC7, 0xF3, 0xF9, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
+                               0xFF, 0xFF, 0x3C, 0x3C, 0x9C, 0x99, 0x99, 0xD3, 0xC3, 0xC3, 0xE7, 0xE1, 0xF1,
+                               0xFF, 0xFF, 0x1C, 0x99, 0xC1, 0xC3, 0xC3, 0xC9, 0x98, 0x1C, 0xFF, 0xFF, 0xFF,
+                               0xFF, 0xFF, 0xFF, 0xC3, 0x83, 0x9F, 0x83, 0x99, 0x01, 0x03, 0xFF, 0xFF, 0xFF,
+                               0x9F, 0x83, 0xF1, 0xC1, 0x81, 0x38, 0x3D, 0x19, 0x81, 0xC3, 0xFF, 0xFF, 0xFF,
+                               0xFF, 0xFF, 0xFF, 0xC0, 0xC0, 0xCC, 0xC0, 0x9C, 0x80, 0xC0, 0xFF, 0xFF, 0xFF,
+                               0xFF, 0xFF, 0xFF, 0x01, 0x01, 0x33, 0xF3, 0xF3, 0xC1, 0xC1, 0xFF, 0xFF, 0xFF};
 
-  RenderChar(ch1, mx-8, my-13);
-  RenderChar(ch1, mx-16, my-13);
-  RenderChar(ch1, mx-24, my-13);
-  RenderChar(ch1, mx-32, my-13);
-
-  RenderChar(ch2, mx-8, my-26);
-  RenderChar(ch2, mx-16, my-26);
-  RenderChar(ch2, mx-24, my-26);
-  RenderChar(ch2, mx-32, my-26);
-
+  RenderSubBuffer(mx,my, 7*8, 13, sub_test);
 
   RenderZone();
 
@@ -99,9 +94,9 @@ void MainWindow::RenderDot(byte x, byte y) {
 
   byte left_mask = ~(0x01 << (shift_bits));
 
-  size_t left_byte_id = row_byte + (y * BUFFER_COLS);
+  word left_byte_id = row_byte + (y * BUFFER_COLS);
 
-  if ((left_byte_id >= 0) && (left_byte_id < BUFFER_SIZE))
+  if (left_byte_id < BUFFER_SIZE)
     buffer[left_byte_id] &= left_mask;
 
   zone.update(x, y);
@@ -121,6 +116,15 @@ void MainWindow::RenderLine(byte x, byte y, byte ex, byte ey) {
   }
 }
 
+void MainWindow::RenderSubBuffer(byte x, byte y, byte dx, byte dy, const byte* subbuffer) {
+  byte full_bytes_num = dx / 8;
+  byte rest_size_bits = dx - full_bytes_num;
+
+  for(byte i = 0; i < full_bytes_num; i++) {
+    RenderChar(subbuffer + (i * dy), x + (i * 8), y);
+  }
+}
+
 #define FONT_HEIGHT_BITS 13
 void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
 
@@ -129,14 +133,14 @@ void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
   if (row_byte+1 >= BUFFER_COLS) // right byte is out of buffer width
     return;
 
-  for(size_t i = 0; i < FONT_HEIGHT_BITS; i++) {
+  for(byte i = 0; i < FONT_HEIGHT_BITS; i++) {
     byte right_mask = (ch[i] >> (8 - shift_bits)) | (0xFF << (shift_bits));
     byte left_mask = (ch[i] << (shift_bits)) | (0xFF >> (8 - shift_bits));
 
-    size_t left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
-    size_t right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
+    word left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
+    word right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
 
-    if ((left_byte_id >= 0) && (left_byte_id < BUFFER_SIZE)) {
+    if (left_byte_id < BUFFER_SIZE) {
       buffer[left_byte_id] &= left_mask;
       zone.update(row_byte * 8, y);
       zone.update(row_byte * 8, y + FONT_HEIGHT_BITS);
@@ -144,8 +148,8 @@ void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
 
     if ((right_byte_id > 0) && (right_byte_id < BUFFER_SIZE )) {
       buffer[right_byte_id] &= right_mask;
-      zone.update(row_byte * 8, y);
-      zone.update(row_byte * 8, y + FONT_HEIGHT_BITS);
+      zone.update((row_byte + 1) * 8, y);
+      zone.update((row_byte + 1) * 8, y + FONT_HEIGHT_BITS);
     }
   }
 }
