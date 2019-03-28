@@ -30,10 +30,11 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
       buffer[i] = 0xFF;
   }
-  RenderLine(0, 0, (BUFFER_COLS * 8)-1, 0); //BUFFER_ROWS
+  /*RenderLine(0, 0, (BUFFER_COLS * 8)-1, 0); //BUFFER_ROWS
   RenderLine((BUFFER_COLS * 8)-1, 0, (BUFFER_COLS * 8)-1, BUFFER_ROWS-1);
   RenderLine((BUFFER_COLS * 8)-1, BUFFER_ROWS, 0, BUFFER_ROWS-1);
-  RenderLine(0, BUFFER_ROWS-1, 0, 0);
+  RenderLine(0, BUFFER_ROWS-1, 0, 0);*/
+  RenderRectangle(0, 0, (BUFFER_COLS * 8) - 1, BUFFER_ROWS - 1);
 
   zone.clear();
 
@@ -59,17 +60,24 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
 
   RenderZone();
 
+  /*for (int i = 0; i < 200; i++) {
+    buffer[(5 + BUFFER_COLS) + (i * BUFFER_COLS)] = 0;
+  }*/
 
   this->update();
 }
 
 void MainWindow::RenderZone() {
   Zone tmp = zone;
-  RenderLine(zone.x(), zone.y(), zone.x(), zone.ey()-1);
-  RenderLine(zone.x(), zone.ey(), zone.ex()-1, zone.ey());
-  RenderLine(zone.ex()-1, zone.ey()-1, zone.ex()-1, zone.y());
-  RenderLine(zone.ex()-1, zone.y(), zone.x(), zone.y());
+  RenderRectangle(zone.x(), zone.y(), zone.ex()-1, zone.ey()-1);
   zone = tmp;
+}
+
+void MainWindow::RenderRectangle(byte x, byte y, byte x1, byte y1) {// coordinates and coordinates
+  RenderLine(x, y, x1, y);
+  RenderLine(x1, y, x1, y1);
+  RenderLine(x1, y1, x, y1);
+  RenderLine(x, y1, x, y);
 }
 
 void MainWindow::RenderCircle(byte x, byte y, byte r) {
@@ -93,7 +101,7 @@ void MainWindow::RenderDot(byte x, byte y) {
 
   size_t left_byte_id = row_byte + (y * BUFFER_COLS);
 
-  if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE))
+  if ((left_byte_id >= 0) && (left_byte_id < BUFFER_SIZE))
     buffer[left_byte_id] &= left_mask;
 
   zone.update(x, y);
@@ -128,7 +136,7 @@ void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
     size_t left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
     size_t right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
 
-    if ((left_byte_id > 0) && (left_byte_id < BUFFER_SIZE)) {
+    if ((left_byte_id >= 0) && (left_byte_id < BUFFER_SIZE)) {
       buffer[left_byte_id] &= left_mask;
       zone.update(row_byte * 8, y);
       zone.update(row_byte * 8, y + FONT_HEIGHT_BITS);
@@ -145,9 +153,14 @@ void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
 void MainWindow::paintEvent(QPaintEvent *) {
   QPainter p(this);
 
+#if DRAW_FULL_BUFFER==1
   for(size_t col = 0; col < BUFFER_COLS; col++) {
     for(size_t row = 0; row < BUFFER_ROWS; row++) {
-        unsigned char byte_ = buffer[col + (row * BUFFER_COLS)];
+#else
+  for(size_t col = zone.x()/8; col < zone.ex()/8; col++) {
+    for(size_t row = zone.y(); row < zone.ey(); row++) {
+#endif
+      unsigned char byte_ = buffer[col + (row * BUFFER_COLS)];
 
       for(size_t bit = 0; bit < 8; bit ++) {
         if((byte_ & (1 << bit)) == 0) {
@@ -163,7 +176,7 @@ void MainWindow::paintEvent(QPaintEvent *) {
       }
     }
   }
-  QPen pen(Qt::red, 1, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
+  QPen pen(Qt::red, 1*ZOOM, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
   p.setPen(pen);
   p.drawRect((zone.x()*ZOOM)+REPLACE_X, (zone.y()*ZOOM)+REPLACE_Y, (zone.ex()-zone.x())*ZOOM, (zone.ey()-zone.y())*ZOOM);
 }

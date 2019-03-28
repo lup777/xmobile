@@ -15,6 +15,7 @@
 #define REPLACE_Y 40
 #define MARGIN 40
 
+#define DRAW_FULL_BUFFER 1
 
 typedef unsigned char byte;
 typedef struct UpdatedZoneClass {
@@ -83,9 +84,10 @@ public:
 
   void RenderChar(const byte* ch, unsigned char x, unsigned char y);
   void RenderDot(byte x, byte y);
-  void RenderLine(byte x, byte y, byte ex, byte ey);
+  void RenderLine(byte x, byte y, byte ex, byte ey); // coordinates and lengths
   void RenderZone();
   void RenderCircle(byte x, byte y, byte r);
+  void RenderRectangle(byte x, byte y, byte x1, byte y1);
 
 private:
   Ui::MainWindow *ui;
