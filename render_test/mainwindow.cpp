@@ -52,6 +52,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
                                0xFF, 0xFF, 0xFF, 0x01, 0x01, 0x33, 0xF3, 0xF3, 0xC1, 0xC1, 0xFF, 0xFF, 0xFF};
 
   RenderSubBuffer(mx,my, 7*8, 13, sub_test);
+  RenderCircle(mx, my, 20);
 
   RenderZone();
 
@@ -68,16 +69,16 @@ void MainWindow::RenderZone() {
   zone = tmp;
 }
 
-void MainWindow::RenderRectangle(byte x, byte y, byte x1, byte y1) {// coordinates and coordinates
+void MainWindow::RenderRectangle(short x, short y, short x1, short y1) {// coordinates and coordinates
   RenderLine(x, y, x1, y);
   RenderLine(x1, y, x1, y1);
   RenderLine(x1, y1, x, y1);
   RenderLine(x, y1, x, y);
 }
 
-void MainWindow::RenderCircle(byte x, byte y, byte r) {
+void MainWindow::RenderCircle(short x, short y, short r) {
   //x^2 + y^2 = r^2
-  for (size_t i = 0; i < r; i+=1) {
+  for (short i = 0; i < r; i+=1) {
     RenderDot(i + x, (sqrt(pow(r, 2) - pow(i, 2))) + y);
     RenderDot(i + x, -(sqrt(pow(r, 2) - pow(i, 2))) + y);
     RenderDot(-i + x, (sqrt(pow(r, 2) - pow(i, 2))) + y);
@@ -85,8 +86,10 @@ void MainWindow::RenderCircle(byte x, byte y, byte r) {
   }
 }
 
-void MainWindow::RenderDot(byte x, byte y) {
+void MainWindow::RenderDot(short x, short y) {
   if (y > BUFFER_ROWS || x > (BUFFER_COLS * 8))
+    return;
+  if (y < 0 || x < 0)
     return;
 
   byte row_byte = x / 8;
@@ -102,7 +105,7 @@ void MainWindow::RenderDot(byte x, byte y) {
   zone.update(x, y);
 }
 
-void MainWindow::RenderLine(byte x, byte y, byte ex, byte ey) {
+void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinates of the start and the end
   float dx = ex - x;
   float dy = ey - y;
 
@@ -111,45 +114,45 @@ void MainWindow::RenderLine(byte x, byte y, byte ex, byte ey) {
   float step_x = dx / steps;
   float step_y = dy / steps;
 
-  for (size_t i = 0 ; i < steps; i++) {
+  for (short i = 0 ; i < steps; i++) {
     RenderDot(x+(step_x*i), y+(step_y*i));
   }
 }
 
-void MainWindow::RenderSubBuffer(byte x, byte y, byte dx, byte dy, const byte* subbuffer) {
-  byte full_bytes_num = dx / 8;
-  byte rest_size_bits = dx - full_bytes_num;
+void MainWindow::RenderSubBuffer(short x, short y, short dx, short dy, const byte* subbuffer) {
+  short full_bytes_num = dx / 8;
+  short rest_size_bits = dx - full_bytes_num;
 
-  for(byte i = 0; i < full_bytes_num; i++) {
-    RenderChar(subbuffer + (i * dy), x + (i * 8), y);
+  for(short i = 0; i < full_bytes_num; i++) {
+    RenderChar(subbuffer + (i * dy), x + (i * 8), y, dy);
   }
 }
 
-#define FONT_HEIGHT_BITS 13
-void MainWindow::RenderChar(const byte* ch, unsigned char x, unsigned char y) {
-
-  byte row_byte = x / 8;
+void MainWindow::RenderChar(const byte* ch, short x, short y, short dy) {
+  if (x < 0 || x > BUFFER_COLS_BITS)
+    return;
+  short row_byte = x / 8;
   byte shift_bits = x - (row_byte * 8);
   if (row_byte+1 >= BUFFER_COLS) // right byte is out of buffer width
     return;
 
-  for(byte i = 0; i < FONT_HEIGHT_BITS; i++) {
+  for(short i = 0; i < dy; i++) {
     byte right_mask = (ch[i] >> (8 - shift_bits)) | (0xFF << (shift_bits));
     byte left_mask = (ch[i] << (shift_bits)) | (0xFF >> (8 - shift_bits));
 
     word left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
     word right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
 
-    if (left_byte_id < BUFFER_SIZE) {
+    if (left_byte_id < BUFFER_SIZE && left_byte_id > 0) {
       buffer[left_byte_id] &= left_mask;
       zone.update(row_byte * 8, y);
-      zone.update(row_byte * 8, y + FONT_HEIGHT_BITS);
+      zone.update(row_byte * 8, y+dy);
     }
 
-    if ((right_byte_id > 0) && (right_byte_id < BUFFER_SIZE )) {
+    if (right_byte_id < BUFFER_SIZE) {
       buffer[right_byte_id] &= right_mask;
       zone.update((row_byte + 1) * 8, y);
-      zone.update((row_byte + 1) * 8, y + FONT_HEIGHT_BITS);
+      zone.update((row_byte + 1) * 8, y+dy);
     }
   }
 }

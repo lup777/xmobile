@@ -9,6 +9,7 @@
 #define ZOOM 1
 #define BUFFER_ROWS (200 )
 #define BUFFER_COLS (25 )
+#define BUFFER_COLS_BITS (25 * 8)
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
 
 #define REPLACE_X 40
@@ -84,13 +85,13 @@ public:
   void paintEvent(QPaintEvent *);
   void mouseMoveEvent(QMouseEvent* event);
 
-  void RenderChar(const byte* ch, unsigned char x, unsigned char y);
-  void RenderDot(byte x, byte y);
-  void RenderLine(byte x, byte y, byte ex, byte ey); // coordinates and lengths
+  void RenderChar(const byte* ch, short x, short y, short dy);
+  void RenderDot(short x, short y);
+  void RenderLine(short x, short y, short ex, short ey); // coordinates and lengths
   void RenderZone();
-  void RenderCircle(byte x, byte y, byte r);
-  void RenderRectangle(byte x, byte y, byte x1, byte y1);
-  void RenderSubBuffer(byte x, byte y, byte dx, byte dy, const byte* subbuffer);
+  void RenderCircle(short x, short y, short r);
+  void RenderRectangle(short x, short y, short x1, short y1);
+  void RenderSubBuffer(short x, short y, short dx, short dy, const byte* subbuffer);
 
 private:
   Ui::MainWindow *ui;
