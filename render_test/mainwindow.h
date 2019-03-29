@@ -96,7 +96,12 @@ public:
 
 private:
   Ui::MainWindow *ui;
-  unsigned char buffer[BUFFER_SIZE];
+  byte buffer[BUFFER_SIZE];
+  byte sub_buffer[100*15];
+  byte* display_buffer;
+  word display_buffer_rows;
+  word display_buffer_cols;
+  word display_buffer_size;
   Zone zone;
 };
 
