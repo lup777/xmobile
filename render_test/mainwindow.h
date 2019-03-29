@@ -42,26 +42,30 @@ typedef struct UpdatedZoneClass {
     if (ey_ < y)
       ey_ = y;
 
-    /*if (x_ < 0)
-      x_ = 0;
-    if (y_ < 0)
-      y_ = 0;*/
-    if (ex_ > (BUFFER_COLS * 8)-1)
-      ex_ = (BUFFER_COLS * 8)-1;
+    if (ex_ > (BUFFER_COLS << 3) - 1)
+      ex_ = (BUFFER_COLS << 3) - 1;
     if (ey_ > BUFFER_ROWS)
       ey_ = BUFFER_ROWS;
   }
 
   byte x() {
-    return (x_/8)*8;
+    if (ex_ == 0 || ey_ == 0)
+      return 0;
+    return x_ & 0xFC; // (x_/8)*8;
   }
   byte y() {
+    if (ex_ == 0 || ey_ == 0)
+      return 0;
     return y_;
   }
   byte ex() {
-    return ((ex_ + 8)/8)*8;
+    if (ex_ == 0 || ey_ == 0)
+      return 0;
+    return (ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
   }
   byte ey() {
+    if (ex_ == 0 || ey_ == 0)
+      return 0;
     return ey_;
   }
 
@@ -70,6 +74,14 @@ typedef struct UpdatedZoneClass {
   byte ex_;
   byte ey_;
 } Zone;
+
+typedef struct struct_display_buffer {
+    byte* buffer;
+    word buf_rows;
+    word buf_cols;
+    word buf_size;
+    Zone zone;
+} DispBuf;
 
 namespace Ui {
   class MainWindow;
@@ -92,17 +104,16 @@ public:
   void RenderZone();
   void RenderCircle(short x, short y, short r);
   void RenderRectangle(short x, short y, short x1, short y1);
-  void RenderSubBuffer(short x, short y, short dx, short dy, const byte* subbuffer);
+  void RenderSubBuffer(short x, short y, DispBuf* sub_disp_);
 
 private:
   Ui::MainWindow *ui;
   byte buffer[BUFFER_SIZE];
   byte sub_buffer[100*15];
-  byte* display_buffer;
-  word display_buffer_rows;
-  word display_buffer_cols;
-  word display_buffer_size;
-  Zone zone;
+
+  DispBuf main_display;
+  DispBuf sub_display;
+  DispBuf* display;
 };
 
 #endif // MAINWINDOW_H
