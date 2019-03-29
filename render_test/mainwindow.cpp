@@ -10,7 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
   for(size_t i = 0; i < BUFFER_SIZE; i++) {
     buffer[i] = 0xFF;
   }
-  this->resize(QSize((BUFFER_COLS * 8 * ZOOM)+MARGIN+REPLACE_X, (BUFFER_ROWS * ZOOM)+MARGIN+REPLACE_X));
+  this->resize(QSize(((BUFFER_COLS << 3) * ZOOM)+MARGIN+REPLACE_X, (BUFFER_ROWS * ZOOM)+MARGIN+REPLACE_X));
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event) {
@@ -87,13 +87,13 @@ void MainWindow::RenderCircle(short x, short y, short r) {
 }
 
 void MainWindow::RenderDot(short x, short y) {
-  if (y > BUFFER_ROWS || x > (BUFFER_COLS * 8))
+  if (y > BUFFER_ROWS || x > (BUFFER_COLS << 3))
     return;
   if (y < 0 || x < 0)
     return;
 
-  byte row_byte = x / 8;
-  byte shift_bits = x - (row_byte * 8);
+  byte row_byte = x >> 3; // x / 8
+  byte shift_bits = x - (row_byte << 3); // x - (row * 8)
 
   byte left_mask = ~(0x01 << (shift_bits));
 
@@ -109,7 +109,8 @@ void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinat
   float dx = ex - x;
   float dy = ey - y;
 
-  float steps = sqrt(pow(dx,2) + pow(dy,2));
+  //float steps = sqrt(pow(dx,2) + pow(dy,2));
+  float steps = sqrt((dx*dx) + (dy*dy));
 
   float step_x = dx / steps;
   float step_y = dy / steps;
@@ -120,19 +121,19 @@ void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinat
 }
 
 void MainWindow::RenderSubBuffer(short x, short y, short dx, short dy, const byte* subbuffer) {
-  short full_bytes_num = dx / 8;
+  short full_bytes_num = dx >> 3;
   short rest_size_bits = dx - full_bytes_num;
 
   for(short i = 0; i < full_bytes_num; i++) {
-    RenderChar(subbuffer + (i * dy), x + (i * 8), y, dy);
+    RenderChar(subbuffer + (i * dy), x + (i << 3), y, dy);
   }
 }
 
 void MainWindow::RenderChar(const byte* ch, short x, short y, short dy) {
   if (x < 0 || x > BUFFER_COLS_BITS)
     return;
-  short row_byte = x / 8;
-  byte shift_bits = x - (row_byte * 8);
+  short row_byte = x >> 3;
+  byte shift_bits = x & 0x07; //x - (row_byte << 3);
   if (row_byte+1 >= BUFFER_COLS) // right byte is out of buffer width
     return;
 
@@ -141,18 +142,17 @@ void MainWindow::RenderChar(const byte* ch, short x, short y, short dy) {
     byte left_mask = (ch[i] << (shift_bits)) | (0xFF >> (8 - shift_bits));
 
     word left_byte_id = row_byte + ((y+i) * BUFFER_COLS);
-    word right_byte_id = row_byte + ((y+i) * BUFFER_COLS) + 1;
 
     if (left_byte_id < BUFFER_SIZE && left_byte_id > 0) {
       buffer[left_byte_id] &= left_mask;
-      zone.update(row_byte * 8, y);
-      zone.update(row_byte * 8, y+dy);
+      zone.update(row_byte << 3, y);
+      zone.update(row_byte << 3, y+dy);
     }
 
-    if (right_byte_id < BUFFER_SIZE) {
-      buffer[right_byte_id] &= right_mask;
-      zone.update((row_byte + 1) * 8, y);
-      zone.update((row_byte + 1) * 8, y+dy);
+    if (left_byte_id + 1 < BUFFER_SIZE) {
+      buffer[left_byte_id + 1] &= right_mask;
+      zone.update((row_byte + 1) << 3, y);
+      zone.update((row_byte + 1) << 3, y+dy);
     }
   }
 }
@@ -164,7 +164,7 @@ void MainWindow::paintEvent(QPaintEvent *) {
   for(size_t col = 0; col < BUFFER_COLS; col++) {
     for(size_t row = 0; row < BUFFER_ROWS; row++) {
 #else
-  for(size_t col = zone.x()/8; col < zone.ex()/8; col++) {
+  for(size_t col = zone.x() >> 3; col < zone.ex() >> 3; col++) {
     for(size_t row = zone.y(); row < zone.ey(); row++) {
 #endif
       unsigned char byte_ = buffer[col + (row * BUFFER_COLS)];
@@ -172,7 +172,7 @@ void MainWindow::paintEvent(QPaintEvent *) {
       for(size_t bit = 0; bit < 8; bit ++) {
         if((byte_ & (1 << bit)) == 0) {
           //p.drawPoint((col*8) + bit, row);
-          size_t x = (col*8) + bit;
+          size_t x = (col << 3) + bit;
           size_t y = row;
           x *= ZOOM;
           y *= ZOOM;
