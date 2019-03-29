@@ -21,9 +21,9 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   int mx = event->pos().x() - REPLACE_X;
   int my = event->pos().y() - REPLACE_Y;
 
-  if (mx > (BUFFER_COLS * 8 * ZOOM) + REPLACE_X)
+  if (mx > (BUFFER_COLS * 8 * ZOOM))
     return;
-  if (my > (BUFFER_ROWS * ZOOM) + REPLACE_Y)
+  if (my > (BUFFER_ROWS * ZOOM))
     return;
   if (mx < 0)
     return;
@@ -50,14 +50,14 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
     sub_buffer[i] = 0xFF;
 
   RenderCircle(64,60,30);
-  //RenderCircle(64,60,25);
- //RenderCircle(70,70,25);
+  RenderCircle(64,60,25);
+  RenderCircle(70,70,25);
 
   display_buffer = buffer;
   display_buffer_rows = BUFFER_ROWS;
   display_buffer_cols = BUFFER_COLS;
   display_buffer_size = BUFFER_SIZE;
-  RenderSubBuffer(mx/8,0, 15 << 3, 100, sub_buffer);
+  RenderSubBuffer(mx, my, 15 * 8, 100, sub_buffer);
 
   RenderLine(40, 20, mx, my);
   RenderLine(mx, my, mx+50, my-10);
@@ -70,8 +70,8 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
                                0xFF, 0xFF, 0xFF, 0xC0, 0xC0, 0xCC, 0xC0, 0x9C, 0x80, 0xC0, 0xFF, 0xFF, 0xFF,
                                0xFF, 0xFF, 0xFF, 0x01, 0x01, 0x33, 0xF3, 0xF3, 0xC1, 0xC1, 0xFF, 0xFF, 0xFF};
 
-  for (byte i = 1; i < 2; i++) {
-    RenderSubBuffer(mx, my, 1 << 3, 13, sub_test + (i * 13));
+  for (byte i = 0; i < 7; i++) {
+    RenderSubBuffer(mx + (i << 3), my, 8, 13, sub_test + (i * 13));
   }
   RenderCircle(mx, my, 20);
 
@@ -145,9 +145,10 @@ void MainWindow::RenderSubBuffer(short tar_x, short tar_y, short src_dx, short s
   if (tar_x < 0 || tar_x > (display_buffer_cols << 3))
     return;
 
-  short row_byte = tar_x >> 3; // columnt number in target buffer
+  short tar_col_id_byte = tar_x >> 3; // columnt number in target buffer
   byte shift_bits = tar_x & 0x07; // tar_x - (tar_x / 8)*8;
-  if (row_byte + 1 >= display_buffer_cols) // right byte is out of buffer width
+
+  if (tar_col_id_byte + 1 >= display_buffer_cols) // right byte is out of buffer width
     return;
 
   for(short src_cur_col = 0; src_cur_col < (src_dx >> 3); src_cur_col++) {
@@ -156,22 +157,23 @@ void MainWindow::RenderSubBuffer(short tar_x, short tar_y, short src_dx, short s
 
       word src_byte_id = ((src_dx >> 3) * src_cur_row) + src_cur_col;
 
-      byte right_mask = ( subbuffer[ src_byte_id + 1] >> (8 - shift_bits)) | (0xFF << (shift_bits));
+      byte right_mask = ( subbuffer[ src_byte_id] >> (8 - shift_bits)) | (0xFF << (shift_bits));
       byte left_mask = ( subbuffer[ src_byte_id] << (shift_bits)) | (0xFF >> (8 - shift_bits));
 
       //word left_byte_id = row_byte + ((y+i) * display_buffer_cols);
-      word left_byte_id = (tar_x + src_cur_col) + ((src_cur_row + tar_y) * display_buffer_cols); // byte id in target buffer
+      word left_byte_id = (tar_col_id_byte + src_cur_col) + ((src_cur_row + tar_y) * display_buffer_cols); // byte id in target buffer
 
-      if (left_byte_id < display_buffer_size && left_byte_id > 0) {
+      word tar_cur_col = tar_col_id_byte + src_cur_col;
+      if (left_byte_id < display_buffer_size && left_byte_id > 0 && tar_cur_col + 1 < display_buffer_cols) {
         display_buffer[left_byte_id] &= left_mask;
-        zone.update(row_byte << 3, tar_y);
-        zone.update(row_byte << 3, tar_y + src_dy);
+        zone.update(tar_cur_col << 3, tar_y);
+        zone.update(tar_cur_col << 3, tar_y + src_dy);
       }
 
-      if (left_byte_id + 1 < display_buffer_size) {
+      if (left_byte_id + 1 < display_buffer_size && tar_cur_col + 1 < display_buffer_cols) {
         display_buffer[left_byte_id + 1] &= right_mask;
-        zone.update((row_byte + 1) << 3, tar_y);
-        zone.update((row_byte + 1) << 3, tar_y + src_dy);
+        zone.update((tar_cur_col + 1) << 3, tar_y);
+        zone.update((tar_cur_col + 1) << 3, tar_y + src_dy);
       }
     }
   }
