@@ -60,7 +60,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   display->zone.clear();
 
   RenderSubBuffer(mx, my, &sub_display);
-
   RenderLine(40, 20, mx, my);
   RenderLine(mx, my, mx+50, my-10);
 
@@ -95,7 +94,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
 
 void MainWindow::RenderZone() {
   Zone tmp = display->zone;
-  RenderRectangle(display->zone.x(), display->zone.y(), display->zone.ex()-1, display->zone.ey()-1);
+  RenderRectangle(display->zone.x(), display->zone.y(), display->zone.ex(), display->zone.ey());
   display->zone = tmp;
 }
 
@@ -132,7 +131,7 @@ void MainWindow::RenderDot(short x, short y) {
   if (left_byte_id < display->buf_size)
     display->buffer[left_byte_id] &= left_mask;
 
-  display->zone.update(x, y);
+  display->zone.update(x - shift_bits, y);
 }
 
 void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinates of the start and the end
@@ -214,12 +213,12 @@ void MainWindow::paintEvent(QPaintEvent *) {
       }
     }
   }
-  QPen pen(Qt::red, 1*ZOOM, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
+  QPen pen(Qt::red, 1 * ZOOM, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
   p.setPen(pen);
-  p.drawRect((display->zone.x()*ZOOM)+REPLACE_X,
-             (display->zone.y()*ZOOM)+REPLACE_Y,
-             (display->zone.ex()-display->zone.x())*ZOOM,
-             (display->zone.ey()-display->zone.y())*ZOOM);
+  p.drawRect((display->zone.x() * ZOOM) + REPLACE_X,
+             (display->zone.y() * ZOOM) + REPLACE_Y,
+             (display->zone.ex() - display->zone.x()) * ZOOM,
+             (display->zone.ey() - display->zone.y()) * ZOOM);
 }
 
 MainWindow::~MainWindow()

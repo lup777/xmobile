@@ -6,7 +6,7 @@
 #include <QMouseEvent>
 #include <math.h>
 
-#define ZOOM 1
+#define ZOOM 2
 #define BUFFER_ROWS (200 )
 #define BUFFER_COLS (25 )
 #define BUFFER_COLS_BITS (25 * 8)
@@ -31,7 +31,7 @@ typedef struct UpdatedZoneClass {
     ex_ = ey_ = 0;
   }
 
-  void update(byte x, byte y) {
+  void update(word x, word y) {
     if (x < x_)
       x_ = x;
     if (y < y_)
@@ -42,37 +42,37 @@ typedef struct UpdatedZoneClass {
     if (ey_ < y)
       ey_ = y;
 
-    if (ex_ > (BUFFER_COLS << 3) - 1)
-      ex_ = (BUFFER_COLS << 3) - 1;
+    if (ex_ > ((BUFFER_COLS - 1) << 3))
+      ex_ = ((BUFFER_COLS - 1) << 3);
     if (ey_ > BUFFER_ROWS)
       ey_ = BUFFER_ROWS;
   }
 
-  byte x() {
+  word x() {
     if (ex_ == 0 || ey_ == 0)
       return 0;
     return x_ & 0xFC; // (x_/8)*8;
   }
-  byte y() {
+  word y() {
     if (ex_ == 0 || ey_ == 0)
       return 0;
     return y_;
   }
-  byte ex() {
+  word ex() {
     if (ex_ == 0 || ey_ == 0)
       return 0;
     return (ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
   }
-  byte ey() {
+  word ey() {
     if (ex_ == 0 || ey_ == 0)
       return 0;
     return ey_;
   }
 
-  byte x_;
-  byte y_;
-  byte ex_;
-  byte ey_;
+  word x_; // coordinates
+  word y_; // coordinates
+  word ex_; // coordinates
+  word ey_; // coordinates
 } Zone;
 
 typedef struct struct_display_buffer {
