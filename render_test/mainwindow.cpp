@@ -107,11 +107,15 @@ void MainWindow::RenderRectangle(short x, short y, short x1, short y1) {// coord
 
 void MainWindow::RenderCircle(short x, short y, short r) {
   //x^2 + y^2 = r^2
+    short p1 = r * r; //pow(r, 2);
+
   for (short i = 0; i < r; i+=1) {
-    RenderDot(i + x, (sqrt(pow(r, 2) - pow(i, 2))) + y);
-    RenderDot(i + x, -(sqrt(pow(r, 2) - pow(i, 2))) + y);
-    RenderDot(-i + x, (sqrt(pow(r, 2) - pow(i, 2))) + y);
-    RenderDot(-i + x, -(sqrt(pow(r, 2) - pow(i, 2))) + y);
+    short p2 = i * i; //pow(i, 2);
+    short sqrt_ = sqrt(p1 - p2);
+    RenderDot(i + x, sqrt_ + y);
+    RenderDot(i + x, -sqrt_ + y);
+    RenderDot(-i + x, sqrt_ + y);
+    RenderDot(-i + x, -sqrt_ + y);
   }
 }
 
