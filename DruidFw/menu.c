@@ -8,9 +8,10 @@
 #include "global.h"
 #include "kbd.h"
 #include "epd.h"
+#include "render.h"
 
 #define APP_HEADER_LEN 15
-
+//#define _log(...)
 static volatile int8_t i;
 App* gp_menu;
 
@@ -24,7 +25,7 @@ void APP_MenuStart(App* menu) {
   context.active_app_id = MENU_MAILBOX_ID;
 
   MessageBufferHandle_t* pHandle = context.mail + MENU_MAILBOX_ID;
-  *pHandle = xMessageBufferCreate((size_t)150);
+  *pHandle = xMessageBufferCreate((size_t)5);
 
   SendAppMsg(MSG_DRAW, NULL, 0, MENU_MAILBOX_ID);
 
@@ -116,55 +117,19 @@ void MENU_DrawHanadler(void) {
   int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
   _log("menu size: %d ", menu_size);
 
-  EPD_StartPartial();
-#if 1
-  EPD_ContinuePartial("      XMobile", 13, 1, 180);
-  if (i-3 >= 0 && i-3 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i-3].header), APP_HEADER_LEN, 0,
-                        180);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 180);
+  displayRenderLine(0, 0,
+		    display.buf_cols << 3,
+		    display.buf_rows,
+		    &display);
+  displayRenderLine(0, 0,
+		    display.buf_cols << 3,
+		    display.buf_rows >> 1,
+		    &display);
+  displayRenderCircle(50, 50, 30, &display);
+  displayRenderRectangle(20, 20, 100, 100, &display);
 
-  if (i-2 >= 0 && i-2 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i-2].header), APP_HEADER_LEN, 1,
-                        160);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 160);
-
-  if (i-1 >= 0 && i-1 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i-1].header), APP_HEADER_LEN, 2,
-                        140);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 140);
-  EPD_ContinuePartial(" -----", 6, 0, 120);
-#endif
-  if (i >= 0 && i < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i].header), APP_HEADER_LEN, 3,
-                        100);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 3, 100);
-#if 1
-  EPD_ContinuePartial(" -----", 6, 0, 80);
-    if (i+1 >= 0 && i+1 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i+1].header), APP_HEADER_LEN, 2,
-                        60);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 2, 60);
-
-  if (i+2 >= 0 && i+2 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i+2].header), APP_HEADER_LEN, 1,
-                        40);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 1, 40);
-
-  if (i+3 >= 0 && i+3 < menu_size)
-    EPD_ContinuePartial((char*)(gp_menu[i+3].header), APP_HEADER_LEN, 0,
-                        20);
-  else
-    EPD_ContinuePartial("               ", APP_HEADER_LEN, 0, 20);
-#endif
-  EPD_UpdatePartial();
-
-  EPD_StopPartial();
+  displayRenderText(10, 100, "hello, renderer!", 16, &display);
+  
+  displayFlush();
 
 }

@@ -11,11 +11,9 @@
 
 #include "usart.h"
 
-#define SPI_TX_BUFFER_SIZE 100
-
-
 static MessageBufferHandle_t g_epd_tx_buffer_handle;
-static uint8_t g_spi_tx_buffer[SPI_TX_BUFFER_SIZE];
+static uint8_t* g_spi_tx_buffer;
+static size_t g_spi_tx_buffer_size;
 static SemaphoreHandle_t gh_spi_sem;
 static volatile uint8_t gi;
 
@@ -34,17 +32,25 @@ static volatile uint8_t gi;
   DIN (data input) - PORTC 5 (MOSI)
 */
 
-inline void SPIC_Init(void) {
+inline void SPIC_Init(size_t tx_buffer_size) {
   PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
   EPD_CSHi(); // PIN4_bm
   PORTA.DIRCLR = PIN3_bm;
   SPIC.INTCTRL = SPI_INTLVL_LO_gc;
 
-  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 255);
+  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 5);
   gh_spi_sem = xSemaphoreCreateMutex();
 
   SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm /*| SPI_PRESCALER_DIV4_gc*/
     | SPI_CLK2X_bm | SPI_MODE_0_gc;
+
+  g_spi_tx_buffer = pvPortMalloc(tx_buffer_size);
+  g_spi_tx_buffer_size = 0;
+  if (g_spi_tx_buffer) {
+    _log("spi tx buf malloc(%d) OK", tx_buffer_size);
+    g_spi_tx_buffer_size = tx_buffer_size;
+  }
+
 }
 
 ISR(SPIC_INT_vect) {
@@ -179,18 +185,61 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
   order.length = data_len;
   order.repeat = 1;
 
-  if (data_len > SPI_TX_BUFFER_SIZE) {
+  if (data_len > g_spi_tx_buffer_size) {
     _log("ERR: TOO MUTCH DATA, NOT SUPPORTED");
     return;
   }
 
   if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
+    _log("[ERR] sendFromRam xSemTake");
 
   for(size_t i = 0; i < data_len; i++)
     g_spi_tx_buffer[i] = data[i];
     
   if (data_len > 0) {
+    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+                                    &order,
+                                    sizeof(order),
+                                    /*pdMS_TO_TICKS(2000)*/0);
+    if (bytes_sent != sizeof(SpiOrder)) {
+      _log("[SPI] xMessageBufferSend failed");
+      return;
+    }
+  }
+
+  EPD_CSLow();
+  EPD_SelectCommand();
+  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+  SPIC.DATA = cmd;
+
+  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
+  //while( EPD_IsCsLow() ) {}
+
+  //_log("EPD_SendFromRam <<<");
+}
+
+void EPD_SendFromDisplayBuf(uint8_t cmd, uint8_t* data,
+			    size_t steps, size_t step) {
+  //_log("EPD_SendFromDisplayBuf >>>");
+  size_t bytes_sent;
+  SpiOrder order;
+  order.is_pgm = false;
+  order.buffer = g_spi_tx_buffer;  // first byte will be send from in this func
+  order.length = steps;
+  order.repeat = 1;
+
+  if (order.length > g_spi_tx_buffer_size) {
+    _log("ERR: TOO MUTCH DATA, NOT SUPPORTED");
+    return;
+  }
+
+  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
+    _log("[ERR] sendFromDisp xSemTake");
+
+  for(size_t i = 0; i < order.length; i++)
+    g_spi_tx_buffer[i] = data[i * step];
+    
+  if (order.length > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
                                     sizeof(order),
@@ -385,10 +434,10 @@ inline void EPD_LoadFlashImageToDisplayRam(uint8_t  XSize,
     EPD_SendFromFlash(WRITE_RAM, image, XSize * YSize);
 }
 
-/*const char display_update_control[] PROGMEM = {
-  DISPLAY_UPDATE_CONTROL_2, 0xC4};
-const char master_activation[] PROGMEM = {
-  MASTER_ACTIVATION};
-const char terminate_frame_read_write[] PROGMEM = {
-  TERMINATE_FRAME_READ_WRITE};
-*/
+/*inline void EPD_SendDisplayCol(char* data,    // start  byte pointer
+			       size_t steps, // number of rows to update
+			       size_t step,  // row length(byte), step size to
+			                     // iterate buffer pointer
+			       char* image) { // data buffer
+  EPD_SendFromDisplayBuf(WRITE_RAM, data, steps, step);
+  }*/

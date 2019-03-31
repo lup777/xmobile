@@ -33,6 +33,9 @@ typedef struct struct_gsm_data {
 #define MSG_CLOSE 2
 #define MSG_GSM_INPUT 3
 
+typedef uint8_t byte;
+typedef uint16_t word;
+
 typedef struct struct_context {
   TaskHandle_t ui_task_handle;
   TaskHandle_t gsm_task_handle;
@@ -41,8 +44,24 @@ typedef struct struct_context {
   uint8_t active_app_id;
 } Context;
 
+typedef struct struct_zone {
+  short x_; // coordinates
+  short y_; // coordinates
+  short ex_; // coordinates
+  short ey_; // coordinates
+} Zone;
+
+typedef struct struct_display_buffer {
+    byte* buffer;
+    short buf_rows;
+    short buf_cols;
+    size_t buf_size;
+    Zone zone;
+} DispBuf;
+
 
 extern Context context;
+extern DispBuf display;
 
 #define SendMsgISR(HANDLE, DATA, SIZE) ({			  \
       BaseType_t hptm_ = pdFALSE;                                 \

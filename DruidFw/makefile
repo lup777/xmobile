@@ -62,9 +62,9 @@ pgm.c \
 kbd.c \
 fonts.c \
 util.c \
-gsm.c \
 menu.c \
 epd.c \
+render.c\
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
@@ -79,6 +79,7 @@ $(PORT_DIR)/port.c \
 #$(DEMO_DIR)/comtest.c
 #ui.c
 #telephone.c \
+#gsm.c \
 
 #gsm.c
 #display.c \
@@ -240,7 +241,7 @@ REMOVE = rm -f
 COPY = cp
 
 HEXSIZE = $(SIZE) --target=$(FORMAT) $(TARGET).hex
-ELFSIZE = $(SIZE) -A $(TARGET).elf
+ELFSIZE = $(SIZE) -C $(TARGET).elf
 
 
 

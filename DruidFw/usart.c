@@ -78,7 +78,7 @@ inline void USART0_init(void) {
     (bsel >> 8) | ((16 - bscale) << 4); // 115200  - 32MGz internal osc
   //https://planetcalc.ru/747/
   //https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
-  g_log_tx_buffer_handle = xStreamBufferCreate(1000, 1);
+  g_log_tx_buffer_handle = xStreamBufferCreate(500, 1);
 
   USARTF0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }

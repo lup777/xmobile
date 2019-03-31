@@ -17,10 +17,9 @@ volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
 static volatile uint8_t gi;
 
-uint8_t disp_buffer[5000];
 
 void EPD_Init(void) {
-  SPIC_Init();
+  //SPIC_Init();
   _log("SPI init completed");
   gbackground = NULL;
   // CS configured to out in SPIC_Init()
@@ -54,27 +53,6 @@ void EPD_Init(void) {
   gEpdMutex = xSemaphoreCreateMutex();
 }
 
-void EPD_t1(uint8_t x0, uint8_t y0, uint8_t x1, uint8_t y1) {
-  _log("EPD Start PU _1_");
-  if (xSemaphoreTake(gEpdMutex, portMAX_DELAY) != pdTRUE) {
-    _log("EPD_StartPartial Failed to take mutex");
-    return;
-  }
-  //EPD_WaitUntilIdle(); // wait
-  _log("EPD Start PU _2_");
-
-  EPD_SetLut(lut_partial_update);
-  //EPD_PowerOn();
-
-  EPD_SetMemoryArea(x0, y0, x1, y1);
-  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
-
-  EPD_SetMemoryArea(x0, y0, x1, y1);
-  EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
-  
-  _log("EPD Start PU _3_");
-}
-
 void EPD_StartPartial(void) {
   _log("EPD Start PU _1_");
   if (xSemaphoreTake(gEpdMutex, portMAX_DELAY) != pdTRUE) {
@@ -96,7 +74,7 @@ void EPD_StartPartial(void) {
   _log("EPD Start PU _3_");
 }
 
-void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
+/*void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
   _log("c>");
   x = 24 - x;
   for (gi = 0; gi < len; gi++) {
@@ -107,6 +85,7 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
     EPD_SetMemoryArea(x, x + width - 1, y, y + height - 1);
     EPD_LoadFlashImageToDisplayRam(width * 8, height, picture);
 
+
     if (x > 0) {
       x -= 1;
     } else {
@@ -115,6 +94,16 @@ void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
   }
   _log("c<");
   //EPD_UpdatePartial();
+  }*/
+
+void EPD_ContinuePartial(word x, word y, byte* data,
+			 size_t steps, size_t step) {
+  // x - column number (byte) to update
+  // y - row number (bit) to start update
+  // steps - number of row to update
+  // step - step for data buffer iterator(byte) (display row width)
+  EPD_SetMemoryArea(x, x, y, y + steps);
+  EPD_SendFromDisplayBuf(WRITE_RAM, data, steps, step);
 }
 
 void EPD_StopPartial(void) {

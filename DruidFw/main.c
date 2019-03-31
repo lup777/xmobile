@@ -10,6 +10,7 @@
 //#include "telephone.h"
 #include "gsm.h"
 #include "menu.h"
+#include "render.h"
 
 static void vMainTask(void* pvParameters);
 void gpio_init(void);
@@ -67,7 +68,7 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   taskEXIT_CRITICAL();
 
   if (xBytesSent != (size_t)payload_len + 1) {
-    _log("ERR SendAppMsg: xMessageBufferSend failed");
+    _log("ERR SendAppMsg");
   }
 }
 
@@ -107,8 +108,8 @@ void _sleep(uint16_t time_ms) {
 
 void TestApp1(void) {
   EPD_StartPartial();
-  EPD_ContinuePartial("      XMobile", 13, 1, 10);
-  EPD_ContinuePartial("not implemented yet", 19, 1, 11);
+  //EPD_ContinuePartial("      XMobile", 13, 1, 10);
+  //EPD_ContinuePartial("not implemented yet", 19, 1, 11);
   EPD_UpdatePartial();
   EPD_StopPartial();
   KBD_WaiteKey();
@@ -127,7 +128,7 @@ static void vMainTask(void* pvParameters) {
   else
     _log("big endian");
 
-  EPD_Init();
+  displayInit();
   //_sleep(100);
 
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
@@ -135,7 +136,7 @@ static void vMainTask(void* pvParameters) {
   //_sleep(3000);
 
   //GSM_Init();
-  _log("MAIN main task init completed");
+  //_log("MAIN main task init completed");
 
   //APP_TelephoneStart();
   APP_MenuStart(menu);
@@ -145,5 +146,4 @@ static void vMainTask(void* pvParameters) {
   }
   APP_MenuStart(menu);
   APP_MenuMessagePump();
-  
 }
