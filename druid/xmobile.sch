@@ -1,40 +1,6 @@
-EESchema Schematic File Version 2
-LIBS:xmobile-rescue
-LIBS:power
-LIBS:device
-LIBS:transistors
-LIBS:conn
-LIBS:linear
-LIBS:regul
-LIBS:74xx
-LIBS:cmos4000
-LIBS:adc-dac
-LIBS:memory
-LIBS:xilinx
-LIBS:microcontrollers
-LIBS:dsp
-LIBS:microchip
-LIBS:analog_switches
-LIBS:motorola
-LIBS:texas
-LIBS:intel
-LIBS:audio
-LIBS:interface
-LIBS:digital-audio
-LIBS:philips
-LIBS:display
-LIBS:cypress
-LIBS:siliconi
-LIBS:opto
-LIBS:atmel
-LIBS:contrib
-LIBS:valves
-LIBS:XC6206P332MR
-LIBS:STF202-22T1G
-LIBS:MCP73871
-LIBS:switch1
+EESchema Schematic File Version 4
 LIBS:xmobile-cache
-EELAYER 25 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -49,1085 +15,929 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L SIM800C U2
-U 1 1 59667E03
-P 10300 9225
-F 0 "U2" H 10350 10200 60  0000 C CNN
-F 1 "SIM800C" H 9650 10200 60  0000 C CNN
-F 2 "SIM800C_lup:SIM800C" H 10125 9425 60  0000 C CNN
-F 3 "" H 10300 9225 60  0000 C CNN
-	1    10300 9225
-	1    0    0    -1  
-$EndComp
-$Comp
-L R-RESCUE-xmobile R6
+L xmobile-rescue:R-RESCUE-xmobile R1
 U 1 1 5967CB22
-P 14375 4725
-F 0 "R6" V 14455 4725 40  0000 C CNN
-F 1 "10k" V 14382 4726 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14305 4725 30  0001 C CNN
-F 3 "" H 14375 4725 30  0000 C CNN
-	1    14375 4725
-	-1   0    0    1   
-$EndComp
-Text Label 9250 8950 2    60   ~ 0
-GND
-Text Label 9250 9325 2    60   ~ 0
-GND
-Text Label 9250 9775 2    60   ~ 0
-GND
-Text Label 9250 9925 2    60   ~ 0
-GND
-Text Label 10950 9100 0    60   ~ 0
-GND
-Text Label 10950 9325 0    60   ~ 0
-GND
-Text Label 10950 8800 0    60   ~ 0
-GND
-Text Label 10950 9025 0    60   ~ 0
-3.7V
-Text Label 10950 8950 0    60   ~ 0
-3.7V
-Text Label 10950 9550 0    60   ~ 0
-GND
-Text Label 10950 9250 0    60   ~ 0
-GND
-Text Label 14375 4475 2    60   ~ 0
-3.3V
-$Comp
-L CONN_8 P3
-U 1 1 5974D7B3
-P 14900 1300
-F 0 "P3" V 14850 1300 60  0000 C CNN
-F 1 "CONN_8" V 14950 1300 60  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight" H 14900 1300 60  0001 C CNN
-F 3 "" H 14900 1300 60  0001 C CNN
-F 4 "EPD display connector" V 15075 1300 60  0000 C CNN "description"
-	1    14900 1300
-	1    0    0    -1  
-$EndComp
-Text Label 14550 950  2    60   ~ 0
-EPD_BUSY
-Text Label 14550 1050 2    60   ~ 0
-EPD_RST
-Text Label 14550 1150 2    60   ~ 0
-EPD_DC
-Text Label 14550 1250 2    60   ~ 0
-EPD_CS
-Text Label 14550 1350 2    60   ~ 0
-EPD_CLK
-Text Label 14550 1450 2    60   ~ 0
-EPD_DIN
-Text Label 14550 1550 2    60   ~ 0
-GND
-Text Label 14550 1650 2    60   ~ 0
-3.3V
-Text Label 10550 4575 0    60   ~ 0
-EPD_CS
-Text Label 10550 4875 0    60   ~ 0
-EPD_CLK
-Text Label 10550 4675 0    60   ~ 0
-EPD_DIN
-Text Label 10550 2575 0    60   ~ 0
-EPD_DC
-Text Label 10550 2775 0    60   ~ 0
-EPD_BUSY
-Text Label 10550 2875 0    60   ~ 0
-EPD_RST
-Text Label 14050 8875 2    60   ~ 0
-GSM_AT_TXD
-$Comp
-L R-RESCUE-xmobile R7
-U 1 1 5980DBE0
-P 14300 8875
-F 0 "R7" V 14380 8875 40  0000 C CNN
-F 1 "1KOmh" V 14307 8876 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14230 8875 30  0001 C CNN
-F 3 "" H 14300 8875 30  0000 C CNN
-	1    14300 8875
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R13
-U 1 1 5980DF53
-P 14650 6650
-F 0 "R13" V 14730 6650 40  0000 C CNN
-F 1 "1KOmh" V 14657 6651 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14580 6650 30  0001 C CNN
-F 3 "" H 14650 6650 30  0000 C CNN
-	1    14650 6650
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R10
-U 1 1 5980E098
-P 14550 6875
-F 0 "R10" V 14630 6875 40  0000 C CNN
-F 1 "14KOmh" V 14550 6875 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14480 6875 30  0001 C CNN
-F 3 "" H 14550 6875 30  0000 C CNN
-	1    14550 6875
-	0    1    1    0   
-$EndComp
-Text Label 14800 6875 0    60   ~ 0
-GND
-Text Label 14100 6650 2    60   ~ 0
-GSM_AT_RXD
-$Comp
-L R-RESCUE-xmobile R14
-U 1 1 5980ECFA
-P 14650 7225
-F 0 "R14" V 14730 7225 40  0000 C CNN
-F 1 "1KOmh" V 14657 7226 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14580 7225 30  0001 C CNN
-F 3 "" H 14650 7225 30  0000 C CNN
-	1    14650 7225
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R11
-U 1 1 5980EDB4
-P 14550 7475
-F 0 "R11" V 14630 7475 40  0000 C CNN
-F 1 "14KOmh" V 14550 7475 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14480 7475 30  0001 C CNN
-F 3 "" H 14550 7475 30  0000 C CNN
-	1    14550 7475
-	0    1    1    0   
-$EndComp
-Text Label 14800 7475 0    60   ~ 0
-GND
-Text Label 14175 7225 2    60   ~ 0
-GSM_AT_RTS
-$Comp
-L R-RESCUE-xmobile R8
-U 1 1 5980F251
-P 14300 9100
-F 0 "R8" V 14380 9100 40  0000 C CNN
-F 1 "1KOmh" V 14307 9101 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14230 9100 30  0001 C CNN
-F 3 "" H 14300 9100 30  0000 C CNN
-	1    14300 9100
-	0    1    1    0   
-$EndComp
-Text Label 14050 9100 2    60   ~ 0
-GSM_AT_DCD
-$Comp
-L R-RESCUE-xmobile R15
-U 1 1 5980F44E
-P 14650 7800
-F 0 "R15" V 14575 7800 40  0000 C CNN
-F 1 "1KOmh" V 14657 7801 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14580 7800 30  0001 C CNN
-F 3 "" H 14650 7800 30  0000 C CNN
-	1    14650 7800
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R12
-U 1 1 5980FA7D
-P 14575 8050
-F 0 "R12" V 14655 8050 40  0000 C CNN
-F 1 "14KOmh" V 14575 8050 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14505 8050 30  0001 C CNN
-F 3 "" H 14575 8050 30  0000 C CNN
-	1    14575 8050
+P 10025 10100
+F 0 "R1" V 10105 10100 40  0000 C CNN
+F 1 "10k" V 10032 10101 40  0000 C CNN
+F 2 "Resistor_SMD:R_0402_1005Metric" V 9955 10100 30  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/348/sfr-e-1507454.pdf" V 10200 9750 30  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/ROHM-Semiconductor/SFR01MZPJ103?qs=sGAEpiMZZMtlubZbdhIBIIR71ikvQRXLchgEzboAcvI%3d" V 10025 10100 60  0001 C CNN "example"
+F 5 "0402 In" V 9950 10100 30  0000 C CNN "case"
+	1    10025 10100
 	0    -1   -1   0   
 $EndComp
-Text Label 14825 8050 0    60   ~ 0
+Text Label 10275 10100 0    60   ~ 0
+3.3V
+Text Label 13175 7150 2    60   ~ 0
+EPD_BUSY
+Text Label 13175 7250 2    60   ~ 0
+EPD_RST
+Text Label 13175 7350 2    60   ~ 0
+EPD_DC
+Text Label 13175 7450 2    60   ~ 0
+EPD_CS
+Text Label 13175 7550 2    60   ~ 0
+EPD_CLK
+Text Label 13175 7650 2    60   ~ 0
+EPD_DIN
+Text Label 13175 7750 2    60   ~ 0
 GND
-Text Label 14125 7800 2    60   ~ 0
-GSM_AT_DTR
-Text Label 15025 7225 0    60   ~ 0
-XMEGA_PE0_GPIO
-Text Label 10550 5875 0    60   ~ 0
-XMEGA_PE0_GPIO
-Text Label 9250 8575 2    60   ~ 0
-GSM_AT_RTS
-Text Label 9250 8425 2    60   ~ 0
-GSM_AT_TXD
-Text Label 14550 8875 0    60   ~ 0
-XMEGA_PE2_RXD0
-Text Label 10550 6075 0    60   ~ 0
-XMEGA_PE2_RXD0
-Text Label 14900 6650 0    60   ~ 0
-XMEGA_PE3_TXD0
-Text Label 10550 6175 0    60   ~ 0
-XMEGA_PE3_TXD0
-Text Label 14550 9100 0    60   ~ 0
-XMEGA_PD2_GPIO
-Text Label 10550 5425 0    60   ~ 0
-XMEGA_PD4_GPIO
-Text Label 14900 7800 0    60   ~ 0
-XMEGA_PD3_GPIO
-Text Label 10550 5325 0    60   ~ 0
-XMEGA_PD3_GPIO
-Text Label 9250 8725 2    60   ~ 0
-GSM_AT_DCD
-Text Label 9250 8500 2    60   ~ 0
-GSM_AT_RXD
-$Comp
-L R-RESCUE-xmobile R16
-U 1 1 5981CEE9
-P 14650 8325
-F 0 "R16" V 14575 8325 40  0000 C CNN
-F 1 "1KOmh" V 14657 8326 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14580 8325 30  0001 C CNN
-F 3 "" H 14650 8325 30  0000 C CNN
-	1    14650 8325
-	0    1    1    0   
-$EndComp
-Text Label 14100 8325 2    60   ~ 0
-GSM_AT_CTS
-Text Label 14900 8325 0    60   ~ 0
-XMEGA_PD4_GPIO
-$Comp
-L R-RESCUE-xmobile R9
-U 1 1 59820A06
-P 14300 9325
-F 0 "R9" V 14380 9325 40  0000 C CNN
-F 1 "1KOmh" V 14307 9326 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 14230 9325 30  0001 C CNN
-F 3 "" H 14300 9325 30  0000 C CNN
-	1    14300 9325
-	0    1    1    0   
-$EndComp
-Text Label 14050 9325 2    60   ~ 0
-GSM_AT_RI
-Text Label 14550 9325 0    60   ~ 0
-XMEGA_PD1_GPIO
-Text Label 9250 8650 2    60   ~ 0
-GSM_AT_CTS
-Text Label 9250 8800 2    60   ~ 0
-GSM_AT_DTR
-Text Label 9250 8875 2    60   ~ 0
-GSM_AT_RI
-Text Label 10550 5125 0    60   ~ 0
-XMEGA_PD1_GPIO
-Text Label 10550 5225 0    60   ~ 0
-XMEGA_PD2_GPIO
-$Comp
-L STF202-22T1G U1
-U 1 1 598237D5
-P 2750 4850
-F 0 "U1" H 2750 4750 50  0000 C CNN
-F 1 "STF202-22T1G" H 2750 5075 50  0000 C CNN
-F 2 "semiconductor:TSOP-6" H 2750 4850 50  0001 C CNN
-F 3 "DOCUMENTATION" H 2750 4850 50  0001 C CNN
-	1    2750 4850
-	1    0    0    -1  
-$EndComp
-Text Label 10950 9625 0    60   ~ 0
-GSM_USB_DN
-Text Label 2000 4850 2    60   ~ 0
-GSM_USB_DN
-Text Label 10950 9700 0    60   ~ 0
-GSM_USB_DP
-Text Label 2000 4950 2    60   ~ 0
-GSM_USB_DP
-Text Label 3500 4750 0    60   ~ 0
-GND
-Text Label 2925 4125 3    60   ~ 0
-GND
-$Comp
-L C-RESCUE-xmobile C1
-U 1 1 59826142
-P 1550 4125
-F 0 "C1" H 1550 4225 40  0000 L CNN
-F 1 "C" H 1556 4040 40  0000 L CNN
-F 2 "Capacitors_SMD:C_1206_HandSoldering" H 1588 3975 30  0001 C CNN
-F 3 "" H 1550 4125 60  0000 C CNN
-	1    1550 4125
-	0    1    1    0   
-$EndComp
-Text Label 1350 4125 2    60   ~ 0
-GND
-Text Label 10950 9775 0    60   ~ 0
-GSM_USB_VBUS
-Text Label 2000 4750 2    60   ~ 0
-GSM_USB_VBUS
-Text Label 10950 8500 0    60   ~ 0
-GSM_NETLIGHT
-$Comp
-L R-RESCUE-xmobile R3
-U 1 1 5A91626C
-P 5450 8375
-F 0 "R3" V 5530 8375 40  0000 C CNN
-F 1 "4.7KOmh" V 5457 8376 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 5380 8375 30  0001 C CNN
-F 3 "" H 5450 8375 30  0000 C CNN
-	1    5450 8375
-	0    1    1    0   
-$EndComp
-$Comp
-L BC850 Q2
-U 1 1 5A916427
-P 6000 8375
-F 0 "Q2" H 6000 8226 40  0000 R CNN
-F 1 "A2SHB" H 6000 8525 40  0000 R CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 5900 8477 29  0000 C CNN
-F 3 "" H 6000 8375 60  0000 C CNN
-	1    6000 8375
-	1    0    0    -1  
-$EndComp
-$Comp
-L LED-RESCUE-xmobile D1
-U 1 1 5A916783
-P 6100 7275
-F 0 "D1" H 6100 7375 50  0000 C CNN
-F 1 "LED" H 6100 7175 50  0000 C CNN
-F 2 "LEDs:LED_0603" H 6100 7275 60  0001 C CNN
-F 3 "" H 6100 7275 60  0000 C CNN
-	1    6100 7275
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R5
-U 1 1 5A916BF7
-P 6100 7825
-F 0 "R5" V 6180 7825 40  0000 C CNN
-F 1 "470Ом" V 6107 7826 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 6030 7825 30  0001 C CNN
-F 3 "" H 6100 7825 30  0000 C CNN
-	1    6100 7825
-	1    0    0    -1  
-$EndComp
-Text Label 6100 7075 0    60   ~ 0
-3.7V
-$Comp
-L R-RESCUE-xmobile R4
-U 1 1 5A9180D4
-P 5750 8700
-F 0 "R4" V 5830 8700 40  0000 C CNN
-F 1 "4.7KOmh" V 5757 8701 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 5680 8700 30  0001 C CNN
-F 3 "" H 5750 8700 30  0000 C CNN
-	1    5750 8700
-	1    0    0    -1  
-$EndComp
-Text Label 6175 9000 0    60   ~ 0
-GND
-$Comp
-L BC850 Q1
-U 1 1 5A91C159
-P 3125 6950
-F 0 "Q1" H 3125 6801 40  0000 R CNN
-F 1 "A2SHB" H 3125 7100 40  0000 R CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 3025 7052 29  0000 C CNN
-F 3 "" H 3125 6950 60  0000 C CNN
-	1    3125 6950
-	1    0    0    -1  
-$EndComp
-$Comp
-L R-RESCUE-xmobile R2
-U 1 1 5A91C5A8
-P 2975 7350
-F 0 "R2" V 3055 7350 40  0000 C CNN
-F 1 "4.7KOmh" V 2982 7351 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 2905 7350 30  0001 C CNN
-F 3 "" H 2975 7350 30  0000 C CNN
-	1    2975 7350
-	0    1    1    0   
-$EndComp
-$Comp
-L R-RESCUE-xmobile R1
-U 1 1 5A91C857
-P 2350 6950
-F 0 "R1" V 2430 6950 40  0000 C CNN
-F 1 "4.7KOmh" V 2357 6951 40  0000 C CNN
-F 2 "Resistors_SMD:R_0603_HandSoldering" V 2280 6950 30  0001 C CNN
-F 3 "" H 2350 6950 30  0000 C CNN
-	1    2350 6950
-	0    1    1    0   
-$EndComp
-Text Label 3225 7525 3    60   ~ 0
-GND
-Text Label 10950 8650 0    60   ~ 0
-GSM_POWER_KEY
-Text Label 3225 6750 0    60   ~ 0
-GSM_POWER_KEY
-Text Label 2100 6950 2    60   ~ 0
-XMEGA_PD0_GSM_POWER
-Text Label 9250 9400 2    60   ~ 0
-SIM_DET
-Text Label 9250 9475 2    60   ~ 0
-SIM_DATA
-Text Label 9250 9550 2    60   ~ 0
-SIM_CLK
-Text Label 9250 9625 2    60   ~ 0
-SIM_RST
-Text Label 9250 9700 2    60   ~ 0
-SIM_VDD
-NoConn ~ 10950 8725
-Text Label 10950 9175 0    60   ~ 0
-GSM_ANT
-Text Label 3450 975  2    60   ~ 0
-GSM_ANT
-Text Label 9250 9025 2    60   ~ 0
-GSM_MICP
-Text Label 9250 9100 2    60   ~ 0
-GSM_MICN
-Text Label 9250 9175 2    60   ~ 0
-GSM_SPKP
-Text Label 9250 9250 2    60   ~ 0
-GSM_SPKN
+Text Label 13175 7850 2    60   ~ 0
+3.3V
 $Sheet
-S 6850 10225 1425 450 
+S 14025 4575 725  575 
 U 5A9ED5F5
 F0 "audio" 60
 F1 "xmobile_audio.sch" 60
-F2 "AUDIO_MICP" I R 8275 10325 60 
-F3 "AUDIO_MICN" I R 8275 10475 60 
-F4 "AUDIO_SPKP" I L 6850 10325 60 
-F5 "AUDIO_SPKN" I L 6850 10475 60 
+F2 "AUDIO_MICP" I L 14025 4675 60 
+F3 "AUDIO_MICN" I L 14025 4800 60 
+F4 "AUDIO_SPKP" I L 14025 5050 60 
+F5 "AUDIO_SPKN" I L 14025 4925 60 
 $EndSheet
-Text Label 6850 10325 2    60   ~ 0
-GSM_SPKP
-Text Label 6850 10475 2    60   ~ 0
-GSM_SPKN
-Text Label 8275 10325 0    60   ~ 0
-GSM_MICP
-Text Label 8275 10475 0    60   ~ 0
-GSM_MICN
 $Sheet
-S 2225 9125 1050 475 
-U 5A9F76AF
-F0 "xmobile_sim_holder" 60
-F1 "xmobile_sim_holder.sch" 60
-F2 "SIM_VCC" I L 2225 9225 60 
-F3 "SIM_RST" I L 2225 9325 60 
-F4 "SIM_CLK" I R 3275 9225 60 
-F5 "GND" B R 3275 9325 60 
-F6 "GSM_VDD" I R 3275 9425 60 
-F7 "SIM_DET" O R 3275 9525 60 
-F8 "SIM_DATA" B L 2225 9425 60 
-$EndSheet
-Text Label 5200 8375 2    60   ~ 0
-GSM_NETLIGHT
-$Sheet
-S 725  1025 800  425 
+S 14400 9675 500  150 
 U 5A9FCB78
 F0 "xmega_power" 60
 F1 "xmega_power.sch" 60
-F2 "3.3V" O R 1525 1100 60 
-F3 "3.7V" O R 1525 1225 60 
-F4 "GND" O R 1525 1350 60 
 $EndSheet
-Text Label 1525 1100 0    60   ~ 0
+Text Label 9725 10700 0    60   ~ 0
 3.3V
-Text Label 1525 1225 0    60   ~ 0
-3.7V
-Text Label 1525 1350 0    60   ~ 0
+Text Label 9325 10700 2    60   ~ 0
 GND
-$Comp
-L AVR-PDI-6 CON1
-U 1 1 5AA047A2
-P 14925 5100
-F 0 "CON1" H 14845 5340 50  0000 C CNN
-F 1 "AVR-PDI-6" H 14715 4855 50  0000 L BNN
-F 2 "Connectors_JAE:JAE_LY20-06P-2T_2x03x2.00mm_Straight" V 14480 5135 50  0001 C CNN
-F 3 "" H 14925 5100 60  0001 C CNN
-	1    14925 5100
-	1    0    0    -1  
-$EndComp
-Text Label 15050 5000 0    60   ~ 0
-3.3V
-Text Label 15050 5200 0    60   ~ 0
-GND
-Text Label 14175 6150 3    60   ~ 0
+Text Label 8700 10100 2    60   ~ 0
 GND
 $Sheet
-S 4000 2075 650  675 
+S 13125 6125 525  400 
 U 5AA512DD
 F0 "xmobile_keyboard" 60
 F1 "xmobile_keyboard.sch" 60
-F2 "in1" I L 4000 2225 60 
-F3 "in2" I L 4000 2375 60 
-F4 "in3" I L 4000 2525 60 
-F5 "out1" O R 4650 2225 60 
-F6 "out2" O R 4650 2375 60 
-F7 "out3" O R 4650 2525 60 
-F8 "GND" B R 4650 2650 60 
+F2 "SDA" B L 13125 6200 60 
+F3 "SCL" B L 13125 6300 60 
+F4 "INT" O L 13125 6400 60 
 $EndSheet
-Text Label 4000 2225 2    60   ~ 0
-KBD_IN_1
-Text Label 10550 5525 0    60   ~ 0
-KBD_IN_1
-Text Label 10550 5625 0    60   ~ 0
-KBD_IN_2
-Text Label 4000 2375 2    60   ~ 0
-KBD_IN_2
-Text Label 10550 5725 0    60   ~ 0
-KBD_IN_3
-Text Label 4000 2525 2    60   ~ 0
-KBD_IN_3
-Text Label 10550 4175 0    60   ~ 0
-KBD_OUT_1
-Text Label 4650 2225 0    60   ~ 0
-KBD_OUT_1
-Text Label 10550 4275 0    60   ~ 0
-KBD_OUT_2
-Text Label 4650 2375 0    60   ~ 0
-KBD_OUT_2
-Text Label 10550 4375 0    60   ~ 0
-KBD_OUT_3
-Text Label 4650 2525 0    60   ~ 0
-KBD_OUT_3
-Text Label 10550 5025 0    60   ~ 0
-XMEGA_PD0_GSM_POWER
-$Comp
-L CONN_4 P7
-U 1 1 5AA6D87E
-P 15300 3825
-F 0 "P7" V 15250 3825 50  0000 C CNN
-F 1 "CONN_4" V 15350 3825 50  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" H 15300 3825 60  0001 C CNN
-F 3 "" H 15300 3825 60  0001 C CNN
-	1    15300 3825
-	1    0    0    -1  
-$EndComp
-Text Label 10550 2475 0    60   ~ 0
-XMEGA_PA0
-Text Label 14950 3675 2    60   ~ 0
-XMEGA_PA0
-Text Label 10550 2675 0    60   ~ 0
-XMEGA_PA2
-Text Label 14950 3775 2    60   ~ 0
-XMEGA_PA2
-Text Label 10550 4775 0    60   ~ 0
-XMEGA_PC6
-Text Label 14950 3875 2    60   ~ 0
-XMEGA_PC6
-$Comp
-L switch1 U5
-U 1 1 5AB790A5
-P 14275 5800
-F 0 "U5" H 14275 5600 60  0000 C CNN
-F 1 "switch1" H 14275 6000 60  0000 C CNN
-F 2 "switch1:switch_6x9" H 14275 5800 60  0001 C CNN
-F 3 "" H 14275 5800 60  0001 C CNN
-	1    14275 5800
-	0    1    1    0   
-$EndComp
-Text Label 14275 6150 3    60   ~ 0
-GND
-NoConn ~ 14375 6150
-NoConn ~ 14175 5450
-$Comp
-L USB_B P1
-U 1 1 5AB7B7B5
-P 2825 3825
-F 0 "P1" H 3025 3625 50  0000 C CNN
-F 1 "USB_B" H 2775 4025 50  0000 C CNN
-F 2 "usb:Conn_USBmicro-B_ebay-side_TH" V 2775 3725 50  0000 C CNN
-F 3 "" V 2775 3725 50  0000 C CNN
-	1    2825 3825
-	1    0    0    -1  
-$EndComp
-Text Label 3125 3725 0    60   ~ 0
-GND
-Text Label 4650 2650 0    60   ~ 0
-GND
-NoConn ~ 14950 3975
-NoConn ~ 15050 5100
-NoConn ~ 14800 5100
-Text Label 14800 5000 2    60   ~ 0
+Text Label 10100 10350 0    60   ~ 0
 PDI_D
-Text Label 14225 5200 2    60   ~ 0
+Text Label 9550 9950 1    60   ~ 0
 PDI_C
 $Comp
-L PWR_FLAG #FLG01
-U 1 1 5AB82AA2
-P 1850 1100
-F 0 "#FLG01" H 1850 1195 50  0001 C CNN
-F 1 "PWR_FLAG" H 1850 1280 50  0000 C CNN
-F 2 "" H 1850 1100 50  0000 C CNN
-F 3 "" H 1850 1100 50  0000 C CNN
-	1    1850 1100
+L xmobile-rescue:CY62158EV30LL-45BVXI U1
+U 1 1 5C118522
+P 4250 5200
+F 0 "U1" H 4250 5000 60  0000 C CNN
+F 1 "CY62158EV30LL-45ZSXIT" H 4250 5150 39  0000 C CNN
+F 2 "druid:TSOPII_44_pin" H 4475 3925 60  0001 C CNN
+F 3 "https://www.cypress.com/file/43811/download" H 4300 4250 60  0001 C CNN
+F 4 "TSOPII_44pin" H 4250 5250 30  0000 C CNN "case"
+F 5 "https://www.mouser.co.uk/ProductDetail/Cypress-Semiconductor/CY62158EV30LL-45ZSXIT?qs=sGAEpiMZZMt9mBA6nIyysIT6PXTPi%2Fj%2F1XazRTiHOZY%3D" H 4250 5200 60  0001 C CNN "example"
+	1    4250 5200
 	1    0    0    -1  
 $EndComp
-NoConn ~ 10950 8425
-Text Label 10950 8875 0    60   ~ 0
+Text Label 7800 6300 2    60   ~ 0
+A0
+Text Label 7800 6400 2    60   ~ 0
+A1
+Text Label 7800 6500 2    60   ~ 0
+A2
+Text Label 7800 6600 2    60   ~ 0
+A3
+Text Label 7800 6700 2    60   ~ 0
+A4
+Text Label 7800 6800 2    60   ~ 0
+A5
+Text Label 7800 6900 2    60   ~ 0
+A6
+Text Label 7800 7000 2    60   ~ 0
+A7
+Text Label 7800 3600 2    60   ~ 0
+A8
+Text Label 7800 3700 2    60   ~ 0
+A9
+Text Label 7800 3900 2    60   ~ 0
+A11
+Text Label 7800 4000 2    60   ~ 0
+A12
+Text Label 7800 4100 2    60   ~ 0
+A13
+Text Label 7800 4200 2    60   ~ 0
+A14
+Text Label 7800 4300 2    60   ~ 0
+A15
+Text Label 7800 4900 2    60   ~ 0
+A16
+Text Label 7800 5000 2    60   ~ 0
+A17
+Text Label 7800 5100 2    60   ~ 0
+A18
+Text Label 7800 5200 2    60   ~ 0
+A19
+Text Label 3400 5650 2    60   ~ 0
+A18
+Text Label 3400 5550 2    60   ~ 0
+A19
+Text Label 7800 5400 2    60   ~ 0
+D0
+Text Label 7800 5500 2    60   ~ 0
+D1
+Text Label 7800 5600 2    60   ~ 0
+D2
+Text Label 7800 5700 2    60   ~ 0
+D3
+Text Label 7800 5800 2    60   ~ 0
+D4
+Text Label 7800 5900 2    60   ~ 0
+D5
+Text Label 7800 6000 2    60   ~ 0
+D6
+Text Label 7800 6100 2    60   ~ 0
+D7
+Text Label 7800 4500 2    60   ~ 0
+WE
+Text Label 4150 4350 1    60   ~ 0
+WE
+Text Label 4050 4350 1    60   ~ 0
+OE
+Text Label 7800 4600 2    60   ~ 0
+OE
+Text Label 7800 3800 2    60   ~ 0
+A10
+Text Label 8400 8500 3    60   ~ 0
 GND
-NoConn ~ 10950 9400
-NoConn ~ 10950 9475
-NoConn ~ 10950 9850
-NoConn ~ 10950 9925
-NoConn ~ 9250 9850
-Text Label 3275 9525 0    60   ~ 0
-SIM_DET
-Text Label 2225 9425 2    60   ~ 0
-SIM_DATA
-Text Label 3275 9225 0    60   ~ 0
-SIM_CLK
-Text Label 2225 9325 2    60   ~ 0
-SIM_RST
-Text Label 2225 9225 2    60   ~ 0
-SIM_VDD
-Text Label 3275 9325 0    60   ~ 0
+Text Label 8500 8500 3    60   ~ 0
 GND
-Text Label 10950 8575 0    60   ~ 0
-SIM_HOLDER_VDD_EXT
-Text Label 3275 9425 0    60   ~ 0
-SIM_HOLDER_VDD_EXT
-$Comp
-L CONN_01X02 P2
-U 1 1 5AB8506D
-P 3650 1025
-F 0 "P2" H 3650 1175 50  0000 C CNN
-F 1 "CONN_01X02" V 3750 1025 50  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-04P-2T_2x02x2.00mm_Straight" H 3650 1025 50  0000 C CNN
-F 3 "" H 3650 1025 50  0000 C CNN
-	1    3650 1025
-	1    0    0    -1  
-$EndComp
-NoConn ~ 3450 1075
-$Comp
-L ATXMEGA128A1U-A IC1
-U 1 1 5AC0F16A
-P 9350 4575
-F 0 "IC1" H 8300 6875 50  0000 L BNN
-F 1 "ATXMEGA128A1U-A" H 9900 2225 50  0000 L BNN
-F 2 "tqfp:LQFP-100_14x14mm_Pitch0.5mm" H 9350 4575 50  0000 C CIN
-F 3 "" H 9350 4575 50  0000 C CNN
-	1    9350 4575
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C39
-U 1 1 5AC15554
-P 11525 2400
-F 0 "C39" H 11550 2500 50  0000 L CNN
-F 1 "100nF" H 11550 2300 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 11563 2250 50  0000 C CNN
-F 3 "" H 11525 2400 50  0000 C CNN
-	1    11525 2400
-	0    -1   -1   0   
-$EndComp
-$Comp
-L C C38
-U 1 1 5AC15849
-P 11525 1425
-F 0 "C38" H 11550 1525 50  0000 L CNN
-F 1 "100nF" H 11550 1325 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 11563 1275 50  0000 C CNN
-F 3 "" H 11525 1425 50  0000 C CNN
-	1    11525 1425
-	0    1    1    0   
-$EndComp
-$Comp
-L C C37
-U 1 1 5AC15959
-P 9725 1800
-F 0 "C37" H 9750 1900 50  0000 L CNN
-F 1 "100nF" H 9750 1700 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9763 1650 50  0000 C CNN
-F 3 "" H 9725 1800 50  0000 C CNN
-	1    9725 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C36
-U 1 1 5AC15B5B
-P 9600 1525
-F 0 "C36" H 9625 1625 50  0000 L CNN
-F 1 "100nF" H 9625 1425 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9638 1375 50  0000 C CNN
-F 3 "" H 9600 1525 50  0000 C CNN
-	1    9600 1525
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C35
-U 1 1 5AC15C67
-P 9475 1800
-F 0 "C35" H 9500 1900 50  0000 L CNN
-F 1 "100nF" H 9500 1700 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9513 1650 50  0000 C CNN
-F 3 "" H 9475 1800 50  0000 C CNN
-	1    9475 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C34
-U 1 1 5AC15D7C
-P 9350 1525
-F 0 "C34" H 9375 1625 50  0000 L CNN
-F 1 "100nF" H 9375 1425 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9388 1375 50  0000 C CNN
-F 3 "" H 9350 1525 50  0000 C CNN
-	1    9350 1525
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C33
-U 1 1 5AC15E90
-P 9225 1800
-F 0 "C33" H 9250 1900 50  0000 L CNN
-F 1 "100nF" H 9250 1700 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9263 1650 50  0000 C CNN
-F 3 "" H 9225 1800 50  0000 C CNN
-	1    9225 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C32
-U 1 1 5AC15FC5
-P 9100 1525
-F 0 "C32" H 9125 1625 50  0000 L CNN
-F 1 "100nF" H 9125 1425 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9138 1375 50  0000 C CNN
-F 3 "" H 9100 1525 50  0000 C CNN
-	1    9100 1525
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C3
-U 1 1 5AC178F7
-P 8975 1800
-F 0 "C3" H 9000 1900 50  0000 L CNN
-F 1 "100nF" H 9000 1700 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 9013 1650 50  0000 C CNN
-F 3 "" H 8975 1800 50  0000 C CNN
-	1    8975 1800
-	1    0    0    -1  
-$EndComp
-$Comp
-L C C2
-U 1 1 5AC17A8A
-P 8850 1525
-F 0 "C2" H 8875 1625 50  0000 L CNN
-F 1 "100nF" H 8875 1425 50  0000 L CNN
-F 2 "Capacitors_SMD:C_0603_HandSoldering" H 8888 1375 50  0000 C CNN
-F 3 "" H 8850 1525 50  0000 C CNN
-	1    8850 1525
-	1    0    0    -1  
-$EndComp
-Text Label 9600 1375 1    60   ~ 0
+Text Label 8600 8500 3    60   ~ 0
 GND
-Text Label 9350 1375 1    60   ~ 0
+Text Label 8700 8500 3    60   ~ 0
 GND
-Text Label 9100 1375 1    60   ~ 0
+Text Label 8800 8500 3    60   ~ 0
 GND
-Text Label 8850 1375 1    60   ~ 0
+Text Label 8900 8500 3    60   ~ 0
 GND
-Text Label 9725 1375 1    60   ~ 0
+Text Label 9000 8500 3    60   ~ 0
 GND
-Text Label 9475 1375 1    60   ~ 0
+Text Label 9100 8500 3    60   ~ 0
 GND
-Text Label 9225 1375 1    60   ~ 0
+Text Label 9200 8500 3    60   ~ 0
 GND
-Text Label 8975 1375 1    60   ~ 0
+Text Label 9300 8500 3    60   ~ 0
 GND
-Text Label 9750 6975 3    60   ~ 0
-GND
-Text Label 9650 6975 3    60   ~ 0
-GND
-Text Label 9550 6975 3    60   ~ 0
-GND
-Text Label 9450 6975 3    60   ~ 0
-GND
-Text Label 9350 6975 3    60   ~ 0
-GND
-Text Label 9250 6975 3    60   ~ 0
-GND
-Text Label 9150 6975 3    60   ~ 0
-GND
-Text Label 9050 6975 3    60   ~ 0
-GND
-Text Label 8950 6975 3    60   ~ 0
-GND
-Text Label 8850 6975 3    60   ~ 0
-GND
-Text Label 8150 2475 2    60   ~ 0
+Text Label 9600 8500 3    60   ~ 0
 PDI_C
-Text Label 8150 2575 2    60   ~ 0
+Text Label 9500 8500 3    60   ~ 0
 PDI_D
-$Comp
-L CP1-RESCUE-xmobile C41
-U 1 1 5AC1E9E1
-P 11575 2100
-F 0 "C41" H 11625 2200 50  0000 L CNN
-F 1 "10mk" H 11575 2000 50  0000 L CNN
-F 2 "Capacitors_SMD:c_elec_4x5.3" H 11575 2100 60  0001 C CNN
-F 3 "" H 11575 2100 60  0000 C CNN
-	1    11575 2100
-	0    -1   -1   0   
-$EndComp
-Text Label 11775 2400 3    60   ~ 0
-GND
-$Comp
-L CP1-RESCUE-xmobile C40
-U 1 1 5AC202D3
-P 11575 1725
-F 0 "C40" H 11625 1825 50  0000 L CNN
-F 1 "10mk" H 11575 1625 50  0000 L CNN
-F 2 "Capacitors_SMD:c_elec_4x5.3" H 11575 1725 60  0001 C CNN
-F 3 "" H 11575 1725 60  0000 C CNN
-	1    11575 1725
-	0    -1   -1   0   
-$EndComp
-Text Label 11775 1425 1    60   ~ 0
-GND
-Text Label 8350 2000 2    60   ~ 0
+Text Label 3850 4350 1    60   ~ 0
 3.3V
+Text Label 3950 4350 1    60   ~ 0
+3.3V
+Text Label 4550 4350 1    60   ~ 0
+GND
+Text Label 4450 4350 1    60   ~ 0
+GND
+Text Label 4250 4350 1    60   ~ 0
+CE1
+Text Label 4350 4350 1    60   ~ 0
+CE2
+Text Label 7800 4700 2    60   ~ 0
+CE1
+Text Label 7800 4800 2    60   ~ 0
+CE2
+$Sheet
+S 12225 3475 650  1725
+U 5A9F76AF
+F0 "xmobile_GSM" 60
+F1 "xmobile_sim_holder.sch" 60
+F2 "STATUS" O R 12875 3550 60 
+F3 "POWER_KEY" O R 12875 3675 60 
+F4 "UART_RTS" I R 12875 3800 60 
+F5 "UART_DTR" I R 12875 3925 60 
+F6 "UART_RI" I R 12875 4050 60 
+F7 "UART_DCD" I R 12875 4175 60 
+F8 "UART_CTS" I R 12875 4300 60 
+F9 "UART_RXD" I R 12875 4425 60 
+F10 "UART_TXD" I R 12875 4550 60 
+F11 "MICP" I R 12875 4675 60 
+F12 "MICN" I R 12875 4800 60 
+F13 "SPKP" O R 12875 4925 60 
+F14 "SPKN" O R 12875 5050 60 
+$EndSheet
+Text Label 12875 3800 0    60   ~ 0
+GSM_RTS
+Text Label 10800 8100 0    60   ~ 0
+GSM_RTS
+Text Label 12875 3925 0    60   ~ 0
+GSM_DTR
+Text Label 10800 3900 0    60   ~ 0
+GSM_DTR
+Text Label 12875 4050 0    60   ~ 0
+GSM_RI
+Text Label 10800 3700 0    60   ~ 0
+GSM_RI
+Text Label 12875 4175 0    60   ~ 0
+GSM_DCD
+Text Label 10800 3800 0    60   ~ 0
+GSM_DCD
+Text Label 12875 4300 0    60   ~ 0
+GSM_CTS
+Text Label 10800 4000 0    60   ~ 0
+GSM_CTS
+Text Label 12875 4425 0    60   ~ 0
+GSM_RXD
+Text Label 10800 7800 0    60   ~ 0
+GSM_RXD
+Text Label 12875 4550 0    60   ~ 0
+GSM_TXD
+Text Label 10800 7900 0    60   ~ 0
+GSM_TXD
+Text Label 12875 3675 0    60   ~ 0
+GSM_PWRKEY
+Text Label 10800 3600 0    60   ~ 0
+GSM_PWRKEY
+Entry Wire Line
+	7500 5300 7600 5400
+Entry Wire Line
+	7500 5400 7600 5500
+Entry Wire Line
+	7500 5500 7600 5600
+Entry Wire Line
+	7500 5600 7600 5700
+Entry Wire Line
+	7500 5700 7600 5800
+Entry Wire Line
+	7500 5800 7600 5900
+Entry Wire Line
+	7500 5900 7600 6000
+Entry Wire Line
+	7500 6000 7600 6100
+Entry Wire Line
+	7500 6200 7600 6300
+Entry Wire Line
+	7500 6300 7600 6400
+Entry Wire Line
+	7500 6400 7600 6500
+Entry Wire Line
+	7500 6500 7600 6600
+Entry Wire Line
+	7500 6600 7600 6700
+Entry Wire Line
+	7500 6700 7600 6800
+Entry Wire Line
+	7500 6800 7600 6900
+Entry Wire Line
+	7500 6900 7600 7000
+Entry Wire Line
+	7500 5100 7600 5200
+Entry Wire Line
+	7500 5000 7600 5100
+Entry Wire Line
+	7500 4900 7600 5000
+Entry Wire Line
+	7500 4800 7600 4900
+Entry Wire Line
+	7500 4200 7600 4300
+Entry Wire Line
+	7500 4100 7600 4200
+Entry Wire Line
+	7500 4000 7600 4100
+Entry Wire Line
+	7500 3900 7600 4000
+Entry Wire Line
+	7500 3800 7600 3900
+Entry Wire Line
+	7500 3700 7600 3800
+Entry Wire Line
+	7500 3600 7600 3700
+Entry Wire Line
+	7500 3500 7600 3600
+Text Label 7500 6150 2    60   ~ 0
+ADDR_SRAM
+Text Label 7500 4800 2    60   ~ 0
+ADDR_SRAM
+Text Label 7500 3500 2    60   ~ 0
+ADDR_SRAM
+Entry Wire Line
+	5225 4800 5325 4900
+Entry Wire Line
+	5225 4900 5325 5000
+Entry Wire Line
+	5225 5000 5325 5100
+Entry Wire Line
+	5225 5100 5325 5200
+Entry Wire Line
+	5225 5200 5325 5300
+Entry Wire Line
+	5225 5300 5325 5400
+Entry Wire Line
+	5225 5400 5325 5500
+Entry Wire Line
+	5225 5500 5325 5600
+Entry Wire Line
+	5225 5600 5325 5700
+Entry Wire Line
+	4650 6250 4750 6350
+Entry Wire Line
+	4550 6250 4650 6350
+Entry Wire Line
+	4450 6250 4550 6350
+Entry Wire Line
+	4350 6250 4450 6350
+Entry Wire Line
+	4250 6250 4350 6350
+Entry Wire Line
+	4150 6250 4250 6350
+Entry Wire Line
+	4050 6250 4150 6350
+Entry Wire Line
+	3950 6250 4050 6350
+Entry Wire Line
+	3850 6250 3950 6350
+Entry Wire Line
+	3100 5450 3200 5550
+Entry Wire Line
+	3100 5550 3200 5650
+Entry Wire Line
+	3100 5350 3200 5450
+Entry Wire Line
+	3100 5250 3200 5350
+Entry Wire Line
+	3100 5150 3200 5250
+Entry Wire Line
+	3100 5050 3200 5150
+Entry Wire Line
+	3100 4950 3200 5050
+Entry Wire Line
+	3100 4850 3200 4950
+Entry Wire Line
+	3100 4750 3200 4850
+Entry Wire Line
+	3100 4650 3200 4750
+Text Label 7500 5300 2    60   ~ 0
+DATA_SRAM
+Text Label 5325 5700 0    60   ~ 0
+ADDR_SRAM
+Text Label 4750 6350 0    60   ~ 0
+ADDR_SRAM
+Text Label 3100 5450 2    60   ~ 0
+ADDR_SRAM
+Text Label 3100 4650 2    60   ~ 0
+DATA_SRAM
+Text Label 5075 4800 0    60   ~ 0
+A0
+Text Label 5075 4900 0    60   ~ 0
+A1
+Text Label 5075 5000 0    60   ~ 0
+A2
+Text Label 5075 5100 0    60   ~ 0
+A3
+Text Label 5075 5200 0    60   ~ 0
+A4
+Text Label 5075 5300 0    60   ~ 0
+A5
+Text Label 5075 5400 0    60   ~ 0
+A6
+Text Label 5075 5500 0    60   ~ 0
+A7
+Text Label 5075 5600 0    60   ~ 0
+A8
+Text Label 3850 6000 3    60   ~ 0
+A17
+Text Label 3950 6000 3    60   ~ 0
+A16
+Text Label 4050 6000 3    60   ~ 0
+A15
+Text Label 4150 6000 3    60   ~ 0
+A14
+Text Label 4250 6000 3    60   ~ 0
+A13
+Text Label 4350 6000 3    60   ~ 0
+A12
+Text Label 4450 6000 3    60   ~ 0
+A11
+Text Label 4550 6000 3    60   ~ 0
+A10
+Text Label 4650 6000 3    60   ~ 0
+A9
+Text Label 3400 4750 2    60   ~ 0
+D7
+Text Label 3400 4850 2    60   ~ 0
+D6
+Text Label 3400 4950 2    60   ~ 0
+D5
+Text Label 3400 5050 2    60   ~ 0
+D4
+Text Label 3400 5150 2    60   ~ 0
+D3
+Text Label 3400 5250 2    60   ~ 0
+D2
+Text Label 3400 5350 2    60   ~ 0
+D1
+Text Label 3400 5450 2    60   ~ 0
+D0
+Text GLabel 14675 9425 0    60   Input ~ 0
+3.3V
+Text Label 14675 9425 0    60   ~ 0
+3.3V
+Wire Wire Line
+	9300 10100 9550 10100
+Connection ~ 9550 10100
+Wire Wire Line
+	12875 4675 14025 4675
+Wire Wire Line
+	14025 4800 12875 4800
+Wire Wire Line
+	12875 4925 14025 4925
+Wire Wire Line
+	14025 5050 12875 5050
+Wire Wire Line
+	7800 5400 7600 5400
+Wire Wire Line
+	7800 5500 7600 5500
+Wire Wire Line
+	7800 5600 7600 5600
+Wire Wire Line
+	7800 5700 7600 5700
+Wire Wire Line
+	7800 5800 7600 5800
+Wire Wire Line
+	7800 5900 7600 5900
+Wire Wire Line
+	7800 6000 7600 6000
+Wire Wire Line
+	7800 6100 7600 6100
+Wire Wire Line
+	7800 6300 7600 6300
+Wire Wire Line
+	7800 6400 7600 6400
+Wire Wire Line
+	7800 6500 7600 6500
+Wire Wire Line
+	7800 6700 7600 6700
+Wire Wire Line
+	7800 6600 7600 6600
+Wire Wire Line
+	7800 6800 7600 6800
+Wire Wire Line
+	7800 6900 7600 6900
+Wire Wire Line
+	7800 7000 7600 7000
+Wire Wire Line
+	7800 5200 7600 5200
+Wire Wire Line
+	7800 5100 7600 5100
+Wire Wire Line
+	7800 5000 7600 5000
+Wire Wire Line
+	7800 4900 7600 4900
+Wire Wire Line
+	7800 4300 7600 4300
+Wire Wire Line
+	7800 4200 7600 4200
+Wire Wire Line
+	7800 4100 7600 4100
+Wire Wire Line
+	7800 4000 7600 4000
+Wire Wire Line
+	7800 3900 7600 3900
+Wire Wire Line
+	7800 3800 7600 3800
+Wire Wire Line
+	7800 3700 7600 3700
+Wire Wire Line
+	7800 3600 7600 3600
+Wire Wire Line
+	3400 5450 3200 5450
+Wire Wire Line
+	3400 5350 3200 5350
+Wire Wire Line
+	3400 5250 3200 5250
+Wire Wire Line
+	3200 5150 3400 5150
+Wire Wire Line
+	3400 5050 3200 5050
+Wire Wire Line
+	3400 4950 3200 4950
+Wire Wire Line
+	3400 4850 3200 4850
+Wire Wire Line
+	3400 4750 3200 4750
+Wire Wire Line
+	5050 4800 5225 4800
+Wire Wire Line
+	5050 4900 5225 4900
+Wire Wire Line
+	5050 5000 5225 5000
+Wire Wire Line
+	5050 5100 5225 5100
+Wire Wire Line
+	5050 5200 5225 5200
+Wire Wire Line
+	5050 5300 5225 5300
+Wire Wire Line
+	5050 5400 5225 5400
+Wire Wire Line
+	5050 5500 5225 5500
+Wire Wire Line
+	5050 5600 5225 5600
+Wire Wire Line
+	4650 6000 4650 6250
+Wire Wire Line
+	4550 6000 4550 6250
+Wire Wire Line
+	4450 6000 4450 6250
+Wire Wire Line
+	4350 6000 4350 6250
+Wire Wire Line
+	4250 6000 4250 6250
+Wire Wire Line
+	4150 6000 4150 6250
+Wire Wire Line
+	4050 6000 4050 6250
+Wire Wire Line
+	3950 6000 3950 6250
+Wire Wire Line
+	3850 6000 3850 6250
+Wire Wire Line
+	3400 5550 3200 5550
+Wire Wire Line
+	3400 5650 3200 5650
+Wire Bus Line
+	3100 5550 3100 5450
+Text Label 9500 3100 0    60   ~ 0
+3.3V
+Text Label 10800 6600 0    60   ~ 0
+EPD_RST
+Text Label 10800 6700 0    60   ~ 0
+EPD_BUSY
+Text Label 10800 6900 0    60   ~ 0
+EPD_DC
+Text Label 10800 4800 0    60   ~ 0
+EPD_CS
+Text Label 10800 4700 0    60   ~ 0
+EPD_CLK
+Text Label 10800 4500 0    60   ~ 0
+EPD_DIN
+Text Label 13125 6200 2    60   ~ 0
+KBD_SDA
+Text Label 13125 6300 2    60   ~ 0
+KBD_SCL
+Text Label 13125 6400 2    60   ~ 0
+KBD_INT
+Text Label 10800 5100 0    60   ~ 0
+KBD_SCL
+Text Label 10800 5200 0    60   ~ 0
+KBD_SDA
+Text Label 10800 7000 0    60   ~ 0
+KBD_INT
 $Comp
-L CONN_01X08 P10
-U 1 1 5AC3E445
-P 7600 6325
-F 0 "P10" H 7600 6775 50  0000 C CNN
-F 1 "CONN_01X08" V 7700 6325 50  0000 C CNN
-F 2 "Connectors_JAE:JAE_LY20-08P-2T_2x04x2.00mm_Straight" H 7600 6325 50  0000 C CNN
-F 3 "" H 7600 6325 50  0000 C CNN
-	1    7600 6325
+L xmobile-rescue:TEST_1P J3
+U 1 1 5C4B9CCC
+P 11625 4600
+F 0 "J3" H 11625 4870 50  0000 C CNN
+F 1 "TEST_DISP_DATA_OUT" H 11625 4800 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 11650 4925 50  0001 C CNN
+F 3 "" H 11825 4600 50  0001 C CNN
+F 4 "1 pad" H 11625 4925 30  0000 C CNN "case"
+	1    11625 4600
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	10800 4600 11625 4600
+Text GLabel 15500 9425 0    60   Input ~ 0
+GND
+Text Label 15500 9425 0    60   ~ 0
+GND
+Text Label 12875 3550 0    60   ~ 0
+GSM_STATUS
+Text Label 10800 6800 0    60   ~ 0
+GSM_STATUS
+$Comp
+L xmobile-rescue:Micro_SD_Card J1
+U 1 1 5C4DB2CD
+P 4075 8950
+F 0 "J1" H 3425 9550 50  0000 C CNN
+F 1 "Micro_SD_Card" H 4725 9550 50  0000 R CNN
+F 2 "Connector_Card:microSD_HC_Wuerth_693072010801" H 4075 8200 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/445/693072010801-336093.pdf" H 4075 8950 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/Wurth-Electronics/693072010801?qs=sGAEpiMZZMuJakaoiLiBpiVYNV8REXtFk03jtifiNMv8wsb977CC%2fA%3d%3d" H 4075 8950 50  0001 C CNN "example"
+F 5 "8 pin microSD" H 4350 8925 30  0000 C CNN "case"
+	1    4075 8950
+	1    0    0    -1  
+$EndComp
+Text Label 3175 9150 2    60   ~ 0
+GND
+Text Label 3175 9050 2    60   ~ 0
+microSD_SCLK
+Text Label 1650 8950 2    60   ~ 0
+3.3V
+Text Label 3175 9250 2    60   ~ 0
+microSD_DO
+Text Label 3175 8750 2    60   ~ 0
+microSD_CS
+Text Label 3175 8850 2    60   ~ 0
+microSD_DI
+NoConn ~ 3175 8650
+NoConn ~ 3175 9350
+Text Label 1825 9250 3    60   ~ 0
+GND
+$Comp
+L xmobile-rescue:C C2
+U 1 1 5C4DFD85
+P 1825 9100
+F 0 "C2" H 1850 9200 50  0000 L CNN
+F 1 "0.1u" H 1950 9100 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0402_1005Metric" H 2025 9375 50  0001 C CNN
+F 3 "https://eu.mouser.com/datasheet/2/40/cx5r-776519.pdf" H 1825 9100 50  0001 C CNN
+F 4 "https://eu.mouser.com/ProductDetail/AVX/04026D104KAT4A?qs=sGAEpiMZZMs0AnBnWHyRQPg4iYkCw7IMED%2f4kpqgf7w%3d" H 1825 9100 60  0001 C CNN "example"
+F 5 "0402 In" H 1950 9025 30  0000 C CNN "case"
+	1    1825 9100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1650 8950 1825 8950
+NoConn ~ 4875 9550
+Text Label 10800 4100 0    60   ~ 0
+microSD_DI
+Text Label 10800 4300 0    60   ~ 0
+microSD_SCLK
+Text Label 10800 4200 0    60   ~ 0
+microSD_DO
+Text Label 10800 8000 0    60   ~ 0
+microSD_CS
+$Comp
+L xmobile-rescue:SW_PUSH SW1
+U 1 1 5C505516
+P 9000 10100
+F 0 "SW1" H 9150 10210 50  0000 C CNN
+F 1 "SW_PUSH" H 9000 10020 50  0000 C CNN
+F 2 "druid:button_4pin_7,5x5" H 8975 9950 50  0001 C CNN
+F 3 "" H 9000 10100 50  0000 C CNN
+F 4 "https://ru.aliexpress.com/item/100-4-4-0-8/32909011951.html?spm=a2g0v.search0604.3.313.5a9f5cbe3LNMTR&ws_ab_test=searchweb0_0%2Csearchweb201602_6_10065_10068_319_317_10696_10084_453_10083_454_10618_10304_10307_10820_10821_10301_537_536_10902_10843_10059_10884_10887_321_322_10103%2Csearchweb201603_51%2CppcSwitch_0&algo_pvid=b432da11-c10a-421f-96ee-7905deee8d06&algo_expid=b432da11-c10a-421f-96ee-7905deee8d06-45" H 9000 10100 60  0001 C CNN "example"
+F 5 "4x4x0,8" H 9000 10100 30  0000 C CNN "case"
+	1    9000 10100
+	1    0    0    -1  
+$EndComp
+$Comp
+L xmobile-rescue:TEST_2P J2
+U 1 1 5C561693
+P 7300 7200
+F 0 "J2" H 7300 7260 50  0000 C CNN
+F 1 "TEST_VIBRO" H 7300 7130 50  0000 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 6925 7025 50  0001 C CNN
+F 3 "" H 7300 7200 50  0001 C CNN
+F 4 "2 pads" H 7300 7075 30  0000 C CNN "case"
+	1    7300 7200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7500 7200 7800 7200
+Text Label 7100 7200 2    60   ~ 0
+GND
+$Comp
+L xmobile-rescue:TEST-RESCUE-xmobile W2
+U 1 1 5C6C0FE4
+P 9900 10350
+F 0 "W2" H 9900 10410 50  0000 C CNN
+F 1 "TEST_PDI" H 9900 10280 50  0000 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 10150 10200 50  0001 C CNN
+F 3 "" H 9900 10350 50  0000 C CNN
+F 4 "2 pads" H 9900 10225 30  0000 C CNN "case"
+	1    9900 10350
+	1    0    0    -1  
+$EndComp
+$Comp
+L xmobile-rescue:TEST-RESCUE-xmobile W1
+U 1 1 5C6C18FA
+P 9525 10700
+F 0 "W1" H 9525 10760 50  0000 C CNN
+F 1 "TEST_XMEGA_PWR" H 9525 10630 50  0000 C CNN
+F 2 "TestPoint:TestPoint_2Pads_Pitch2.54mm_Drill0.8mm" H 9625 10550 50  0001 C CNN
+F 3 "" H 9525 10700 50  0000 C CNN
+F 4 "2 pads" H 9525 10575 30  0000 C CNN "case"
+	1    9525 10700
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9550 10350 9700 10350
+Wire Wire Line
+	9550 9950 9550 10100
+NoConn ~ 10800 4900
+NoConn ~ 10800 5000
+NoConn ~ 10800 5400
+NoConn ~ 10800 5500
+NoConn ~ 10800 5600
+NoConn ~ 10800 5700
+NoConn ~ 10800 5800
+NoConn ~ 10800 5900
+NoConn ~ 10800 6000
+NoConn ~ 10800 6100
+NoConn ~ 10800 6300
+NoConn ~ 10800 6400
+NoConn ~ 10800 6500
+NoConn ~ 10800 7400
+NoConn ~ 10800 7500
+NoConn ~ 10800 7600
+NoConn ~ 10800 7700
+NoConn ~ 7800 7300
+NoConn ~ 7800 7400
+NoConn ~ 7800 7500
+NoConn ~ 7800 7700
+NoConn ~ 7800 7800
+Wire Wire Line
+	9550 10100 9775 10100
+Wire Wire Line
+	9550 10100 9550 10350
+$Comp
+L xmobile-rescue:PWR_FLAG #FLG0101
+U 1 1 5C7368D2
+P 14975 9425
+F 0 "#FLG0101" H 14975 9520 50  0001 C CNN
+F 1 "PWR_FLAG" H 14975 9649 50  0000 C CNN
+F 2 "" H 14975 9425 50  0000 C CNN
+F 3 "" H 14975 9425 50  0000 C CNN
+	1    14975 9425
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	14675 9425 14975 9425
+Connection ~ 1825 8950
+Wire Wire Line
+	1825 8950 3175 8950
+$Comp
+L xmobile-rescue:XMega128A1U_TQFP100 U2
+U 1 1 5C772B8C
+P 9300 5600
+F 0 "U2" H 9275 5600 60  0000 C CNN
+F 1 "XMega128A1U_TQFP100" H 9300 5250 60  0001 C CNN
+F 2 "Package_QFP:TQFP-100_14x14mm_P0.5mm" H 9350 7400 60  0001 C CNN
+F 3 "https://www.mouser.co.uk/datasheet/2/268/Atmel-8385-8-and-16-bit-AVR-Microcontroller-ATxmeg-1315775.pdf" H 9350 7400 60  0001 C CNN
+F 4 "https://www.mouser.co.uk/ProductDetail/Microchip-Technology-Atmel/ATXMEGA128A1U-AU?qs=sGAEpiMZZMuur7c7MCGU2B0A76QkTCM%252B" H 9300 5600 50  0001 C CNN "example"
+F 5 "TQFP-100_14x14mm_0,5mm" H 9300 5300 30  0000 C CNN "case"
+	1    9300 5600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8600 3100 8700 3100
+Wire Wire Line
+	9400 3100 9500 3100
+Wire Wire Line
+	8700 3100 8800 3100
+Connection ~ 8700 3100
+Wire Wire Line
+	8800 3100 8900 3100
+Connection ~ 8800 3100
+Wire Wire Line
+	8900 3100 9000 3100
+Connection ~ 8900 3100
+Wire Wire Line
+	9000 3100 9100 3100
+Connection ~ 9000 3100
+Wire Wire Line
+	9100 3100 9200 3100
+Connection ~ 9100 3100
+Wire Wire Line
+	9200 3100 9300 3100
+Connection ~ 9200 3100
+Wire Wire Line
+	9300 3100 9400 3100
+Connection ~ 9300 3100
+Connection ~ 9400 3100
+$Comp
+L xmobile-rescue:TEST_1P J5
+U 1 1 5C7A3241
+P 13400 7850
+F 0 "J5" H 13400 8120 50  0000 C CNN
+F 1 "EPD_1" H 13400 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13425 8175 50  0001 C CNN
+F 3 "" H 13600 7850 50  0001 C CNN
+F 4 "1 pad" H 13400 8175 30  0000 C CNN "case"
+	1    13400 7850
 	-1   0    0    1   
 $EndComp
-NoConn ~ 8150 2975
-NoConn ~ 8150 3075
-NoConn ~ 8150 3175
-NoConn ~ 8150 3275
-NoConn ~ 8150 3425
-NoConn ~ 8150 3525
-NoConn ~ 8150 3625
-NoConn ~ 8150 3725
-NoConn ~ 8150 3825
-NoConn ~ 8150 3925
-NoConn ~ 8150 4025
-NoConn ~ 8150 4125
-NoConn ~ 8150 4275
-NoConn ~ 8150 4375
-NoConn ~ 8150 4475
-NoConn ~ 8150 4575
-NoConn ~ 8150 4675
-NoConn ~ 8150 4775
-NoConn ~ 8150 4875
-NoConn ~ 8150 4975
-NoConn ~ 8150 5125
-NoConn ~ 8150 5225
-NoConn ~ 8150 5325
-NoConn ~ 8150 5425
-NoConn ~ 8150 5525
-NoConn ~ 8150 5625
-NoConn ~ 8150 5725
-NoConn ~ 8150 5825
-NoConn ~ 10550 6575
-NoConn ~ 10550 6475
-NoConn ~ 10550 6375
-NoConn ~ 10550 6275
-NoConn ~ 10550 5975
-NoConn ~ 10550 3725
-NoConn ~ 10550 3825
-NoConn ~ 10550 3925
-NoConn ~ 10550 4025
 $Comp
-L INDUCTOR L1
-U 1 1 5AC20B29
-P 10050 1650
-F 0 "L1" V 10000 1650 40  0000 C CNN
-F 1 "120m" V 10150 1650 40  0001 C CNN
-F 2 "Inductors:Inductor_1212" H 10050 1650 60  0001 C CNN
-F 3 "" H 10050 1650 60  0000 C CNN
-F 4 "ferrite bead" V 10175 1625 60  0000 C CNN "details"
-	1    10050 1650
-	1    0    0    -1  
+L xmobile-rescue:TEST_1P J6
+U 1 1 5C7A34B4
+P 13500 7850
+F 0 "J6" H 13500 8120 50  0000 C CNN
+F 1 "EPD_1" H 13500 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13525 8175 50  0001 C CNN
+F 3 "" H 13700 7850 50  0001 C CNN
+F 4 "1 pad" H 13500 8175 30  0000 C CNN "case"
+	1    13500 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J7
+U 1 1 5C7A34E6
+P 13600 7850
+F 0 "J7" H 13600 8120 50  0000 C CNN
+F 1 "EPD_1" H 13600 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13625 8175 50  0001 C CNN
+F 3 "" H 13800 7850 50  0001 C CNN
+F 4 "1 pad" H 13600 8175 30  0000 C CNN "case"
+	1    13600 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J8
+U 1 1 5C7A351A
+P 13700 7850
+F 0 "J8" H 13700 8120 50  0000 C CNN
+F 1 "EPD_1" H 13700 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13725 8175 50  0001 C CNN
+F 3 "" H 13900 7850 50  0001 C CNN
+F 4 "1 pad" H 13700 8175 30  0000 C CNN "case"
+	1    13700 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J9
+U 1 1 5C7A986E
+P 13800 7850
+F 0 "J9" H 13800 8120 50  0000 C CNN
+F 1 "EPD_1" H 13800 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13825 8175 50  0001 C CNN
+F 3 "" H 14000 7850 50  0001 C CNN
+F 4 "1 pad" H 13800 8175 30  0000 C CNN "case"
+	1    13800 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J10
+U 1 1 5C7A98AE
+P 13900 7850
+F 0 "J10" H 13900 8120 50  0000 C CNN
+F 1 "EPD_1" H 13900 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 13925 8175 50  0001 C CNN
+F 3 "" H 14100 7850 50  0001 C CNN
+F 4 "1 pad" H 13900 8175 30  0000 C CNN "case"
+	1    13900 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J11
+U 1 1 5C7A98EC
+P 14000 7850
+F 0 "J11" H 14000 8120 50  0000 C CNN
+F 1 "EPD_1" H 14000 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 14025 8175 50  0001 C CNN
+F 3 "" H 14200 7850 50  0001 C CNN
+F 4 "1 pad" H 14000 8175 30  0000 C CNN "case"
+	1    14000 7850
+	-1   0    0    1   
+$EndComp
+$Comp
+L xmobile-rescue:TEST_1P J12
+U 1 1 5C7A9928
+P 14100 7850
+F 0 "J12" H 14100 8120 50  0000 C CNN
+F 1 "EPD_1" H 14100 8050 50  0000 C CNN
+F 2 "TestPoint:TestPoint_THTPad_1.0x1.0mm_Drill0.5mm" H 14125 8175 50  0001 C CNN
+F 3 "" H 14300 7850 50  0001 C CNN
+F 4 "1 pad" H 14100 8175 30  0000 C CNN "case"
+	1    14100 7850
+	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	14175 7225 14400 7225
+	13175 7850 13400 7850
 Wire Wire Line
-	14900 7225 15025 7225
+	13175 7750 13500 7750
 Wire Wire Line
-	14250 7475 14300 7475
+	13500 7750 13500 7850
 Wire Wire Line
-	14250 7475 14250 7225
-Connection ~ 14250 7225
+	13175 7650 13600 7650
 Wire Wire Line
-	14100 6650 14400 6650
+	13600 7650 13600 7850
 Wire Wire Line
-	14300 6875 14250 6875
+	13175 7550 13700 7550
 Wire Wire Line
-	14250 6875 14250 6650
-Connection ~ 14250 6650
+	13700 7550 13700 7850
 Wire Wire Line
-	14125 7800 14400 7800
+	13175 7450 13800 7450
 Wire Wire Line
-	14325 8050 14250 8050
+	13800 7450 13800 7850
 Wire Wire Line
-	14250 8050 14250 7800
-Connection ~ 14250 7800
+	13175 7350 13900 7350
 Wire Wire Line
-	14100 8325 14400 8325
+	13900 7350 13900 7850
 Wire Wire Line
-	2000 4125 2000 4750
+	13175 7250 14000 7250
 Wire Wire Line
-	1750 4125 2625 4125
+	14000 7250 14000 7850
 Wire Wire Line
-	3500 4850 3775 4850
+	13175 7150 14100 7150
 Wire Wire Line
-	2725 4450 3775 4450
-Wire Wire Line
-	2725 4450 2725 4125
-Wire Wire Line
-	3500 4950 3875 4950
-Wire Wire Line
-	2825 4350 3875 4350
-Wire Wire Line
-	2825 4350 2825 4125
-Wire Wire Line
-	3775 4450 3775 4850
-Wire Wire Line
-	3875 4350 3875 4950
-Connection ~ 2000 4125
-Wire Wire Line
-	5700 8375 5800 8375
-Wire Wire Line
-	5750 8375 5750 8450
-Connection ~ 5750 8375
-Wire Wire Line
-	6100 8075 6100 8175
-Wire Wire Line
-	6100 8575 6100 9000
-Wire Wire Line
-	6100 7575 6100 7475
-Wire Wire Line
-	5750 9000 6175 9000
-Wire Wire Line
-	5750 9000 5750 8950
-Connection ~ 6100 9000
-Wire Wire Line
-	3225 7150 3225 7525
-Connection ~ 3225 7350
-Wire Wire Line
-	2600 6950 2925 6950
-Wire Wire Line
-	2725 7350 2725 6950
-Connection ~ 2725 6950
-Wire Wire Line
-	14375 4975 14375 5450
-Wire Wire Line
-	14225 5200 14800 5200
-Connection ~ 14375 5200
-Wire Wire Line
-	1525 1100 1850 1100
-Wire Wire Line
-	9100 1675 9100 2000
-Wire Wire Line
-	9725 1650 9725 1375
-Wire Wire Line
-	9475 1650 9475 1375
-Wire Wire Line
-	9225 1650 9225 1375
-Wire Wire Line
-	8975 1650 8975 1375
-Wire Wire Line
-	11775 1725 11775 1425
-Wire Wire Line
-	11775 1425 11675 1425
-Wire Wire Line
-	11775 2100 11775 2400
-Wire Wire Line
-	11775 2400 11675 2400
-Connection ~ 11375 1425
-Connection ~ 11375 2400
-Connection ~ 11375 1725
-Connection ~ 11375 2100
-Wire Wire Line
-	8850 2000 8850 1675
-Wire Wire Line
-	8975 1950 8975 2000
-Connection ~ 8975 2000
-Connection ~ 9100 2000
-Wire Wire Line
-	9225 1950 9225 2000
-Connection ~ 9225 2000
-Wire Wire Line
-	9475 1950 9475 2000
-Connection ~ 9475 2000
-Wire Wire Line
-	9725 1950 9725 2000
-Connection ~ 9725 2000
-Wire Wire Line
-	9600 1675 9600 2000
-Connection ~ 9600 2000
-Wire Wire Line
-	9650 2175 9650 2000
-Connection ~ 9650 2000
-Wire Wire Line
-	9550 2175 9550 2000
-Connection ~ 9550 2000
-Wire Wire Line
-	9450 2175 9450 2000
-Connection ~ 9450 2000
-Wire Wire Line
-	9350 1675 9350 2175
-Connection ~ 9350 2000
-Wire Wire Line
-	9150 2175 9150 2000
-Connection ~ 9150 2000
-Wire Wire Line
-	9250 2175 9250 2000
-Connection ~ 9250 2000
-Wire Wire Line
-	9050 2175 9050 2000
-Connection ~ 9050 2000
-Wire Wire Line
-	8950 2175 8950 2000
-Connection ~ 8950 2000
-Connection ~ 8850 2000
-Wire Wire Line
-	7800 5975 8150 5975
-Wire Wire Line
-	8150 6075 7800 6075
-Wire Wire Line
-	7800 6175 8150 6175
-Wire Wire Line
-	8150 6275 7800 6275
-Wire Wire Line
-	8150 6375 7800 6375
-Wire Wire Line
-	7800 6475 8150 6475
-Wire Wire Line
-	8150 6575 7800 6575
-Wire Wire Line
-	7800 6675 8150 6675
-Wire Wire Line
-	8350 2000 10050 2000
-Wire Wire Line
-	10050 2000 10050 1950
-Wire Wire Line
-	9800 2175 9800 2050
-Wire Wire Line
-	9900 2175 9900 2100
-Wire Wire Line
-	11375 1350 11375 2400
-Wire Wire Line
-	9800 2050 10850 2050
-Wire Wire Line
-	10850 2050 10850 1725
-Wire Wire Line
-	10850 1725 11375 1725
-Wire Wire Line
-	9900 2100 11375 2100
-Wire Wire Line
-	10050 1350 11375 1350
-$Comp
-L PWR_FLAG #FLG02
-U 1 1 5AC483E4
-P 11375 1350
-F 0 "#FLG02" H 11375 1445 50  0001 C CNN
-F 1 "PWR_FLAG" H 11375 1530 50  0000 C CNN
-F 2 "" H 11375 1350 50  0000 C CNN
-F 3 "" H 11375 1350 50  0000 C CNN
-	1    11375 1350
-	1    0    0    -1  
-$EndComp
-NoConn ~ 10550 3075
-NoConn ~ 10550 2975
-NoConn ~ 10550 3525
-NoConn ~ 10550 3625
-NoConn ~ 10550 3175
-NoConn ~ 10550 3325
-NoConn ~ 10550 3425
-NoConn ~ 8150 2725
-NoConn ~ 8150 2825
-NoConn ~ 10550 4475
+	14100 7150 14100 7850
+Wire Bus Line
+	7500 4800 7500 5125
+Wire Bus Line
+	7500 5300 7500 6000
+Wire Bus Line
+	7500 3500 7500 4200
+Wire Bus Line
+	3100 4650 3100 5350
+Wire Bus Line
+	7500 6150 7500 6900
+Wire Bus Line
+	5325 4900 5325 5700
+Wire Bus Line
+	3950 6350 4750 6350
 $EndSCHEMATC

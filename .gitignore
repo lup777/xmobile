@@ -12,3 +12,10 @@
 tmp/
 *.d
 a
+# Temporary files
+*.000
+*.bck
+*.kicad_pcb-bak
+.#*
+rescue-backup/*
+rescue-backup
