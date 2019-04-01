@@ -1,16 +1,26 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <iostream>
+
+#include <QFileDialog>
+#include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow)
 {
   ui->setupUi(this);
+  ui->plainTextEdit->hide();
+  //centralWidget()->setAttribute(Qt::WA_TransparentForMouseEvents);
+  //this->setMouseTracking(true);
 
-  main_display.buffer = buffer;
+  ZOOM = ui->spinBox_3->value();
+
   main_display.buf_rows = BUFFER_ROWS;
   main_display.buf_cols = BUFFER_COLS;
   main_display.buf_size = BUFFER_SIZE;
+  main_display.buffer = new byte[BUFFER_SIZE];//buffer;
 
   for(word i = 0; i < main_display.buf_size; i++) {
     main_display.buffer[i] = 0xFF;
@@ -38,8 +48,62 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event) {
-  int mx = event->pos().x() - REPLACE_X;
-  int my = event->pos().y() - REPLACE_Y;
+  ui->spinBox->setValue((event->x() / ZOOM) + REPLACE_X - MARGIN);
+  ui->spinBox_2->setValue((event->y() / ZOOM) + REPLACE_X - MARGIN);
+}
+//
+void MainWindow::wheelEvent(QWheelEvent *event) {
+  if (event->delta() > 0)
+    ui->spinBox_3->setValue(ZOOM + 1);
+  else
+    ui->spinBox_3->setValue(ZOOM - 1);
+
+}
+
+void MainWindow::mousePressEvent(QMouseEvent* event) {
+  int mx = (event->x() - REPLACE_X) / ZOOM;
+  int my = (event->y() - REPLACE_Y) / ZOOM;
+
+  if(event->buttons() == Qt::LeftButton) {
+    for(int i = 0; i < dots.size(); i++) {
+      if (dots[i].first == mx && dots[i].second == my) {
+        dots.erase(dots.begin() + i);
+        return;
+      }
+    }
+
+    dots.push_back(QPair<short, short>(mx, my));
+  }
+
+  if(event->buttons() == Qt::RightButton) {
+    short shift_x = display->zone.x();
+    short shift_y = display->zone.y();
+
+    if (display->buffer != NULL)
+      delete [] display->buffer;
+
+    display->buf_cols = (display->zone.ex() >> 3) - (display->zone.x() >> 3);
+    display->buf_rows = display->zone.ey() - display->zone.y() + 1;
+    display->buf_size = display->buf_cols * display->buf_rows;
+    display->buffer = new byte[display->buf_size];
+
+    for(int i = 0; i < dots.size(); i++) {
+      dots[i].first -= shift_x;
+      dots[i].second -= shift_y;
+    }
+  }
+  std::cout << "zone: " << display->zone.x() << ", " << display->zone.y() << ", " << display->zone.ex() << ", " << display->zone.ey() << std::endl;
+
+  render();
+  this->update();
+}
+
+
+void MainWindow::render() {
+  /*int mx = 100 - REPLACE_X;
+  int my = 110 - REPLACE_Y;
+  //int mx = event->pos().x() - REPLACE_X;
+  //int my = event->pos().y() - REPLACE_Y;
 
   if (mx > (display->buf_cols * 8 * ZOOM))
     return;
@@ -48,15 +112,15 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   if (mx < 0)
     return;
   if (my < 0)
-    return;
+    return;*/
 
 
   for(size_t i = 0; i < display->buf_size; i++) {
       display->buffer[i] = 0xFF;
   }
 
-  RenderRectangle(0, 0, (display->buf_cols << 3) - 1, display->buf_rows - 1);
 
+  /*
   display->zone.clear();
 
   RenderSubBuffer(mx, my, &sub_display);
@@ -82,8 +146,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
       }
   }
   RenderCircle(mx, my, 20);
+  */
+  //RenderRectangle(0, 0, (display->buf_cols << 3) - 1, display->buf_rows - 1);
 
-  RenderZone();
+  display->zone.clear();
+
+  for (int i = 0; i < dots.size(); i++) {
+    RenderDot(dots[i].first, dots[i].second);
+  }
+
+  //RenderZone();
 
   /*for (int i = 0; i < 200; i++) {
     buffer[(5 + BUFFER_COLS) + (i * BUFFER_COLS)] = 0;
@@ -91,11 +163,16 @@ void MainWindow::mouseMoveEvent(QMouseEvent* event) {
 
   this->update();
 }
-
 void MainWindow::RenderZone() {
-  Zone tmp = display->zone;
-  RenderRectangle(display->zone.x(), display->zone.y(), display->zone.ex(), display->zone.ey());
-  display->zone = tmp;
+  RenderZone(display);
+}
+
+void MainWindow::RenderZone(DispBuf* disp) {
+  Zone tmp1 = display->zone;
+  Zone tmp = disp->zone;
+  RenderRectangle(disp->zone.x(), disp->zone.y(), disp->zone.ex(), disp->zone.ey());
+  disp->zone = tmp;
+  display->zone = tmp1;
 }
 
 void MainWindow::RenderRectangle(short x, short y, short x1, short y1) {// coordinates and coordinates
@@ -120,7 +197,7 @@ void MainWindow::RenderCircle(short x, short y, short r) {
 }
 
 void MainWindow::RenderDot(short x, short y) {
-  if (y > display->buf_rows || x > (display->buf_cols << 3))
+  if (y >= display->buf_rows || x >= (display->buf_cols << 3))
     return;
   if (y < 0 || x < 0)
     return;
@@ -190,10 +267,13 @@ void MainWindow::RenderSubBuffer(short tar_x, short tar_y, DispBuf* sub_disp_) {
       display->zone.update((tar_cur_col + 1) << 3, tar_y + src_cur_row);
     }
   }
+  //RenderZone(sub_disp_);
 }
 
 void MainWindow::paintEvent(QPaintEvent *) {
   QPainter p(this);
+
+  render();
 
 #if DRAW_FULL_BUFFER==1
   for(size_t col = 0; col < display->buf_cols; col++) {
@@ -217,15 +297,61 @@ void MainWindow::paintEvent(QPaintEvent *) {
       }
     }
   }
-  QPen pen(Qt::red, 1 * ZOOM, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
+
+  QPen pen(QColor(0xFF, 0, 0, 0x80), 1 * ZOOM, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin);
   p.setPen(pen);
-  p.drawRect((display->zone.x() * ZOOM) + REPLACE_X,
-             (display->zone.y() * ZOOM) + REPLACE_Y,
+  p.drawRect((display->zone.x() * ZOOM) + REPLACE_X + (ZOOM / 2),
+             (display->zone.y() * ZOOM) + REPLACE_Y + (ZOOM / 2),
              (display->zone.ex() - display->zone.x()) * ZOOM,
              (display->zone.ey() - display->zone.y()) * ZOOM);
+
+  QPen pen2(QColor(0x00, 0xFF, 0, 0x80), 1 * ZOOM, Qt::DotLine, Qt::RoundCap, Qt::RoundJoin);
+  p.setPen(pen2);
+  p.drawRect((0 * 8 * ZOOM) + REPLACE_X + (ZOOM / 2),
+             (0 * ZOOM) + REPLACE_Y + (ZOOM / 2),
+             (display->buf_cols * 8) * ZOOM,
+             display->buf_rows * ZOOM);
+
+  //std::cout << "zone: " << display->zone.x() << ", " << display->zone.y() << ", " << display->zone.ex() << ", " << display->zone.ey() << std::endl;
 }
 
 MainWindow::~MainWindow()
 {
   delete ui;
+}
+
+void MainWindow::on_pushButton_released()
+{
+  bool bStatus;
+  if (ui->plainTextEdit->isVisible()) {
+    ui->plainTextEdit->hide();
+    QStringList strings = ui->plainTextEdit->toPlainText().split(QRegExp("[, ]"),QString::SkipEmptyParts);
+
+    for (int i = 0; (i < display->buf_size) && (i < strings.size()); i++) {
+      display->buffer[i] = (strings[i].toUInt(&bStatus,16));
+      qDebug() << "next: " << display->buffer[i];
+
+
+    }
+
+  } else {
+    ui->plainTextEdit->show();
+    ui->plainTextEdit->clear();
+    QString code;
+    for(int i = 0; i < display->buf_size; i++) {
+       code += "0x";
+       code += QString::number( display->buffer[i], 16 );
+       code += ", ";
+    }
+    ui->plainTextEdit->appendPlainText(code);
+    ui->spinBox->setValue(display->buf_cols);
+    ui->spinBox_2->setValue(display->buf_rows);
+  }
+}
+
+void MainWindow::on_spinBox_3_valueChanged(int v)
+{
+  ZOOM = v;
+  //this->resize(QSize(((display->buf_cols << 3) * ZOOM)+MARGIN+REPLACE_X, (display->buf_rows * ZOOM)+MARGIN+REPLACE_X));
+  this->update();
 }

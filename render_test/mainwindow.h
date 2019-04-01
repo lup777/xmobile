@@ -5,8 +5,10 @@
 #include <QPainter>
 #include <QMouseEvent>
 #include <math.h>
+#include <QPair>
+#include <QVector>
 
-#define ZOOM 2
+//#define ZOOM 3
 #define BUFFER_ROWS (200 )
 #define BUFFER_COLS (25 )
 #define BUFFER_COLS_BITS (25 * 8)
@@ -27,52 +29,73 @@ typedef struct UpdatedZoneClass {
     clear();
   }
   void clear() {
-    x_ = y_ = BUFFER_ROWS;
+    x_ = y_ = 255;
     ex_ = ey_ = 0;
+    clean = true;
   }
 
   void update(word x, word y) {
-    if (x < x_)
+
+    //if (clean == true) {
+    //  x_ = y_ = ex_ = ey_;
+   // }
+
+    if (x < x_) {
       x_ = x;
-    if (y < y_)
+      clean = false;
+    }
+    if (y < y_) {
+      clean = false;
       y_ = y;
+    }
 
-    if (ex_ < x)
+    if (ex_ < x) {
       ex_ = x;
-    if (ey_ < y)
-      ey_ = y;
+      clean = false;
+    }
 
-    if (ex_ > ((BUFFER_COLS - 1) << 3))
+    if (ey_ < y) {
+      clean = false;
+      ey_ = y;
+    }
+
+    if (ex_ > ((BUFFER_COLS - 1) << 3)) {
+      clean = false;
       ex_ = ((BUFFER_COLS - 1) << 3);
-    if (ey_ > BUFFER_ROWS)
+    }
+
+    if (ey_ > BUFFER_ROWS) {
+      clean = false;
       ey_ = BUFFER_ROWS;
+    }
   }
 
   word x() {
-    if (ex_ == 0 || ey_ == 0)
+    if (clean == true)
       return 0;
     return x_ & 0xFC; // (x_/8)*8;
   }
   word y() {
-    if (ex_ == 0 || ey_ == 0)
+    if (clean == true)
       return 0;
     return y_;
   }
   word ex() {
-    if (ex_ == 0 || ey_ == 0)
+    if (clean == true)
       return 0;
     return (ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
   }
   word ey() {
-    if (ex_ == 0 || ey_ == 0)
+    if (clean == true)
       return 0;
     return ey_;
   }
-
+private:
   word x_; // coordinates
   word y_; // coordinates
   word ex_; // coordinates
   word ey_; // coordinates
+  bool clean;
 } Zone;
 
 typedef struct struct_display_buffer {
@@ -97,14 +120,22 @@ public:
 
   void paintEvent(QPaintEvent *);
   void mouseMoveEvent(QMouseEvent* event);
+  void mousePressEvent(QMouseEvent* event);
+  void wheelEvent(QWheelEvent *event);
 
   void RenderChar(const byte* ch, short x, short y, short dy);
   void RenderDot(short x, short y);
   void RenderLine(short x, short y, short ex, short ey); // coordinates and lengths
+  void RenderZone(DispBuf* disp);
   void RenderZone();
   void RenderCircle(short x, short y, short r);
   void RenderRectangle(short x, short y, short x1, short y1);
   void RenderSubBuffer(short x, short y, DispBuf* sub_disp_);
+  void render();
+
+private slots:
+  void on_pushButton_released();
+  void on_spinBox_3_valueChanged(int arg1);
 
 private:
   Ui::MainWindow *ui;
@@ -114,6 +145,8 @@ private:
   DispBuf main_display;
   DispBuf sub_display;
   DispBuf* display;
+  QVector<QPair<short, short> > dots;
+  byte ZOOM;
 };
 
 #endif // MAINWINDOW_H
