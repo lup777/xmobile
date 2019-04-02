@@ -49,6 +49,7 @@ typedef struct struct_zone {
   short y_; // coordinates
   short ex_; // coordinates
   short ey_; // coordinates
+  bool clean;
 } Zone;
 
 typedef struct struct_display_buffer {

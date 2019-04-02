@@ -114,10 +114,10 @@ void MENU_KeyPressHandler(char key) {
 }
 
 void MENU_DrawHanadler(void) {
-  int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
-  _log("menu size: %d ", menu_size);
+  //int8_t menu_size = MENU_SIZE;//(int8_t)(sizeof(*gp_menu) / sizeof(App));
+  //_log("menu size: %d ", menu_size);
 
-  displayRenderLine(0, 0,
+  /*displayRenderLine(0, 0,
 		    display.buf_cols << 3,
 		    display.buf_rows,
 		    &display);
@@ -126,7 +126,7 @@ void MENU_DrawHanadler(void) {
 		    display.buf_rows >> 1,
 		    &display);
   displayRenderCircle(50, 50, 30, &display);
-  displayRenderRectangle(20, 20, 100, 100, &display);
+  displayRenderRectangle(20, 20, 100, 100, &display);*/
 
   displayRenderText(8, 125+i, "hello", 1, &display);
   displayRenderText(12, 140+i, "hello, renderer!", 16, &display);

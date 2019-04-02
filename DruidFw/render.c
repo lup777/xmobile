@@ -38,6 +38,7 @@ void displayInit(void) {
 void displayFlush(void) {
   EPD_StartPartial();
 
+  
   for (size_t col = 0; col < (size_t)display.buf_cols; col++ ) {
     EPD_ContinuePartial(display.buf_cols - col - 1, // col number byte
 			display.buf_rows - 0, // start row number bit
@@ -48,8 +49,14 @@ void displayFlush(void) {
   EPD_UpdatePartial();
 
   EPD_StopPartial();
-  for(word i = 0; i < display.buf_size; i++)
-    display.buffer[i] = 0xFF;
+  _log("(%d:%d) (%d:%d)", zoneX(),
+       zoneY(),
+       zoneEx(),
+       zoneEy());
+  
+  zoneClear();
+    for(word i = 0; i < display.buf_size; i++)
+      display.buffer[i] = 0xFF;
 }
 
 void displayRenderDot(short x, short y, DispBuf* display_) {
@@ -186,44 +193,60 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
 }
 
 void zoneUpdate(short x, short y, DispBuf* display_) {
-  if (x < display_->zone.x_)
-    display_->zone.x_ = x;
-  if (y < display_->zone.y_)
-    display_->zone.y_ = y;
 
-  if (display_->zone.ex_ < x)
-    display_->zone.ex_ = x;
-  if (display_->zone.ey_ < y)
-    display_->zone.ey_ = y;
+  if (x < display_->zone.x_) {
+      display_->zone.x_ = x;
+      display_->zone.clean = false;
+    }
+    if (y < display_->zone.y_) {
+      display_->zone.clean = false;
+      display_->zone.y_ = y;
+    }
 
-  if (display_->zone.ex_ > ((display_->buf_cols - 1) << 3))
-    display_->zone.ex_ = ((display_->buf_cols - 1) << 3);
-  if (display_->zone.ey_ > display_->buf_rows)
-    display_->zone.ey_ = display_->buf_rows;
+    if (display_->zone.ex_ < x) {
+      display_->zone.ex_ = x;
+      display_->zone.clean = false;
+    }
+
+    if (display_->zone.ey_ < y) {
+      display_->zone.clean = false;
+      display_->zone.ey_ = y;
+    }
+
+    if (display_->zone.ex_ > ((display_->buf_cols) << 3)) {
+      display_->zone.clean = false;
+      display_->zone.ex_ = ((display_->buf_cols) << 3);
+    }
+
+    if (display_->zone.ey_ > display_->buf_rows) {
+      display_->zone.clean = false;
+      display_->zone.ey_ = display_->buf_rows;
+    }
 }
 
 void zoneClear(void) {
   display.zone.x_ = display.zone.y_ = display.buf_rows;
   display.zone.ex_ = display.zone.ey_ = 0;
+  display.zone.clean = true;
 }
 
 word zoneX(void) {
-  if (display.zone.ex_ == 0 || display.zone.ey_ == 0)
+  if (display.zone.clean)
     return 0;
   return display.zone.x_ & 0xFC; // (x_/8)*8;
 }
 word zoneY(void) {
-  if (display.zone.ex_ == 0 || display.zone.ey_ == 0)
+  if (display.zone.clean)
     return 0;
   return display.zone.y_;
 }
 word zoneEx(void) {
-  if (display.zone.ex_ == 0 || display.zone.ey_ == 0)
+  if (display.zone.clean)
     return 0;
   return (display.zone.ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
 }
 word zoneEy(void) {
-  if (display.zone.ex_ == 0 || display.zone.ey_ == 0)
+  if (display.zone.clean)
     return 0;
   return display.zone.ey_;
 }
