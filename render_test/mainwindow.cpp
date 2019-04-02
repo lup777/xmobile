@@ -71,8 +71,11 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
         return;
       }
     }
-
-    dots.push_back(QPair<short, short>(mx, my));
+    if (QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ControlModifier)) {
+      reverce_dots.push_back(QPair<short, short>(mx, my));
+    } else {
+      dots.push_back(QPair<short, short>(mx, my));
+    }
   }
 
   if(event->buttons() == Qt::RightButton) {
@@ -84,9 +87,10 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
 
     display->buf_cols = (display->zone.ex() >> 3) - (display->zone.x() >> 3);
     display->buf_rows = display->zone.ey() - display->zone.y() + 1;
-    display->buf_size = display->buf_cols * display->buf_rows;
+    display->buf_size = (display->buf_cols) * display->buf_rows;
     display->buffer = new byte[display->buf_size];
-
+    qDebug() << "cols: " << display->buf_cols;
+    qDebug() << "size: " << display->buf_size;
     for(int i = 0; i < dots.size(); i++) {
       dots[i].first -= shift_x;
       dots[i].second -= shift_y;
@@ -120,41 +124,39 @@ void MainWindow::render() {
   }
 
 
-  /*
   display->zone.clear();
+  /*display->zone.clear();
 
   RenderSubBuffer(mx, my, &sub_display);
   RenderLine(40, 20, mx, my);
   RenderLine(mx, my, mx+50, my-10);
+*/
+  byte sub_test[7*13] = {0xff, 0xff, 0x0, 0x1c, 0x9f, 0xcf, 0xe7, 0xf3, 0x31, 0x0, 0xff, 0xff, 0xff,
+                         0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
-  byte sub_test[7*13] = {0xFF, 0xFF, 0x00, 0x00, 0x8F, 0xC7, 0xF3, 0xF9, 0x00, 0x00, 0xFF, 0xFF, 0xFF,
-                               0xFF, 0xFF, 0x3C, 0x3C, 0x9C, 0x99, 0x99, 0xD3, 0xC3, 0xC3, 0xE7, 0xE1, 0xF1,
-                               0xFF, 0xFF, 0x1C, 0x99, 0xC1, 0xC3, 0xC3, 0xC9, 0x98, 0x1C, 0xFF, 0xFF, 0xFF,
-                               0xFF, 0xFF, 0xFF, 0xC3, 0x83, 0x9F, 0x83, 0x99, 0x01, 0x03, 0xFF, 0xFF, 0xFF,
-                               0x9F, 0x83, 0xF1, 0xC1, 0x81, 0x38, 0x3D, 0x19, 0x81, 0xC3, 0xFF, 0xFF, 0xFF,
-                               0xFF, 0xFF, 0xFF, 0xC0, 0xC0, 0xCC, 0xC0, 0x9C, 0x80, 0xC0, 0xFF, 0xFF, 0xFF,
-                               0xFF, 0xFF, 0xFF, 0x01, 0x01, 0x33, 0xF3, 0xF3, 0xC1, 0xC1, 0xFF, 0xFF, 0xFF};
+  byte id = 0;
+  DispBuf d;
+  d.buffer = sub_test + (id * 13);
+  d.buf_cols = 1;
+  d.buf_rows = 13;
+  RenderSubBuffer(0, 0, &d);
 
-  {
-      DispBuf d;
-
-      for (byte i = 0; i < 7; i++) {
-        d.buffer = sub_test + (i * 13);
-        d.buf_cols = 1;
-        d.buf_rows = 13;
-        RenderSubBuffer(mx + (i << 3), my, &d);
-      }
+  for (int i = 0; i < reverce_dots.size(); i++) {
+    RenderDot(reverce_dots[i].first, reverce_dots[i].second, true);
   }
-  RenderCircle(mx, my, 20);
-  */
+
+  for (int i = 0; i < dots.size(); i++) {
+    RenderDot(dots[i].first, dots[i].second, false);
+  }
+
+  /*RenderCircle(mx, my, 20);
+
   //RenderRectangle(0, 0, (display->buf_cols << 3) - 1, display->buf_rows - 1);
 
   display->zone.clear();
 
-  for (int i = 0; i < dots.size(); i++) {
-    RenderDot(dots[i].first, dots[i].second);
-  }
 
+*/
   //RenderZone();
 
   /*for (int i = 0; i < 200; i++) {
@@ -189,14 +191,14 @@ void MainWindow::RenderCircle(short x, short y, short r) {
   for (short i = 0; i < r; i+=1) {
     short p2 = i * i; //pow(i, 2);
     short sqrt_ = sqrt(p1 - p2);
-    RenderDot(i + x, sqrt_ + y);
-    RenderDot(i + x, -sqrt_ + y);
-    RenderDot(-i + x, sqrt_ + y);
-    RenderDot(-i + x, -sqrt_ + y);
+    RenderDot(i + x, sqrt_ + y, false);
+    RenderDot(i + x, -sqrt_ + y, false);
+    RenderDot(-i + x, sqrt_ + y, false);
+    RenderDot(-i + x, -sqrt_ + y, false);
   }
 }
 
-void MainWindow::RenderDot(short x, short y) {
+void MainWindow::RenderDot(short x, short y, bool reverce) {
   if (y >= display->buf_rows || x >= (display->buf_cols << 3))
     return;
   if (y < 0 || x < 0)
@@ -210,9 +212,14 @@ void MainWindow::RenderDot(short x, short y) {
   word left_byte_id = row_byte + (y * display->buf_cols);
 
   if (left_byte_id < display->buf_size)
-    display->buffer[left_byte_id] &= left_mask;
+    if (!reverce) {// set
+      display->buffer[left_byte_id] &= left_mask;
+      display->zone.update(x - shift_bits, y);
+    } else {
+      display->buffer[left_byte_id] |= ~left_mask;
+    }
 
-  display->zone.update(x - shift_bits, y);
+
 }
 
 void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinates of the start and the end
@@ -226,7 +233,7 @@ void MainWindow::RenderLine(short x, short y, short ex, short ey) { // coordinat
   float step_y = dy / steps;
 
   for (short i = 0 ; i < steps; i++) {
-    RenderDot(x+(step_x*i), y+(step_y*i));
+    RenderDot(x+(step_x*i), y+(step_y*i), false);
   }
 }
 
@@ -249,7 +256,7 @@ void MainWindow::RenderSubBuffer(short tar_x, short tar_y, DispBuf* sub_disp_) {
       word left_byte_id = tar_cur_col + ((src_cur_row + tar_y) * display->buf_cols); // byte id in target buffer
 
       if (left_byte_id >= display->buf_size
-              || tar_cur_col + 1 >= display->buf_cols
+              || tar_cur_col > display->buf_cols
               || tar_y + src_cur_row >= display->buf_rows)
         continue;
 
@@ -258,7 +265,7 @@ void MainWindow::RenderSubBuffer(short tar_x, short tar_y, DispBuf* sub_disp_) {
       display->zone.update(tar_cur_col << 3, tar_y + src_cur_row);
 
       if (left_byte_id + 1 >= display->buf_size
-              || tar_cur_col + 1 >= display->buf_cols
+              || tar_cur_col > display->buf_cols
               || tar_y + src_cur_row >= display->buf_rows)
         continue;
 
@@ -325,14 +332,14 @@ void MainWindow::on_pushButton_released()
   bool bStatus;
   if (ui->plainTextEdit->isVisible()) {
     ui->plainTextEdit->hide();
-    QStringList strings = ui->plainTextEdit->toPlainText().split(QRegExp("[, ]"),QString::SkipEmptyParts);
+    /*QStringList strings = ui->plainTextEdit->toPlainText().split(QRegExp("[, ]"),QString::SkipEmptyParts);
 
     for (int i = 0; (i < display->buf_size) && (i < strings.size()); i++) {
       display->buffer[i] = (strings[i].toUInt(&bStatus,16));
       qDebug() << "next: " << display->buffer[i];
 
 
-    }
+    }*/
 
   } else {
     ui->plainTextEdit->show();
