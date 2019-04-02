@@ -7,6 +7,7 @@
 #include <math.h>
 #include <QPair>
 #include <QVector>
+#include <QDebug>
 
 //#define ZOOM 3
 #define BUFFER_ROWS (200 )
@@ -34,8 +35,8 @@ typedef struct UpdatedZoneClass {
     clean = true;
   }
 
-  void update(word x, word y) {
-
+  void update(word x, word y) { // bits, bits
+    //qDebug() << "update zone: " << x << " : " << y;
     //if (clean == true) {
     //  x_ = y_ = ex_ = ey_;
    // }
@@ -83,7 +84,7 @@ typedef struct UpdatedZoneClass {
   word ex() {
     if (clean == true)
       return 0;
-    return (ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
+    return (ex_/* + 8*/) & 0xFC; // ((ex_ + 8)/8)*8;
   }
   word ey() {
     if (clean == true)
@@ -124,7 +125,7 @@ public:
   void wheelEvent(QWheelEvent *event);
 
   void RenderChar(const byte* ch, short x, short y, short dy);
-  void RenderDot(short x, short y);
+  void RenderDot(short x, short y, bool reverce);
   void RenderLine(short x, short y, short ex, short ey); // coordinates and lengths
   void RenderZone(DispBuf* disp);
   void RenderZone();
@@ -146,6 +147,7 @@ private:
   DispBuf sub_display;
   DispBuf* display;
   QVector<QPair<short, short> > dots;
+  QVector<QPair<short, short> > reverce_dots;
   byte ZOOM;
 };
 
