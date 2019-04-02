@@ -17,10 +17,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
   ZOOM = ui->spinBox_3->value();
 
-  main_display.buf_rows = BUFFER_ROWS;
-  main_display.buf_cols = BUFFER_COLS;
-  main_display.buf_size = BUFFER_SIZE;
-  main_display.buffer = new byte[BUFFER_SIZE];//buffer;
+  display = &main_display;
+  ui->spinBox->setValue(BUFFER_COLS);
+  ui->spinBox_2->setValue(BUFFER_ROWS);
+  //main_display.buf_rows = BUFFER_ROWS;
+  //main_display.buf_cols = BUFFER_COLS;
+  //main_display.buf_size = BUFFER_SIZE;
+  //main_display.buffer = new byte[BUFFER_SIZE];//buffer;
 
   for(word i = 0; i < main_display.buf_size; i++) {
     main_display.buffer[i] = 0xFF;
@@ -48,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
 }
 
 void MainWindow::mouseMoveEvent(QMouseEvent* event) {
-  ui->spinBox->setValue((event->x() / ZOOM) + REPLACE_X - MARGIN);
-  ui->spinBox_2->setValue((event->y() / ZOOM) + REPLACE_X - MARGIN);
+  //ui->spinBox->setValue((event->x() / ZOOM) + REPLACE_X - MARGIN);
+  //ui->spinBox_2->setValue((event->y() / ZOOM) + REPLACE_X - MARGIN);
 }
 //
 void MainWindow::wheelEvent(QWheelEvent *event) {
@@ -85,12 +88,17 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
     if (display->buffer != NULL)
       delete [] display->buffer;
 
+    display->buf_rows = display->zone.ey() - display->zone.y() + 1;
     display->buf_cols = (display->zone.ex() >> 3) - (display->zone.x() >> 3);
+
+    ui->spinBox->setValue((display->zone.ex() >> 3) - (display->zone.x() >> 3));
+    ui->spinBox_2->setValue(display->zone.ey() - display->zone.y() + 1);
+    /*display->buf_cols = (display->zone.ex() >> 3) - (display->zone.x() >> 3);
     display->buf_rows = display->zone.ey() - display->zone.y() + 1;
     display->buf_size = (display->buf_cols) * display->buf_rows;
     display->buffer = new byte[display->buf_size];
     qDebug() << "cols: " << display->buf_cols;
-    qDebug() << "size: " << display->buf_size;
+    qDebug() << "size: " << display->buf_size;*/
     for(int i = 0; i < dots.size(); i++) {
       dots[i].first -= shift_x;
       dots[i].second -= shift_y;
@@ -204,7 +212,7 @@ void MainWindow::RenderDot(short x, short y, bool reverce) {
     return;
   if (y < 0 || x < 0)
     return;
-
+//qDebug() << "RenderDot(" << x << ", " << y << ")";
   byte row_byte = x >> 3; // x / 8
   byte shift_bits = x & 0x07; ;//x - (row_byte << 3); // x - (row * 8)
 
@@ -215,7 +223,7 @@ void MainWindow::RenderDot(short x, short y, bool reverce) {
   if (left_byte_id < display->buf_size)
     if (!reverce) {// set
       display->buffer[left_byte_id] &= left_mask;
-      display->zone.update(x - shift_bits, y);
+      display->zone.update(x - shift_bits + 8, y);
     } else {
       display->buffer[left_byte_id] |= ~left_mask;
     }
@@ -306,7 +314,7 @@ void MainWindow::paintEvent(QPaintEvent *) {
     }
   }
 
-  QPen pen(QColor(0xFF, 0, 0, 0x80), 1 * ZOOM, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin);
+  QPen pen(QColor(0xFF, 0, 0, 0x80), 1 * ZOOM, Qt::DashLine, Qt::RoundCap, Qt::RoundJoin); // red
   p.setPen(pen);
   p.drawRect((display->zone.x() * ZOOM) + REPLACE_X + (ZOOM / 2),
              (display->zone.y() * ZOOM) + REPLACE_Y + (ZOOM / 2),
@@ -361,5 +369,39 @@ void MainWindow::on_spinBox_3_valueChanged(int v)
 {
   ZOOM = v;
   //this->resize(QSize(((display->buf_cols << 3) * ZOOM)+MARGIN+REPLACE_X, (display->buf_rows * ZOOM)+MARGIN+REPLACE_X));
+  this->update();
+}
+
+void MainWindow::on_spinBox_valueChanged(int arg1)
+{
+  if (arg1 < 0)
+    return;
+  display->buf_cols = arg1;
+  //display->buf_rows = display->zone.ey() - display->zone.y() + 1;
+  display->buf_size = (display->buf_cols) * display->buf_rows;
+
+  display->buffer = new byte[display->buf_size];
+
+  qDebug() << "cols: " << display->buf_cols;
+  qDebug() << "size: " << display->buf_size;
+
+  render();
+  this->update();
+}
+
+void MainWindow::on_spinBox_2_valueChanged(int arg1)
+{
+  if (arg1 < 0)
+    return;
+  //display->buf_cols = (display->zone.ex() >> 3) - (display->zone.x() >> 3);
+  display->buf_rows = arg1;
+  display->buf_size = (display->buf_cols) * display->buf_rows;
+
+  display->buffer = new byte[display->buf_size];
+
+  qDebug() << "rows: " << display->buf_rows;
+  qDebug() << "size: " << display->buf_size;
+
+  render();
   this->update();
 }

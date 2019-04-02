@@ -60,9 +60,9 @@ typedef struct UpdatedZoneClass {
       ey_ = y;
     }
 
-    if (ex_ > ((BUFFER_COLS - 1) << 3)) {
+    if (ex_ > ((BUFFER_COLS) << 3)) {
       clean = false;
-      ex_ = ((BUFFER_COLS - 1) << 3);
+      ex_ = ((BUFFER_COLS) << 3);
     }
 
     if (ey_ > BUFFER_ROWS) {
@@ -137,6 +137,10 @@ public:
 private slots:
   void on_pushButton_released();
   void on_spinBox_3_valueChanged(int arg1);
+
+  void on_spinBox_valueChanged(int arg1);
+
+  void on_spinBox_2_valueChanged(int arg1);
 
 private:
   Ui::MainWindow *ui;
