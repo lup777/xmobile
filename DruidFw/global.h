@@ -52,7 +52,7 @@ typedef struct struct_zone {
 } Zone;
 
 typedef struct struct_display_buffer {
-    byte* buffer;
+    uint8_t* buffer;
     short buf_rows;
     short buf_cols;
     size_t buf_size;

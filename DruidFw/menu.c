@@ -128,7 +128,10 @@ void MENU_DrawHanadler(void) {
   displayRenderCircle(50, 50, 30, &display);
   displayRenderRectangle(20, 20, 100, 100, &display);
 
-  displayRenderText(10, 100, "hello, renderer!", 16, &display);
+  displayRenderText(8, 125+i, "hello", 1, &display);
+  displayRenderText(12, 140+i, "hello, renderer!", 16, &display);
+  displayRenderText(14, 155+i, "hello, renderer!", 16, &display);
+  displayRenderText(17, 170+i, "hello, renderer!", 16, &display);
   
   displayFlush();
 

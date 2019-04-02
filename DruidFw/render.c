@@ -48,6 +48,8 @@ void displayFlush(void) {
   EPD_UpdatePartial();
 
   EPD_StopPartial();
+  for(word i = 0; i < display.buf_size; i++)
+    display.buffer[i] = 0xFF;
 }
 
 void displayRenderDot(short x, short y, DispBuf* display_) {
@@ -115,13 +117,20 @@ void displayRenderText(short x, short y,
   DispBuf pic;
   pic.buf_cols = 1; // byte
   pic.buf_rows = 13; // bits
+  uint8_t buffer[13];
+  pic.buffer = buffer;
 
   for (size_t i = 0; i < len; i++) {
-    pic.buffer = (byte*)FONT_GetPicture8x13( (uint8_t)(text[i]));
+    uint8_t* tmp = (uint8_t*)FONT_GetPicture8x13( (uint8_t)(text[i]) );
+
+    for (byte j = 0; j < 13; j++) {
+      pic.buffer[j] = pgm_read_byte(tmp+j);
+    }
     displayRenderSubBuffer(x + ((pic.buf_cols * i) << 3),
 			   y,
 			   &pic,
 			   display_);
+    //_log("--> 0x%02X", text[i]);
   }
 }
 
@@ -138,9 +147,12 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
       // i - current line number in source buffer
 
       word src_byte_id = (sub_disp_->buf_cols * src_cur_row) + src_cur_col;
-
-      byte right_mask = ( sub_disp_->buffer[ src_byte_id] >> (8 - shift_bits)) | (0xFF << (shift_bits));
-      byte left_mask = ( sub_disp_->buffer[ src_byte_id] << (shift_bits)) | (0xFF >> (8 - shift_bits));
+      //_log("-> 0x%02X", sub_disp_->buffer[ src_byte_id]);
+      byte right_mask = ( sub_disp_->buffer[ src_byte_id] >> (8 - shift_bits))
+	| (0xFF << (shift_bits));
+      
+      byte left_mask = ( sub_disp_->buffer[ src_byte_id] << (shift_bits))
+	| (0xFF >> (8 - shift_bits));
 
       short tar_cur_col = tar_col_id_byte + src_cur_col;
       word left_byte_id = tar_cur_col +
@@ -148,20 +160,25 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
 	 display_->buf_cols); // byte id in target buffer
 
       if (left_byte_id >= display_->buf_size
-              || tar_cur_col + 1 >= display_->buf_cols
+              || tar_cur_col > display_->buf_cols
               || tar_y + src_cur_row >= display_->buf_rows)
         continue;
 
+      //_log("0x%02X 0x%02X", display_->buffer[left_byte_id], display_->buffer[left_byte_id + 1]);
+
+      
       display_->buffer[left_byte_id] &= left_mask;
+
       zoneUpdate(tar_cur_col << 3, tar_y, display_);
       zoneUpdate(tar_cur_col << 3, tar_y + src_cur_row, display_);
 
       if (left_byte_id + 1 >= display_->buf_size
-              || tar_cur_col + 1 >= display_->buf_cols
+              || tar_cur_col > display_->buf_cols
               || tar_y + src_cur_row >= display_->buf_rows)
         continue;
 
       display_->buffer[left_byte_id + 1] &= right_mask;
+      //_log("-> 0x%02X 0x%02X", display_->buffer[left_byte_id], display_->buffer[left_byte_id + 1]);      
       zoneUpdate((tar_cur_col + 1) << 3, tar_y, display_);
       zoneUpdate((tar_cur_col + 1) << 3, tar_y + src_cur_row, display_);
     }
