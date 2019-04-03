@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->plainTextEdit->hide();
   //centralWidget()->setAttribute(Qt::WA_TransparentForMouseEvents);
   //this->setMouseTracking(true);
-
+  REPLACE_X = 40;
+  REPLACE_Y = 40;
   ZOOM = ui->spinBox_3->value();
 
   display = &main_display;
@@ -53,14 +54,30 @@ MainWindow::MainWindow(QWidget *parent) :
 void MainWindow::mouseMoveEvent(QMouseEvent* event) {
   //ui->spinBox->setValue((event->x() / ZOOM) + REPLACE_X - MARGIN);
   //ui->spinBox_2->setValue((event->y() / ZOOM) + REPLACE_X - MARGIN);
+  qDebug("mouse move");
 }
 //
 void MainWindow::wheelEvent(QWheelEvent *event) {
-  if (event->delta() > 0)
-    ui->spinBox_3->setValue(ZOOM + 1);
-  else
-    ui->spinBox_3->setValue(ZOOM - 1);
+  if (event->delta() == 0)
+    return;
 
+  int window_half_x = this->window()->size().width() / 2;
+  int window_half_y = this->window()->size().height() / 2;
+
+  int new_mx = (event->x() - REPLACE_X) / (ZOOM + 1);
+  int new_my = (event->y() - REPLACE_Y) / (ZOOM + 1);
+
+  if (event->delta() > 0) {
+    ui->spinBox_3->setValue(ZOOM + 1);
+  } else {
+    ui->spinBox_3->setValue(ZOOM - 1);
+  }
+
+  int new_replace_x = window_half_x - (new_mx * ZOOM);
+  int new_replace_y = window_half_y - (new_my * ZOOM);
+
+  REPLACE_X = new_replace_x;
+  REPLACE_Y = new_replace_y;
 }
 
 void MainWindow::mousePressEvent(QMouseEvent* event) {
@@ -104,7 +121,6 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
       dots[i].second -= shift_y;
     }
   }
-  std::cout << "zone: " << display->zone.x() << ", " << display->zone.y() << ", " << display->zone.ex() << ", " << display->zone.ey() << std::endl;
 
   render();
   this->update();
@@ -148,7 +164,7 @@ void MainWindow::render() {
   d.buffer = sub_test + (id * 13);
   d.buf_cols = 1;
   d.buf_rows = 13;
-  RenderSubBuffer(0, 0, &d);
+  //RenderSubBuffer(0, 0, &d);
 
   for (int i = 0; i < reverce_dots.size(); i++) {
     RenderDot(reverce_dots[i].first, reverce_dots[i].second, true);
@@ -172,7 +188,7 @@ void MainWindow::render() {
     buffer[(5 + BUFFER_COLS) + (i * BUFFER_COLS)] = 0;
   }*/
 
-  this->update();
+  //this->update();
 }
 void MainWindow::RenderZone() {
   RenderZone(display);
@@ -223,7 +239,7 @@ void MainWindow::RenderDot(short x, short y, bool reverce) {
   if (left_byte_id < display->buf_size)
     if (!reverce) {// set
       display->buffer[left_byte_id] &= left_mask;
-      display->zone.update(x - shift_bits + 8, y);
+      display->zone.update(x - shift_bits, y);
     } else {
       display->buffer[left_byte_id] |= ~left_mask;
     }

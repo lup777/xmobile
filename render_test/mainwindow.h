@@ -15,8 +15,8 @@
 #define BUFFER_COLS_BITS (25 * 8)
 #define BUFFER_SIZE (BUFFER_COLS * BUFFER_ROWS)
 
-#define REPLACE_X 40
-#define REPLACE_Y 40
+//#define REPLACE_X 40
+//#define REPLACE_Y 40
 #define MARGIN 40
 
 #define DRAW_FULL_BUFFER 1
@@ -37,6 +37,8 @@ typedef struct UpdatedZoneClass {
 
   void update(word x, word y) { // bits, bits
     //qDebug() << "update zone: " << x << " : " << y;
+
+
     //if (clean == true) {
     //  x_ = y_ = ex_ = ey_;
    // }
@@ -69,6 +71,7 @@ typedef struct UpdatedZoneClass {
       clean = false;
       ey_ = BUFFER_ROWS;
     }
+    qDebug() << "zone: " << x_ << ", " << y_ << ", " << ex_ << ", " << ey_;
   }
 
   word x() {
@@ -84,7 +87,7 @@ typedef struct UpdatedZoneClass {
   word ex() {
     if (clean == true)
       return 0;
-    return (ex_/* + 8*/) & 0xFC; // ((ex_ + 8)/8)*8;
+    return (ex_ + 8) & 0xFC; // ((ex_ + 8)/8)*8;
   }
   word ey() {
     if (clean == true)
@@ -153,6 +156,8 @@ private:
   QVector<QPair<short, short> > dots;
   QVector<QPair<short, short> > reverce_dots;
   byte ZOOM;
+  int REPLACE_X;
+  int REPLACE_Y;
 };
 
 #endif // MAINWINDOW_H
