@@ -188,7 +188,7 @@ void MainWindow::render() {
     buffer[(5 + BUFFER_COLS) + (i * BUFFER_COLS)] = 0;
   }*/
 
-  //this->update();
+  this->update();
 }
 void MainWindow::RenderZone() {
   RenderZone(display);
