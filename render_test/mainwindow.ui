@@ -140,4 +140,8 @@
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
+ <slots>
+  <signal>renderCompleteSignal()</signal>
+  <slot>on_renderComplete()</slot>
+ </slots>
 </ui>
