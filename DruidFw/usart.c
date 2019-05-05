@@ -49,21 +49,21 @@ void _log(const char *format, ...) {
 		    len + 2, // buffer + <\n> + <\r> - <first byte>
 		    0);
   taskEXIT_CRITICAL();
-  USARTF0.CTRLA |= USART_DREINTLVL_LO_gc;
+  USARTE1.CTRLA |= USART_DREINTLVL_LO_gc;
 #else
   for(uint8_t i = 0; i < len + 2; i ++) {
-    while((USARTF0.STATUS & USART_DREIF_bm) == 0) {};
-    USARTF0_DATA = buffer[i];
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    USARTE1_DATA = buffer[i];
   }
 #endif
 }
 
 inline void USART0_init(void) {
-  PORTF.OUTSET = PIN3_bm; // TX
-  PORTF.DIRSET = PIN3_bm; // TX
-  USARTF0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
+  PORTE.OUTSET = PIN7_bm; // TX
+  PORTE.DIRSET = PIN7_bm; // TX
+  USARTE1.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
-  USARTF0.CTRLA = USART_RXCINTLVL_LO_gc
+  USARTE1.CTRLA = USART_RXCINTLVL_LO_gc
     | USART_TXCINTLVL_OFF_gc
     | USART_DREINTLVL_OFF_gc;
   //USARTF0.BAUDCTRLA = 25; // 9600  - 2MGz internal osc
@@ -73,17 +73,17 @@ inline void USART0_init(void) {
 
   uint16_t bsel = 1079;
   uint8_t bscale = 5;
-  USARTF0.BAUDCTRLA = bsel & 0xff; // 115200  - 32MGz internal osc
-  USARTF0.BAUDCTRLB =
+  USARTE1.BAUDCTRLA = bsel & 0xff; // 115200  - 32MGz internal osc
+  USARTE1.BAUDCTRLB =
     (bsel >> 8) | ((16 - bscale) << 4); // 115200  - 32MGz internal osc
   //https://planetcalc.ru/747/
   //https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
   g_log_tx_buffer_handle = xStreamBufferCreate(500, 1);
 
-  USARTF0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+  USARTE1.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
 
-ISR(USARTF0_DRE_vect) {
+ISR(USARTE1_DRE_vect) {
 //ISR(USARTF0_TXC_vect) {
   char data;
   BaseType_t pxHPTW = pdFALSE;
@@ -93,10 +93,10 @@ ISR(USARTF0_DRE_vect) {
 				1,               // buffer length
 				&pxHPTW);
   if (read_count == 1) {
-    USARTF0_DATA = data;
+    USARTE1_DATA = data;
   }
   else
-    USARTF0.CTRLA |= USART_DREINTLVL_OFF_gc;
+    USARTE1.CTRLA |= USART_DREINTLVL_OFF_gc;
 
   if (pxHPTW != pdFALSE )
     taskYIELD();
@@ -109,7 +109,7 @@ ISR(USARTF0_RXC_vect) {
   } data;
 
   data.id = MSG_KBD;
-  data.key = USARTF0_DATA;
+  data.key = USARTE1_DATA;
   bool need_yield = false;
 
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
