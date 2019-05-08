@@ -59,13 +59,12 @@ main.c \
 usart.c \
 spi.c \
 pgm.c \
-kbd.c \
+kbd2.c \
 fonts.c \
 util.c \
 menu.c \
 epd.c \
 render.c\
-twi_master_driver.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \

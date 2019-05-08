@@ -4,31 +4,78 @@
  SCL - PC1
  SDA - PC0
 */
+#include <avr/io.h>
+#include <avr/interrupt.h>
+
+#include "global.h"
+#include "usart.h"
+
+#include "kbd2.h"
 
 #define  MAX7370_ADDR 0x38
 
 #define WRITE_FLAG 0
 #define READ_FLAG 1
 
-#define Taktfreuqenz 32000000
 #define Takt_TWI 400000
 #define TWI_BAUD(F_SYS, F_TWI) ((F_SYS / (2 * F_TWI)) - 5)
-#define TWI_BAUDRATE TWI_BAUD(Taktfrequenz, Takt_TWI)
+#define TWI_BAUDRATE TWI_BAUD(configCPU_CLOCK_HZ, Takt_TWI)
 
-void send_address(uint8_t rw);
-void start_tx(void);
-void start_rx(void);
+//void send_address(uint8_t rw);
+//void start_tx(void);
+//void start_rx(void);
+void kbd_send_data(uint8_t addr, uint8_t* data, size_t len);
+uint8_t kbd_read_byte(uint8_t addr);
 
 void twi_init(void);
 void max7370_init(void);
 
+#define TWI_MASTER_WRITE 0
+#define TWI_MASTER_READ  1
+
+#define MAX7370_REG_FIFO          0x00
+#define MAX7370_REG_CONFIG        0x01
+#define MAX7370_REG_DEBOUNCE      0x02
+#define MAX7370_REG_INTERRUPT     0x03
+#define MAX7370_REG_SLEEP         0x06
+#define MAX7370_REG_ARR_SIZE      0x30
+#define MAX7370_REG_LED_ENABLE    0x31
+#define MAX7370_REG_CONST_CURRENT 0x43
+#define MAX7370_REG_PWM           0x45
+#define MAX7370_REG_LED_CONF_C4   0x54
+#define MAX7370_REG_LED_CONF_C5   0x55
+#define MAX7370_REG_LED_CONF_C6   0x56
+#define MAX7370_REG_LED_CONF_C7   0x57
+
+// MAX7370_REG_CONFIG
+#define MAX7370_CFG_ENABLE_KEY_RELEASE   (1 << 3)
+#define MAX7370_CFG_INTERRUPT_UNTIL_READ (1 << 5)
+#define MAX7370_CFG_WAKEUP               (1 << 7)
+
+// MAX7370_REG_SLEEP
+#define MAX7370_AUTOSLEEP_DISABLE 0
+
+// col - 4
+// row - 5
+// int - PA0
 
 void kbd_init(void) {
+  _log("kbd init");
   twi_init();
   max7370_init();
+
+  
+  PORTA.DIRCLR = PIN0_bm;
+  PORTA.OUTCLR = PIN0_bm;
+
+  PORTA.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+  PORTA.INTCTRL = (PORT_INT1LVL_OFF_gc | PORT_INT0LVL_LO_gc);
+  PORTA_INT0MASK = 0x01;
+  _log("kbd init complete");
 }
 
 void twi_init(void) {
+  _log("twi init");
   TWIC_MASTER_BAUD = TWI_BAUDRATE;
 
   TWIC_MASTER_CTRLA
@@ -41,36 +88,45 @@ void twi_init(void) {
   TWIC_MASTER_STATUS = TWI_MASTER_BUSSTATE_IDLE_gc;
 }
 
-#define MAX7370_REG_CONFIG        0x01
-#define MAX7370_REG_DEBOUNCE      0x02
-#define MAX7370_REG_INTERRUPT     0x03
-#define MAX7370_REG_SLEEP         0x06
-#define MAX7370_REG_ARR_SIZE      0x30
-
-// MAX7370_REG_CONFIG
-#define MAX7370_CFG_ENABLE_KEY_RELEASE   (1 << 3)
-#define MAX7370_CFG_INTERRUPT_UNTIL_READ (1 << 5)
-#define MAX7370_CFG_WAKEUP               (1 << 7)
-
-// MAX7370_REG_SLEEP
-#define MAX7370_AUTOSLEEP_DISABLE 0
-
 void max7370_init(void) {
-  // disable sleep, enable key release, clear int on first read
-  max7370_write_reg(client, 
-		    MAX7370_REG_CONFIG, MAX7370_CFG_KEY_NORELEASE | MAX7370_CFG_INTERRUPT | MAX7370_CFG_WAKEUP);
+  _log("max7370 init");
 
+  _log("write config reg");
+  // disable sleep, enable key release, clear int on first read
+  kbd_send_reg_byte(MAX7370_REG_CONFIG,
+		    MAX7370_CFG_INTERRUPT_UNTIL_READ
+		    | MAX7370_CFG_WAKEUP);
+
+  _log("write debounce reg");
   // debounce time 16ms
-  max7370_write_reg(client, MAX7370_REG_DEBOUNCE, 0x77);
-  
+  kbd_send_reg_byte(MAX7370_REG_DEBOUNCE, 0x77);
+
+  _log("write interrupt reg");
   // nINT asserts every debounce cycles
-  max7370_write_reg(client, MAX7370_REG_INTERRUPT, 0x01);
-  
+  kbd_send_reg_byte(MAX7370_REG_INTERRUPT, 0x01);
+
+  _log("write autosleep reg");
   // disable Autosleep
-  max7370_write_reg(client, MAX7370_REG_SLEEP, MAX7370_AUTOSLEEP_DISABLE);
- 
+  kbd_send_reg_byte(MAX7370_REG_SLEEP, MAX7370_AUTOSLEEP_DISABLE);
+
+  _log("write arr size reg");
   // kb arr size
-  max7370_write_reg(client, MAX7370_REG_ARR_SIZE, 0xFF); 
+  kbd_send_reg_byte(MAX7370_REG_ARR_SIZE, 0x64);
+
+
+  //kbd_send_reg_byte(MAX7370_REG_CONST_CURRENT, 0xC0);
+
+  //kbd_send_reg_byte(MAX7370_REG_PWM, 0x0F);
+
+  //kbd_send_reg_byte(MAX7370_REG_LED_CONF_C4, 0 | (1 << 5));
+  //kbd_send_reg_byte(MAX7370_REG_LED_CONF_C5, 0 | (1 << 5));
+  //kbd_send_reg_byte(MAX7370_REG_LED_CONF_C6, 0 | (1 << 5));
+  //kbd_send_reg_byte(MAX7370_REG_LED_CONF_C7, 0 | (1 << 5));
+  //kbd_send_reg_byte(MAX7370_REG_LED_ENABLE, 0x07);
+}
+
+void kbd_send_reg_byte(uint8_t addr, uint8_t data) {
+  kbd_send_data(addr, &data, 1);
 }
 
 void kbd_send_data(uint8_t addr, uint8_t* data, size_t len) {
@@ -83,6 +139,10 @@ void kbd_send_data(uint8_t addr, uint8_t* data, size_t len) {
   // waite for write complete
   while( !(TWIC_MASTER_STATUS & TWI_MASTER_WIF_bm) );
 
+  // write data byte 
+  TWIC_MASTER_DATA = addr;
+
+  
   size_t i = 0;
   for(; i < len; i ++) {
     // waite for write complete
@@ -126,9 +186,14 @@ uint8_t kbd_read_byte(uint8_t addr) {
 
   while( !(TWIC_MASTER_STATUS & TWI_MASTER_RIF_bm) );
 
-  uint8_t data = TWIC_MASTER_RIF_bm;
+  uint8_t data = TWIC_MASTER_DATA;
 
   TWIC_MASTER_CTRLC = TWI_MASTER_ACKACT_bm | TWI_MASTER_CMD_STOP_gc;
 
   return data;
+}
+
+ISR(PORTA_INT0_vect) {
+  uint8_t key = kbd_read_byte(MAX7370_REG_FIFO);
+  _log("PORTA INT (%d)", key);
 }

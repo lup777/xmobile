@@ -6,7 +6,7 @@
 
 #include "epd.h"
 #include "pgm.h"
-#include "kbd.h"
+#include "kbd2.h"
 //#include "telephone.h"
 #include "gsm.h"
 #include "menu.h"
@@ -17,6 +17,7 @@ void gpio_init(void);
 void GPIO_toggle_PA0(void);
 void _sleep(uint16_t time_ms);
 void KBD_Init(void);
+void setup_interrupts(void);
 void TestApp1(void);
 
 // GLOBAL VARIABLES
@@ -72,6 +73,17 @@ void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
   }
 }
 
+void setup_interrupts(void) {
+  //clear_global_interrupt();
+
+    CCP = CCP_IOREG_gc;
+
+    PMIC.CTRL = (PMIC_LOLVLEN_bm | PMIC_HILVLEN_bm);
+
+    PMIC.INTPRI = 0x00;
+}
+
+ 
 int main(void) {
 
   //OSC_PLLCTRL = 0x16;  // 2 * 16 = 32MGz
@@ -84,8 +96,10 @@ int main(void) {
   
   gpio_init();
   USART0_init();
-  KBD_Init();
+  kbd_init();
 
+  setup_interrupts();
+  
   context.active_app_id = MENU_MAILBOX_ID;
 
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++)
@@ -112,7 +126,7 @@ void TestApp1(void) {
   //EPD_ContinuePartial("not implemented yet", 19, 1, 11);
   EPD_UpdatePartial();
   EPD_StopPartial();
-  KBD_WaiteKey();
+  //KBD_WaiteKey();
 }
 
 static void vMainTask(void* pvParameters) {
