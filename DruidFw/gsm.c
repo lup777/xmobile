@@ -58,8 +58,8 @@ void GSM_Init(void) {
     | USART_TXCINTLVL_OFF_gc
     | USART_DREINTLVL_OFF_gc;
 
-  uint16_t bsel = 1079;
-  uint8_t bscale = 5;
+  uint16_t bsel = 68;
+  uint8_t bscale = 0;
   USARTE0.BAUDCTRLA = bsel & 0xff; // 115200  - 32MGz internal osc
   USARTE0.BAUDCTRLB =
     (bsel >> 8) | ((16 - bscale) << 4); // 115200  - 32MGz internal osc
@@ -70,6 +70,12 @@ void GSM_Init(void) {
   //vTaskDelay((TickType_t)(50000 / portTICK_PERIOD_MS));
   
   //send_byte("AT\n", 3);
+  _log("waiting for gsm init");
+  while( gsm_status() == false );
+
+  send_str("AT\n\r", 4);
+  send_str("ATE\n\r", 5);
+  send_str("AT+GSN\n\r", 8);
   _log("GSM init completed");
 }
 
@@ -94,9 +100,25 @@ ISR(USARTE0_TXC_vect) {
 
 ISR(USARTE0_RXC_vect) {
   char data;
+  BaseType_t need_yeld = pdFALSE;
+
   data = USARTE0.DATA;
 
-  _log("GSM: %c", data);
+  xMessageBufferSendFromISR(gsm_rx_buf,
+			    &data,
+			    1,
+			    &need_yeld);
+  if (need_yeld == pdTRUE)
+    taskYIELD();
+
+  /*  
+  if (data == '\n') {
+    _log("\\n");
+  } else if (data == '\r') {
+    _log("\\r");
+  } else {
+    _log("GSM: %c (0x%02X)", data, data);
+    }*/
 }
 
 // Responce format: "\r\n<responce>\r\n"

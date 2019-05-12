@@ -84,7 +84,8 @@ void setup_interrupts(void) {
 }
 
 MessageBufferHandle_t kbd_rx_buf;
- 
+MessageBufferHandle_t gsm_rx_buf;
+
 int main(void) {
 
   //OSC_PLLCTRL = 0x16;  // 2 * 16 = 32MGz
@@ -96,6 +97,7 @@ int main(void) {
   CLK_CTRL = CLK_SCLKSEL_RC32M_gc;
 
   kbd_rx_buf = xMessageBufferCreate( 20 );
+  gsm_rx_buf = xMessageBufferCreate( 50 );
   
   gpio_init();
   USART0_init();
@@ -160,10 +162,16 @@ static void vMainTask(void* pvParameters) {
 
   for(;;) {
     char key;
-    size_t rx_bytes = xMessageBufferReceive(kbd_rx_buf, &key, 1, 0);
+    char gsm_char;
+    size_t kbd_rx_bytes = xMessageBufferReceive(kbd_rx_buf, &key, 1, 0);
+    size_t gsm_rx_bytes = xMessageBufferReceive(gsm_rx_buf, &gsm_char, 1, 0);
 
-    if (rx_bytes > 0) {
+    if (kbd_rx_bytes > 0) {
       _log("KBD: 0x%02X", key);
+    }
+
+    if (gsm_rx_bytes > 0) {
+      _log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
     }
     //APP_MenuMessagePump();
   }
