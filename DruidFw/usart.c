@@ -58,6 +58,12 @@ void _log(const char *format, ...) {
 #endif
 }
 
+inline void logc(char c) {
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = c;
+
+}
+
 inline void USART0_init(void) {
   PORTE.OUTSET = PIN7_bm; // TX
   PORTE.DIRSET = PIN7_bm; // TX

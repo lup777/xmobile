@@ -99,15 +99,24 @@ ISR(USARTE0_TXC_vect) {
 }
 
 ISR(USARTE0_RXC_vect) {
-  char data;
+  unsigned char data;
   BaseType_t need_yeld = pdFALSE;
+  static unsigned char buffer[50];
+  static int idx = 0;
 
   data = USARTE0.DATA;
 
-  xMessageBufferSendFromISR(gsm_rx_buf,
-			    &data,
-			    1,
-			    &need_yeld);
+    buffer[idx] = data;
+    idx++;
+
+    if (idx > 0 && data == 0x0D && idx < 45) {
+    xMessageBufferSendFromISR(gsm_rx_buf,
+			      &buffer,
+			      idx,
+			      &need_yeld);
+    idx = 0;
+  }
+  
   if (need_yeld == pdTRUE)
     taskYIELD();
 

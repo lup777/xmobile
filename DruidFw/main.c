@@ -162,16 +162,26 @@ static void vMainTask(void* pvParameters) {
 
   for(;;) {
     char key;
-    char gsm_char;
+    char gsm_char[45];
     size_t kbd_rx_bytes = xMessageBufferReceive(kbd_rx_buf, &key, 1, 0);
-    size_t gsm_rx_bytes = xMessageBufferReceive(gsm_rx_buf, &gsm_char, 1, 0);
+    size_t gsm_rx_bytes = xMessageBufferReceive(gsm_rx_buf, &gsm_char, 45, 0);
 
     if (kbd_rx_bytes > 0) {
       _log("KBD: 0x%02X", key);
     }
 
     if (gsm_rx_bytes > 0) {
-      _log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
+      //_log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
+      logc('G');
+      logc('S');
+      logc('M');
+      logc(':');
+      logc(' ');
+
+      size_t i = 0;
+      for(; i < gsm_rx_bytes; i++) {
+	logc(gsm_char[i]);
+      }
     }
     //APP_MenuMessagePump();
   }
