@@ -152,8 +152,8 @@ static void vMainTask(void* pvParameters) {
   
   //_sleep(3000);
 
-  //GSM_Init();
-  //_log("MAIN main task init completed");
+  GSM_Init();
+  _log("MAIN main task init completed");
 
   //APP_TelephoneStart();
   APP_MenuStart(menu);
