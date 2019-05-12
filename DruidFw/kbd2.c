@@ -194,6 +194,15 @@ uint8_t kbd_read_byte(uint8_t addr) {
 }
 
 ISR(PORTA_INT0_vect) {
+  BaseType_t need_yeld = pdFALSE;
   uint8_t key = kbd_read_byte(MAX7370_REG_FIFO);
+  
   _log("PORTA INT (%d)", key);
+
+  xMessageBufferSendFromISR(kbd_rx_buf,
+			    &key,
+			    1,
+			    &need_yeld);
+  if (need_yeld == pdTRUE)
+    taskYIELD();
 }

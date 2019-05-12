@@ -83,6 +83,7 @@ void setup_interrupts(void) {
     PMIC.INTPRI = 0x00;
 }
 
+MessageBufferHandle_t kbd_rx_buf;
  
 int main(void) {
 
@@ -93,6 +94,8 @@ int main(void) {
 
   CCP = CCP_IOREG_gc;
   CLK_CTRL = CLK_SCLKSEL_RC32M_gc;
+
+  kbd_rx_buf = xMessageBufferCreate( 20 );
   
   gpio_init();
   USART0_init();
@@ -156,7 +159,13 @@ static void vMainTask(void* pvParameters) {
   APP_MenuStart(menu);
 
   for(;;) {
-    APP_MenuMessagePump();
+    char key;
+    size_t rx_bytes = xMessageBufferReceive(kbd_rx_buf, &key, 1, 0);
+
+    if (rx_bytes > 0) {
+      _log("KBD: 0x%02X", key);
+    }
+    //APP_MenuMessagePump();
   }
   APP_MenuStart(menu);
   APP_MenuMessagePump();

@@ -63,6 +63,7 @@ typedef struct struct_display_buffer {
 
 extern Context context;
 extern DispBuf display;
+extern MessageBufferHandle_t kbd_rx_buf;
 
 #define SendMsgISR(HANDLE, DATA, SIZE) ({			  \
       BaseType_t hptm_ = pdFALSE;                                 \
