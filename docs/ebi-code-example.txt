@@ -1,0 +1,30 @@
+I just ran into this thread. I used XMEGA128A1U in an industrial project with SRAM with 4-port EBI. Maybe somebody will be still able to use my information.
+
+ 
+
+The 4-port mode is working well on this processor. I used this setup:
+
+PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
+EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
+
+EBI.CS2.BASEADDR = 0x0000;
+EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;   // 62,5ns R/W cycle @ 32MHz - you have to meet your SRAM's speed specification
+EBI.CS2.CTRLA = EBI_CS_ASPACE_128KB_gc | EBI_CS_MODE_SRAM_gc;
+
+The schematic from my project:
+
+ 
+
+How fast is the EBI? The access speed of internal RAM is 2 clock cycles, the max access speed for EBI for 4-port SRAM mode (no multiplexing) is 3 clock cycles, so 2/3 speed of internal RAM. The used SRAM chip has to support this speed!
+
+ 
+
+How many chips can be connected? Many. The processor itself has 4 CS signal outputs, so 4 chips without problem. For more chips you have to use some external CS signal generator. The 8-bit bus LCD is also not a problem - you can use one CS output for it and use 2 addresses in that CS range for writing the data to the LCD - one address line connected to RS.
+
+ 
+
+Different modes of connecting SRAM and DRAM chips is described in AVR1312: Using the XMEGA External Bus Interface > 2.1 Connecting Memories and Peripherals > 2.1.3 Four-port Interface
+
+ 
+
+I wrote about the EBI once, you can find there more information. Let me link it here: Atmel XMEGA with SRAM with 4-port EBI 

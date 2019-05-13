@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<!--[if IEMobile 7]><html class="iem7" lang="en" dir="ltr"><![endif]-->
+<!--[if lte IE 6]><html class="lt-ie9 lt-ie8 lt-ie7" lang="en" dir="ltr"><![endif]-->
+<!--[if (IE 7)&(!IEMobile)]><html class="lt-ie9 lt-ie8" lang="en" dir="ltr"><![endif]-->
+<!--[if IE 8]><html class="lt-ie9" lang="en" dir="ltr"><![endif]-->
+<!--[if (gte IE 9)|(gt IEMobile 7)]><!-->
+<html class="js js flexbox canvas canvastext webgl no-touch geolocation postmessage no-websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients no-cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths js boxshadow" dir="ltr" prefix="og: http://ogp.me/ns# article: http://ogp.me/ns/article# book: http://ogp.me/ns/book# profile: http://ogp.me/ns/profile# video: http://ogp.me/ns/video# product: http://ogp.me/ns/product# content: http://purl.org/rss/1.0/modules/content/ dc: http://purl.org/dc/terms/ foaf: http://xmlns.com/foaf/0.1/ rdfs: http://www.w3.org/2000/01/rdf-schema# sioc: http://rdfs.org/sioc/ns# sioct: http://rdfs.org/sioc/types# skos: http://www.w3.org/2004/02/skos/core# xsd: http://www.w3.org/2001/XMLSchema# schema: http://schema.org/" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<link rel="shortcut icon" href="https://www.avrfreaks.net/sites/all/themes/avrfreaks/favicon.ico" type="image/vnd.microsoft.icon">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="MobileOptimized" content="width">
+<meta name="description" content="I was under impression that the four-port mode was not supported on any of the currently available chips. Apparently it is.">
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="generator" content="Drupal 7 (http://drupal.org)">
+<link rel="canonical" href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi">
+<link rel="shortlink" href="https://www.avrfreaks.net/node/120980">
+<meta property="og:site_name" content="AVR Freaks">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi">
+<meta property="og:title" content="XMEGA-AU four-port EBI">
+<meta property="og:description" content="I was under impression that the four-port mode was not supported on any of the currently available chips. Apparently it is.">
+<meta property="og:updated_time" content="2013-03-15T13:10:24+00:00">
+<meta property="article:published_time" content="2013-03-15T13:10:24+00:00">
+<meta property="article:modified_time" content="2013-03-15T13:10:24+00:00">
+<title>XMEGA-AU four-port EBI | AVR Freaks</title>
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_nLnURQV-OJYJJPpa_tvZDRiAtlfGhVDzO2v5EKMdlzI.css" media="all">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_DHcXHPYBSjIVaCQZEG4ZlpLkvslnFlBCnQUCzlbRBio.css" media="all">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_1x4u_UWci5L1vkbefEeOnvHhWMq7e3_lvkDeezG6-bE.css" media="all">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_1EwI7L2d7PtEnjXz5YVVJW0LljSK4SXPj7Eehgu5J10.css" media="all">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_NetvTWTpE6c5dijmsClP50xrPauHMZNcHX4hJlj9SOI.css" media="screen">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_6b38QoA10iNo0WlQABsPuoYUzGFZrPw1WER3vGjCXdw.css" media="print">
+<link type="text/css" rel="stylesheet" href="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/css_uS4NjxRdC3RJ1agsmisNJLwbZc3YBKRTDDybOGIbj3k.css" media="only screen">
+
+<!--[if lt IE 9]>
+<link type="text/css" rel="stylesheet" href="https://www.avrfreaks.net/sites/default/files/css/css_-5FYXt7x7pi1LDVhNX3xqD-mTMEh3bq59MoR4cM3N8Q.css" media="screen" />
+<![endif]-->
+
+<!--[if (lt IE 9)&(!IEMobile 7)]>
+<link type="text/css" rel="stylesheet" href="https://www.avrfreaks.net/sites/default/files/css/css_DqMa2yIJOsRmEDdvyvYEmkQ1UPvriDJ1S7BifKQzo5I.css" media="screen" />
+<![endif]-->
+<script src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/analytics.js" async=""></script><script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_v7z_ueNi9EIrZXPI8So7AkuzyXuKekr2jbdDptsM5Oc.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_zFf0BHTY3Pf96jaFgeQjnpGZRFNRxTYsZKq7Q0K6A1k.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_D513xrHxkFzR3xMs-U1B-okOiPuXCy6MX1kwfrKN5Ls.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_UuUqwuzzmWE5GHwotz7pvF_e2TcZ_qg9dVcu2xJgvVQ.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+(function(i,s,o,g,r,a,m){i["GoogleAnalyticsObject"]=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,"script","https://www.google-analytics.com/analytics.js","ga");ga("create", "UA-1473358-1", {"cookieDomain":"auto"});ga("send", "pageview");
+//--><!]]>
+</script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_MbUlIYOCWfucM3dM8YlAM4sBXExMh83PgE3fvukwVUI.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/modernizr.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_9LxQYNcHez42saCSnQXHePouksOl8pzxQr4SokgRx18.js"></script>
+<script type="text/javascript" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/js_bJtuPhNLexUKWVQV80DOCxFp9jNm-U60HbWzF-t64r0.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+jQuery.extend(Drupal.settings, {"basePath":"\/","pathPrefix":"","ajaxPageState":{"theme":"avrfreaks","theme_token":"Sz7ihCaZpswnklIYrZZT0ASxgQ9G35FHIobn9nR5-zs","jquery_version":"1.7","js":{"sites\/all\/modules\/contrib\/jquery_update\/replace\/jquery\/1.7\/jquery.min.js":1,"misc\/jquery.once.js":1,"misc\/drupal.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/ui\/minified\/jquery.ui.core.min.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/ui\/external\/jquery.cookie.js":1,"sites\/all\/modules\/contrib\/jquery_update\/replace\/misc\/jquery.form.min.js":1,"profiles\/commons\/modules\/contrib\/dialog\/misc\/ajax.js":1,"sites\/all\/modules\/contrib\/jquery_update\/js\/jquery_update.js":1,"sites\/all\/modules\/contrib\/apachesolr_sort\/apachesolr_sort.js":1,"sites\/all\/modules\/contrib\/apachesolr_autocomplete\/apachesolr_autocomplete.js":1,"sites\/all\/modules\/contrib\/apachesolr_autocomplete\/jquery-autocomplete\/jquery.autocomplete.js":1,"sites\/all\/modules\/custom\/quote\/quote.js":1,"misc\/progress.js":1,"profiles\/commons\/modules\/contrib\/ctools\/js\/modal.js":1,"profiles\/commons\/modules\/contrib\/rate\/rate.js":1,"profiles\/commons\/modules\/contrib\/rate\/templates\/fivestar\/fivestar.js":1,"sites\/all\/modules\/custom\/avrfreaks_forum\/js\/avrfreaks_forum.js":1,"sites\/all\/modules\/contrib\/google_analytics\/googleanalytics.js":1,"0":1,"sites\/all\/modules\/custom\/avrfreaks_moderate\/js\/avrfreaks_moderate.js":1,"https:\/\/cdnjs.cloudflare.com\/ajax\/libs\/modernizr\/2.0.6\/modernizr.min.js":1,"sites\/all\/modules\/contrib\/hide_submit\/hide_submit.js":1,"sites\/all\/themes\/avrfreaks\/scripts\/modernizr.js":1,"sites\/all\/themes\/avrfreaks\/scripts\/syze.min.js":1,"sites\/all\/themes\/avrfreaks\/scripts\/script.js":1},"css":{"profiles\/commons\/modules\/contrib\/editor\/css\/components\/align.module.css":1,"profiles\/commons\/modules\/contrib\/editor\/css\/components\/resize.module.css":1,"profiles\/commons\/modules\/contrib\/editor\/css\/filter\/filter.caption.css":1,"profiles\/commons\/modules\/contrib\/editor\/modules\/editor_ckeditor\/css\/plugins\/drupalimagecaption\/editor_ckeditor.drupalimagecaption.css":1,"modules\/system\/system.base.css":1,"modules\/system\/system.menus.css":1,"modules\/system\/system.messages.css":1,"modules\/system\/system.theme.css":1,"misc\/ui\/jquery.ui.core.css":1,"misc\/ui\/jquery.ui.theme.css":1,"modules\/comment\/comment.css":1,"profiles\/commons\/modules\/contrib\/date\/date_api\/date.css":1,"modules\/field\/theme\/field.css":1,"modules\/node\/node.css":1,"modules\/poll\/poll.css":1,"modules\/user\/user.css":1,"modules\/forum\/forum.css":1,"profiles\/commons\/modules\/contrib\/views\/css\/views.css":1,"sites\/all\/modules\/contrib\/ckeditor\/css\/ckeditor.css":1,"profiles\/commons\/modules\/commons\/commons_media\/commons_media.css":1,"sites\/all\/modules\/contrib\/apachesolr_autocomplete\/apachesolr_autocomplete.css":1,"sites\/all\/modules\/contrib\/apachesolr_autocomplete\/jquery-autocomplete\/jquery.autocomplete.css":1,"profiles\/commons\/modules\/contrib\/ctools\/css\/ctools.css":1,"sites\/all\/modules\/custom\/quote\/quote.css":1,"sites\/all\/modules\/contrib\/tagclouds\/tagclouds.css":1,"sites\/all\/modules\/custom\/advanced_forum\/styles\/naked\/advanced-forum.naked.structure.css":1,"sites\/all\/modules\/custom\/advanced_forum\/styles\/naked\/advanced-forum.naked.images.css":1,"profiles\/commons\/modules\/contrib\/ctools\/css\/modal.css":1,"profiles\/commons\/modules\/contrib\/rate\/templates\/fivestar\/fivestar.css":1,"sites\/all\/modules\/custom\/avrfreaks_forum\/css\/forum-topic.css":1,"profiles\/commons\/modules\/contrib\/rate\/rate.css":1,"sites\/all\/modules\/contrib\/hide_submit\/hide_submit.css":1,"profiles\/commons\/themes\/contrib\/adaptivetheme\/at_core\/css\/at.layout.css":1,"sites\/all\/themes\/avrfreaks\/css\/global.base.css":1,"sites\/all\/themes\/avrfreaks\/css\/global.styles.css":1,"sites\/all\/themes\/avrfreaks\/css\/global.breakpoints.css":1,"sites\/all\/themes\/avrfreaks\/css\/community.breakpoints.css":1,"sites\/all\/themes\/avrfreaks\/css\/forum.css":1,"sites\/all\/themes\/avrfreaks\/css\/pager.css":1,"sites\/all\/themes\/avrfreaks\/css\/community.css":1,"sites\/all\/themes\/avrfreaks\/css\/print.css":1,"public:\/\/adaptivetheme\/avrfreaks_files\/avrfreaks.responsive.layout.css":1,"public:\/\/adaptivetheme\/avrfreaks_files\/avrfreaks.responsive.styles.css":1,"public:\/\/adaptivetheme\/avrfreaks_files\/avrfreaks.lt-ie9.layout.css":1,"sites\/all\/themes\/avrfreaks\/css\/lt-ie9.css":1}},"apachesolr_autocomplete":{"path":"\/apachesolr_autocomplete"},"quote_nest":"0","CToolsModal":{"loadingText":"Loading...","closeText":"Close Window","closeImage":"\u003Cimg typeof=\u0022foaf:Image\u0022 class=\u0022image-style-none\u0022 src=\u0022https:\/\/www.avrfreaks.net\/profiles\/commons\/modules\/contrib\/ctools\/images\/icon-close-window.png\u0022 alt=\u0022Close window\u0022 title=\u0022Close window\u0022 \/\u003E","throbber":"\u003Cimg typeof=\u0022foaf:Image\u0022 class=\u0022image-style-none\u0022 src=\u0022https:\/\/www.avrfreaks.net\/profiles\/commons\/modules\/contrib\/ctools\/images\/throbber.gif\u0022 alt=\u0022Loading\u0022 title=\u0022Loading...\u0022 \/\u003E"},"rate":{"basePath":"\/rate\/vote\/js","destination":"node\/120980"},"hide_submit":{"hide_submit_status":true,"hide_submit_method":"disable","hide_submit_css":"hide-submit-disable","hide_submit_abtext":"","hide_submit_atext":"","hide_submit_hide_css":"hide-submit-processing","hide_submit_hide_text":"Processing...","hide_submit_hide_fx":false,"hide_submit_reset_time":5000},"urlIsAjaxTrusted":{"\/forum\/xmega-au-four-port-ebi":true,"https:\/\/community.atmel.com\/search\/site":true},"googleanalytics":{"trackOutbound":1,"trackMailto":1,"trackDownload":1,"trackDownloadExtensions":"7z|aac|arc|arj|asf|asx|avi|bin|csv|doc(x|m)?|dot(x|m)?|exe|flv|gif|gz|gzip|hqx|jar|jpe?g|js|mp(2|3|4|e?g)|mov(ie)?|msi|msp|pdf|phps|png|ppt(x|m)?|pot(x|m)?|pps(x|m)?|ppam|sld(x|m)?|thmx|qtm?|ra(m|r)?|sea|sit|tar|tgz|torrent|txt|wav|wma|wmv|wpd|xls(x|m|b)?|xlt(x|m)|xlam|xml|z|zip"},"currentPath":"node\/120980","currentPathIsAdmin":false,"adaptivetheme":{"avrfreaks":{"layout_settings":{"bigscreen":"three-col-grail","tablet_landscape":"three-col-grail","tablet_portrait":"one-col-vert","smalltouch_landscape":"one-col-vert","smalltouch_portrait":"one-col-stack"},"media_query_settings":{"bigscreen":"only screen and (min-width:1800px)","tablet_landscape":"only screen and (min-width:755px) and (max-width:1799px)","tablet_portrait":"only screen and (min-width:680px) and (max-width:754px)","smalltouch_landscape":"only screen and (min-width:321px) and (max-width:679px)","smalltouch_portrait":"only screen and (max-width:320px)"}}}});
+//--><!]]>
+</script>
+<!--[if lt IE 9]>
+<script src="https://www.avrfreaks.net/profiles/commons/themes/contrib/adaptivetheme/at_core/scripts/html5.js?pp05wh"></script>
+<![endif]-->
+</head>
+<body class="html not-front not-logged-in no-sidebars page-node page-node- page-node-120980 node-type-forum site-name-hidden atr-7.x-3.x atv-7.x-3.4 palette-active palette-blue-blue gecko firefox linux avr-freaks ios7-fix-processed">
+  <div id="skip-link">
+    <a href="#main-content" class="element-invisible element-focusable">Skip to main content</a>
+  </div>
+    <div class="header-wrapper">
+  <div class="header-color-row-one">
+    <header id="header" class="clearfix" role="banner">
+
+              <!-- start: Branding -->
+        <div id="branding" class="branding-elements clearfix branding-mobile">
+                      <div id="logo">
+                <a class="avr-menu-toggle mobile-menu-processed" href="#top"><img class="nav-mobile" typeof="foaf:Image" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/hamburger.png" alt="Menu"></a>
+              <a href="https://www.avrfreaks.net/" title="AVR Freaks"><img class="site-logo" typeof="foaf:Image" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/Atmel_Freaks_logo_large.png" alt="AVR Freaks"></a>              <a href="https://www.avrfreaks.net/" class="mobile-logo-link"><img class="site-logo-mobile" typeof="foaf:Image" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/mobile_logo.png" alt="AVR Freaks"></a>            </div>
+          
+                      <!-- start: Site name and Slogan hgroup -->
+            <hgroup class="element-invisible h-group" id="name-and-slogan">
+
+                              <h1 class="element-invisible" id="site-name"><a href="https://www.avrfreaks.net/" title="Home page">AVR Freaks</a></h1>
+              
+              
+            </hgroup><!-- /end #name-and-slogan -->
+          
+        </div><!-- /end #branding -->
+           
+      <!-- Navigation elements -->
+        <div id="menu-bar" class="nav clearfix"><nav id="block-menu-menu-main-menu-mobile" class="block block-menu menu-wrapper menu-bar-wrapper clearfix odd first block-count-1 block-region-menu-bar block-menu-main-menu-mobile" role="navigation">  
+      <h3 class="element-invisible block-title">Main menu mobile</h3>
+  
+  <ul class="menu clearfix"><li class="first leaf"><a href="https://www.avrfreaks.net/" class="thin">Home</a></li>
+<li class="leaf"><a href="https://community.atmel.com/communities">Communities</a></li>
+<li class="leaf"><a href="https://www.avrfreaks.net/forum" class="thin">Forums</a></li>
+<li class="leaf"><a href="https://community.atmel.com/projects" class="thin">Projects</a></li>
+<li class="leaf"><a href="https://community.atmel.com/vendors" class="thin">Vendors</a></li>
+<li class="leaf"><a href="https://www.avrfreaks.net/wiki" class="thin">Wiki</a></li>
+<li class="leaf"><a href="https://community.atmel.com/search/site" class="thick">Search</a></li>
+<li class="leaf"><a href="https://community.atmel.com/user" class="thin">My summary</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/privacy.aspx" class="thin" target="_blank">Privacy</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/contact/distributors/default.aspx?contactType=Online%20Directory" class="thin" target="_blank">Contact</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/legal.aspx" class="thin" target="_blank">Site Use Terms</a></li>
+<li class="last leaf"><a href="http://www.atmel.com/About/cookies.aspx" class="thin" target="_blank">Cookies</a></li>
+</ul>
+  </nav><nav id="block-system-main-menu" class="block block-system block-menu no-title menu-wrapper menu-bar-wrapper clearfix even last block-count-2 block-region-menu-bar block-main-menu" role="navigation">  
+  
+  <ul class="menu clearfix"><li class="first leaf"><a href="https://community.atmel.com/communities">Communities</a></li>
+<li class="leaf active-trail"><a href="https://www.avrfreaks.net/forum" class="active">Forums</a></li>
+<li class="leaf"><a href="https://community.atmel.com/projects">Projects</a></li>
+<li class="leaf"><a href="https://community.atmel.com/vendors">Vendors</a></li>
+<li class="last leaf"><a href="https://www.avrfreaks.net/wiki/wik" title="Wiki">WIKI</a></li>
+</ul>
+  </nav></div>
+      <!-- region: Header -->
+      <div class="region region-header"><div class="region-inner clearfix"><div id="block-avrfreaks-rewrites-avr-header-logout-link" class="block block-avrfreaks-rewrites no-title odd first block-count-3 block-region-header block-avr-header-logout-link"><div class="block-inner clearfix">  
+  
+  <div class="block-content content"><ul class="authentication-links"><li class="signup first"><a href="https://www.avrfreaks.net/user/register">Signup</a></li>
+<li class="login last"><a href="https://www.avrfreaks.net/user/login?destination=home-new">Login</a></li>
+</ul></div>
+  </div></div><div id="block-search-form" class="block block-search no-title even last block-count-4 block-region-header block-form" role="search"><div class="block-inner clearfix">  
+  
+  <div class="block-content content"><form action="/forum/xmega-au-four-port-ebi" method="post" id="search-block-form" accept-charset="UTF-8" class="form hideSubmitButton-processed">
+  <div>
+        <div class="container-inline">
+      <h2 class="element-invisible">Search form</h2>
+    <div class="form-item form-type-textfield form-item-search-block-form">
+  <label class="element-invisible" for="edit-search-block-form--2">Search </label>
+ <input autocomplete="off" title="Enter the terms you wish to search for." class="apachesolr-autocomplete unprocessed form-text form-autocomplete" placeholder="What are you interested in?" id="edit-search-block-form--2" name="search_block_form" size="15" maxlength="128" type="search">
+</div>
+<div class="form-item form-type-select form-item-filter-by">
+ <select id="edit-filter-by" name="filter_by" class="form-select"><option selected="selected" value="all">Entire Site</option><option value="forum">All Communities</option><option value="9631">AVR Freaks</option><option value="9636">Atmel SMART ARM-based MCUs</option><option value="9666">Internet of Things</option><option value="9826">Capacitive Touch</option><option value="project">Projects</option><option value="vendor">Vendors</option><option value="wiki">Wiki</option></select>
+</div>
+<div class="form-actions form-wrapper" id="edit-actions"><input id="edit-submit" name="op" value="Search" class="form-submit" type="submit"></div><input name="form_build_id" value="form-x1qwW50SB11MbOrZFsbTica6KkGgHrQH-JzQFZIgDmo" type="hidden">
+<input name="form_id" value="search_block_form" type="hidden">
+</div>
+  </div>
+</form>
+
+</div>
+  </div></div></div></div>    </header>
+  </div>
+  <div class="header-color-row-two"></div>
+</div>
+<div id="header-second-wrapper" class="header-second">
+        <!-- Breadcrumbs -->
+    <div id="breadcrumb" class="clearfix"><nav class="breadcrumb-wrapper clearfix" role="navigation" aria-labelledby="breadcrumb-label"><h2 id="breadcrumb-label" class="element-invisible">You are here</h2><ol id="crumbs" class="clearfix"><li class="crumb crumb-first"><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://community.atmel.com/">Home</a></span></li><li class="crumb"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://community.atmel.com/communities">Communities</a></span></li><li class="crumb"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://www.avrfreaks.net/">AVR Freaks</a></span></li><li class="crumb"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://www.avrfreaks.net/forum">Forums</a></span></li><li class="crumb"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://www.avrfreaks.net/forums/avr-microcontrollers">AVR Microcontrollers</a></span></li><li class="crumb"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><a rel="v:url" property="v:title" href="https://www.avrfreaks.net/forums/avr-xmega">AVR XMEGA</a></span></li><li class="crumb crumb-last"><span class="crumb-separator"> » </span><span typeof="v:Breadcrumb"><span property="v:title">XMEGA-AU four-port EBI</span></span></li></ol></nav></div>    </div>
+<div id="page" class="container page">
+
+  <div id="columns" class="columns clearfix">
+    <!-- Messages and Help -->
+    
+    <!-- region: Secondary Content -->
+    
+    <div id="page-top">
+            
+          </div>
+    <div id="content-column" class="content-column" role="main">
+      <div class="content-inner">
+        
+        <!-- region: Highlighted -->
+        
+        <div id="main-content">
+
+          <!-- region: Main Content -->
+                      <div id="content" class="region">
+                <div class="mobile-menu-bar">
+                  <div id="menu-bar" class="nav clearfix"><div id="menu-bar" class="nav clearfix"><nav id="block-menu-menu-main-menu-mobile" class="block block-menu menu-wrapper menu-bar-wrapper clearfix odd first block-count-1 block-region-menu-bar block-menu-main-menu-mobile" role="navigation">  
+      <h3 class="element-invisible block-title">Main menu mobile</h3>
+  
+  <ul class="menu clearfix"><li class="first leaf"><a href="https://www.avrfreaks.net/" class="thin">Home</a></li>
+<li class="leaf"><a href="https://community.atmel.com/communities">Communities</a></li>
+<li class="leaf"><a href="https://www.avrfreaks.net/forum" class="thin">Forums</a></li>
+<li class="leaf"><a href="https://community.atmel.com/projects" class="thin">Projects</a></li>
+<li class="leaf"><a href="https://community.atmel.com/vendors" class="thin">Vendors</a></li>
+<li class="leaf"><a href="https://www.avrfreaks.net/wiki" class="thin">Wiki</a></li>
+<li class="leaf"><a href="https://community.atmel.com/search/site" class="thick">Search</a></li>
+<li class="leaf"><a href="https://community.atmel.com/user" class="thin">My summary</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/privacy.aspx" class="thin" target="_blank">Privacy</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/contact/distributors/default.aspx?contactType=Online%20Directory" class="thin" target="_blank">Contact</a></li>
+<li class="leaf"><a href="http://www.atmel.com/About/legal.aspx" class="thin" target="_blank">Site Use Terms</a></li>
+<li class="last leaf"><a href="http://www.atmel.com/About/cookies.aspx" class="thin" target="_blank">Cookies</a></li>
+</ul>
+  </nav><nav id="block-system-main-menu" class="block block-system block-menu no-title menu-wrapper menu-bar-wrapper clearfix even last block-count-2 block-region-menu-bar block-main-menu" role="navigation">  
+  
+  <ul class="menu clearfix"><li class="first leaf"><a href="https://community.atmel.com/communities">Communities</a></li>
+<li class="leaf active-trail"><a href="https://www.avrfreaks.net/forum" class="active">Forums</a></li>
+<li class="leaf"><a href="https://community.atmel.com/projects">Projects</a></li>
+<li class="leaf"><a href="https://community.atmel.com/vendors">Vendors</a></li>
+<li class="last leaf"><a href="https://www.avrfreaks.net/wiki/wik" title="Wiki">WIKI</a></li>
+</ul>
+  </nav></div></div>                </div>
+              <div class="one-column at-panel panel-display clearfix">
+  <div class="region region-one-main">
+    <div class="region-inner clearfix">
+      <div class="panel-pane pane-node-title no-title block">
+  <div class="block-inner clearfix">
+    
+            
+    
+    <div class="block-content">
+      <h2>XMEGA-AU four-port EBI</h2>
+    </div>
+
+    
+    
+  </div>
+</div>
+<div class="panel-separator"></div><div class="panel-pane pane-node-content pane-commons-bw-group no-title block">
+  <div class="block-inner clearfix">
+    
+            
+    
+    <div class="block-content">
+        
+<div id="forum-topic-header" class="forum-topic-header clearfix">
+	
+      <div class="topic-reply-link">
+      <a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments    </div>
+    
+  
+      <div class="last-post-link">
+       <a href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi#comment-2555991" class="af-button-large active"><span>Go To Last Post</span></a>    </div>
+    
+      
+  <div class="topic-post-count">
+      <span>17 posts / 0 new</span>
+  </div>
+    
+  <div class="topic-post-pager">
+         </div>
+    
+  <a id="forum-topic-top"></a>
+</div>
+
+<a id="forum-topic-top"></a>
+  <div class="forum-topic-hat clearfix">
+    <div class="forum-hat-left-side">Author</div>
+    <div class="forum-hat-right-side">Message</div>
+  </div>
+<div id="post-120980" class="forum-post clearfix en posted-by-1391 article odd node-full  " about="/forum/xmega-au-four-port-ebi" typeof="sioc:Post sioct:BoardPost" role="article">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi" class="active">#1</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Fri. Mar 15, 2013 - 01:10 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="form-item form-type-item">
+  <label>Fivestar widget </label>
+ <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-6b652c38350fdf4253048b9fcae17d1f rate-node-120980-3-3 rate-processed" id="rate-node-120980-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-81">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-82">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-83">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-84">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-85">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>
+</div>
+              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <div class="field field-name-body field-type-text-with-summary field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>I
+ was under impression that the four-port mode was not supported on any 
+of the currently available chips. Apparently it is. There are new 
+registers in the U version that allow to use ports E/F instead of the 
+missing L.</p>
+<p>I want non-multiplexed SRAM. Anybody tried that? Any words of wisdom?</p>
+<p>EDIT: Well, I tried this on atxmega64a1u on STK600. Without actual 
+SRAM yet. The micro seems to generate all the right signals needed to 
+address up to 16MB of SRAM. That is encouraging.</p>
+<p>I wish Atmel would fix the documentation! We need a new version of 
+AVR1312 for the U versions. Need to say something about the EBIOUT in 
+the non-U to U migration guide. The max EBI mode is more like 
+four-and-half-port, rather than just four-port ... unless I'm still 
+missing something.</p>
+</div></div></div><span property="dc:title" content="XMEGA-AU four-port EBI" class="rdf-meta element-hidden"></span>        </div>
+                                          <div class="post-tags">
+            <h2 class="field-label">Tags:</h2><div class="topic-comments-tags"><a href="https://community.atmel.com/search/site?f%5B0%5D=im_taxonomy_forums%3A968&amp;f%5B1%5D=bundle%3Aforum">AVR Microcontrollers</a>, <a href="https://community.atmel.com/search/site?f%5B0%5D=im_taxonomy_forums%3A586&amp;f%5B1%5D=bundle%3Aforum">AVR XMEGA</a>, <a href="https://community.atmel.com/search/site?f%5B0%5D=im_field_avr_forum_devices%3A899&amp;f%5B1%5D=bundle%3Aforum">ATmega64</a></div>          </div>
+              </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline node-action-links"><li class="comment_forbidden first"><span class=""><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-f/m">Log in</a> / <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-f/m">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<div id="forum-comments" class="comment-wrapper">
+  <a id="comment-895791"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895791" class="forum-post clearfix en posted-by-7633 odd first comment-with-picture  " about="/comment/895791#comment-895791" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="TFrancuz's picture" title="TFrancuz's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Resident              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Fri. Jan 10, 2003              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 570 <a href="https://www.avrfreaks.net/user/7633/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895791#comment-895791" class="permalink" rel="bookmark">#2</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 09:06 AM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-074003b4b879acda79c14ab82d05e487 rate-comment-895791-3-3 rate-processed" id="rate-comment-895791-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-1">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-2">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-3">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-4">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-5">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>How
+ did you enable 4-port EBI configuration? In updated datasheet there is 
+some information about it but it seems to be not correct. E.g. in Atmel 
+Studio, when you choose XMEGA128A1U and run simulator mentioned 
+registers just donâ€™t exists. They donâ€™t exist in io.h file too. So 
+to me 4-port EBI is just a wishlist of Atmel.</p>
+</div></div></div><span property="foaf:name" content="TFrancuz" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-895814"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895814" class="forum-post clearfix en posted-by-1391 post-by-starter even comment-with-picture  " about="/comment/895814#comment-895814" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895814#comment-895814" class="permalink" rel="bookmark">#3</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 11:47 AM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-0497f114414e255ad9ed9cc300f39787 rate-comment-895814-3-3 rate-processed" id="rate-comment-895814-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-6">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-7">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-8">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-9">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-10">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b>TFrancuz wrote:</b><blockquote class="bb-quote-body">How did you enable 4-port EBI configuration?</blockquote></div><br>
+<div class="bb-quote">
+<blockquote class="bb-quote-body">
+<pre>// Select PORTF as EBI PORT3 and PORTE as chip select outputs
+PORTCFG.reserved_0x05 = 3; // EBIOUT
+// AVR1312 call
+EBI_Enable(EBI_SDDATAW_8BIT_gc,
+	     EBI_LPCMODE_ALE1_gc,
+	     EBI_SRMODE_NOALE_gc,
+	     EBI_IFMODE_4PORT_gc);</pre></blockquote>
+</div>
+</div></div></div><span property="foaf:name" content="ezharkov" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-895889"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895889" class="forum-post clearfix en posted-by-7633 odd comment-with-picture  " about="/comment/895889#comment-895889" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="TFrancuz's picture" title="TFrancuz's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Resident              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Fri. Jan 10, 2003              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 570 <a href="https://www.avrfreaks.net/user/7633/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895889#comment-895889" class="permalink" rel="bookmark">#4</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 05:11 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-90e1bc0beeed04663d33e0ab7c0c26b5 rate-comment-895889-3-3 rate-processed" id="rate-comment-895889-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-11">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-12">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-13">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-14">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-15">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>Please
+ let me know if you will be able to run 4-port mode. Itâ€™s interesting 
+why Atmel Studio simulator doesnâ€™t support this mode. I donâ€™t think 
+that using reserved registers is a good idea.</p>
+</div></div></div><span property="foaf:name" content="TFrancuz" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-895900"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895900" class="forum-post clearfix en posted-by-1391 post-by-starter even comment-with-picture  " about="/comment/895900#comment-895900" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895900#comment-895900" class="permalink" rel="bookmark">#5</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 05:38 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-dba93f9c1576ccdc43b6eb8793290c30 rate-comment-895900-3-3 rate-processed" id="rate-comment-895900-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-16">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-17">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-18">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-19">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-20">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b>TFrancuz wrote:</b><blockquote class="bb-quote-body">Please
+ let me know if you will be able to run 4-port mode. Itâ€™s interesting 
+why Atmel Studio simulator doesnâ€™t support this mode. I donâ€™t think 
+that using reserved registers is a good idea.</blockquote></div>The 
+register is "reserved" is probably because the toolchain (and the xml 
+files) are just not up-to-date. It is not "reserved" in the datasheet. 
+The simulator is probably the last thing that I would base any 
+conclusions on. As I said in the second part of my original post, 
+everything seems to work just fine, on a real hardware atxmega64a1u, but
+ without an actual SRAM chip yet. So, I'm pretty confident that 
+everything is going to work. I will probably have a board with SRAM in a
+ week or so. We will see.<p></p>
+</div></div></div><span property="foaf:name" content="ezharkov" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-895944"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895944" class="forum-post clearfix en posted-by-7633 odd comment-with-picture  " about="/comment/895944#comment-895944" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="TFrancuz's picture" title="TFrancuz's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Resident              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Fri. Jan 10, 2003              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 570 <a href="https://www.avrfreaks.net/user/7633/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895944#comment-895944" class="permalink" rel="bookmark">#6</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/tfrancuz-0" title="View user profile." class="username" xml:lang="" about="/users/tfrancuz-0" typeof="sioc:UserAccount" property="foaf:name" datatype="">TFrancuz</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 07:37 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-d5b5ff4fef2f0502a9ea44326bf83347 rate-comment-895944-3-3 rate-processed" id="rate-comment-895944-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-21">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-22">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-23">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-24">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-25">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>Atmel
+ says that simulator is very similar to actual device, even bugs are 
+simulated ïŠ Iâ€™m talking about Atmel Studio 6.x simulator, not AVR 
+Studio. But we will see. What MCU silicon revision do you have?</p>
+</div></div></div><span property="foaf:name" content="TFrancuz" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-895948"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-895948" class="forum-post clearfix en posted-by-1391 post-by-starter even comment-with-picture  " about="/comment/895948#comment-895948" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/895948#comment-895948" class="permalink" rel="bookmark">#7</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Sat. Mar 16, 2013 - 07:59 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-766f9489ab6ffa9df093a39186aaad93 rate-comment-895948-3-3 rate-processed" id="rate-comment-895948-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-26">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-27">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-28">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-29">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-30">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>MCU
+ revision - I did not care to look. Will look on Monday. Simulator - 
+well, the register is not listed in the 6.1 xml files either. So, I 
+guess, both the simulator files and the xml files were generated from an
+ older revision of whatever the primary document that they generate 
+everything from. There must be something newer then.</p>
+</div></div></div><span property="foaf:name" content="ezharkov" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-896369"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-896369" class="forum-post clearfix en posted-by-1391 post-by-starter odd comment-with-picture  " about="/comment/896369#comment-896369" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/896369#comment-896369" class="permalink" rel="bookmark">#8</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Mon. Mar 18, 2013 - 02:00 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-34757073d7a1a5d8e51573b72c074752 rate-comment-896369-3-3 rate-processed" id="rate-comment-896369-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-31">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-32">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-33">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-34">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-35">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b>ezharkov wrote:</b><blockquote class="bb-quote-body">MCU revision - I did not care to look. Will look on Monday.</blockquote></div>Well,
+ it is L, which appears to be the very first "production" release of 
+64A1U. The last non-U was H, right? Therefore, the simulator must be 
+running I, J, or K? What MCU.REVID do you see in the simulator?<p></p>
+</div></div></div><span property="foaf:name" content="ezharkov" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-921988"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-921988" class="forum-post clearfix en posted-by-240095 even comment-with-picture  " about="/comment/921988#comment-921988" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><img src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/offline.png"><a href="https://www.avrfreaks.net/users/natblist1242" title="View user profile." class="username" xml:lang="" about="/users/natblist1242" typeof="sioc:UserAccount" property="foaf:name" datatype="">natblist</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/natblist1242" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="natblist's picture" title="natblist's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: New Member              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Mon. Sep 22, 2008              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 13 <a href="https://www.avrfreaks.net/user/240095/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/921988#comment-921988" class="permalink" rel="bookmark">#9</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/natblist1242" title="View user profile." class="username" xml:lang="" about="/users/natblist1242" typeof="sioc:UserAccount" property="foaf:name" datatype="">natblist</a></span>: </span>
+              <span class="date-time">Tue. Jun 25, 2013 - 03:39 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-ea60a5e262a8cd25cc2321c6fa07a789 rate-comment-921988-3-3 rate-processed" id="rate-comment-921988-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-36">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-37">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-38">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-39">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-40">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>Did you get this working? Interested in doing same thing!<br>
+Thanks.</p>
+</div></div></div><span property="foaf:name" content="natblist" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-922571"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-922571" class="forum-post clearfix en posted-by-1391 post-by-starter odd comment-with-picture  " about="/comment/922571#comment-922571" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="ezharkov's picture" title="ezharkov's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Posting Freak              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jun 21, 2005              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 1396 <a href="https://www.avrfreaks.net/user/1391/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Chicago area, USA              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/922571#comment-922571" class="permalink" rel="bookmark">#10</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/ezharkov" title="View user profile." class="username" xml:lang="" about="/users/ezharkov" typeof="sioc:UserAccount" property="foaf:name" datatype="">ezharkov</a></span>: </span>
+              <span class="date-time">Thu. Jun 27, 2013 - 08:37 AM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-eb873fc80e480d8cdea42ee4862caabe rate-comment-922571-3-3 rate-processed" id="rate-comment-922571-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-41">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-42">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-43">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-44">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-45">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b>natblist wrote:</b><blockquote class="bb-quote-body">Did you get this working?</blockquote></div>Yes, in the end it all worked as advertized.<p></p>
+</div></div></div><span property="foaf:name" content="ezharkov" class="rdf-meta element-hidden"></span>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1702946"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1702946" class="forum-post clearfix en posted-by-379721 even comment-with-picture  " about="/comment/1702946#comment-1702946" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="Foxcat385's picture" title="Foxcat385's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Hangaround              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Sat. Jun 14, 2014              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 283 <a href="https://www.avrfreaks.net/user/379721/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1702946#comment-1702946" class="permalink" rel="bookmark">#11</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a></span>: </span>
+              <span class="date-time">Tue. Nov 3, 2015 - 04:47 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-3630b615aa78299ec238d8357988f0b2 rate-comment-1702946-3-3 rate-processed" id="rate-comment-1702946-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-46">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-47">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-48">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-49">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-50">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>Hello,
+ sorry for the bump. I'm glad I've found the solution to my long 
+problem! (other than the 16-bit pointer problem and PROGMEM problem)</p>
+<p>&nbsp;</p>
+<p>I'm buying this chip. I don't know does this work on an XM128A1U too 
+or just XM64A1U. I need to know what text the chip should have on itself
+ before I buy. I would also want to know is it possible to connect 
+multiple chips. I'm planning to put a SRAM chip and a 8-bit parallel LCD
+ screen on the same EBI. What should the code look like if I would map 
+the SRAM chip's starting address to 0x004000 in XMEGA and have 0xFFxxxx 
+for the screen?</p>
+<p>&nbsp;</p>
+<p>Also, how fast is this SRAM mode? I need it to be fast for 
+Uzebox-like tile-based video processing for my parallel TFT LCD 176x200 
+display.</p>
+</div></div></div>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1703261"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1703261" class="forum-post clearfix en posted-by-205571 odd comment-with-picture comment-with-signature  " about="/comment/1703261#comment-1703261" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><img src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/online.png"><a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="gchapman's picture" title="gchapman's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: 10k+ Postman              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jan 9, 2007              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 10059 <a href="https://www.avrfreaks.net/user/205571/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Arlington, Texas, u.S.A.              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1703261#comment-1703261" class="permalink" rel="bookmark">#12</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a></span>: </span>
+              <span class="date-time">Tue. Nov 3, 2015 - 09:48 PM</span>                                            <span class="forum-in-reply-to"><a href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi#comment-1702946" class="active">(Reply to #11)</a></span>
+                          </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-3d3ce49151b363ce89bb5e1c6cd8c290 rate-comment-1703261-3-3 rate-processed" id="rate-comment-1703261-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-51">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-52">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-53">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-54">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-55">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><span rel="sioc:reply_of" resource="/comment/1702946#comment-1702946" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b><a class="username" href="https://community.atmel.com/users/foxcat385" title="View user profile." rel="nofollow">Foxcat385 wrote:</a></b><blockquote class="bb-quote-body">I
+ would also want to know is it possible to connect multiple chips. I'm 
+planning to put a SRAM chip and a 8-bit parallel LCD screen on the same 
+EBI.</blockquote></div>IIRC all 4 chip selects are available and configurable as either chip selects or additional address bits.<p></p>
+<p>The MattairTech 1MB SRAM XMEGA board shows two chip selects with one of two selected by a jumper.</p>
+<hr>
+<p><a href="http://www.atmel.com/devices/ATXMEGA128A1U.aspx?tab=documents" target="_blank" rel="nofollow">http://www.atmel.com/devices/ATXMEGA128A1U.aspx?tab=documents</a> (search for<strong> </strong>AVR1312: Using the XMEGA External Bus Interface)</p>
+<p><a href="http://www.mattairtech.com/images/X1/MT-XRAM-1M_schematic_1600.png" target="_blank" rel="nofollow">http://www.mattairtech.com/images/X1/MT-XRAM-1M_schematic_1600.png</a></p>
+</div></div></div>        </div>
+                                  <div class="author-signature">
+            <p>"Dare to be naïve." - Buckminster Fuller</p>
+          </div>
+                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1703271"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1703271" class="forum-post clearfix en posted-by-205571 even comment-with-picture comment-with-signature  " about="/comment/1703271#comment-1703271" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><img src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/online.png"><a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="gchapman's picture" title="gchapman's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: 10k+ Postman              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jan 9, 2007              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 10059 <a href="https://www.avrfreaks.net/user/205571/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Arlington, Texas, u.S.A.              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1703271#comment-1703271" class="permalink" rel="bookmark">#13</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a></span>: </span>
+              <span class="date-time">Tue. Nov 3, 2015 - 09:54 PM</span>                                            <span class="forum-in-reply-to"><a href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi#comment-1702946" class="active">(Reply to #11)</a></span>
+                          </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-61e9b07c72630961cb89b022bd2c75f2 rate-comment-1703271-3-3 rate-processed" id="rate-comment-1703271-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-56">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-57">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-58">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-59">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-60">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><span rel="sioc:reply_of" resource="/comment/1702946#comment-1702946" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p></p><div class="bb-quote"><b><a class="username" href="https://community.atmel.com/users/foxcat385" title="View user profile." rel="nofollow">Foxcat385 wrote:</a></b><blockquote class="bb-quote-body">... (other than the 16-bit pointer problem and ...</blockquote></div>IAR has a memory model for the XMEGA that covers the entire 16MB data space.<p></p>
+<p>For AVR GCC, Atmel created the Huge Memory package in ASF.</p>
+<p><a href="http://asf.atmel.com/docs/latest/xmegaau/html/group__hugemem__group.html" target="_blank" rel="nofollow">http://asf.atmel.com/docs/latest/xmegaau/html/group__hugemem__group.html</a></p>
+</div></div></div>        </div>
+                                  <div class="author-signature">
+            <p>"Dare to be naïve." - Buckminster Fuller</p>
+          </div>
+                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1703426"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1703426" class="forum-post clearfix en posted-by-379721 odd comment-with-picture  " about="/comment/1703426#comment-1703426" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="Foxcat385's picture" title="Foxcat385's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Hangaround              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Sat. Jun 14, 2014              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 283 <a href="https://www.avrfreaks.net/user/379721/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1703426#comment-1703426" class="permalink" rel="bookmark">#14</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a></span>: </span>
+              <span class="date-time">Wed. Nov 4, 2015 - 12:43 AM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-921c787173d6378aeb6c5b8fbfac05a3 rate-comment-1703426-3-3 rate-processed" id="rate-comment-1703426-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-61">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-62">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-63">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-64">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-65">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>But
+ IAR is expensive as hell while Atmel Studio is (as much as I was told) 
+worse than ever. It takes so long to install, breaks VS2010 and VS2012 
+installations. Upon trying to fix it, the patch requires extra files. 
+Pff.... Nightmare. My mentor had trouble with installing VS and Atmel 
+Studio on the school PCs for the next year. The installation of AS took 
+hours! I hope the hugemem can be used without Atmel Studio and with 
+something else like Eclipse. Now can it?</p>
+</div></div></div>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1703511"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1703511" class="forum-post clearfix en posted-by-205571 even comment-with-picture comment-with-signature  " about="/comment/1703511#comment-1703511" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><img src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/online.png"><a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="gchapman's picture" title="gchapman's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: 10k+ Postman              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Tue. Jan 9, 2007              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 10059 <a href="https://www.avrfreaks.net/user/205571/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+                  Location: Arlington, Texas, u.S.A.              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1703511#comment-1703511" class="permalink" rel="bookmark">#15</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/gchapman" title="View user profile." class="username" xml:lang="" about="/users/gchapman" typeof="sioc:UserAccount" property="foaf:name" datatype="">gchapman</a></span>: </span>
+              <span class="date-time">Wed. Nov 4, 2015 - 04:00 AM</span>                                            <span class="forum-in-reply-to"><a href="https://www.avrfreaks.net/forum/xmega-au-four-port-ebi#comment-1703426" class="active">(Reply to #14)</a></span>
+                          </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-3c0057ee6e4d1c5caa67c693b5a35226 rate-comment-1703511-3-3 rate-processed" id="rate-comment-1703511-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-66">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-67">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-68">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-69">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-70">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><span rel="sioc:reply_of" resource="/comment/1703426#comment-1703426" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>There is an ASF download though I've yet to try that (it's "huge" <img alt="wink" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/wink_smile.png" title="wink" height="23" width="23"></p>
+<p>Its release notes states use with IDEs other than Atmel Studio.</p>
+<p><a href="http://www.atmel.com/tools/avrsoftwareframework.aspx" target="_blank" rel="nofollow">http://www.atmel.com/tools/avrsoftwareframework.aspx</a></p>
+</div></div></div>        </div>
+                                  <div class="author-signature">
+            <p>"Dare to be naïve." - Buckminster Fuller</p>
+          </div>
+                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-1704671"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-1704671" class="forum-post clearfix en posted-by-379721 odd comment-with-picture  " about="/comment/1704671#comment-1704671" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="Foxcat385's picture" title="Foxcat385's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: Hangaround              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Sat. Jun 14, 2014              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 283 <a href="https://www.avrfreaks.net/user/379721/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/1704671#comment-1704671" class="permalink" rel="bookmark">#16</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/foxcat385" title="View user profile." class="username" xml:lang="" about="/users/foxcat385" typeof="sioc:UserAccount" property="foaf:name" datatype="">Foxcat385</a></span>: </span>
+              <span class="date-time">Thu. Nov 5, 2015 - 01:59 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-4b3c71c6950976e855288735ac2e107b rate-comment-1704671-3-3 rate-processed" id="rate-comment-1704671-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-1" id="rate-button-71">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-2" id="rate-button-72">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-3" id="rate-button-73">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-4" id="rate-button-74">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-empty rate-fivestar-5" id="rate-button-75">5</span></li></ul></div><div class="rate-info">Total votes: 0</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>Okay.</p>
+<p>&nbsp;</p>
+<p>Anyways, I didn't understand this clearly. Did OP use SDRAM with 
+SRAM? From the code, I see that&nbsp;EBI_SDDATAW_8BIT_gc says that SDRAM
+ is used. Then,&nbsp;EBI_LPCMODE_ALE1_gc says that a latch is used. 
+Then,&nbsp;EBI_SRMODE_NOALE_gc says the opposite; NO latch! And 
+finally,&nbsp;EBI_IFMODE_4PORT_gc says that a 4 port mode is used. So is
+ there SRAM or SDRAM or both? Is there a latch? Is this a 4-port or 
+4.5-port usage? If it's 4.5, then which pin is connected to 
+what?&nbsp;Can someone please draw schematics for me which pin goes 
+where and if I need to use any resistors? I'm definitely confused.</p>
+</div></div></div>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+<a id="comment-2555991"></a>
+
+<a id="forum-topic-top"></a>
+<div id="post-2555991" class="forum-post clearfix en posted-by-485116 even last comment-with-picture  " about="/comment/2555991#comment-2555991" typeof="sioc:Post sioct:Comment">
+    <div class="forum-post-info clearfix">        
+    <div class="forum-author-name-block">
+              <div class="author-pane"><a href="https://www.avrfreaks.net/users/tyg" title="View user profile." class="username" xml:lang="" about="/users/tyg" typeof="sioc:UserAccount" property="foaf:name" datatype="">tyg</a>  <div class="user-picture">
+    <a href="https://www.avrfreaks.net/users/tyg" title="View user profile."><img typeof="foaf:Image" class="image-style-thumbnail" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/picture-default.jpg" alt="tyg's picture" title="tyg's picture"></a>  </div>
+</div>          </div>
+    <div class="forum-post-panel-sub">
+      <div class="forum-post-user-rate">
+                  Level: New Member              </div>
+      <div class="forum-post-panel-joined">
+                  Joined: Sat. Aug 6, 2016              </div>
+      <div class="forum-post-panel-posts">
+                  Posts: 8 <a href="https://www.avrfreaks.net/user/485116/content">View posts</a>              </div>
+      <div class="forum-post-user-location">
+              </div>
+          </div>
+  </div>
+    <div class="avr-forum-post-wrapper">
+    <div class="avr-forum-post-panel-main clearfix">
+      <div class="forum-post-upper-panel ">
+        <div class="avr-forum-posted-on">
+          <div class="forum-post-number">
+                        <a href="https://www.avrfreaks.net/comment/2555991#comment-2555991" class="permalink" rel="bookmark">#17</a></div>
+          <div class="forum-post-rating">
+            <div class="post-date">
+              <span class="label-text">Posted <span class="topic-posted-by"> by <a href="https://www.avrfreaks.net/users/tyg" title="View user profile." class="username" xml:lang="" about="/users/tyg" typeof="sioc:UserAccount" property="foaf:name" datatype="">tyg</a></span>: </span>
+              <span class="date-time">Thu. Sep 20, 2018 - 05:05 PM</span>                                        </div>
+                          <div class="rating-widget">
+                <div class="rate-widget-3 rate-widget clear-block rate-average rate-widget-fivestar rate-04a3e203869ed898ed1fa26bb6a41ffd rate-comment-2555991-3-3 rate-processed" id="rate-comment-2555991-3-3"><div class="item-list"><ul class="rate-fivestar-processed"><li class="even first"><span class="rate-button rate-fivestar-btn-filled rate-fivestar-1" id="rate-button-76">1</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-filled rate-fivestar-2" id="rate-button-77">2</span></li><li class="even"><span class="rate-button rate-fivestar-btn-filled rate-fivestar-3" id="rate-button-78">3</span></li><li class="odd"><span class="rate-button rate-fivestar-btn-filled rate-fivestar-4" id="rate-button-79">4</span></li><li class="even last"><span class="rate-button rate-fivestar-btn-filled rate-fivestar-5" id="rate-button-80">5</span></li></ul></div><div class="rate-info">Total votes: 1</div></div>              
+              </div>   
+                      </div>
+        </div>
+      </div>
+        <div class="forum-post-content">
+          <span rel="sioc:reply_of" resource="/forum/xmega-au-four-port-ebi" class="rdf-meta element-hidden"></span><div class="field field-name-comment-body field-type-text-long field-label-hidden view-mode-full"><div class="field-items"><div class="field-item even" property="content:encoded"><p>I just ran into this thread. I used <strong>XMEGA128A1U</strong> in an industrial project with SRAM with 4-port EBI. Maybe somebody will be still able to use my information.</p>
+<p>&nbsp;</p>
+<p>The 4-port mode is working well on this processor. I used this setup:</p>
+<pre class=" c_cpp" data-pbcklang="c_cpp" data-pbcktabsize="4">PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
+EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
+
+EBI.CS2.BASEADDR = 0x0000;
+EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;   // 62,5ns R/W cycle @ 32MHz - you have to meet your SRAM's speed specification
+EBI.CS2.CTRLA = EBI_CS_ASPACE_128KB_gc | EBI_CS_MODE_SRAM_gc;
+</pre><p>The schematic from my project:</p>
+<p><img alt="" src="XMEGA-AU%20four-port%20EBI%20%7C%20AVR%20Freaks_files/XMEGA_SRAM_4-port_EBI_schematic.png" style="width: 500px; height: 352px;"></p>
+<p>&nbsp;</p>
+<p>How fast is the EBI? The access speed of internal RAM is 2 clock 
+cycles, the max access speed for EBI for 4-port SRAM mode (no 
+multiplexing) is 3 clock cycles, so 2/3 speed of internal RAM. The used 
+SRAM chip has to support this speed!</p>
+<p>&nbsp;</p>
+<p>How many chips can be connected? Many. The processor itself has 4 CS 
+signal outputs, so 4 chips without problem. For more chips you have to 
+use some external CS signal generator. The 8-bit bus LCD is also not a 
+problem - you can use one CS output for it and use 2 addresses in that 
+CS range for writing the data to the LCD - one address line connected to
+ RS.</p>
+<p>&nbsp;</p>
+<p>Different modes of connecting SRAM and DRAM chips is described in <em>AVR1312: Using the XMEGA External Bus Interface &gt; 2.1 Connecting Memories and Peripherals &gt; 2.1.3 Four-port Interface</em></p>
+<p>&nbsp;</p>
+<p>I wrote about the EBI once, you can find there more information. Let me link it here: <a href="http://blog.tyg-res.tk/2016/09/atmel-xmega-sram-with-4-port-ebi.html" target="_blank" rel="nofollow">Atmel XMEGA with SRAM with 4-port EBI </a></p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+</div></div></div>        </div>
+                                      </div>
+    </div>
+        <div class="forum-post-footer clearfix">
+      <div class="forum-post-links">
+        <ul class="links inline"><li class="comment_forbidden first last"><span><a href="https://www.avrfreaks.net/user/login?destination=node/120980%23comment-form">Log in</a> or <a href="https://www.avrfreaks.net/user/register?destination=node/120980%23comment-form">register</a> to post comments</span></li>
+</ul>          <a href="#forum-topic-top" title="Jump to top of page" class="af-button-small"><span>Top</span></a>
+      </div>
+    </div>
+</div>
+    <div class="pane-avrfreaks-select"><form action="/forum/xmega-au-four-port-ebi" method="post" id="avrfreaks-forum-select-form" accept-charset="UTF-8" class="form hideSubmitButton-processed">
+  <div>
+        
+  <div class="form-item form-type-select form-item-taxonomy-forum">
+  <label for="edit-taxonomy-forum">Jump To </label>
+ <select id="edit-taxonomy-forum" name="taxonomy_forum" class="form-select"><option value="https://www.avrfreaks.net/forums/avr-microcontrollers" class="level-2">-AVR Microcontrollers</option><option value="https://www.avrfreaks.net/forums/megaavr-and-tinyavr" class="level-3">--megaAVR and tinyAVR</option><option value="https://www.avrfreaks.net/forums/avr-xmega" class="level-3" selected="selected">--AVR XMEGA</option><option value="https://www.avrfreaks.net/forums/avr-uc3" class="level-3">--AVR UC3</option><option value="https://www.avrfreaks.net/forums/tools" class="level-2">-Tools</option><option value="https://www.avrfreaks.net/forums/arduino" class="level-3">--Arduino</option><option value="https://www.avrfreaks.net/forums/atmel-studio-avr-related" class="level-3">--Atmel Studio (AVR-related)</option><option value="https://www.avrfreaks.net/forums/atmel-software-framework-asf-and-atmel-start-asfv4-all-architectures" class="level-3">--Atmel Software Framework (ASF) and Atmel Start (ASFv4), all architectures</option><option value="https://www.avrfreaks.net/forums/evaluation-and-development-kits-avr-related" class="level-3">--Evaluation and Development Kits (AVR-related)</option><option value="https://www.avrfreaks.net/forums/system-debuggers-and-programmers" class="level-3">--In-System Debuggers and Programmers</option><option value="https://www.avrfreaks.net/forums/compilers-and-general-programming" class="level-3">--Compilers and General Programming</option><option value="https://www.avrfreaks.net/forums/learning-and-information" class="level-2">-Learning and Information</option><option value="https://www.avrfreaks.net/forums/general-electronics" class="level-3">--General Electronics</option><option value="https://www.avrfreaks.net/forums/tutorials" class="level-3">--Tutorials</option><option value="https://www.avrfreaks.net/forums/avr-freaks-projects" class="level-3">--AVR Freaks Projects</option><option value="https://www.avrfreaks.net/forums/miscellaneous" class="level-2">-Miscellaneous</option><option value="https://www.avrfreaks.net/forums/marketplace" class="level-3">--Marketplace</option><option value="https://www.avrfreaks.net/forums/atmel-smart-arm-based-mcus" class="level-1">Atmel SMART ARM-based MCUs</option><option value="https://www.avrfreaks.net/forums/atmel-smart-arm-based-mcus-and-mpus" class="level-2">-Atmel SMART ARM-based MCUs and MPUs</option><option value="https://www.avrfreaks.net/forums/atmel-cortex-mpus" class="level-3">--Atmel Cortex-A MPUs</option><option value="https://www.avrfreaks.net/forums/atmel-cortex-m-mcus" class="level-3">--Atmel Cortex-M MCUs</option><option value="https://www.avrfreaks.net/forums/atmel-arm7-mcus" class="level-3">--Atmel ARM7 MCUs</option><option value="https://www.avrfreaks.net/forums/tools-1" class="level-2">-Tools</option><option value="https://www.avrfreaks.net/forums/evaluation-and-development-kits-arm-related" class="level-3">--Evaluation and Development Kits (ARM-related)</option><option value="https://www.avrfreaks.net/forums/system-debuggers-and-programmers-arm-related" class="level-3">--In-System Debuggers and Programmers (ARM-related)</option><option value="https://www.avrfreaks.net/forums/atmel-studio-arm-related" class="level-3">--Atmel Studio (ARM-related)</option><option value="https://www.avrfreaks.net/forums/compilers-assemblers-linkers-and-general-programming-arm-related" class="level-3">--Compilers, Assemblers, Linkers and General Programming (ARM-related)</option><option value="https://www.avrfreaks.net/forums/operating-systems" class="level-2">-Operating Systems</option><option value="https://www.avrfreaks.net/forums/linux" class="level-3">--Linux</option><option value="https://www.avrfreaks.net/forums/android" class="level-3">--Android</option><option value="https://www.avrfreaks.net/forums/wince" class="level-3">--WinCE</option><option value="https://www.avrfreaks.net/forums/%C2%B5cos-ii-real-time-kernel" class="level-3">--µC/OS-II - Real-Time Kernel</option><option value="https://www.avrfreaks.net/forums/internet-things" class="level-1">Internet of Things</option><option value="https://www.avrfreaks.net/forums/wireless-2" class="level-2">-Wireless</option><option value="https://www.avrfreaks.net/forums/general-wireless-discussions" class="level-3">--General Wireless Discussions</option><option value="https://www.avrfreaks.net/forums/80211wi-fi" class="level-3">--802.11/Wi-Fi</option><option value="https://www.avrfreaks.net/forums/802154zigbee" class="level-3">--802.15.4/ZigBee</option><option value="https://www.avrfreaks.net/forums/bluetooth" class="level-3">--Bluetooth</option><option value="https://www.avrfreaks.net/forums/security-0" class="level-2">-Security</option><option value="https://www.avrfreaks.net/forums/general-security-discussions" class="level-3">--General Security Discussions</option><option value="https://www.avrfreaks.net/forums/capacitive-touch" class="level-1">Capacitive Touch</option><option value="https://www.avrfreaks.net/forums/capacitive-touch-solutions" class="level-2">-Capacitive Touch Solutions</option><option value="https://www.avrfreaks.net/forums/general-capacitive-touch-discussions" class="level-3">--General Capacitive Touch Discussions</option></select>
+</div>
+<input name="form_build_id" value="form-N8cyZOAghoUbrrxPx3ynTMWXLuZK6WuUIu9lDI6oFho" type="hidden">
+<input name="form_id" value="avrfreaks_forum_select_form" type="hidden">
+
+  </div>
+</form>
+
+</div>
+        </div>
+    </div>
+
+    
+    
+  </div>
+</div>
+    </div>
+  </div>
+</div>
+            </div>
+          
+          
+
+          
+        </div><!-- /end #main-content -->
+
+        <!-- region: Content Aside -->
+        
+      </div><!-- /end .content-inner -->
+    </div><!-- /end #content-column -->
+
+    <!-- regions: Sidebar first and Sidebar second -->
+        
+  </div><!-- /end #columns -->
+
+  <!-- region: Tertiary Content -->
+  
+  <!-- region: Footer -->
+  
+</div>
+<div id="footer-second" class="footer-wrapper"><div class="region region-footer-second"><div class="region-inner clearfix"><div id="block-block-6" class="block block-block no-title odd first block-count-5 block-region-footer-second block-6"><div class="block-inner clearfix">  
+  
+  <div class="block-content content"><p>© 2018 Microchip Technology Inc.</p>
+</div>
+  </div></div><nav id="block-menu-menu-footer-links" class="block block-menu no-title even last block-count-6 block-region-footer-second block-menu-footer-links" role="navigation"><div class="block-inner clearfix">  
+  
+  <div class="block-content content"><ul class="menu clearfix"><li class="first leaf"><a href="https://www.microchip.com/about-us/legal-information/privacy-policy" target="_blank">Privacy</a></li>
+<li class="leaf"><a href="https://www.microchip.com/about-us/contact-us" target="_blank">Contact</a></li>
+<li class="last leaf"><a href="https://www.microchip.com/about-us/legal-information/website-usage-and-limitation-of-liability" target="_blank">Site Use Terms</a></li>
+</ul></div>
+  </div></nav></div></div></div>
+  
+
+</body></html>
