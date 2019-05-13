@@ -14,6 +14,8 @@
 
 #define MENU_SIZE 5
 
+#define KBD_RX_BUFFER_SIZE 10
+
 typedef struct struct_gsm_data {
   uint8_t flags; // should be renamed
   // signal level

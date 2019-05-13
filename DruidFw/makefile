@@ -66,6 +66,7 @@ menu.c \
 epd.c \
 render.c\
 gsm.c \
+core_drv.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \

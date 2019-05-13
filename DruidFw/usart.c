@@ -64,7 +64,7 @@ inline void logc(char c) {
 
 }
 
-inline void USART0_init(void) {
+inline void log_init(void) {
   PORTE.OUTSET = PIN7_bm; // TX
   PORTE.DIRSET = PIN7_bm; // TX
   USARTE1.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
@@ -72,10 +72,6 @@ inline void USART0_init(void) {
   USARTE1.CTRLA = USART_RXCINTLVL_LO_gc
     | USART_TXCINTLVL_OFF_gc
     | USART_DREINTLVL_OFF_gc;
-  //USARTF0.BAUDCTRLA = 25; // 9600  - 2MGz internal osc
-  //USARTF0.BAUDCTRLB = 0; // 9600  - 2MGz internal osc
-  //USARTF0.BAUDCTRLA = 19; // 115200 - 2MGz internal osc
-  //USARTF0.BAUDCTRLB = 0xC0; // 115200  - 2MGz internal osc
 
   uint16_t bsel = 1079;
   uint8_t bscale = 5;
@@ -121,7 +117,7 @@ ISR(USARTF0_RXC_vect) {
   for (uint8_t i = 0; i < MAILBOX_SIZE; i++) {
     need_yield |= SendMsgISR(context.mail[i], &data, sizeof(data));
   }
-  
+
   if ( need_yield )
     taskYIELD();
 }
