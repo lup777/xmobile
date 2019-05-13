@@ -95,6 +95,14 @@ void send_str(char* data, size_t len) {
   }
 }
 
+void send_cstr(const char* data) {
+  size_t len = strlen(data);
+  size_t i = 0;
+  for(; i < len; i++) {
+    send_byte( data[i] );
+  }
+}
+
 ISR(USARTE0_TXC_vect) {
 }
 
@@ -105,14 +113,17 @@ ISR(USARTE0_RXC_vect) {
   static int idx = 0;
 
   data = USARTE0.DATA;
+  
+  buffer[idx] = data;
+  idx++;
 
-    buffer[idx] = data;
-    idx++;
-
-    if (idx > 0 && data == 0x0D && idx < 45) {
+  if (idx > 1                     &&
+      buffer[idx - 2] == 0x0D     &&
+      buffer[idx - 1] == 0x0A     &&
+      idx < 45) {
     xMessageBufferSendFromISR(gsm_rx_buf,
 			      &buffer,
-			      idx,
+			      idx - 2,
 			      &need_yeld);
     idx = 0;
   }

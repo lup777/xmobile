@@ -64,6 +64,14 @@ inline void logc(char c) {
 
 }
 
+inline void logcl(const char* str) {
+  size_t size = strlen(str);
+  size_t i = 0;
+  for(; i< size; i++) {
+    logc( str[i] );
+  }
+}
+
 inline void log_init(void) {
   PORTE.OUTSET = PIN7_bm; // TX
   PORTE.DIRSET = PIN7_bm; // TX

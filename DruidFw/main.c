@@ -90,16 +90,13 @@ static void vMainTask(void* pvParameters) {
 
     if (gsm_rx_bytes > 0) {
       //_log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
-      logc('G');
-      logc('S');
-      logc('M');
-      logc(':');
-      logc(' ');
+      logcl("GSM: ");
 
       size_t i = 0;
       for(; i < gsm_rx_bytes; i++) {
 	logc(gsm_char[i]);
       }
+      logcl("\n\r");
     }
     //APP_MenuMessagePump();
   }
