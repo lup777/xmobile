@@ -39,11 +39,12 @@ int main(void) {
   kbd_rx_buf = xMessageBufferCreate( KBD_RX_BUFFER_SIZE );
   gsm_rx_buf = xMessageBufferCreate( 50 );
 
-  {  // init modules
-    run_on_32mgz();
-    log_init();
-    kbd_init();
-    interrupts_init();
+  {  // init modules (order is significant)
+    clk_init();  // set sys clock to internal 32 MGz
+    sram_init(); // configure external SRAM
+    log_init();  // configure debug USART
+    kbd_init();  // configure keyboard MAX7370 I2C
+    int_init();  // enable ints and clear int flags
   }
 
   context.active_app_id = MENU_MAILBOX_ID;

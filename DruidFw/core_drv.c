@@ -3,7 +3,7 @@
 
 #include "core_drv.h"
 
-inline void run_on_32mgz(void) {
+inline void clk_init(void) {
     //OSC_PLLCTRL = 0x16;  // 2 * 16 = 32MGz
   OSC_CTRL = OSC_RC32MEN_bm;
 
@@ -13,7 +13,7 @@ inline void run_on_32mgz(void) {
   CLK_CTRL = CLK_SCLKSEL_RC32M_gc;
 }
 
-void interrupts_init(void) {
+void int_init(void) {
   //clear_global_interrupt();
 
     CCP = CCP_IOREG_gc;
@@ -21,4 +21,24 @@ void interrupts_init(void) {
     PMIC.CTRL = (PMIC_LOLVLEN_bm | PMIC_HILVLEN_bm);
 
     PMIC.INTPRI = 0x00;
+}
+
+void sram_init(void) {
+  /*
+    PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
+    EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
+
+    EBI.CS2.BASEADDR = 0x0000;
+    EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;   // 62,5ns R/W cycle @ 32MHz - you have to meet your SRAM's speed specification
+    EBI.CS2.CTRLA = EBI_CS_ASPACE_128KB_gc | EBI_CS_MODE_SRAM_gc;
+
+  */
+
+  // NEED PORT CONFIGURATION
+
+  EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
+
+  EBI.CS2.BASEADDR = 0x0000;
+  EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;
+  EBI.CS2.CTRLA = EBI_CS_ASPACE_128KB_gc | EBI_CS_MODE_SRAM_gc;
 }

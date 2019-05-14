@@ -2,5 +2,6 @@
 
 #pragma once
 
-void interrupts_init(void);
-void run_on_32mgz(void);
+void int_init(void);
+void clk_init(void);
+void sram_init(void);
