@@ -20,7 +20,7 @@ void send_str(char* data, size_t len);
 void send_cstr(const char* data);
 void send_byte(char data);
 bool gsm_status(void);
-
+void gsm_get_signal_quality(void);
 
 
 void GSM_CallCmd(const char* msg);

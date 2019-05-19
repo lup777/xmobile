@@ -389,13 +389,13 @@ void EPD_clear(void) {
 }
 
 inline void EPD_PowerOn(void) {
-  _log("EPD power on");
+  //_log("EPD power on");
   EPD_SendFromGen(0x22, 0xC0, 1);
 
   EPD_SendFromRam(0x20, NULL, 0);
-  _log("waiting for epd power on");
+  //_log("waiting for epd power on");
   EPD_WaitUntilIdle();
-  _log("epd powered on");
+  //_log("epd powered on");
 }
 
 inline void EPD_PowerOff(void) {

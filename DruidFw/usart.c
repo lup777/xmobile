@@ -14,12 +14,14 @@
 #include "usart.h"
 #include "kbd.h"
 
+#define DISABLE_LOGS
 
 #define LOG_BUFFER_LEN 35
 
 StreamBufferHandle_t g_log_tx_buffer_handle;
 
 void _log(const char *format, ...) {
+#ifdef DISABLE_LOGS
   //return;
   char buffer[LOG_BUFFER_LEN];
   //memset(buffer, 0, LOG_BUFFER_LEN);
@@ -42,15 +44,6 @@ void _log(const char *format, ...) {
     buffer[LOG_BUFFER_LEN - 2] = '\r';
   }
 
-#if 0
-  taskENTER_CRITICAL();
-  xStreamBufferSend(g_log_tx_buffer_handle,
-		    buffer, // first byte will be sent in next command
-		    len + 2, // buffer + <\n> + <\r> - <first byte>
-		    0);
-  taskEXIT_CRITICAL();
-  USARTE1.CTRLA |= USART_DREINTLVL_LO_gc;
-#else
   for(uint8_t i = 0; i < len + 2; i ++) {
     while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
     USARTE1_DATA = buffer[i];
@@ -59,17 +52,20 @@ void _log(const char *format, ...) {
 }
 
 inline void logc(char c) {
+#ifdef DISABLE_LOGS
   while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
   USARTE1_DATA = c;
-
+#endif
 }
 
 inline void logcl(const char* str) {
+#ifdef DISABLE_LOGS
   size_t size = strlen(str);
   size_t i = 0;
   for(; i< size; i++) {
     logc( str[i] );
   }
+#endif
 }
 
 inline void log_init(void) {

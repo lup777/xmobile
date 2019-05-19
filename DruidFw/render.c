@@ -49,10 +49,10 @@ void displayFlush(void) {
   EPD_UpdatePartial();
 
   EPD_StopPartial();
-  _log("(%d:%d) (%d:%d)", zoneX(),
+  /*_log("(%d:%d) (%d:%d)", zoneX(),
        zoneY(),
        zoneEx(),
-       zoneEy());
+       zoneEy());*/
   
   zoneClear();
     for(word i = 0; i < display.buf_size; i++)

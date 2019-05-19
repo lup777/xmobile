@@ -221,6 +221,43 @@ const uint8_t FONT_pt_mono_bold_8x13_2[][FONTS_NUM] PROGMEM = {
   };
 
 const uint8_t* FONT_GetPicture8x13(uint8_t code) {
+
+  switch(code) {
+  case '0': return FONT_pt_mono_bold_8x13_1['0'];
+  case '1': return FONT_pt_mono_bold_8x13_1['1'];
+  case '2': return FONT_pt_mono_bold_8x13_1['2'];
+  case '3': return FONT_pt_mono_bold_8x13_1['3'];
+  case '4': return FONT_pt_mono_bold_8x13_1['4'];
+  case '5': return FONT_pt_mono_bold_8x13_1['5'];
+  case '6': return FONT_pt_mono_bold_8x13_1['6'];
+  case '7': return FONT_pt_mono_bold_8x13_1['7'];
+  case '8': return FONT_pt_mono_bold_8x13_1['8'];
+  case '9': return FONT_pt_mono_bold_8x13_1['9'];
+
+  case 'A': return FONT_pt_mono_bold_8x13_1['a'];
+  case 'B': return FONT_pt_mono_bold_8x13_1['b'];
+  case 'C': return FONT_pt_mono_bold_8x13_1['c'];
+  case 'D': return FONT_pt_mono_bold_8x13_1['d'];
+  case 'E': return FONT_pt_mono_bold_8x13_1['e'];
+  case 'F': return FONT_pt_mono_bold_8x13_1['f'];
+  case 'G': return FONT_pt_mono_bold_8x13_1['g'];
+  case 'H': return FONT_pt_mono_bold_8x13_1['h'];
+  case 'I': return FONT_pt_mono_bold_8x13_1['i'];
+  case 'J': return FONT_pt_mono_bold_8x13_1['j'];
+
+  case 'K': return FONT_pt_mono_bold_8x13_1['k'];
+  case 'L': return FONT_pt_mono_bold_8x13_1['l'];
+  case 'M': return FONT_pt_mono_bold_8x13_1['m'];
+  case 'N': return FONT_pt_mono_bold_8x13_1['n'];
+  case 'O': return FONT_pt_mono_bold_8x13_1['o'];
+  case 'P': return FONT_pt_mono_bold_8x13_1['p'];
+  case 'R': return FONT_pt_mono_bold_8x13_1['r'];
+  case 'T': return FONT_pt_mono_bold_8x13_1['t'];
+  case 'S': return FONT_pt_mono_bold_8x13_1['s'];
+  case 'U': return FONT_pt_mono_bold_8x13_1['u'];
+
+  }
+
   if (code >= ' ' && code <= ':')
     return FONT_pt_mono_bold_8x13_1[code];
 
@@ -235,7 +272,8 @@ const uint8_t* FONT_GetPicture8x13(uint8_t code) {
 
   if (code >= 'a' && code <= '{')
     return FONT_pt_mono_bold_8x13_1[code];
-
+  
+  
   if (code >= '}' && code <= '~')
     return FONT_pt_mono_bold_8x13_1[code];
 

@@ -197,7 +197,7 @@ ISR(PORTA_INT0_vect) {
   BaseType_t need_yeld = pdFALSE;
   uint8_t key = kbd_read_byte(MAX7370_REG_FIFO);
   
-  _log("PORTA INT (%d)", key);
+  //_log("PORTA INT (%d)", key);
 
   xMessageBufferSendFromISR(kbd_rx_buf,
 			    &key,

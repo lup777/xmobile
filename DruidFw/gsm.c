@@ -72,10 +72,19 @@ void GSM_Init(void) {
   //send_byte("AT\n", 3);
   _log("waiting for gsm init");
   while( gsm_status() == false );
-
+  _sleep(1000);
   send_str("AT\n\r", 4);
+  _sleep(1000);
   send_str("ATE\n\r", 5);
+  _sleep(1000);
   send_str("AT+GSN\n\r", 8);
+  _sleep(1000);
+  send_str("AT+CLVL=8\n\r", 11);
+  _sleep(1000);
+  send_str("AT+COPS?\n\r", 10);
+  _sleep(1000);
+  send_str("AT+CRSL=15\n\r", 12);
+  _sleep(1000);
   _log("GSM init completed");
 }
 
@@ -101,6 +110,10 @@ void send_cstr(const char* data) {
   for(; i < len; i++) {
     send_byte( data[i] );
   }
+}
+
+void gsm_get_signal_quality(void) {
+  send_cstr("AT+CSQ\r\n");
 }
 
 ISR(USARTE0_TXC_vect) {
