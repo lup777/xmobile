@@ -239,6 +239,7 @@ static void vMainTask(void* pvParameters) {
 
       displayRenderText(3, 185, "call: +", 7, &display);
       displayRenderText(60, 185, phone_number.text, phone_number.index, &display);
+      displayRenderRectangle(2, 180, 150, 197, &display);
       displayFlush();
     }
     // ~update display
