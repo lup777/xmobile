@@ -24,7 +24,7 @@ void int_init(void) {
 }
 
 void sram_init(void) {
-  /*
+  /* EXAMPLE
     PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
     EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
 
@@ -36,9 +36,14 @@ void sram_init(void) {
 
   // NEED PORT CONFIGURATION
 
-  /*EBI.CTRL = EBI_SRMODE_NOALE_gc | EBI_IFMODE_4PORT_gc;
+  EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
+    | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
+                                 // IFMODE[1:0] = 1 0 (bits)
 
-  EBI.CS2.BASEADDR = 0x0000;
-  EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;
-  EBI.CS2.CTRLA = EBI_CS_ASPACE_128KB_gc | EBI_CS_MODE_SRAM_gc;*/
+  EBI.CS2.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
+
+  EBI.CS2.CTRLB = EBI_CS_SRWS_1CLK_gc;  // One Clk per 2 cycles wait state
+
+  EBI.CS2.CTRLA = EBI_CS_ASPACE_1MB_gc  // size of the block above the base address
+    | EBI_CS_MODE_SRAM_gc;              // SRAM mode
 }
