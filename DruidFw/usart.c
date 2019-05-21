@@ -101,3 +101,12 @@ void vLogTask(void* pvParameters) {
   }
 }
 #endif
+
+void raw_logc(const char* str) {
+  size_t i = 0;
+
+  for (i = 0; i < sizeof(str); i++) {
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    USARTE1_DATA = str[i];
+  }
+}

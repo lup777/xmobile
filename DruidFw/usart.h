@@ -6,6 +6,7 @@
 
 
 void log_init(void);
+void raw_logc(const char* str);
 
 #ifndef DISABLE_LOGS
 void _log(const char *format, ...);

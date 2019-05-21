@@ -44,20 +44,30 @@ int main(void) {
     int_init();  // enable ints and clear int flags
   }
 
-  xTaskCreate( vMainTask,
-               "main_task",
-               configMINIMAL_STACK_SIZE,
-               NULL,
-               1,
-               NULL );
+  BaseType_t result;
+
+  result = xTaskCreate( vMainTask,
+                        "main_task",
+                        configMINIMAL_STACK_SIZE,
+                        NULL,
+                        1,
+                        NULL );
+
+  if (result != pdPASS) {
+    raw_logc("main task cr fail");
+  }
 
 #ifndef DISABLE_LOGS
-  xTaskCreate( vLogTask,
-               "log_task",
-               configMINIMAL_STACK_SIZE,
-               NULL,
-               1,
-               NULL );
+  result = xTaskCreate( vLogTask,
+                        "log_task",
+                        configMINIMAL_STACK_SIZE,
+                        NULL,
+                        1,
+                        NULL );
+
+  if (result != pdPASS) {
+    raw_logc("log task cr fail");
+  }
 #endif
 
 
