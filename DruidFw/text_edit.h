@@ -2,8 +2,6 @@
 
 #pragma once
 
-#define TEXT_EDIT_LEN 25
-
 typedef struct {
   int8_t idx;
   char* text;

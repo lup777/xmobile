@@ -96,7 +96,7 @@ static void vMainTask(void* pvParameters) {
   } lines[line_num];
 
   TextEdit te;
-  textEdit_init(&te);
+  textEdit_init(&te, 25);
 
   size_t i = 0;
 

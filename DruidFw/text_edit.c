@@ -12,7 +12,7 @@ bool textEdit_init(TextEdit* te, byte len) {
   if (te->text == NULL)
     return false;
 
-  te->idx = -1;
+  te->idx = 0;
   te->len = len;
   return true;
 }
@@ -24,7 +24,7 @@ void textEddit_free(TextEdit* te) {
   if (te->text)
     vPortFree(te->text);
 
-  te->idx = -1;
+  te->idx = 0;
   te->text = NULL;
   te->len = 0;
 }
@@ -33,11 +33,11 @@ bool textEdit_pushc(TextEdit* te, char c) {
   if (te == NULL)
     return false;
 
-  if (te->idx >= TEXT_EDIT_LEN) {// if full
-    textEdit_init(te);          // clear text field
+  if (te->idx >= te->len) {// if full
+    te->idx = 0;
   }
 
-  if (te->idx < TEXT_EDIT_LEN) {
+  if (te->idx < te->len) {
     te->text[ te->idx ] = c;
     te->idx ++;
     return true;
@@ -50,9 +50,9 @@ bool textEdit_pop(TextEdit* te, char* c) {
   if (te == NULL || c == NULL)
     return false;
 
-  if (te->idx >= 0) {
-    *c = te->text[ te->idx ];
+  if (te->idx > 0) {
     te->idx --;
+    *c = te->text[ te->idx ];
     return true;
   }
   return false;
