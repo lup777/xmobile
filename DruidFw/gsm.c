@@ -22,7 +22,7 @@ bool GSM_SendByte(char c, uint16_t delay_ms);
 bool GSM_ReadByte(char* out, uint16_t delay_ms);
 char GSM_ReadResultCode(uint16_t delay_ms, char* out);
 
-// new 
+// new
 void send_byte(char byte);
 
 // http://codius.ru/articles/GSM_%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_SIM800L_%D1%87%D0%B0%D1%81%D1%82%D1%8C_1
@@ -34,21 +34,21 @@ void GSM_Init(void) {
   //_log("GSM Start gsm init");
   // PA2 - status
   PORTA.DIRCLR = PIN2_bm; // status
-  
+
   PORTD.DIRSET = PIN0_bm;
   PORTD.OUTCLR = PIN0_bm;
 
   vTaskDelay((TickType_t)(1000 / portTICK_PERIOD_MS));
-  
+
   //gsm_msg_buffer = xMessageBufferCreate( 10 );
-  
+
   PORTD.OUTSET = PIN0_bm;
 
   // USARTE0
 
   PORTE.DIRCLR = PIN2_bm; // Rx
   PORTE.DIRSET = PIN3_bm; // Tx
-  PORTE.OUTCLR = PIN4_bm; // Tx 
+  PORTE.OUTCLR = PIN4_bm; // Tx
 
   USARTE0.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
     | USART_CHSIZE_8BIT_gc;
@@ -68,7 +68,7 @@ void GSM_Init(void) {
 
   //_log("wait for gsm boot");
   //vTaskDelay((TickType_t)(50000 / portTICK_PERIOD_MS));
-  
+
   //send_byte("AT\n", 3);
   _log("waiting for gsm init");
   while( gsm_status() == false );
@@ -126,13 +126,13 @@ ISR(USARTE0_RXC_vect) {
   static int idx = 0;
 
   data = USARTE0.DATA;
-  
+
   buffer[idx] = data;
   idx++;
 
   if (idx > 1                     &&
-      buffer[idx - 2] == 0x0D     &&
-      buffer[idx - 1] == 0x0A     &&
+      buffer[idx - 2] == '\r'     &&
+      buffer[idx - 1] == '\n'     &&
       idx < 45) {
     xMessageBufferSendFromISR(gsm_rx_buf,
 			      &buffer,
@@ -140,18 +140,9 @@ ISR(USARTE0_RXC_vect) {
 			      &need_yeld);
     idx = 0;
   }
-  
+
   if (need_yeld == pdTRUE)
     taskYIELD();
-
-  /*  
-  if (data == '\n') {
-    _log("\\n");
-  } else if (data == '\r') {
-    _log("\\r");
-  } else {
-    _log("GSM: %c (0x%02X)", data, data);
-    }*/
 }
 
 // Responce format: "\r\n<responce>\r\n"
