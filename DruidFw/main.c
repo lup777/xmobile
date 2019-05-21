@@ -96,7 +96,10 @@ static void vMainTask(void* pvParameters) {
   } lines[line_num];
 
   TextEdit te;
-  textEdit_init(&te, 25);
+  if (textEdit_init(&te, 25) ) {
+    _log("TextEdit init FAILED");
+    for (;;){}
+  }
 
   size_t i = 0;
 
