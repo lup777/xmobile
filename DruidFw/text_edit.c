@@ -4,9 +4,29 @@
 
 #include "text_edit.h"
 
-bool textEdit_init(TextEdit* te) {
+bool textEdit_init(TextEdit* te, byte len) {
+  if (te == NULL)
+    return false;
+
+  te->text = pvPortMalloc(len);
+  if (te->text == NULL)
+    return false;
+
   te->idx = -1;
+  te->len = len;
   return true;
+}
+
+void textEddit_free(TextEdit* te) {
+  if (te == NULL)
+    return;
+
+  if (te->text)
+    vPortFree(te->text);
+
+  te->idx = -1;
+  te->text = NULL;
+  te->len = 0;
 }
 
 bool textEdit_pushc(TextEdit* te, char c) {
