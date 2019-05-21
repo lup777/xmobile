@@ -64,7 +64,7 @@ void kbd_init(void) {
   twi_init();
   max7370_init();
 
-  
+
   PORTA.DIRCLR = PIN0_bm;
   PORTA.OUTCLR = PIN0_bm;
 
@@ -139,22 +139,22 @@ void kbd_send_data(uint8_t addr, uint8_t* data, size_t len) {
   // waite for write complete
   while( !(TWIC_MASTER_STATUS & TWI_MASTER_WIF_bm) );
 
-  // write data byte 
+  // write data byte
   TWIC_MASTER_DATA = addr;
 
-  
+
   size_t i = 0;
   for(; i < len; i ++) {
     // waite for write complete
     while( !(TWIC_MASTER_STATUS & TWI_MASTER_WIF_bm) );
 
-    // write data byte 
+    // write data byte
     TWIC_MASTER_DATA = data[i];
   }
 
   // waite for write complete
   while( !(TWIC_MASTER_STATUS & TWI_MASTER_WIF_bm) );
-  
+
   // write stop condition cmd
   TWIC_MASTER_CTRLC = TWI_MASTER_CMD_STOP_gc;
 }
@@ -196,7 +196,7 @@ uint8_t kbd_read_byte(uint8_t addr) {
 ISR(PORTA_INT0_vect) {
   BaseType_t need_yeld = pdFALSE;
   uint8_t key = kbd_read_byte(MAX7370_REG_FIFO);
-  
+
   //_log("PORTA INT (%d)", key);
 
   xMessageBufferSendFromISR(kbd_rx_buf,
@@ -205,4 +205,25 @@ ISR(PORTA_INT0_vect) {
 			    &need_yeld);
   if (need_yeld == pdTRUE)
     taskYIELD();
+}
+
+bool kbd_key_to_char(byte key, char* ch) {
+  if (ch == NULL)
+    return false;
+
+  switch(key) {
+  case 13: *ch = '1'; return true;
+  case 18: *ch = '2'; return true;
+  case 25: *ch = '3'; return true;
+  case  1: *ch = '4'; return true;
+  case  5: *ch = '5'; return true;
+  case  3: *ch = '6'; return true;
+  case 21: *ch = '7'; return true;
+  case 11: *ch = '8'; return true;
+  case  0: *ch = '9'; return true;
+  case  8: *ch = '*'; return true;
+  case  10: *ch = '0'; return true;
+  case  16: *ch = '#'; return true;
+  }
+  return false;
 }

@@ -1,21 +1,21 @@
-// ui.c
+// text_edit.c
 
 #include "render.h"
 
-#define TEXT_EDIT_LEN
-
-typedef struct struct_TextEdit {
-  char text[TEXT_EDIT_LEN];
-  int8_t idx;
-} TextEdit;
+#include "text_edit.h"
 
 bool textEdit_init(TextEdit* te) {
-  idx = -1;
+  te->idx = -1;
+  return true;
 }
 
 bool textEdit_pushc(TextEdit* te, char c) {
   if (te == NULL)
     return false;
+
+  if (te->idx >= TEXT_EDIT_LEN) {// if full
+    textEdit_init(te);          // clear text field
+  }
 
   if (te->idx < TEXT_EDIT_LEN) {
     te->text[ te->idx ] = c;
@@ -42,5 +42,5 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   byte char_width = 8; // width of char place (to get in font info)
   byte char_height = 15; // height of char place (to get in font info)
   displayRenderText(x, y, te->text, te->idx, pdisplay);
-  displayRenderRectangle(x, y, (x + char_width) * te->idx, y + 15, pdisplay);
+  displayRenderRectangle(x, y, (x + char_width) * te->idx, y + char_height, pdisplay);
 }

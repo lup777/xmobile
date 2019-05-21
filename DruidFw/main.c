@@ -12,6 +12,7 @@
 #include "menu.h"
 #include "render.h"
 #include "core_drv.h"
+#include "text_edit.h"
 
 // local functions
 static void vMainTask(void* pvParameters);
@@ -88,39 +89,28 @@ static void vMainTask(void* pvParameters) {
   GSM_Init();
   _log("MAIN main task init completed");
 
-  //APP_TelephoneStart();
-  //APP_MenuStart(menu);
-
 #define line_num 10
   struct LineDate {
     char line[25];
     byte len;
   } lines[line_num];
 
-  struct TextField12 {
-    char text[12];
-    byte len;
-    byte index;
-  } phone_number;
+  TextEdit te;
+  textEdit_init(&te);
 
   size_t i = 0;
 
   for (i = 0; i < line_num; i++) {
     lines[i].len = 0;
   }
-  phone_number.len = 12;
-  phone_number.index = 0;
   bool need_update_display = false;
 
   for(;;) {
     char key;
-
     char gsm_char[25];
 
     size_t kbd_rx_bytes = xMessageBufferReceive(kbd_rx_buf, &key, 1, 0);
-    size_t gsm_rx_bytes = xMessageBufferReceive(gsm_rx_buf,
-                                                gsm_char,
-                                                25, 0);
+    size_t gsm_rx_bytes = xMessageBufferReceive(gsm_rx_buf, gsm_char, 25, 0);
 
     if (kbd_rx_bytes > 0) {
       //_log("KBD: 0x%02X", key);
@@ -143,54 +133,22 @@ static void vMainTask(void* pvParameters) {
 
       else if (key == 17) { // call
         send_cstr("ATD+");
-        send_str(phone_number.text, phone_number.index);
+        send_str(te.text, te.idx);
         send_cstr(";\r\n");
       }
 
       else {
         _log("KBD: 0x%02X", key);
 
-        switch(key) {
-        case 13: phone_number.text[phone_number.index] = '1';
-          phone_number.index ++;
-          break;
-        case 18: phone_number.text[phone_number.index] = '2';
-          phone_number.index ++;
-          break;
-        case 25: phone_number.text[phone_number.index] = '3';
-          phone_number.index ++;
-          break;
-        case  1: phone_number.text[phone_number.index] = '4';
-          phone_number.index ++;
-          break;
-        case  5: phone_number.text[phone_number.index] = '5';
-          phone_number.index ++;
-          break;
-        case  3: phone_number.text[phone_number.index] = '6';
-          phone_number.index ++;
-          break;
-        case 21: phone_number.text[phone_number.index] = '7';
-          phone_number.index ++;
-          break;
-        case 11: phone_number.text[phone_number.index] = '8';
-          phone_number.index ++;
-          break;
-        case  0: phone_number.text[phone_number.index] = '9';
-          phone_number.index ++;
-          break;
-        case  8: phone_number.text[phone_number.index] = '*';
-          phone_number.index ++;
-          break;
-        case  10: phone_number.text[phone_number.index] = '0';
-          phone_number.index ++;
-          break;
-        case  16: phone_number.text[phone_number.index] = '#';
-          phone_number.index ++;
-          break;
+        char ch;
+        if (true == kbd_key_to_char( key, &ch )) {
+          textEdit_pushc(&te, ch);
         }
-        if (phone_number.index >= phone_number.len) {
-          phone_number.index = 0;
-        }
+
+        // draw call number
+        displayRenderText(3, 185, "call: +", 7, &display);
+        textEdit_render(&te, 60, 185, &display);
+
         need_update_display = true;
       }
     }
@@ -212,13 +170,7 @@ static void vMainTask(void* pvParameters) {
       }
       logcl("\n\r");
 
-      need_update_display = true;
-    }
-
-
-    // update display
-    if (need_update_display) {
-      need_update_display = false;
+      // draw GSM log
       displayRenderText(8, 10, "gsm:", 4, &display);
       for (i = 0; i < line_num; i++) {
 
@@ -228,9 +180,13 @@ static void vMainTask(void* pvParameters) {
         displayRenderText(8, 24 + (i * 14), str, len, &display);
       }
 
-      displayRenderText(3, 185, "call: +", 7, &display);
-      displayRenderText(60, 185, phone_number.text, phone_number.index, &display);
-      displayRenderRectangle(2, 180, 150, 197, &display);
+      need_update_display = true;
+    }
+
+
+    // update display
+    if (need_update_display) {
+      need_update_display = false;
       displayFlush();
     }
   }

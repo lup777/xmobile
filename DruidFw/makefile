@@ -66,6 +66,7 @@ epd.c \
 render.c\
 gsm.c \
 core_drv.c \
+text_edit.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/queue.c \
 $(SOURCE_DIR)/list.c \
