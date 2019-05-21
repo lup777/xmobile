@@ -29,6 +29,10 @@ void textEddit_free(TextEdit* te) {
   te->len = 0;
 }
 
+void textEdit_clear(TextEdit* te) {
+  te->idx = 0;
+}
+
 bool textEdit_pushc(TextEdit* te, char c) {
   if (te == NULL)
     return false;
