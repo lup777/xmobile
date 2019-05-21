@@ -79,11 +79,9 @@ int main(void) {
 
 static void vMainTask(void* pvParameters) {
   (void)(pvParameters);
-  raw_logc("_1_");
   check_endian();
-  raw_logc("_2_");
+
   displayInit();
-  raw_logc("_3_");
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   GSM_Init();
@@ -91,7 +89,7 @@ static void vMainTask(void* pvParameters) {
     _sleep(1000);
     _log("MAIN main task init completed");
   }
-
+    
 #define line_num 10
   struct LineDate {
     char line[25];

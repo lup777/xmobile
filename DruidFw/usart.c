@@ -60,13 +60,12 @@ inline void logcl(const char* str) {
 #ifndef DISABLE_LOGS
 
 void send_log_str(char* data, byte len) {
-  //if( xSemaphoreTake( log_mutex, portMAX_DELAY ) == pdTRUE ) {
+  taskENTER_CRITICAL();
   size_t i = 0;
   for (i = 0; i < len; i++) {
     xQueueSendToBack(log_buf_handle, (void*) &(data[i]), 0);
   }
-    //xSemaphoreGive( log_mutex );
-    //}
+  taskEXIT_CRITICAL();  
 }
 #endif
 
