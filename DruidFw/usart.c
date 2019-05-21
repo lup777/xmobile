@@ -61,7 +61,10 @@ inline void logcl(const char* str) {
 
 void send_log_str(char* data, byte len) {
   //if( xSemaphoreTake( log_mutex, portMAX_DELAY ) == pdTRUE ) {
-    xStreamBufferSend(log_buf_handle, data, len, 0);
+  size_t i = 0;
+  for (i = 0; i < len; i++) {
+    xQueueSendToBack(log_buf_handle, (void*) &(data[i]), 0);
+  }
     //xSemaphoreGive( log_mutex );
     //}
 }
@@ -98,17 +101,14 @@ ISR(USARTF0_RXC_vect) {}*/
 #ifndef DISABLE_LOGS
 void vLogTask(void* pvParameters) {
   (void)(pvParameters);
-  char buf[LOG_BUFFER_LEN];
-  size_t i = 0;
+  char buf;
 
   for (;;) { // loop
-    size_t rx = xStreamBufferReceive(log_buf_handle, buf, LOG_BUFFER_LEN, portMAX_DELAY);
+    xQueueReceive(log_buf_handle, (void*) &buf, portMAX_DELAY);
 
-    for (i = 0; i < rx; i++) {
-      while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
 
-      USARTE1_DATA = buf[i];
-    }
+    USARTE1_DATA = buf;
   }
 }
 #endif

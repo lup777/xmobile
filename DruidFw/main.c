@@ -25,7 +25,7 @@ void check_endian(void);
 MessageBufferHandle_t kbd_rx_buf;
 MessageBufferHandle_t gsm_rx_buf;
 #ifndef DISABLE_LOGS
-StreamBufferHandle_t  log_buf_handle;
+QueueHandle_t log_buf_handle;
 #endif
 
 // ~GLOBAL VARIABLES~
@@ -34,7 +34,7 @@ int main(void) {
   kbd_rx_buf = xMessageBufferCreate( KBD_RX_BUFFER_SIZE ); // kbd input message buffer
   gsm_rx_buf = xMessageBufferCreate( 50 );     // GSM input message buffer
 #ifndef DISABLE_LOGS
-  log_buf_handle = xStreamBufferCreate(80, 1); // logging output stream
+  log_buf_handle = xQueueCreate(80, 1); // logging output stream
 #endif
 
   {  // init modules (order is significant)

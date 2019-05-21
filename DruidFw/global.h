@@ -8,6 +8,7 @@
 #include "message_buffer.h"
 #include "task.h"
 #include "semphr.h"
+#include "queue.h"
 
 #define MENU_SIZE 5
 
@@ -51,7 +52,7 @@ extern DispBuf display;
 extern MessageBufferHandle_t kbd_rx_buf;
 extern MessageBufferHandle_t gsm_rx_buf;
 #ifndef DISABLE_LOGS
-extern StreamBufferHandle_t  log_buf_handle;
+extern QueueHandle_t log_buf_handle;
 #endif
 
 
