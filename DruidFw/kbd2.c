@@ -60,7 +60,7 @@ void max7370_init(void);
 // int - PA0
 
 void kbd_init(void) {
-  _log("kbd init");
+  raw_logc("kbd init");
   twi_init();
   max7370_init();
 
@@ -71,11 +71,11 @@ void kbd_init(void) {
   PORTA.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
   PORTA.INTCTRL = (PORT_INT1LVL_OFF_gc | PORT_INT0LVL_LO_gc);
   PORTA_INT0MASK = 0x01;
-  _log("kbd init complete");
+  raw_logc("kbd init complete");
 }
 
 void twi_init(void) {
-  _log("twi init");
+  raw_logc("twi init");
   TWIC_MASTER_BAUD = TWI_BAUDRATE;
 
   TWIC_MASTER_CTRLA
@@ -89,27 +89,27 @@ void twi_init(void) {
 }
 
 void max7370_init(void) {
-  _log("max7370 init");
+  raw_logc("max7370 init");
 
-  _log("write config reg");
+  raw_logc("write config reg");
   // disable sleep, enable key release, clear int on first read
   kbd_send_reg_byte(MAX7370_REG_CONFIG,
 		    MAX7370_CFG_INTERRUPT_UNTIL_READ
 		    | MAX7370_CFG_WAKEUP);
 
-  _log("write debounce reg");
+  raw_logc("write debounce reg");
   // debounce time 16ms
   kbd_send_reg_byte(MAX7370_REG_DEBOUNCE, 0x77);
 
-  _log("write interrupt reg");
+  raw_logc("write interrupt reg");
   // nINT asserts every debounce cycles
   kbd_send_reg_byte(MAX7370_REG_INTERRUPT, 0x01);
 
-  _log("write autosleep reg");
+  raw_logc("write autosleep reg");
   // disable Autosleep
   kbd_send_reg_byte(MAX7370_REG_SLEEP, MAX7370_AUTOSLEEP_DISABLE);
 
-  _log("write arr size reg");
+  raw_logc("write arr size reg");
   // kb arr size
   kbd_send_reg_byte(MAX7370_REG_ARR_SIZE, 0x64);
 

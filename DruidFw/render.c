@@ -16,6 +16,7 @@ void displayInit(void) {
 
   if (display.buffer == NULL) {
     _log("disp buf malloc(%d) FAILED", DISPLAY_BUFFER_SIZE);
+    for(;;) {}
     return;
   }
 

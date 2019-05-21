@@ -34,12 +34,12 @@ int main(void) {
   kbd_rx_buf = xMessageBufferCreate( KBD_RX_BUFFER_SIZE ); // kbd input message buffer
   gsm_rx_buf = xMessageBufferCreate( 50 );     // GSM input message buffer
 #ifndef DISABLE_LOGS
-  log_buf_handle = xStreamBufferCreate(50, 1); // logging output stream
+  log_buf_handle = xStreamBufferCreate(80, 1); // logging output stream
 #endif
 
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
-    sram_init(); // configure external SRAM
+    //sram_init(); // configure external SRAM
     log_init();  // configure debug USART
     kbd_init();  // configure keyboard MAX7370 I2C
     int_init();  // enable ints and clear int flags
@@ -71,7 +71,7 @@ int main(void) {
   }
 #endif
 
-
+  raw_logc("start_scheduler");
   vTaskStartScheduler();
 
   return 0;
@@ -79,15 +79,18 @@ int main(void) {
 
 static void vMainTask(void* pvParameters) {
   (void)(pvParameters);
-
+  raw_logc("_1_");
   check_endian();
-
+  raw_logc("_2_");
   displayInit();
-
+  raw_logc("_3_");
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   GSM_Init();
-  _log("MAIN main task init completed");
+  for (;;) {
+    _sleep(1000);
+    _log("MAIN main task init completed");
+  }
 
 #define line_num 10
   struct LineDate {

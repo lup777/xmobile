@@ -8,12 +8,15 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "stream_buffer.h"
+#include "semphr.h"
 
 #include "global.h"
 
-#define LOG_BUFFER_LEN 20
+#define LOG_BUFFER_LEN 40
 
 #ifndef DISABLE_LOGS
+xSemaphoreHandle log_mutex;
+
 void send_log_str(char* data, byte len);
 #endif
 
@@ -55,10 +58,12 @@ inline void logcl(const char* str) {
 #endif
 
 #ifndef DISABLE_LOGS
-inline void send_log_str(char* data, byte len) {
-  taskENTER_CRITICAL();
-  xStreamBufferSend(log_buf_handle, &data, len, 0);
-  taskEXIT_CRITICAL();
+
+void send_log_str(char* data, byte len) {
+  //if( xSemaphoreTake( log_mutex, portMAX_DELAY ) == pdTRUE ) {
+    xStreamBufferSend(log_buf_handle, data, len, 0);
+    //xSemaphoreGive( log_mutex );
+    //}
 }
 #endif
 
@@ -79,6 +84,12 @@ inline void log_init(void) {
   // https://planetcalc.ru/747/
   // https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
   USARTE1.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
+
+#ifndef DISABLE_LOGS
+  log_mutex = xSemaphoreCreateMutex();
+  if (!log_mutex)
+    raw_logc("LOG SEM FAILED");
+#endif
 }
 
 /*ISR(USARTE1_DRE_vect) {}
@@ -91,7 +102,7 @@ void vLogTask(void* pvParameters) {
   size_t i = 0;
 
   for (;;) { // loop
-    size_t rx = xStreamBufferReceive(log_buf_handle, &buf, LOG_BUFFER_LEN, portMAX_DELAY);
+    size_t rx = xStreamBufferReceive(log_buf_handle, buf, LOG_BUFFER_LEN, portMAX_DELAY);
 
     for (i = 0; i < rx; i++) {
       while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
@@ -105,8 +116,12 @@ void vLogTask(void* pvParameters) {
 void raw_logc(const char* str) {
   size_t i = 0;
 
-  for (i = 0; i < sizeof(str); i++) {
+  for (i = 0; i < strlen(str); i++) {
     while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
     USARTE1_DATA = str[i];
   }
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = '\r';
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = '\n';
 }

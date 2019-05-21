@@ -26,6 +26,8 @@
 #define MSG_CLOSE 2
 #define MSG_GSM_INPUT 3
 
+//#define DISABLE_LOGS
+
 typedef uint8_t byte;
 typedef uint16_t word;
 
@@ -52,7 +54,6 @@ extern MessageBufferHandle_t gsm_rx_buf;
 extern StreamBufferHandle_t  log_buf_handle;
 #endif
 
-//#define DISABLE_LOGS
 
 #include "usart.h"
 

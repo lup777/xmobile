@@ -47,10 +47,12 @@ inline void SPIC_Init(size_t tx_buffer_size) {
   g_spi_tx_buffer = pvPortMalloc(tx_buffer_size);
   g_spi_tx_buffer_size = 0;
   if (g_spi_tx_buffer) {
-    _log("spi tx buf malloc(%d) OK", tx_buffer_size);
+    _log("spi tx buf malloc(%d) OK", tx_buffer_size); 
     g_spi_tx_buffer_size = tx_buffer_size;
+  } else {
+    _log("spi tx buf malloc failed");
+    for(;;) {}    
   }
-
 }
 
 ISR(SPIC_INT_vect) {

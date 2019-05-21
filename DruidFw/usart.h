@@ -9,6 +9,7 @@ void log_init(void);
 void raw_logc(const char* str);
 
 #ifndef DISABLE_LOGS
+extern xSemaphoreHandle log_mutex;
 void _log(const char *format, ...);
 void logc(char c);
 void logcl(const char* str);
