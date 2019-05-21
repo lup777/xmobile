@@ -62,7 +62,6 @@ pgm.c \
 kbd2.c \
 fonts.c \
 util.c \
-menu.c \
 epd.c \
 render.c\
 gsm.c \
@@ -82,6 +81,7 @@ $(PORT_DIR)/port.c \
 #ui.c
 #telephone.c \
 #gsm.c \
+#menu.c \
 
 #gsm.c
 #display.c \

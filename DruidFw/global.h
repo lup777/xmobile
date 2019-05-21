@@ -1,6 +1,5 @@
 //global.h
-#ifndef __GLOBAL_H__
-#define __GLOBAL_H__
+#pragma once
 
 #include <avr/io.h>
 #include <stdbool.h>
@@ -10,17 +9,9 @@
 #include "task.h"
 #include "semphr.h"
 
-#include "usart.h"
-
 #define MENU_SIZE 5
 
 #define KBD_RX_BUFFER_SIZE 10
-
-typedef struct struct_gsm_data {
-  uint8_t flags; // should be renamed
-  // signal level
-  // battary level
-} GsmData;
 
 #define NO_LOG_THREAD
 
@@ -38,14 +29,6 @@ typedef struct struct_gsm_data {
 typedef uint8_t byte;
 typedef uint16_t word;
 
-typedef struct struct_context {
-  TaskHandle_t ui_task_handle;
-  TaskHandle_t gsm_task_handle;
-  GsmData gsm_data;
-  MessageBufferHandle_t mail[MAILBOX_SIZE];
-  uint8_t active_app_id;
-} Context;
-
 typedef struct struct_zone {
   short x_; // coordinates
   short y_; // coordinates
@@ -62,29 +45,18 @@ typedef struct struct_display_buffer {
     Zone zone;
 } DispBuf;
 
-
-extern Context context;
 extern DispBuf display;
 extern MessageBufferHandle_t kbd_rx_buf;
 extern MessageBufferHandle_t gsm_rx_buf;
+#ifndef DISABLE_LOGS
+extern StreamBufferHandle_t  log_buf_handle;
+#endif
 
-#define SendMsgISR(HANDLE, DATA, SIZE) ({			  \
-      BaseType_t hptm_ = pdFALSE;                                 \
-      UBaseType_t uxSavedInterruptStatus_;                        \
-      if (HANDLE != NULL) {                                       \
-        uxSavedInterruptStatus_ = taskENTER_CRITICAL_FROM_ISR();  \
-        xMessageBufferSendFromISR(HANDLE, DATA, SIZE, &hptm_);    \
-        taskEXIT_CRITICAL_FROM_ISR( uxSavedInterruptStatus_ );    \
-      }                                                           \
-      (hptm_ == pdTRUE);                                          \
-    })
+//#define DISABLE_LOGS
 
+#include "usart.h"
 
 void _sleep(uint16_t time_ms);
 uint8_t _strlen(char * str);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
-void SendAppMsg(uint8_t msg_id, char* payload, uint8_t payload_len,
-                uint8_t mailbox_id);
-
-#endif // __GLOBAL_H__

@@ -11,7 +11,8 @@
 #include "spi.h"
 #include "fonts.h"
 
-#define _log(...)
+#define __log(...)
+//#define __log _log
 
 volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
@@ -20,7 +21,7 @@ static volatile uint8_t gi;
 
 void EPD_Init(void) {
   //SPIC_Init();
-  _log("SPI init completed");
+  __log("SPI init completed");
   gbackground = NULL;
   // CS configured to out in SPIC_Init()
   PORTA.DIRSET = PIN1_bm; // DC
@@ -30,12 +31,12 @@ void EPD_Init(void) {
 
   EPD_Reset();
 
-  _log("EPD init");
+  __log("EPD init");
   {
     uint8_t data[3] = {0xC7, 0x00, 0x00};
     EPD_SendFromRam(DRIVER_OUTPUT_CONTROL, data, 3);
   }
-  
+
   {
     uint8_t data[3] = {0xD7, 0xD6, 0x9D};
     EPD_SendFromRam(BOOSTER_SOFT_START_CONTROL, data, 3);
@@ -46,7 +47,7 @@ void EPD_Init(void) {
   EPD_SendFromGen(SET_GATE_TIME, 0x08, 1);
   EPD_SendFromGen(DATA_ENTRY_MODE_SETTING, 0x01, 1);
 
-  _log("EPD Init completed");
+  __log("EPD Init completed");
 
   //EPD_clear();
 
@@ -54,13 +55,13 @@ void EPD_Init(void) {
 }
 
 void EPD_StartPartial(void) {
-  _log("EPD Start PU _1_");
+  __log("EPD Start PU _1_");
   if (xSemaphoreTake(gEpdMutex, portMAX_DELAY) != pdTRUE) {
-    _log("EPD_StartPartial Failed to take mutex");
+    __log("EPD_StartPartial Failed to take mutex");
     return;
   }
   //EPD_WaitUntilIdle(); // wait
-  _log("EPD Start PU _2_");
+  __log("EPD Start PU _2_");
 
   EPD_SetLut(lut_partial_update);
   EPD_PowerOn();
@@ -70,12 +71,12 @@ void EPD_StartPartial(void) {
 
   EPD_SetMemoryArea(0, EPD_WIDTH_BYTES - 1, EPD_HEIGHT - 1, 0);
   EPD_LoadFlashImageToDisplayRam(EPD_WIDTH, EPD_HEIGHT, gbackground);
-  
-  _log("EPD Start PU _3_");
+
+  __log("EPD Start PU _3_");
 }
 
 /*void EPD_ContinuePartial(char* str, uint8_t len, uint8_t x, uint8_t y) {
-  _log("c>");
+  __log("c>");
   x = 24 - x;
   for (gi = 0; gi < len; gi++) {
     const uint8_t* picture = FONT_GetPicture8x13( (uint8_t)(str[gi]));
@@ -92,7 +93,7 @@ void EPD_StartPartial(void) {
       break;
     }
   }
-  _log("c<");
+  __log("c<");
   //EPD_UpdatePartial();
   }*/
 
@@ -108,15 +109,15 @@ void EPD_ContinuePartial(word x, word y, byte* data,
 
 void EPD_StopPartial(void) {
   EPD_PowerOff();
-  _log("EPD_StopPartial give mutex");
+  __log("EPD_StopPartial give mutex");
   xSemaphoreGive(gEpdMutex);
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   //_sleep(200);
-  _log("EPD_StopPartial take mutex");
+  __log("EPD_StopPartial take mutex");
   if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
-    _log("EPD_StartPartial Failed to take mutex");
+    __log("EPD_StartPartial Failed to take mutex");
     return;
   }
 
@@ -148,7 +149,7 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
 }
 
 void EPD_UpdatePartial(void) {
-  _log("update");
+  __log("update");
   EPD_SendFromGen(0x22, 0x04, 1);
   EPD_SendFromRam(0x20, NULL, 0);
   EPD_SendFromRam(0xFF, NULL, 0);
@@ -157,7 +158,7 @@ void EPD_UpdatePartial(void) {
 void EPD_ShowFullScreenImage(const uint8_t *image,
                              uint16_t xsize,
                              uint16_t ysize) {
-  _log("EPD show full screen image");
+  __log("EPD show full screen image");
   //Get xbytes from xsize, rounding up
   uint8_t xbytes;
   xbytes = ( xsize + 7 ) >> 3;
