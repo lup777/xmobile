@@ -17,7 +17,6 @@
 // local functions
 static void vMainTask(void* pvParameters);
 
-void _sleep(uint16_t time_ms);
 void check_endian(void);
 // ~ local functions
 
@@ -31,16 +30,22 @@ QueueHandle_t log_buf_handle;
 // ~GLOBAL VARIABLES~
 
 int main(void) {
+  log_init();  // configure debug USART
+
   kbd_rx_buf = xMessageBufferCreate( KBD_RX_BUFFER_SIZE ); // kbd input message buffer
+  CHECK(kbd_rx_buf);
+
   gsm_rx_buf = xMessageBufferCreate( 50 );     // GSM input message buffer
+  CHECK(gsm_rx_buf);
+
 #ifndef DISABLE_LOGS
   log_buf_handle = xQueueCreate(80, 1); // logging output stream
+  CHECK(log_buf_handle);
 #endif
 
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
     //sram_init(); // configure external SRAM
-    log_init();  // configure debug USART
     kbd_init();  // configure keyboard MAX7370 I2C
     int_init();  // enable ints and clear int flags
   }
@@ -53,10 +58,7 @@ int main(void) {
                         NULL,
                         1,
                         NULL );
-
-  if (result != pdPASS) {
-    raw_logc("main task cr fail");
-  }
+  CHECK(result == pdPASS);
 
 #ifndef DISABLE_LOGS
   result = xTaskCreate( vLogTask,
@@ -66,9 +68,7 @@ int main(void) {
                         1,
                         NULL );
 
-  if (result != pdPASS) {
-    raw_logc("log task cr fail");
-  }
+  CHECK(result == pdPASS);
 #endif
 
   raw_logc("start_scheduler");
@@ -85,11 +85,8 @@ static void vMainTask(void* pvParameters) {
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   GSM_Init();
-  for (;;) {
-    _sleep(1000);
-    _log("MAIN main task init completed");
-  }
-    
+  CHECK(0);
+
 #define line_num 10
   struct LineDate {
     char line[25];
@@ -97,10 +94,7 @@ static void vMainTask(void* pvParameters) {
   } lines[line_num];
 
   TextEdit te;
-  if (textEdit_init(&te, 25) ) {
-    _log("TextEdit init FAILED");
-    for (;;){}
-  }
+  textEdit_init(&te, 25); // result will be checked internally
 
   size_t i = 0;
 
@@ -200,7 +194,7 @@ void _sleep(uint16_t time_ms) {
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
 }
 
-inline void check_endian(void) {
+void check_endian(void) {
   union {
     uint16_t d;
     uint8_t a[2];

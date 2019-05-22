@@ -5,12 +5,10 @@
 #include "text_edit.h"
 
 bool textEdit_init(TextEdit* te, byte len) {
-  if (te == NULL)
-    return false;
+  CHECK(te);
 
   te->text = pvPortMalloc(len);
-  if (te->text == NULL)
-    return false;
+  CHECK(te->text);
 
   te->idx = 0;
   te->len = len;
@@ -18,8 +16,7 @@ bool textEdit_init(TextEdit* te, byte len) {
 }
 
 void textEddit_free(TextEdit* te) {
-  if (te == NULL)
-    return;
+  CHECK(te);
 
   if (te->text)
     vPortFree(te->text);
@@ -34,8 +31,7 @@ void textEdit_clear(TextEdit* te) {
 }
 
 bool textEdit_pushc(TextEdit* te, char c) {
-  if (te == NULL)
-    return false;
+  CHECK(te);
 
   if (te->idx >= te->len) {// if full
     te->idx = 0;
@@ -51,8 +47,8 @@ bool textEdit_pushc(TextEdit* te, char c) {
 }
 
 bool textEdit_pop(TextEdit* te, char* c) {
-  if (te == NULL || c == NULL)
-    return false;
+  CHECK(te);
+  CHECK(c);
 
   if (te->idx > 0) {
     te->idx --;

@@ -52,6 +52,7 @@ void EPD_Init(void) {
   //EPD_clear();
 
   gEpdMutex = xSemaphoreCreateMutex();
+  CHECK(gEpdMutex);
 }
 
 void EPD_StartPartial(void) {

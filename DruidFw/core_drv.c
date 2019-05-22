@@ -50,7 +50,7 @@ void sram_init(void) {
   PORTF.DIRSET = 0xFF;
   PORTH.DIRSET = 0xFF;
   PORTH.OUTSET = 0xFF;
-  
+
   EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
     | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
                                  // IFMODE[1:0] = 1 0 (bits)
@@ -58,17 +58,17 @@ void sram_init(void) {
   //EBI.CS0.CTRLA = EBI_CS_MODE_DISABLED_gc;
 
   //EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
-  
+
   //EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
 
-  
-  EBI.CS3.CTRLA = EBI_CS_ASIZE_1MB_gc  // size of the block above the base address
+
+  EBI.CS3.CTRLA = EBI_CS_ASPACE_1MB_gc  // size of the block above the base address
     | EBI_CS_MODE_SRAM_gc;              // SRAM mode
 
   EBI.CS3.CTRLB = EBI_CS_SRWS_1CLK_gc;  // One Clk per 2 cycles wait state
 
   EBI.CS3.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
-  
+
 }
 
 bool check_sram(void) {
@@ -86,7 +86,7 @@ bool check_sram(void) {
     if (result != 0xAA)
       return false;
   }
-  
+
   return true;
   //_log("MEM TEST: i = 0x%04X", i);
 }

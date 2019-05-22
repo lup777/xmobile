@@ -62,3 +62,17 @@ void _sleep(uint16_t time_ms);
 uint8_t _strlen(char * str);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
+
+
+// CHECK
+// if (X == false) -> show func:line and loop
+#define CHECK(X) {                                    \
+    if(X == false) {                                  \
+      _log("CHECK: %s:%d", __FUNCTION__, __LINE__) ;  \
+      for(;;) {}                                      \
+    }                                                 \
+  }
+
+#ifndef EBI_CS_ASPACE_gm
+# define EBI_CS_ASPACE_1MB_gc   EBI_CS_ASIZE_1MB_gc
+#endif

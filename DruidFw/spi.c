@@ -45,14 +45,9 @@ inline void SPIC_Init(size_t tx_buffer_size) {
     | SPI_CLK2X_bm | SPI_MODE_0_gc;
 
   g_spi_tx_buffer = pvPortMalloc(tx_buffer_size);
-  g_spi_tx_buffer_size = 0;
-  if (g_spi_tx_buffer) {
-    _log("spi tx buf malloc(%d) OK", tx_buffer_size); 
-    g_spi_tx_buffer_size = tx_buffer_size;
-  } else {
-    _log("spi tx buf malloc failed");
-    for(;;) {}    
-  }
+  CHECK(g_spi_tx_buffer);
+
+  g_spi_tx_buffer_size = tx_buffer_size;
 }
 
 ISR(SPIC_INT_vect) {
@@ -155,7 +150,7 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
 
   if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
     _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
- 
+
   if (repeat > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
@@ -197,7 +192,7 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
 
   for(size_t i = 0; i < data_len; i++)
     g_spi_tx_buffer[i] = data[i];
-    
+
   if (data_len > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,
@@ -240,7 +235,7 @@ void EPD_SendFromDisplayBuf(uint8_t cmd, uint8_t* data,
 
   for(size_t i = 0; i < order.length; i++)
     g_spi_tx_buffer[i] = data[i * step];
-    
+
   if (order.length > 0) {
     bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
                                     &order,

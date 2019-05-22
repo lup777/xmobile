@@ -7,11 +7,6 @@
 #include "global.h"
 #include "kbd.h"
 
-/*void _sleep(uint16_t time_ms) {
-  //TickType_t xDelay = time / portTICK_PERIOD_MS;
-  vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
-  }*/
-
 volatile uint16_t g_key_map;
 
 #define KEY_1 (0x0001)

@@ -13,16 +13,9 @@ DispBuf display;
 
 void displayInit(void) {
   display.buffer = pvPortMalloc(DISPLAY_BUFFER_SIZE);
-
-  if (display.buffer == NULL) {
-    _log("disp buf malloc(%d) FAILED", DISPLAY_BUFFER_SIZE);
-    for(;;) {}
-    return;
-  }
+  CHECK(display.buffer);
 
   display.buf_size = DISPLAY_BUFFER_SIZE;
-  _log("disp buf malloc(%d) OK", display.buf_size);
-  
 
   for (size_t i = 0; i < display.buf_size; i++)
     display.buffer[i] = 0xFF;
@@ -39,7 +32,7 @@ void displayInit(void) {
 void displayFlush(void) {
   EPD_StartPartial();
 
-  
+
   for (size_t col = 0; col < (size_t)display.buf_cols; col++ ) {
     EPD_ContinuePartial(display.buf_cols - col - 1, // col number byte
 			display.buf_rows - 0, // start row number bit
@@ -54,7 +47,7 @@ void displayFlush(void) {
        zoneY(),
        zoneEx(),
        zoneEy());*/
-  
+
   zoneClear();
     for(word i = 0; i < display.buf_size; i++)
       display.buffer[i] = 0xFF;
@@ -158,7 +151,7 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
       //_log("-> 0x%02X", sub_disp_->buffer[ src_byte_id]);
       byte right_mask = ( sub_disp_->buffer[ src_byte_id] >> (8 - shift_bits))
 	| (0xFF << (shift_bits));
-      
+
       byte left_mask = ( sub_disp_->buffer[ src_byte_id] << (shift_bits))
 	| (0xFF >> (8 - shift_bits));
 
@@ -174,7 +167,7 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
 
       //_log("0x%02X 0x%02X", display_->buffer[left_byte_id], display_->buffer[left_byte_id + 1]);
 
-      
+
       display_->buffer[left_byte_id] &= left_mask;
 
       zoneUpdate(tar_cur_col << 3, tar_y, display_);
@@ -186,7 +179,7 @@ void displayRenderSubBuffer(short tar_x, short tar_y,
         continue;
 
       display_->buffer[left_byte_id + 1] &= right_mask;
-      //_log("-> 0x%02X 0x%02X", display_->buffer[left_byte_id], display_->buffer[left_byte_id + 1]);      
+      //_log("-> 0x%02X 0x%02X", display_->buffer[left_byte_id], display_->buffer[left_byte_id + 1]);
       zoneUpdate((tar_cur_col + 1) << 3, tar_y, display_);
       zoneUpdate((tar_cur_col + 1) << 3, tar_y + src_cur_row, display_);
     }
