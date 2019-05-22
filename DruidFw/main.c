@@ -13,6 +13,7 @@
 #include "render.h"
 #include "core_drv.h"
 #include "text_edit.h"
+#include "ml_text_edit.h"
 
 // local functions
 static void vMainTask(void* pvParameters);
@@ -26,6 +27,8 @@ MessageBufferHandle_t gsm_rx_buf;
 #ifndef DISABLE_LOGS
 QueueHandle_t log_buf_handle;
 #endif
+//MessageBufferHandle_t task_mgr_msg_buf_handle;
+enum enum_tasks active_task;
 
 // ~GLOBAL VARIABLES~
 
@@ -42,6 +45,9 @@ int main(void) {
   log_buf_handle = xQueueCreate(80, 1); // logging output stream
   CHECK(log_buf_handle);
 #endif
+
+  //task_mgr_msg_buf_handle = xMessageBufferCreate( TASK_MGR_BUFFER_SIZE );
+  //CHECK(task_mgr_msg_buf_handle);
 
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
@@ -71,6 +77,15 @@ int main(void) {
   CHECK(result == pdPASS);
 #endif
 
+  /*result = xTaskCreate( vTaskMgr,
+                        "task_mgr",
+                        configMINIMAL_STACK_SIZE,
+                        NULL,
+                        2,
+                        NULL );
+
+  CHECK(result == pdPASS);*/
+
   raw_logc("start_scheduler");
   vTaskStartScheduler();
 
@@ -87,20 +102,12 @@ static void vMainTask(void* pvParameters) {
   GSM_Init();
   CHECK(0);
 
-#define line_num 10
-  struct LineDate {
-    char line[25];
-    byte len;
-  } lines[line_num];
+  MlineTextEdit mte;
+  mlTextEdit_init(&mte, 25, 7); // result will be checked internally
 
   TextEdit te;
   textEdit_init(&te, 25); // result will be checked internally
 
-  size_t i = 0;
-
-  for (i = 0; i < line_num; i++) {
-    lines[i].len = 0;
-  }
   bool need_update_display = false;
 
   for(;;) {
@@ -115,27 +122,17 @@ static void vMainTask(void* pvParameters) {
 
       if (key == 0x02) { // loud connection
         send_cstr("AT+SNFS=1\n\r");
-      }
-
-      else if (key == 0x1B) { // get signal quality
+      } else if (key == 0x1B) { // get signal quality
         gsm_get_signal_quality();
-      }
-
-      else if (key == 0x1D) { // set ring volume
+      } else if (key == 0x1D) { // set ring volume
         send_cstr("AT+CRSL=15\n\r");
-      }
-
-      else if (key == 0x18) {//responce the call
+      } else if (key == 0x18) {//responce the call
         send_cstr("ATA\n\r");
-      }
-
-      else if (key == 17) { // call
+      } else if (key == 17) { // call
         send_cstr("ATD+");
         send_str(te.text, te.idx);
         send_cstr(";\r\n");
-      }
-
-      else {
+      } else {
         _log("KBD: 0x%02X", key);
 
         char ch;
@@ -152,35 +149,18 @@ static void vMainTask(void* pvParameters) {
     }
 
     if (gsm_rx_bytes > 0) {
-
-      for (i = 1; i < line_num; i++) {
-        memcpy(&(lines[i - 1]), &(lines[i]), 25);
-        lines[i - 1].len = lines[i].len;
-      }
-      memcpy(lines[line_num - 1].line, gsm_char, gsm_rx_bytes);
-      lines[line_num - 1].len = gsm_rx_bytes;
+      mlTextEdit_pushstr(&mte, gsm_char, gsm_rx_bytes);
 
       //_log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
       logcl("GSM: ");
-
-      for(i = 0; i < gsm_rx_bytes; i++) {
-        logc(gsm_char[i]);
-      }
+      send_log_str(gsm_char, gsm_rx_bytes);
       logcl("\n\r");
 
       // draw GSM log
-      displayRenderText(8, 10, "gsm:", 4, &display);
-      for (i = 0; i < line_num; i++) {
-
-        char* str = lines[i].line;
-        byte len = lines[i].len;
-
-        displayRenderText(8, 24 + (i * 14), str, len, &display);
-      }
+      mlTextEdit_render(&mte, 8, 24, &display);
 
       need_update_display = true;
     }
-
 
     // update display
     if (need_update_display) {

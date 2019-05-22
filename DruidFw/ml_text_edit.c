@@ -1,9 +1,13 @@
 // ml_text_edit.c
+#include <string.h>
+
 #include "text_edit.h"
 
 #include "ml_text_edit.h"
+#include "render.h"
 
 void exchange_tes(TextEdit* tel, TextEdit* ter);
+static void move_lines_back(MlineTextEdit* mte);
 
 bool mlTextEdit_init(MlineTextEdit* mte, byte line_len, byte lines_num) {
   byte i = 0;
@@ -30,48 +34,42 @@ bool mlTextEdit_init(MlineTextEdit* mte, byte line_len, byte lines_num) {
 bool mlTextEdit_pushc(MlineTextEdit* mte, char c) {
   CHECK(mte);
 
-  TextEdit* te = mte->lines_arr + mte->line_idx;
+  TextEdit* te = mte->lines_arr + (mte->lines_num - 1);
   CHECK(te);
 
   return textEdit_pushc(te, c);
+}
+
+bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str) {
+  return mlTextEdit_pushstr(mte, (char*)str, strlen(str));
 }
 
 bool mlTextEdit_pushstr(MlineTextEdit* mte, char* str, byte len) {
   CHECK(mte);
   CHECK(str);
 
-  if (mte->line_idx >= mte->lines_num) {
-    // move all lines back
-  }
+  move_lines_back(mte);
+  TextEdit* te = mte->lines_arr + (mte->lines_num - 1);
 
-  TextEdit* te = mte->lines_arr + mte->line_idx;
-  CHECK(te);
-
-  bool result = textEdit_pushstr(te, str, len);
+  bool result = textEdit_setstr(te, str, len); // set string to TE
   if (result == false)
     return false;
 
-  mte->line_idx++;
   return true;
 }
 
-bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str) {
+static void move_lines_back(MlineTextEdit* mte) {
+  byte i = 0;
   CHECK(mte);
-  CHECK(str);
 
-  if (mte->line_idx >= mte->lines_num) {
-    // move all lines back
+  for (i = 1; i < mte->lines_num; i ++) {
+    CHECK(mte->lines_arr + i);
+
+    memcpy(mte->lines_arr + i - 1,
+           mte->lines_arr + i,
+           sizeof(TextEdit));
   }
-
-  TextEdit* te = mte->lines_arr + mte->line_idx;
-  CHECK(te);
-
-  bool result = textEdit_pushcstr(te, str);
-  if (result == false)
-    return false;
-
-  mte->line_idx++;
-  return true;
+  //mte->line_idx--;
 }
 
 inline void exchange_tes(TextEdit* tel, TextEdit* ter) { // exchange TextEdit instances
@@ -85,6 +83,7 @@ inline void exchange_tes(TextEdit* tel, TextEdit* ter) { // exchange TextEdit in
 
 void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) {
   byte char_height = 15; // height of char place (to get in font info)
+  byte char_width = 8; // width of char place (to get in font info)
 
   CHECK(mte);
   CHECK(pdisplay);
@@ -94,5 +93,10 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
     TextEdit* te = mte->lines_arr + i;
     CHECK(te);
     textEdit_render(te, x, y + (char_height * i), pdisplay); // render line
+  }
+  if (mte->lines_num > 0) {
+    byte len_chars = mte->lines_arr[0].len;
+    displayRenderRectangle(x, y, len_chars * char_width,
+                           mte->lines_num * char_height, pdisplay);
   }
 }

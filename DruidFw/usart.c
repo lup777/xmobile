@@ -16,8 +16,6 @@
 
 #ifndef DISABLE_LOGS
 xSemaphoreHandle log_mutex;
-
-void send_log_str(char* data, byte len);
 #endif
 
 #ifndef DISABLE_LOGS
@@ -65,7 +63,7 @@ void send_log_str(char* data, byte len) {
   for (i = 0; i < len; i++) {
     xQueueSendToBack(log_buf_handle, (void*) &(data[i]), 0);
   }
-  taskEXIT_CRITICAL();  
+  taskEXIT_CRITICAL();
 }
 #endif
 

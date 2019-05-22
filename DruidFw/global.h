@@ -13,6 +13,7 @@
 #define MENU_SIZE 5
 
 #define KBD_RX_BUFFER_SIZE 10
+#define TASK_MGR_BUFFER_SIZE 50
 
 #define NO_LOG_THREAD
 
@@ -76,3 +77,14 @@ uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 #ifndef EBI_CS_ASPACE_gm
 # define EBI_CS_ASPACE_1MB_gc   EBI_CS_ASIZE_1MB_gc
 #endif
+
+enum enum_tasks {
+  enum_task_mgr,
+  enum_task_tel,
+  enum_task_clock
+};
+
+#define MSG_HEADER_KBD 0
+#define MSG_HEADER_GSM 1
+
+extern enum enum_tasks active_task;

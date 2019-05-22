@@ -33,7 +33,7 @@ void textEdit_clear(TextEdit* te) {
   te->idx = 0;
 }
 
-byte textEdit_pushstr(TextEdit* te, char* str, byte len) {
+byte textEdit_setstr(TextEdit* te, char* str, byte len) {
   byte i = 0;
   CHECK(te);
   CHECK(str);
@@ -41,18 +41,12 @@ byte textEdit_pushstr(TextEdit* te, char* str, byte len) {
   for (i = 0; i < len; i++) {
     textEdit_pushc(te, str[i]);
   }
+  te->idx = len;
   return i;
 }
 
-byte textEdit_pushcstr(TextEdit* te, const char* str) {
-  byte i = 0;
-  CHECK(te);
-  CHECK(str);
-
-  for (i = 0; i < strlen(str); i++) {
-    textEdit_pushc(te, str[i]);
-  }
-  return i;
+byte textEdit_setcstr(TextEdit* te, const char* str) {
+  return textEdit_setstr(te, (char*)str, strlen(str));
 }
 
 bool textEdit_pushc(TextEdit* te, char c) {
@@ -93,5 +87,6 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   byte char_width = 8; // width of char place (to get in font info)
   byte char_height = 15; // height of char place (to get in font info)
   displayRenderText(x, y, te->text, te->idx, pdisplay);
-  displayRenderRectangle(x, y, (x + char_width) * te->idx, y + char_height, pdisplay);
+  displayRenderRectangle(x, y, (x + char_width) * te->idx,
+                         y + char_height, pdisplay);
 }
