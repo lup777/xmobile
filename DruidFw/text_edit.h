@@ -2,8 +2,10 @@
 
 #pragma once
 
+#include "global.h"
+
 typedef struct {
-  int8_t idx;
+  byte idx;
   char* text;
   byte len;
 } TextEdit;
@@ -12,5 +14,7 @@ void textEdit_clear (TextEdit* te);
 bool textEdit_init  (TextEdit* te, byte len);
 void textEddit_free (TextEdit* te);
 bool textEdit_pushc (TextEdit* te, char c);
+byte textEdit_pushstr(TextEdit* te, char* str, byte len);
+byte textEdit_pushcstr(TextEdit* te, const char* str);
 bool textEdit_pop   (TextEdit* te, char* c);
 void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay);

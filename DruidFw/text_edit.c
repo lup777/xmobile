@@ -1,5 +1,7 @@
 // text_edit.c
 
+#include <string.h>
+
 #include "render.h"
 
 #include "text_edit.h"
@@ -17,9 +19,9 @@ bool textEdit_init(TextEdit* te, byte len) {
 
 void textEddit_free(TextEdit* te) {
   CHECK(te);
+  CHECK(te->text);
 
-  if (te->text)
-    vPortFree(te->text);
+  vPortFree(te->text);
 
   te->idx = 0;
   te->text = NULL;
@@ -27,11 +29,35 @@ void textEddit_free(TextEdit* te) {
 }
 
 void textEdit_clear(TextEdit* te) {
+  CHECK(te);
   te->idx = 0;
+}
+
+byte textEdit_pushstr(TextEdit* te, char* str, byte len) {
+  byte i = 0;
+  CHECK(te);
+  CHECK(str);
+
+  for (i = 0; i < len; i++) {
+    textEdit_pushc(te, str[i]);
+  }
+  return i;
+}
+
+byte textEdit_pushcstr(TextEdit* te, const char* str) {
+  byte i = 0;
+  CHECK(te);
+  CHECK(str);
+
+  for (i = 0; i < strlen(str); i++) {
+    textEdit_pushc(te, str[i]);
+  }
+  return i;
 }
 
 bool textEdit_pushc(TextEdit* te, char c) {
   CHECK(te);
+  CHECK(te->text);
 
   if (te->idx >= te->len) {// if full
     te->idx = 0;
@@ -49,6 +75,7 @@ bool textEdit_pushc(TextEdit* te, char c) {
 bool textEdit_pop(TextEdit* te, char* c) {
   CHECK(te);
   CHECK(c);
+  CHECK(te->text);
 
   if (te->idx > 0) {
     te->idx --;
@@ -59,6 +86,10 @@ bool textEdit_pop(TextEdit* te, char* c) {
 }
 
 void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
+  CHECK(te);
+  CHECK(te->text);
+  CHECK(pdisplay);
+
   byte char_width = 8; // width of char place (to get in font info)
   byte char_height = 15; // height of char place (to get in font info)
   displayRenderText(x, y, te->text, te->idx, pdisplay);

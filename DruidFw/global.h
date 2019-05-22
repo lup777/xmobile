@@ -67,7 +67,7 @@ uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 // CHECK
 // if (X == false) -> show func:line and loop
 #define CHECK(X) {                                    \
-    if(X == false) {                                  \
+    if((X) == false) {                                \
       _log("CHECK: %s:%d", __FUNCTION__, __LINE__) ;  \
       for(;;) {}                                      \
     }                                                 \
