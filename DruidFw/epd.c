@@ -14,7 +14,6 @@
 #define __log(...)
 //#define __log _log
 
-volatile SemaphoreHandle_t gEpdMutex;
 const uint8_t* gbackground;
 static volatile uint8_t gi;
 
@@ -49,18 +48,10 @@ void EPD_Init(void) {
 
   __log("EPD Init completed");
 
-  //EPD_clear();
-
-  gEpdMutex = xSemaphoreCreateMutex();
-  CHECK(gEpdMutex);
 }
 
 void EPD_StartPartial(void) {
   __log("EPD Start PU _1_");
-  if (xSemaphoreTake(gEpdMutex, portMAX_DELAY) != pdTRUE) {
-    __log("EPD_StartPartial Failed to take mutex");
-    return;
-  }
   //EPD_WaitUntilIdle(); // wait
   __log("EPD Start PU _2_");
 
@@ -110,17 +101,11 @@ void EPD_ContinuePartial(word x, word y, byte* data,
 
 void EPD_StopPartial(void) {
   EPD_PowerOff();
-  __log("EPD_StopPartial give mutex");
-  xSemaphoreGive(gEpdMutex);
 }
 
 void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
   //_sleep(200);
   __log("EPD_StopPartial take mutex");
-  if (xSemaphoreTake(gEpdMutex, (TickType_t)50) != pdTRUE) {
-    __log("EPD_StartPartial Failed to take mutex");
-    return;
-  }
 
   EPD_SetLut(lut_partial_update);
 
@@ -146,7 +131,6 @@ void EPD_ShowString(char* str, uint8_t len, uint8_t x, uint8_t y) {
 
   EPD_UpdatePartial();
   EPD_PowerOff();
-  xSemaphoreGive(gEpdMutex);
 }
 
 void EPD_UpdatePartial(void) {

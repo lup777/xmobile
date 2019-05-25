@@ -5,6 +5,9 @@
 
 #include "global.h"
 
+extern MessageBufferHandle_t kbd_msg_buf_handle;
+
+
 void kbd_init(void);
 void kbd_send_reg_byte(uint8_t addr, uint8_t data);
 

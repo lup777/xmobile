@@ -14,32 +14,26 @@
 
 #define LOG_BUFFER_LEN 40
 
-#ifndef DISABLE_LOGS
-xSemaphoreHandle log_mutex;
-#endif
+// ======== Semaphore ======================
+SemaphoreHandle_t mutex_handle = NULL;
+StaticSemaphore_t mutex_buffer;
+// =========================================
+
 
 #ifndef DISABLE_LOGS
-void _log(const char *format, ...) {
+void __log(const char *format, ...) {
+  //void __log(PGM_P format, ...) {
   char buffer[LOG_BUFFER_LEN];
-
+  
   va_list args;
   va_start(args, format);
 
-  uint8_t len = vsnprintf(buffer,
-        (size_t)LOG_BUFFER_LEN,
-        format,
-        args);
+  size_t len = vsnprintf(buffer, LOG_BUFFER_LEN,
+			  format, args);
 
-  va_end(args);
-  if (len + 2 <= LOG_BUFFER_LEN) {
-    buffer[len] = '\r';
-    buffer[len + 1] = '\n';
-  } else {
-    buffer[LOG_BUFFER_LEN - 1] = '\r';
-    buffer[LOG_BUFFER_LEN - 2] = '\n';
-  }
+  va_end(args); 
 
-  send_log_str(buffer, len + 2);
+  send_log_str(buffer, len + 1);
 }
 #endif
 
@@ -58,16 +52,31 @@ inline void logcl(const char* str) {
 #ifndef DISABLE_LOGS
 
 void send_log_str(char* data, byte len) {
-  taskENTER_CRITICAL();
   size_t i = 0;
+    //taskENTER_CRITICAL();
+
+  if (xSemaphoreTake(mutex_handle, 0) != pdTRUE)
+    return;
+  
   for (i = 0; i < len; i++) {
-    xQueueSendToBack(log_buf_handle, (void*) &(data[i]), 0);
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    USARTE1_DATA = data[i];
   }
-  taskEXIT_CRITICAL();
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = '\r';
+
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = '\n';
+
+  xSemaphoreGive(mutex_handle);
+
 }
 #endif
 
 inline void log_init(void) {
+
+  mutex_handle = xSemaphoreCreateMutexStatic(&mutex_buffer);
+  
   PORTE.OUTSET = PIN7_bm; // TX
   PORTE.DIRSET = PIN7_bm; // TX
   USARTE1.CTRLC = USART_CMODE_ASYNCHRONOUS_gc | USART_PMODE_DISABLED_gc
@@ -84,12 +93,6 @@ inline void log_init(void) {
   // https://planetcalc.ru/747/
   // https://www.dolman-wim.nl/xmega/tools/baudratecalculator/index.php
   USARTE1.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
-
-#ifndef DISABLE_LOGS
-  log_mutex = xSemaphoreCreateMutex();
-  if (!log_mutex)
-    raw_logc("LOG SEM FAILED");
-#endif
 }
 
 /*ISR(USARTE1_DRE_vect) {}
@@ -98,21 +101,28 @@ ISR(USARTF0_RXC_vect) {}*/
 #ifndef DISABLE_LOGS
 void vLogTask(void* pvParameters) {
   (void)(pvParameters);
-  char buf;
+  /*char buf[90];
+  raw_logc("_0_");
 
   for (;;) { // loop
-    xQueueReceive(log_buf_handle, (void*) &buf, portMAX_DELAY);
-
-    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
-
-    USARTE1_DATA = buf;
-  }
+    size_t size = xMessageBufferReceive(log_msg_buf_handle, buf, 90, portMAX_DELAY);
+    byte i = 0;
+    raw_logc("_2_");
+    
+    for (i = 0; i < size; i++) {
+      while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+      USARTE1_DATA = buf[i];
+    }
+    }*/
 }
 #endif
 
 void raw_logc(const char* str) {
   size_t i = 0;
 
+  if (xSemaphoreTake(mutex_handle, 0) != pdTRUE)
+    return;
+  
   for (i = 0; i < strlen(str); i++) {
     while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
     USARTE1_DATA = str[i];
@@ -121,4 +131,6 @@ void raw_logc(const char* str) {
   USARTE1_DATA = '\r';
   while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
   USARTE1_DATA = '\n';
+
+  xSemaphoreGive(mutex_handle);
 }

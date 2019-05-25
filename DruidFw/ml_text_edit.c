@@ -1,43 +1,43 @@
 // ml_text_edit.c
 #include <string.h>
 
-#include "text_edit.h"
-
-#include "ml_text_edit.h"
 #include "render.h"
 
-void exchange_tes(TextEdit* tel, TextEdit* ter);
+#include "ml_text_edit.h"
+
 static void move_lines_back(MlineTextEdit* mte);
 
-bool mlTextEdit_init(MlineTextEdit* mte, byte line_len, byte lines_num) {
-  byte i = 0;
+bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* line1,
+		     char* line2, char* line3, char* line4, char* line5, char* line6,
+		     char* line7) {
   CHECK(mte);
 
-  { // alloc array for line pointers
-    size_t size = sizeof(TextEdit*) * lines_num;
-    mte->lines_num = lines_num;
+  mte->buffer[0] = line1;
+  mte->buffer[1] = line2;
+  mte->buffer[2] = line3;
+  mte->buffer[3] = line4;
+  mte->buffer[4] = line5;
+  mte->buffer[5] = line6;
+  mte->buffer[6] = line7;
 
-    mte->lines_arr = (TextEdit*)pvPortMalloc(size);
-    CHECK(mte->lines_arr);
+  mte->lines_num = lines_num;
+
+  byte i = 0;
+  for (i = 0; i < lines_num; i++) {
+    CHECK(mte->buffer[i]);
+    memset(mte->buffer[i], ' ', mte->line_len);
   }
 
-  for (i = 0; i < lines_num; i++) { // for each line
-    TextEdit* te = mte->lines_arr + i;  // current line
-    textEdit_init(te, line_len);    // result will be checked internally
-  }
-
-  mte->line_idx = 0;
-
+  mte->line_len = line_len;
+  
   return true;
 }
 
 bool mlTextEdit_pushc(MlineTextEdit* mte, char c) {
   CHECK(mte);
-
-  TextEdit* te = mte->lines_arr + (mte->lines_num - 1);
-  CHECK(te);
-
-  return textEdit_pushc(te, c);
+  (void)(c);
+  
+  return true;
 }
 
 bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str) {
@@ -47,56 +47,39 @@ bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str) {
 bool mlTextEdit_pushstr(MlineTextEdit* mte, char* str, byte len) {
   CHECK(mte);
   CHECK(str);
-
+  
   move_lines_back(mte);
-  TextEdit* te = mte->lines_arr + (mte->lines_num - 1);
-
-  bool result = textEdit_setstr(te, str, len); // set string to TE
-  if (result == false)
-    return false;
+  
+  memcpy(mte->buffer[mte->lines_num - 1], str, len);
 
   return true;
 }
 
 static void move_lines_back(MlineTextEdit* mte) {
-  byte i = 0;
   CHECK(mte);
-
-  for (i = 1; i < mte->lines_num; i ++) {
-    CHECK(mte->lines_arr + i);
-
-    memcpy(mte->lines_arr + i - 1,
-           mte->lines_arr + i,
-           sizeof(TextEdit));
+  int8_t i = 1;
+  for (i = 1; i < mte->lines_num; i++) {
+    memcpy(mte->buffer[i-1], mte->buffer[i], mte->line_len);
   }
-  //mte->line_idx--;
-}
-
-inline void exchange_tes(TextEdit* tel, TextEdit* ter) { // exchange TextEdit instances
-  CHECK(tel);
-  CHECK(ter);
-
-  TextEdit* tmp = ter;
-  ter = tel;
-  tel = tmp;
+  memset(mte->buffer[mte->lines_num - 1], ' ', mte->line_len);
 }
 
 void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) {
-  byte char_height = 15; // height of char place (to get in font info)
-  byte char_width = 8; // width of char place (to get in font info)
-
   CHECK(mte);
-  CHECK(pdisplay);
+  
+  int8_t i = 0;
 
-  byte i = 0;
-  for (i = 0; i < mte->lines_num; i++) { // for each line
-    TextEdit* te = mte->lines_arr + i;
-    CHECK(te);
-    textEdit_render(te, x, y + (char_height * i), pdisplay); // render line
-  }
-  if (mte->lines_num > 0) {
-    byte len_chars = mte->lines_arr[0].len;
-    displayRenderRectangle(x, y, len_chars * char_width,
-                           mte->lines_num * char_height, pdisplay);
+  byte char_width = 8; // width of char place (to get in font info)
+  byte char_height = 15; // height of char place (to get in font info)
+
+  displayRenderRectangle(x, y,
+			 x + (char_width * mte->line_len),
+			 y + (char_height * mte->lines_num), pdisplay);
+
+  x += 3; y += 3;
+  for (i = 0; i < mte->lines_num; i++) {
+    displayRenderText(x, y, mte->buffer[i], mte->line_len, pdisplay);
+    y += char_height;
+    
   }
 }

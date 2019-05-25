@@ -11,6 +11,7 @@
 #include "usart.h"
 
 #include "kbd2.h"
+#include "task_mgr.h"
 
 #define  MAX7370_ADDR 0x38
 
@@ -195,13 +196,15 @@ uint8_t kbd_read_byte(uint8_t addr) {
 
 ISR(PORTA_INT0_vect) {
   BaseType_t need_yeld = pdFALSE;
-  uint8_t key = kbd_read_byte(MAX7370_REG_FIFO);
+  byte buffer[2];
+  buffer[1] = kbd_read_byte(MAX7370_REG_FIFO);
 
   //_log("PORTA INT (%d)", key);
+  buffer[0] = MSG_HEADER_KBD;
 
-  xMessageBufferSendFromISR(kbd_rx_buf,
-			    &key,
-			    1,
+  xMessageBufferSendFromISR(tm_msg_buf_handle,
+			    buffer,
+			    2,
 			    &need_yeld);
   if (need_yeld == pdTRUE)
     taskYIELD();

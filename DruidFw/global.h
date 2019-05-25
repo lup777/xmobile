@@ -8,7 +8,6 @@
 #include "message_buffer.h"
 #include "task.h"
 #include "semphr.h"
-#include "queue.h"
 
 #define MENU_SIZE 5
 
@@ -28,34 +27,12 @@
 #define MSG_CLOSE 2
 #define MSG_GSM_INPUT 3
 
-//#define DISABLE_LOGS
+#define X_MERGIN_PIX 3
+#define Y_MERGIN_PIX 3
 
+//#define DISABLE_LOGS
 typedef uint8_t byte;
 typedef uint16_t word;
-
-typedef struct struct_zone {
-  short x_; // coordinates
-  short y_; // coordinates
-  short ex_; // coordinates
-  short ey_; // coordinates
-  bool clean;
-} Zone;
-
-typedef struct struct_display_buffer {
-    uint8_t* buffer;
-    short buf_rows;
-    short buf_cols;
-    size_t buf_size;
-    Zone zone;
-} DispBuf;
-
-extern DispBuf display;
-extern MessageBufferHandle_t kbd_rx_buf;
-extern MessageBufferHandle_t gsm_rx_buf;
-#ifndef DISABLE_LOGS
-extern QueueHandle_t log_buf_handle;
-#endif
-
 
 #include "usart.h"
 
@@ -67,12 +44,21 @@ uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 
 // CHECK
 // if (X == false) -> show func:line and loop
-#define CHECK(X) {                                    \
+#define CHECK(X) {				      \
     if((X) == false) {                                \
       _log("CHECK: %s:%d", __FUNCTION__, __LINE__) ;  \
       for(;;) {}                                      \
     }                                                 \
   }
+
+#define DCHECK(X, Y) {				      \
+    if((X) == false) {                                \
+      raw_logc("CHECK");			      \
+      raw_logc(Y);				      \
+      for(;;) {}                                      \
+    }                                                 \
+  }
+
 
 #ifndef EBI_CS_ASPACE_gm
 # define EBI_CS_ASPACE_1MB_gc   EBI_CS_ASIZE_1MB_gc

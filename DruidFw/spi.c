@@ -8,13 +8,14 @@
 
 #include "FreeRTOS.h"
 #include "task.h"
+#include "message_buffer.h"
 
 #include "usart.h"
 
-static MessageBufferHandle_t g_epd_tx_buffer_handle;
+//static MessageBufferHandle_t g_epd_tx_buffer_handle;
 static uint8_t* g_spi_tx_buffer;
 static size_t g_spi_tx_buffer_size;
-static SemaphoreHandle_t gh_spi_sem;
+//static SemaphoreHandle_t gh_spi_sem;
 static volatile uint8_t gi;
 
 /*
@@ -32,22 +33,35 @@ static volatile uint8_t gi;
   DIN (data input) - PORTC 5 (MOSI)
 */
 
-inline void SPIC_Init(size_t tx_buffer_size) {
+// ======== MessageBuffer ==================
+MessageBufferHandle_t tx_buf_handle;
+StaticStreamBuffer_t tx_buf_struct;
+uint8_t msg_tx_buffer[ sizeof(SpiOrder) * 5 ];
+// =========================================
+
+// ======== Semaphore ======================
+SemaphoreHandle_t gh_spi_sem = NULL;
+StaticSemaphore_t xMutexBuffer;
+// =========================================
+
+inline void SPIC_Init(byte* tx_buffer_) {
+  CHECK(tx_buffer_);
+
   PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
   EPD_CSHi(); // PIN4_bm
   PORTA.DIRCLR = PIN3_bm;
   SPIC.INTCTRL = SPI_INTLVL_LO_gc;
 
-  g_epd_tx_buffer_handle = xMessageBufferCreate(sizeof(SpiOrder) * 5);
-  gh_spi_sem = xSemaphoreCreateMutex();
+  tx_buf_handle = xMessageBufferCreateStatic(sizeof(msg_tx_buffer),
+					     msg_tx_buffer, &tx_buf_struct);
+
+  gh_spi_sem = xSemaphoreCreateMutexStatic(&xMutexBuffer);
 
   SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm /*| SPI_PRESCALER_DIV4_gc*/
     | SPI_CLK2X_bm | SPI_MODE_0_gc;
 
-  g_spi_tx_buffer = pvPortMalloc(tx_buffer_size);
-  CHECK(g_spi_tx_buffer);
-
-  g_spi_tx_buffer_size = tx_buffer_size;
+  g_spi_tx_buffer = tx_buffer_;
+  g_spi_tx_buffer_size = 200;//sizeof(tx_buffer_);
 }
 
 ISR(SPIC_INT_vect) {
@@ -66,7 +80,7 @@ ISR(SPIC_INT_vect) {
       sent_cnt = 0; // repeat transfering buffer
       // continue transferring
     } else {
-      received_bytes = xMessageBufferReceiveFromISR(g_epd_tx_buffer_handle,
+      received_bytes = xMessageBufferReceiveFromISR(tx_buf_handle,
                                                     &order,
                                                     sizeof(order),
                                                     &hptw);
@@ -117,7 +131,7 @@ void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
     _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
 
   if (data_len > 0) {
-    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+    bytes_sent = xMessageBufferSend(tx_buf_handle,
                                     &order,
                                     sizeof(order),
                                     /*pdMS_TO_TICKS(2000)*/0);
@@ -152,7 +166,7 @@ void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
     _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
 
   if (repeat > 0) {
-    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+    bytes_sent = xMessageBufferSend(tx_buf_handle,
                                     &order,
                                     sizeof(order),
                                     /*pdMS_TO_TICKS(2000)*/0);
@@ -184,7 +198,7 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
 
   if (data_len > g_spi_tx_buffer_size) {
     _log("ERR: TOO MUTCH DATA, NOT SUPPORTED");
-    return;
+    CHECK(0);
   }
 
   if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
@@ -194,7 +208,7 @@ void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
     g_spi_tx_buffer[i] = data[i];
 
   if (data_len > 0) {
-    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+    bytes_sent = xMessageBufferSend(tx_buf_handle,
                                     &order,
                                     sizeof(order),
                                     /*pdMS_TO_TICKS(2000)*/0);
@@ -237,7 +251,7 @@ void EPD_SendFromDisplayBuf(uint8_t cmd, uint8_t* data,
     g_spi_tx_buffer[i] = data[i * step];
 
   if (order.length > 0) {
-    bytes_sent = xMessageBufferSend(g_epd_tx_buffer_handle,
+    bytes_sent = xMessageBufferSend(tx_buf_handle,
                                     &order,
                                     sizeof(order),
                                     /*pdMS_TO_TICKS(2000)*/0);

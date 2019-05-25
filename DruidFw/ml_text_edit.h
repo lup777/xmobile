@@ -4,13 +4,14 @@
 #include "global.h"
 
 typedef struct {
-  TextEdit* lines_arr;
-  byte line_len;
-  byte lines_num;
-  byte line_idx;
+  int8_t lines_num;
+  byte   line_len;
+  char*  buffer[7];
 } MlineTextEdit;
 
-bool mlTextEdit_init(MlineTextEdit* mte, byte line_len, byte lines_num);
+bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* line1,
+		     char* line2, char* line3, char* line4, char* line5, char* line6,
+		     char* line7);
 bool mlTextEdit_pushc(MlineTextEdit* mte, char c);
 bool mlTextEdit_pushstr(MlineTextEdit* mte, char* str, byte len);
 bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str);

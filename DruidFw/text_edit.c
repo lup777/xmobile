@@ -2,35 +2,23 @@
 
 #include <string.h>
 
-#include "render.h"
-
 #include "text_edit.h"
 
-bool textEdit_init(TextEdit* te, byte len) {
+bool textEdit_init(TextEdit* te, char* buffer_, byte buffer_len_) {
   CHECK(te);
 
-  te->text = pvPortMalloc(len);
-  CHECK(te->text);
+  //te->text = pvPortMalloc(len);
+  te->buffer = buffer_;
+  CHECK(te->buffer);
 
-  te->idx = 0;
-  te->len = len;
+  te->data_len = 0;
+  te->buffer_len = buffer_len_;
   return true;
-}
-
-void textEddit_free(TextEdit* te) {
-  CHECK(te);
-  CHECK(te->text);
-
-  vPortFree(te->text);
-
-  te->idx = 0;
-  te->text = NULL;
-  te->len = 0;
 }
 
 void textEdit_clear(TextEdit* te) {
   CHECK(te);
-  te->idx = 0;
+  te->data_len = 0;
 }
 
 byte textEdit_setstr(TextEdit* te, char* str, byte len) {
@@ -38,10 +26,13 @@ byte textEdit_setstr(TextEdit* te, char* str, byte len) {
   CHECK(te);
   CHECK(str);
 
+  if (len > te->buffer_len)
+    len = te->buffer_len;
+
   for (i = 0; i < len; i++) {
     textEdit_pushc(te, str[i]);
   }
-  te->idx = len;
+  te->data_len = len;
   return i;
 }
 
@@ -51,15 +42,15 @@ byte textEdit_setcstr(TextEdit* te, const char* str) {
 
 bool textEdit_pushc(TextEdit* te, char c) {
   CHECK(te);
-  CHECK(te->text);
-
-  if (te->idx >= te->len) {// if full
-    te->idx = 0;
+  CHECK(te->buffer);
+  
+  if (te->data_len >= te->buffer_len) {// if full
+    te->data_len = 0;
   }
 
-  if (te->idx < te->len) {
-    te->text[ te->idx ] = c;
-    te->idx ++;
+  if (te->data_len < te->buffer_len) {
+    te->buffer[ te->data_len ] = c;
+    te->data_len ++;
     return true;
   }
 
@@ -69,24 +60,33 @@ bool textEdit_pushc(TextEdit* te, char c) {
 bool textEdit_pop(TextEdit* te, char* c) {
   CHECK(te);
   CHECK(c);
-  CHECK(te->text);
+  CHECK(te->buffer);
 
-  if (te->idx > 0) {
-    te->idx --;
-    *c = te->text[ te->idx ];
+  if (te->data_len > 0) {
+    *c = te->buffer[ te->data_len - 1 ];
+    te->data_len --;
     return true;
   }
+  
   return false;
 }
 
 void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   CHECK(te);
-  CHECK(te->text);
+  CHECK(te->buffer);
   CHECK(pdisplay);
-
+  
   byte char_width = 8; // width of char place (to get in font info)
   byte char_height = 15; // height of char place (to get in font info)
-  displayRenderText(x, y, te->text, te->idx, pdisplay);
-  displayRenderRectangle(x, y, (x + char_width) * te->idx,
-                         y + char_height, pdisplay);
+
+  byte xm = X_MERGIN_PIX;
+  byte ym = Y_MERGIN_PIX;
+  
+  if (te->data_len > 0) {
+    displayRenderText(x + xm, y + ym,
+		      te->buffer, te->data_len, pdisplay);
+  }
+
+  displayRenderRectangle(x, y, x + (char_width * te->data_len) + xm + xm,
+                         y + char_height + ym, pdisplay);
 }

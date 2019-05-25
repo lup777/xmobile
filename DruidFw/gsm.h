@@ -11,9 +11,7 @@
 #define CMD_CHECK_NET_STATUS "AT+CREG?"
 #define CMD_GET_IMEI "AT+GSN"
 
-extern StreamBufferHandle_t g_gsm_tx_buffer_handle;
-
-
+extern MessageBufferHandle_t gsm_msg_buf_handle;
 
 void GSM_Init(void);
 void send_str(char* data, size_t len);

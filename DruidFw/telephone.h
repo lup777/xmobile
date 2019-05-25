@@ -2,12 +2,8 @@
 
 #pragma once
 
-#include "kbd.h"
+#include "global.h"
 
-typedef struct struct_menu {
-  char cmd[12];
-  char answer[12];
-} TelMenu;
+extern MessageBufferHandle_t tel_msg_buf_handle;
 
-void APP_Telephone(void);
-void APP_TelephoneStart(void);
+void vTelTask(void* pvParameters);

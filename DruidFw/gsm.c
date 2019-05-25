@@ -12,6 +12,7 @@
 #include "global.h"
 #include "spi.h"
 #include "kbd2.h"
+#include "task_mgr.h"
 
 #define READ_BUFFER_SIZE 255
 
@@ -27,7 +28,7 @@ void send_byte(char byte);
 
 // http://codius.ru/articles/GSM_%D0%BC%D0%BE%D0%B4%D1%83%D0%BB%D1%8C_SIM800L_%D1%87%D0%B0%D1%81%D1%82%D1%8C_1
 
-char rbuf[READ_BUFFER_SIZE];
+//char rbuf[READ_BUFFER_SIZE];
 char gresult;
 
 void GSM_Init(void) {
@@ -123,22 +124,23 @@ ISR(USARTE0_RXC_vect) {
   unsigned char data;
   BaseType_t need_yeld = pdFALSE;
   static unsigned char buffer[50];
-  static int idx = 0;
+  static int idx = 1;
 
   data = USARTE0.DATA;
 
   buffer[idx] = data;
   idx++;
 
-  if (idx > 1                     &&
+  if (idx > 2                     &&
       buffer[idx - 2] == '\r'     &&
       buffer[idx - 1] == '\n'     &&
       idx < 45) {
-    xMessageBufferSendFromISR(gsm_rx_buf,
-			      &buffer,
+    buffer[0] = MSG_HEADER_GSM;
+    xMessageBufferSendFromISR(tm_msg_buf_handle,
+			      buffer,
 			      idx - 2,
 			      &need_yeld);
-    idx = 0;
+    idx = 1;
   }
 
   if (need_yeld == pdTRUE)

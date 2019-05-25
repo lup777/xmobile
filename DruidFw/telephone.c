@@ -1,168 +1,106 @@
 // telephone.c
-
 #include "telephone.h"
-
-#include "FreeRTOS.h"
-#include "task.h"
-#include "message_buffer.h"
-
-#include "global.h"
-#include "epd.h"
+#include "render.h"
+#include "text_edit.h"
+#include "ml_text_edit.h"
+#include "kbd2.h"
 #include "gsm.h"
 
-void APP_TelephoneStart(void);
-void TEL_Thread(void* pvParameters);
-void TEL_MessagePump(void);
-void TEL_KeyPressHandler(char key);
-void TEL_DrawHandler(void);
-void ShowLine(uint8_t i, uint8_t x, uint8_t y);
-void TEL_CloseHandler(void);
+// ===== TEL MessageBuffer data ===========
+MessageBufferHandle_t tel_msg_buf_handle;
+StaticStreamBuffer_t tel_msg_buf_struct;
+static uint8_t tel_msg_buffer[ 100 ];
+static void handle_kbd(char key);
+// ========================================
 
-#define TEL_MENU_SIZE 6//(sizeof(menu) / sizeof(TelMenu))
+// ======== UI ============================
+static char te1_buf[20];
+static TextEdit te1;
 
-static TelMenu menu[TEL_MENU_SIZE] = {
-  {"AT+CREG?\0   ", "            "},
-  {"AT+GSN\0     ", "            "},
-  {"ATE0\0       ", "            "},
-  {"AT\0         ", "            "},
-  {"\0           ", "            "},
-  {"\0           ", "            "},
+#define MTE_LINE_LEN 15
+char line1[MTE_LINE_LEN];
+char line2[MTE_LINE_LEN];
+char line3[MTE_LINE_LEN];
+char line4[MTE_LINE_LEN];
+char line5[MTE_LINE_LEN];
+char line6[MTE_LINE_LEN];
+char line7[MTE_LINE_LEN];
+MlineTextEdit mte;
+// ========================================
 
-};
+static void ui_init(void);
+static void ui_update(void);
+void tel_init(void);
+void vTelTask(void* pvParameters);
 
-uint8_t g_selected;
 
-void APP_TelephoneStart(void) {
-  xTaskCreate(TEL_Thread, "telephoneTask", configMINIMAL_STACK_SIZE,
-              NULL, 1, NULL);
-  context.active_app_id = TELEPHONE_MAILBOX_ID;
-  _sleep(100);
-
-  SendAppMsg(MSG_DRAW, NULL, 0, TELEPHONE_MAILBOX_ID);
+void tel_init(void) {
+  tel_msg_buf_handle = xMessageBufferCreateStatic(sizeof(tel_msg_buffer),
+						  tel_msg_buffer,
+						  &tel_msg_buf_struct);
+  ui_init();
 }
 
-void TEL_Thread(void* pvParameters) {
+void vTelTask(void* pvParameters) {
   (void)(pvParameters);
-  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
-  *pHandle = xMessageBufferCreate((size_t)100);
 
-  TEL_MessagePump();
-  _log("APP telephone closed");
-}
+  tel_init();
 
-void TEL_MessagePump(void) {
-  char data[100];
-  size_t len;
-  g_selected = 0;
+  static char buffer[50];
 
-  MessageBufferHandle_t* pHandle = context.mail + TELEPHONE_MAILBOX_ID;
+  for(;;) {
+    size_t rx_bytes = xMessageBufferReceive(tel_msg_buf_handle, buffer, 50, portMAX_DELAY);
+    if (rx_bytes < 2) continue;
 
-  _log("APP telephone started");
-
-  while(1) {
-    _log("Telephone waiting for msg");
-    len = xMessageBufferReceive(*pHandle, data, 100, portMAX_DELAY);
-    if (len > 0) {
-      switch(data[0]) {
-
-        case MSG_KBD: {
-          _log("TEL menu msg: key %d", (uint8_t)(data[1]));
-          TEL_KeyPressHandler(data[1]);
-          TEL_DrawHandler();
-          break;
-        } // case MSG_KBD
-
-          case MSG_DRAW: {
-            _log("TEL menu msg: show");
-            TEL_DrawHandler();
-            break;
-          } // case MSG_DRAW
-
-          case MSG_GSM_INPUT: {
-            uint8_t i;
-            _log("TEL menu msg: gsm input");
-            for (i = 0; i < len && i < 100; i ++)
-              menu[g_selected].answer[i] = data[i];
-	    _log("GSM: %s", data[i]);
-            TEL_DrawHandler();
-            break;
-          }
-
-          case MSG_CLOSE: {
-            _log("TEL menu msg: close telephonet");
-
-            TEL_CloseHandler();
-
-            context.active_app_id = MENU_MAILBOX_ID;
-            vMessageBufferDelete(*pHandle);
-            context.mail[TELEPHONE_MAILBOX_ID] = NULL;
-            vTaskDelete(NULL);
-            return;
-          }
-
-          default:
-            _log("APP menu msg: not known: %d", (uint8_t)(data[0]));
-            break;
-
-      } // switch
-    } // if ( len > 0 )
-  } // while(1)
-}
-
-void TEL_CloseHandler(void) {
-}
-
-void TEL_KeyPressHandler(char key) {
-  switch( key ) {
-    /*case '2': {
-      if (g_selected < TEL_MENU_SIZE)
-        g_selected ++;
+    switch(buffer[0]) {
+    case MSG_HEADER_GSM:
+      mlTextEdit_pushstr(&mte, buffer + 1, rx_bytes - 1);
+      ui_update();
       break;
-    } // case key2
 
-    case '5': {
-      SendGsm(menu[g_selected].cmd);
-    } // case key5
-    case '8': {
-      if (g_selected > 0)
-        g_selected --;
-      break;
-    } // case key8
-    */
-
-  case '1':
-    _log("send AT");
-    SendGsmLen("AT\n", 3);
-    break;
-
-  case '2':
-    _log("send AT+CREG");
-    SendGsmLen("AT+CREG\n", 8);
-    break;
-      
-    default:
-      break;
-  } // switch ( key )
-}
-
-void TEL_DrawHandler(void) {
-  //  return;
-  EPD_StartPartial();
-  EPD_ContinuePartial("     telephone      ", 20, 1, 185);
-
-  EPD_ContinuePartial("1. at", 5, 1, 160);
-  EPD_ContinuePartial("2. at+creg", 10, 1, 140);
-  
-  EPD_UpdatePartial();
-  EPD_StopPartial();
-}
-
-void ShowLine(uint8_t i, uint8_t x, uint8_t y) {
-  char marker = '~';
-  TelMenu line = menu[i];
-  if (i == g_selected) {
-    EPD_ContinuePartial(&marker, 1, x-1, y);
+    case MSG_HEADER_KBD: {
+      char ch;
+      if (true == kbd_key_to_char( buffer[1], &ch )) {
+	textEdit_pushc(&te1, ch);
+      } else {
+	handle_kbd(buffer[1]);
+      }
+      ui_update();
+    } // case MSG_HEADER_KBD
+    } // switch
   }
-  EPD_ContinuePartial(line.cmd, 12, x, y);
-  //  EPD_ContinuePartial(line.answer, 12, x + 12, y);
+}
+
+static void ui_init(void) {
+  textEdit_init(&te1, te1_buf, 20);
+  
+  mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, line5, line6, line7);
+}
+
+static void ui_update(void) {
+  displayRenderText(2, 173, "call: +", 7, &display);
+  textEdit_render(&te1, 55, 170, &display);
+  
+  mlTextEdit_render(&mte, 3, 3, &display);
+
+  displayFlush();
+}
+
+static void handle_kbd(char key) {
+  switch(key) {
+  case 24: // responce
+    send_cstr("ATA\n\r");
+    break;
+    
+  case 29: // call
+    send_cstr("ATD+");
+    send_str(te1.buffer, te1.data_len);
+    send_cstr(";\r\n");
+    break;
+
+  default:
+    break;
+
+  } // switch
+  
 }

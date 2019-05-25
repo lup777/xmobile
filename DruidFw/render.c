@@ -5,17 +5,13 @@
 #include "epd.h"
 #include "fonts.h"
 
-#define DISPLAY_BUFFER_COLS_BYTE 25
-#define DISPLAY_BUFFER_ROWS_BITS 200
-#define DISPLAY_BUFFER_SIZE (DISPLAY_BUFFER_ROWS_BITS * DISPLAY_BUFFER_COLS_BYTE)
-
 DispBuf display;
 
-void displayInit(void) {
-  display.buffer = pvPortMalloc(DISPLAY_BUFFER_SIZE);
+void displayInit(byte* display_buffer, byte* display_spi_buf) {
+  display.buffer = display_buffer;
   CHECK(display.buffer);
 
-  display.buf_size = DISPLAY_BUFFER_SIZE;
+  display.buf_size = sizeof(display_buffer);
 
   for (size_t i = 0; i < display.buf_size; i++)
     display.buffer[i] = 0xFF;
@@ -24,14 +20,13 @@ void displayInit(void) {
   display.buf_rows = DISPLAY_BUFFER_ROWS_BITS;
   display.buf_cols = DISPLAY_BUFFER_COLS_BYTE;
   display.buf_size = DISPLAY_BUFFER_SIZE;
-
-  SPIC_Init(display.buf_rows);
+  SPIC_Init(display_spi_buf);
   EPD_Init();
 }
 
 void displayFlush(void) {
   EPD_StartPartial();
-
+  
 
   for (size_t col = 0; col < (size_t)display.buf_cols; col++ ) {
     EPD_ContinuePartial(display.buf_cols - col - 1, // col number byte
