@@ -5,6 +5,7 @@
 #include "ml_text_edit.h"
 #include "kbd2.h"
 #include "gsm.h"
+#include "fonts_nimbus_12_22.h"
 
 // ===== TEL MessageBuffer data ===========
 MessageBufferHandle_t tel_msg_buf_handle;
@@ -17,7 +18,7 @@ static void handle_kbd(char key);
 static char te1_buf[20];
 static TextEdit te1;
 
-#define MTE_LINE_LEN 15
+#define MTE_LINE_LEN 20
 char line1[MTE_LINE_LEN];
 char line2[MTE_LINE_LEN];
 char line3[MTE_LINE_LEN];
@@ -78,11 +79,28 @@ static void ui_init(void) {
 }
 
 static void ui_update(void) {
-  displayRenderText(2, 173, "call: +", 7, &display);
+  displayRenderText(2, 173, "call:+", 7, &display);
   textEdit_render(&te1, 55, 170, &display);
   
-  mlTextEdit_render(&mte, 3, 3, &display);
+  mlTextEdit_render(&mte, 10, 3, &display);
 
+  /*const uint8_t tmp[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xf5, 0xff, 0xf5, 0xff, 0xed, 0xff, 0xee, 0xff, 0xee, 0xff, 0xde, 0x7f, 0xc0, 0x7f, 0xdf, 0xbf, 0xbf, 0x1f, 0xe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};*/
+  
+  {
+    DispBuf pic;
+    pic.buf_cols = 2; // byte
+    pic.buf_rows = 22; // bits
+    uint8_t buffer[44];
+    pic.buffer = (byte*)buffer;
+    
+    for (byte j = 0; j < 44; j++) {
+      pic.buffer[j] = pgm_read_byte_far( ch_32 + j );
+    }
+
+    
+    displayRenderSubBuffer(30, 140, &pic, &display);
+  }
+    
   displayFlush();
 }
 

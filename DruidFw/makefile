@@ -71,6 +71,7 @@ ml_text_edit.c \
 task_mgr.c \
 check_box.c \
 telephone.c \
+fonts_nimbus_12_22.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/stream_buffer.c \
@@ -163,7 +164,7 @@ CFLAGS += -std=gnu99 -Werror
 #             files -- see avr-libc docs [FIXME: not yet described there]
 ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 
-
+#MEM_CFG = --section-start,.data=0x804000,--defsym=__heep_end_=0x8FFFFF
 
 # Optional linker flags.
 #  -Wl,...:   tell GCC to pass this to linker.

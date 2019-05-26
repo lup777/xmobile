@@ -91,11 +91,11 @@ void MainWindow::mousePressEvent(QMouseEvent* event) {
         return;
       }
     }
-    if (QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ControlModifier)) {
+    /*if (QGuiApplication::queryKeyboardModifiers().testFlag(Qt::ControlModifier)) {
       reverce_dots.push_back(QPair<short, short>(mx, my));
     } else {
       dots.push_back(QPair<short, short>(mx, my));
-    }
+    }*/
   }
 
   if(event->buttons() == Qt::RightButton) {
@@ -159,12 +159,18 @@ void MainWindow::render() {
                          0xFF, 0xFF, 0xFF, 0xC3, 0x83, 0x9F, 0x83, 0x99, 0x01, 0x03, 0xFF, 0xFF, 0xFF,
                          0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
 
+  byte sub_test2[2*22] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xf5, 0xff, 0xf5, 0xff, 0xed, 0xff, 0xee, 0xff, 0xee, 0xff, 0xde, 0x7f, 0xc0, 0x7f, 0xdf, 0xbf, 0xbf, 0x1f, 0xe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
   byte id = 1;
   DispBuf d;
-  d.buffer = sub_test + (id * 13);
+  //d.buffer = sub_test + (id * 13);
   d.buf_cols = 1;
   d.buf_rows = 13;
-  //RenderSubBuffer(0, 0, &d);
+
+  d.buffer = sub_test2;
+  d.buf_cols = 2;
+  d.buf_rows = 22;
+  RenderSubBuffer(0, 0, &d);
+  //RenderCircle(8,11, 6);
 
   for (int i = 0; i < reverce_dots.size(); i++) {
     RenderDot(reverce_dots[i].first, reverce_dots[i].second, true);

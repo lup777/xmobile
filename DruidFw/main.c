@@ -92,7 +92,7 @@ int main(void) {
 
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
-    //sram_init(); // configure external SRAM
+    //sram_init(); // configure external SRAM .init0
     kbd_init();  // configure keyboard MAX7370 I2C
     int_init();  // enable ints and clear int flags
   }
@@ -130,6 +130,15 @@ int main(void) {
   CHECK(result == pdPASS);*/
 
   raw_logc("start_scheduler");
+
+  /*if (check_sram()) {
+    _log("MEM test OK");
+  } else {
+    _log("MEM test FAILED");
+  }
+  
+  CHECK(0);*/
+  
   vTaskStartScheduler();
 
   vMainTask(NULL);

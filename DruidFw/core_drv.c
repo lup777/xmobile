@@ -29,6 +29,10 @@ void int_init(void) {
     PMIC.INTPRI = 0x00;
 }
 
+void sram_init(void) __attribute__ ((naked))	\
+  __attribute__ ((section (".init0")));
+
+
 void sram_init(void) {
   /* EXAMPLE
     PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
@@ -45,51 +49,74 @@ void sram_init(void) {
   // PF - A8 .. A15
   // PH - A16.. A19, CE1, CE2, OE, WE
   // PJ - D0 .. D7
+  
+  EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
+    | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
+                                 // IFMODE[1:0] = 1 0 (bits)
+
+  EBI.CS0.CTRLA = EBI_CS_MODE_DISABLED_gc;
+  EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
+  EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
 
   PORTK.DIRSET = 0xFF;
   PORTF.DIRSET = 0xFF;
   PORTH.DIRSET = 0xFF;
   PORTH.OUTSET = 0xFF;
 
-  EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
-    | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
-                                 // IFMODE[1:0] = 1 0 (bits)
-
-  //EBI.CS0.CTRLA = EBI_CS_MODE_DISABLED_gc;
-
-  //EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
-
-  //EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
-
-
   EBI.CS3.CTRLA = EBI_CS_ASPACE_1MB_gc  // size of the block above the base address
     | EBI_CS_MODE_SRAM_gc;              // SRAM mode
 
-  EBI.CS3.CTRLB = EBI_CS_SRWS_1CLK_gc;  // One Clk per 2 cycles wait state
+  EBI.CS3.CTRLB = EBI_CS_SRWS_2CLK_gc;  // One Clk per 2 cycles wait state
 
   EBI.CS3.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
+  
 
 }
 
 bool check_sram(void) {
   //_log("start check_sram");
+  /*uint32_t i  = 0;
+  uint8_t data = 0xAA;
 
-  uint32_t i = 0x4000;
   uint8_t result;
-
-  for (i = 8000; i < 8008; i ++) {
-    WriteEBI(i, 0xAA);
+  
+  for (i = 0x4000; i < 0x400F; i++) {
+    WriteEBI(i, data);
+    _log("write: 0x%02X", data);
   }
 
-  for (i = 8000; i < 8008; i ++) {
+  WriteEBI((uint32_t)0x401F, 0xAB);
+  
+  for (i = 0x4000; i < 0x400F; i ++) {
     result = ReadEBI(i);
-    if (result != 0xAA)
-      return false;
+    _log("read: 0x%02X", result);
+    //if (*(uint8_t*)ptr != 0xAA)
+    //if (result != data)
+    //return false;
+    }*/
+
+  volatile int16_t ptr = 0x4000;
+  volatile int16_t ptr_end = 0x400F;
+  
+  uint8_t data = 0xAA;
+  uint8_t result;
+  
+  for (ptr = 0x4000; ptr < ptr_end; ptr++, data++) {
+    *(uint8_t*)ptr = data;
+    _log("write: 0x%02X", data);
   }
 
+  data = 0xAA;
+
+  for (ptr = 0x4000; ptr < ptr_end + 1; ptr++, data++) {
+    result = *(uint8_t*)ptr;
+    _log("read: 0x%02X", result);
+  }
+
+  
   return true;
-  //_log("MEM TEST: i = 0x%04X", i);
 }
+
 
 uint8_t ReadEBI(uint32_t Address)
 {
