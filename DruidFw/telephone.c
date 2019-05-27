@@ -5,7 +5,7 @@
 #include "ml_text_edit.h"
 #include "kbd2.h"
 #include "gsm.h"
-#include "fonts_nimbus_12_22.h"
+//#include "fonts_nimbus_12_22.h"
 
 // ===== TEL MessageBuffer data ===========
 MessageBufferHandle_t tel_msg_buf_handle;
@@ -74,33 +74,33 @@ void vTelTask(void* pvParameters) {
 
 static void ui_init(void) {
   textEdit_init(&te1, te1_buf, 20);
-  
+
   mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, line5, line6, line7);
 }
 
 static void ui_update(void) {
   displayRenderText(2, 173, "call:+", 7, &display);
   textEdit_render(&te1, 55, 170, &display);
-  
+
   mlTextEdit_render(&mte, 10, 3, &display);
 
   /*const uint8_t tmp[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xf5, 0xff, 0xf5, 0xff, 0xed, 0xff, 0xee, 0xff, 0xee, 0xff, 0xde, 0x7f, 0xc0, 0x7f, 0xdf, 0xbf, 0xbf, 0x1f, 0xe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};*/
-  
-  {
+
+/*  {
     DispBuf pic;
     pic.buf_cols = 2; // byte
     pic.buf_rows = 22; // bits
     uint8_t buffer[44];
     pic.buffer = (byte*)buffer;
-    
+
     for (byte j = 0; j < 44; j++) {
       pic.buffer[j] = pgm_read_byte_far( ch_32 + j );
     }
 
-    
+
     displayRenderSubBuffer(30, 140, &pic, &display);
   }
-    
+  */
   displayFlush();
 }
 
@@ -109,7 +109,7 @@ static void handle_kbd(char key) {
   case 24: // responce
     send_cstr("ATA\n\r");
     break;
-    
+
   case 29: // call
     send_cstr("ATD+");
     send_str(te1.buffer, te1.data_len);
@@ -120,5 +120,5 @@ static void handle_kbd(char key) {
     break;
 
   } // switch
-  
+
 }

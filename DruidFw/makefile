@@ -71,14 +71,14 @@ ml_text_edit.c \
 task_mgr.c \
 check_box.c \
 telephone.c \
-fonts_nimbus_12_22.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/stream_buffer.c \
 $(PORT_DIR)/port.c \
 $(SOURCE_DIR)/queue.c \
-$(SOURCE_DIR)/croutine.c 
+$(SOURCE_DIR)/croutine.c
 
+#fonts_nimbus_12_22.c \
 
 #$(SOURCE_DIR)/portable/MemMang/heap_1.c
 
