@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "text_edit.h"
+#include "fonts.h"
 
 bool textEdit_init(TextEdit* te, char* buffer_, byte buffer_len_) {
   CHECK(te);
@@ -76,9 +77,6 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   CHECK(te->buffer);
   CHECK(pdisplay);
   
-  byte char_width = 8; // width of char place (to get in font info)
-  byte char_height = 15; // height of char place (to get in font info)
-
   byte xm = X_MERGIN_PIX;
   byte ym = Y_MERGIN_PIX;
   
@@ -87,6 +85,6 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
 		      te->buffer, te->data_len, pdisplay);
   }
 
-  displayRenderRectangle(x, y, x + (char_width * te->data_len) + xm + xm,
-                         y + char_height + ym, pdisplay);
+  displayRenderRectangle(x, y, x + (FONT_max_width * te->buffer_len) + xm + xm,
+                         y + FONT_max_height + ym, pdisplay);
 }

@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "render.h"
-
+#include "fonts.h"
 #include "ml_text_edit.h"
 
 static void move_lines_back(MlineTextEdit* mte);
@@ -69,17 +69,14 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
   
   int8_t i = 0;
 
-  byte char_width = 8; // width of char place (to get in font info)
-  byte char_height = 15; // height of char place (to get in font info)
-
   displayRenderRectangle(x, y,
-			 x + (char_width * mte->line_len),
-			 y + (char_height * mte->lines_num), pdisplay);
+			 x + (FONT_max_width * mte->line_len),
+			 y + (FONT_max_height * mte->lines_num), pdisplay);
 
   x += 3; y += 3;
   for (i = 0; i < mte->lines_num; i++) {
     displayRenderText(x, y, mte->buffer[i], mte->line_len, pdisplay);
-    y += char_height;
+    y += FONT_max_height;
     
   }
 }

@@ -27,8 +27,8 @@
 #define MSG_CLOSE 2
 #define MSG_GSM_INPUT 3
 
-#define X_MERGIN_PIX 3
-#define Y_MERGIN_PIX 3
+#define X_MERGIN_PIX 2
+#define Y_MERGIN_PIX 2
 
 //#define DISABLE_LOGS
 typedef uint8_t byte;

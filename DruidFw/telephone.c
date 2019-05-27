@@ -15,10 +15,10 @@ static void handle_kbd(char key);
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[20];
+static char te1_buf[11];
 static TextEdit te1;
 
-#define MTE_LINE_LEN 20
+#define MTE_LINE_LEN 15
 char line1[MTE_LINE_LEN];
 char line2[MTE_LINE_LEN];
 char line3[MTE_LINE_LEN];
@@ -73,16 +73,16 @@ void vTelTask(void* pvParameters) {
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 20);
+  textEdit_init(&te1, te1_buf, 11);
 
   mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, line5, line6, line7);
 }
 
 static void ui_update(void) {
-  displayRenderText(2, 173, "call:+", 7, &display);
-  textEdit_render(&te1, 55, 170, &display);
+  displayRenderText(1, 172, "call:+", 6, &display);
+  textEdit_render(&te1, 57, 172, &display);
 
-  mlTextEdit_render(&mte, 10, 3, &display);
+  mlTextEdit_render(&mte, 7, 3, &display);
 
   /*const uint8_t tmp[] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xc3, 0xff, 0xf5, 0xff, 0xf5, 0xff, 0xed, 0xff, 0xee, 0xff, 0xee, 0xff, 0xde, 0x7f, 0xc0, 0x7f, 0xdf, 0xbf, 0xbf, 0x1f, 0xe, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};*/
 

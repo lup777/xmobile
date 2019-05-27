@@ -30,10 +30,10 @@ byte dispay_spi_buf[DISPLAY_BUFFER_ROWS_BITS];
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[20];
+static char te1_buf[12];
 static TextEdit te1;
 
-static char te2_buf[20];
+static char te2_buf[12];
 static TextEdit te2;
 
 static CheckBox cb1;
@@ -153,8 +153,8 @@ inline void menu_up(void) {
   }*/
 
 static void ui_update(void) {
-  textEdit_render(&te1, 20, 10, &display);
-  textEdit_render(&te2, 20, 30, &display);
+  textEdit_render(&te1, 18, 10, &display);
+  textEdit_render(&te2, 18, 40, &display);
 
   if (state == 0) {
     checkBox_set_value(&cb1, true);
@@ -167,14 +167,14 @@ static void ui_update(void) {
   }
   
   checkBox_render(&cb1, 2, 10, &display);
-  checkBox_render(&cb2, 2, 30, &display);
+  checkBox_render(&cb2, 2, 40, &display);
     
   displayFlush();
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 20);
-  textEdit_init(&te2, te2_buf, 20);
+  textEdit_init(&te1, te1_buf, 12);
+  textEdit_init(&te2, te2_buf, 12);
 
   textEdit_setcstr(&te1, "task manager");
   textEdit_setcstr(&te2, "telephone");

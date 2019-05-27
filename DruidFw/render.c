@@ -111,22 +111,28 @@ void displayRenderText(short x, short y,
 		       char* text, size_t len,
 		       DispBuf* display_) {
   DispBuf pic;
-  pic.buf_cols = 1; // byte
-  pic.buf_rows = 13; // bits
-  uint8_t buffer[13];
+  uint8_t buffer[80];
   pic.buffer = buffer;
-
+  byte cx =  x;
+  
   for (size_t i = 0; i < len; i++) {
     uint8_t* tmp = (uint8_t*)FONT_GetPicture8x13( (uint8_t)(text[i]) );
 
-    for (byte j = 0; j < 13; j++) {
-      pic.buffer[j] = pgm_read_byte(tmp+j);
+    pic.buf_cols = pgm_read_byte(tmp + 0); // bits
+    pic.buf_cols = pic.buf_cols / 8; // bytes
+    pic.buf_rows = pgm_read_byte(tmp + 1);
+    byte char_w = pgm_read_byte(tmp + 2);
+
+    byte j = 3;
+    for (j = 3; j < (pic.buf_cols * pic.buf_rows) + 3; j++) {
+      pic.buffer[j - 3] = pgm_read_byte(tmp + j);
     }
-    displayRenderSubBuffer(x + ((pic.buf_cols * i) << 3),
-			   y,
-			   &pic,
-			   display_);
-    //_log("--> 0x%02X", text[i]);
+
+    //for (j -= 3; j < 80; j++)
+    //  pic.buffer[j] = 0xFF;
+
+    displayRenderSubBuffer(cx, y, &pic, display_);
+    cx += char_w;    
   }
 }
 
