@@ -20,7 +20,7 @@
 //typedef StaticMessageBuffer_t struct StaticStreamBuffer_t * const
 
 // local functions
-static void vMainTask(void* pvParameters);
+//static void vMainTask(void* pvParameters);
 
 void check_endian(void);
 void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
@@ -141,11 +141,11 @@ int main(void) {
   
   vTaskStartScheduler();
 
-  vMainTask(NULL);
+  //vMainTask(NULL);
   vTelTask(NULL);
   return 0;
 }
-
+/*
 static void vMainTask(void* pvParameters) {
   (void)(pvParameters);
   check_endian();
@@ -203,20 +203,6 @@ static void vMainTask(void* pvParameters) {
       }
     }
     (void)(gsm_rx_bytes);
-    /*if (gsm_rx_bytes > 0) {
-      //DCHECK(0, "_2_");
-      mlTextEdit_pushstr(&mte, gsm_char, gsm_rx_bytes);
-
-      //_log("GSM: %c  (0x%02X)", gsm_char, gsm_char);
-      logcl("GSM: ");
-      //send_log_str(gsm_char, gsm_rx_bytes);
-      logcl("\n\r");
-
-      // draw GSM log
-      mlTextEdit_render(&mte, 8, 24, &display);
-      
-      need_update_display = true;
-      }*/
 
     // update display
     if (need_update_display) {
@@ -228,7 +214,7 @@ static void vMainTask(void* pvParameters) {
     
   }
 }
-
+*/
 void _sleep(uint16_t time_ms) {
   vTaskDelay((TickType_t)(time_ms / portTICK_PERIOD_MS));
 }

@@ -24,3 +24,7 @@ void gsm_get_signal_quality(void);
 void GSM_CallCmd(const char* msg);
 void SendGsm(const char* msg);
 void SendGsmLen(const char* msg, uint8_t len);
+
+void gsm_configure_usart(void);
+void gsm_enable_hands_free(void);
+void gsm_change_side_tone_gain_lvl(void);

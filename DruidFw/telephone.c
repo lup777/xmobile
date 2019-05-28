@@ -12,6 +12,7 @@ MessageBufferHandle_t tel_msg_buf_handle;
 StaticStreamBuffer_t tel_msg_buf_struct;
 static uint8_t tel_msg_buffer[ 100 ];
 static void handle_kbd(char key);
+void module_init(void);
 // ========================================
 
 // ======== UI ============================
@@ -29,6 +30,7 @@ char line7[MTE_LINE_LEN];
 MlineTextEdit mte;
 // ========================================
 
+volatile bool inited;
 static void ui_init(void);
 static void ui_update(void);
 void tel_init(void);
@@ -36,18 +38,19 @@ void vTelTask(void* pvParameters);
 
 
 void tel_init(void) {
+  inited = false;
   tel_msg_buf_handle = xMessageBufferCreateStatic(sizeof(tel_msg_buffer),
 						  tel_msg_buffer,
 						  &tel_msg_buf_struct);
   ui_init();
 }
 
+char buffer[50];
+
 void vTelTask(void* pvParameters) {
   (void)(pvParameters);
 
   tel_init();
-
-  static char buffer[50];
 
   for(;;) {
     size_t rx_bytes = xMessageBufferReceive(tel_msg_buf_handle, buffer, 50, portMAX_DELAY);
@@ -56,6 +59,7 @@ void vTelTask(void* pvParameters) {
     switch(buffer[0]) {
     case MSG_HEADER_GSM:
       mlTextEdit_pushstr(&mte, buffer + 1, rx_bytes - 1);
+      send_log_str(buffer + 1, rx_bytes - 1);
       ui_update();
       break;
 
@@ -63,13 +67,34 @@ void vTelTask(void* pvParameters) {
       char ch;
       if (true == kbd_key_to_char( buffer[1], &ch )) {
 	textEdit_pushc(&te1, ch);
+	ui_update();
       } else {
 	handle_kbd(buffer[1]);
       }
-      ui_update();
     } // case MSG_HEADER_KBD
+    case MSG_HEADER_TM:
+      ui_update();
+      if (inited == false) {
+	//module_init();
+	inited = true;
+      }
+      break;
     } // switch
   }
+}
+
+void module_init(void) {
+  raw_logc("config usart");
+  gsm_configure_usart();
+
+  raw_logc("en HF");
+  gsm_enable_hands_free();
+
+  raw_logc("gain");
+  gsm_change_side_tone_gain_lvl();
+
+  send_log_str(buffer + 1, rx_bytes - 1);
+  raw_logc("gsm init compl");
 }
 
 static void ui_init(void) {
@@ -114,6 +139,11 @@ static void handle_kbd(char key) {
     send_cstr("ATD+");
     send_str(te1.buffer, te1.data_len);
     send_cstr(";\r\n");
+    break;
+
+  case 27: // network status
+    _log("get sig quality");
+    gsm_get_signal_quality();
     break;
 
   default:

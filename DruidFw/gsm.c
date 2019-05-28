@@ -71,12 +71,7 @@ void GSM_Init(void) {
   //vTaskDelay((TickType_t)(50000 / portTICK_PERIOD_MS));
 
   //send_byte("AT\n", 3);
-  _log("waiting for gsm init");
-  while( gsm_status() == false );
-  _sleep(1000);
-  send_str("AT\n\r", 4);
-  _sleep(1000);
-  send_str("ATE\n\r", 5);
+  /*send_str("ATE\n\r", 5); // echo 
   _sleep(1000);
   send_str("AT+GSN\n\r", 8);
   _sleep(1000);
@@ -86,7 +81,24 @@ void GSM_Init(void) {
   _sleep(1000);
   send_str("AT+CRSL=15\n\r", 12);
   _sleep(1000);
+  */
+  //gsm_enable_hands_free();
+  //gsm_change_side_tone_gain_lvl();
+  
   _log("GSM init completed");
+}
+
+void gsm_configure_usart(void) {
+  send_str("AT\n\r", 4);
+}
+
+void gsm_enable_hands_free(void) {
+  //AT+CHF=<ind>,<state>
+  send_str("AT+CHF=1,2\n\r", 12);
+}
+
+void gsm_change_side_tone_gain_lvl(void) {
+  send_str("AT+SIDET=2,16\n\r", 15);
 }
 
 inline bool gsm_status(void) {
@@ -100,6 +112,7 @@ inline void send_byte(char data) {
 
 void send_str(char* data, size_t len) {
   size_t i = 0;
+  while( gsm_status() == false );
   for(; i < len; i++) {
     send_byte(data[i]);
   }
@@ -126,21 +139,22 @@ ISR(USARTE0_RXC_vect) {
   static unsigned char buffer[50];
   static int idx = 1;
 
+  buffer[idx] = USARTE0.DATA;
   data = USARTE0.DATA;
-
+  
   buffer[idx] = data;
-  idx++;
 
-  if (idx > 2                     &&
-      buffer[idx - 2] == '\r'     &&
-      buffer[idx - 1] == '\n'     &&
-      idx < 45) {
-    buffer[0] = MSG_HEADER_GSM;
-    xMessageBufferSendFromISR(tm_msg_buf_handle,
-			      buffer,
-			      idx - 2,
-			      &need_yeld);
-    idx = 1;
+  if ((buffer[idx] != '\r') && (buffer[idx] != '\n')) {
+    idx++;
+  } else {
+    if (idx > 2) {
+      buffer[0] = MSG_HEADER_GSM;
+      xMessageBufferSendFromISR(tm_msg_buf_handle,
+				buffer,
+				idx,
+				&need_yeld);
+      idx = 1;
+    }
   }
 
   if (need_yeld == pdTRUE)

@@ -72,5 +72,6 @@ enum enum_tasks {
 
 #define MSG_HEADER_KBD 0
 #define MSG_HEADER_GSM 1
+#define MSG_HEADER_TM  2
 
 extern enum enum_tasks active_task;

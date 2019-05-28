@@ -108,6 +108,8 @@ static void handle_msg(char *buffer, size_t msg_size) {
 	active_task = enum_task_mgr; break;
       case 1:
 	active_task = enum_task_tel; break;
+	buffer[0] = MSG_HEADER_TM;
+	xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
       default:
 	CHECK(0);
 	break;
