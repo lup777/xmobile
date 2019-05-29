@@ -51,14 +51,12 @@ void vTaskMgr(void* pvParameters) {
   tm_msg_buf_handle = xMessageBufferCreateStatic(sizeof(msg_buffer),
 						 msg_buffer,
 						 &msg_buf_struct);
-  displayInit(display_buffer, dispay_spi_buf);
 
+  displayInit(display_buffer, dispay_spi_buf);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
-  GSM_Init();
-
   ui_init();
-  _sleep(500);
+  GSM_Init();
   ui_update();
 
   active_task = enum_task_mgr;
@@ -84,11 +82,11 @@ void vTaskMgr(void* pvParameters) {
           break;
 
         case enum_task_clock:
-	  break;
+	        break;
 
         default:
-	  CHECK(0);
-	  break;
+	      CHECK(0);
+	      break;
       }
     }
   }
@@ -105,20 +103,19 @@ static void handle_msg(char *buffer, size_t msg_size) {
     if (buffer[1] == 9) { // key enter
       switch (state) {
       case 0:
-	active_task = enum_task_mgr; break;
+        active_task = enum_task_mgr; break;
       case 1:
-	active_task = enum_task_tel; break;
-	buffer[0] = MSG_HEADER_TM;
-	xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
+	      active_task = enum_task_tel; break;
+	      buffer[0] = MSG_HEADER_TM;
+	      xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
       default:
-	CHECK(0);
-	break;
+	      CHECK(0);
+	      break;
       }
     }
 
     if (buffer[1] == 26) // key down
       menu_down();
-
     
     ui_update();
     //_log("KBD: 0x%02X", buffer[1]);
@@ -127,8 +124,7 @@ static void handle_msg(char *buffer, size_t msg_size) {
   } // KBD
 
   case MSG_HEADER_GSM:
-    logcl("GSM: ");
-    send_log_str(buffer + 1, msg_size - 1);
+    xMessageBufferSend(tel_msg_buf_handle, buffer, msg_size, portMAX_DELAY);
     break;
   }
 }

@@ -14,17 +14,16 @@
 extern MessageBufferHandle_t gsm_msg_buf_handle;
 
 void GSM_Init(void);
-void send_str(char* data, size_t len);
-void send_cstr(const char* data);
-void send_byte(char data);
+
+void gsm_send_cstr(const char* data);
+void gsm_send_str(char* data, size_t len);
+void gsm_send_cstr_ne(const char* data);
+void gsm_send_str_ne(char* data, size_t len);
+
+void gsm_send_cmd_end(void);
 bool gsm_status(void);
-void gsm_get_signal_quality(void);
 
 
 void GSM_CallCmd(const char* msg);
 void SendGsm(const char* msg);
 void SendGsmLen(const char* msg, uint8_t len);
-
-void gsm_configure_usart(void);
-void gsm_enable_hands_free(void);
-void gsm_change_side_tone_gain_lvl(void);

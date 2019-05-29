@@ -69,10 +69,9 @@ void sram_init(void) {
   EBI.CS3.CTRLB = EBI_CS_SRWS_2CLK_gc;  // One Clk per 2 cycles wait state
 
   EBI.CS3.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
-  
-
 }
 
+#ifndef DISABLE_LOGS
 bool check_sram(void) {
   //_log("start check_sram");
   /*uint32_t i  = 0;
@@ -106,17 +105,14 @@ bool check_sram(void) {
     _log("write: 0x%02X", data);
   }
 
-  data = 0xAA;
-
-  for (ptr = 0x4000; ptr < ptr_end + 1; ptr++, data++) {
+  for (ptr = 0x4000; ptr < ptr_end + 1; ptr++) {
     result = *(uint8_t*)ptr;
     _log("read: 0x%02X", result);
   }
 
-  
   return true;
 }
-
+#endif
 
 uint8_t ReadEBI(uint32_t Address)
 {

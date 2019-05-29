@@ -28,4 +28,5 @@ void send_log_str(char* data, byte len);
 #  define _log(X, ...) raw_logc(X) 
 #  define logc(X) {}
 #  define logcl(X) {}
+#  define send_log_str(X,Y) {}
 #endif

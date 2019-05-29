@@ -17,11 +17,11 @@
 #define READ_BUFFER_SIZE 255
 
 void GSM_CallCmd(const char* msg);
-void GSM_SendCStr(const char* str);
-void GSM_SendStr(char* str, uint8_t len);
+void gsm_sendcstr(char* str, uint8_t len);
 bool GSM_SendByte(char c, uint16_t delay_ms);
 bool GSM_ReadByte(char* out, uint16_t delay_ms);
 char GSM_ReadResultCode(uint16_t delay_ms, char* out);
+void gsm_send_cmd_end(void);
 
 // new
 void send_byte(char byte);
@@ -73,7 +73,7 @@ void GSM_Init(void) {
   //send_byte("AT\n", 3);
   /*send_str("ATE\n\r", 5); // echo 
   _sleep(1000);
-  send_str("AT+GSN\n\r", 8);
+  send_str("AT+GSN\n\r", 8); // request IMEI
   _sleep(1000);
   send_str("AT+CLVL=8\n\r", 11);
   _sleep(1000);
@@ -88,46 +88,38 @@ void GSM_Init(void) {
   _log("GSM init completed");
 }
 
-void gsm_configure_usart(void) {
-  send_str("AT\n\r", 4);
-}
 
-void gsm_enable_hands_free(void) {
-  //AT+CHF=<ind>,<state>
-  send_str("AT+CHF=1,2\n\r", 12);
-}
-
-void gsm_change_side_tone_gain_lvl(void) {
-  send_str("AT+SIDET=2,16\n\r", 15);
-}
-
-inline bool gsm_status(void) {
+bool gsm_status(void) {
   return ((PORTA.IN & PIN2_bm) != 0);
 }
 
-inline void send_byte(char data) {
+void send_byte(char data) {
   while((USARTE0.STATUS & USART_DREIF_bm) == 0) {};
   USARTE0.DATA = data;
 }
 
-void send_str(char* data, size_t len) {
+void gsm_send_str(char* data, size_t len) {
+  gsm_send_str_ne(data, len);
+  gsm_send_cmd_end();
+}
+void gsm_send_str_ne(char* data, size_t len) {
   size_t i = 0;
   while( gsm_status() == false );
+
   for(; i < len; i++) {
     send_byte(data[i]);
   }
 }
-
-void send_cstr(const char* data) {
-  size_t len = strlen(data);
-  size_t i = 0;
-  for(; i < len; i++) {
-    send_byte( data[i] );
-  }
+void gsm_send_cstr(const char* data) {
+  gsm_send_str((char*)data, strlen(data));
 }
 
-void gsm_get_signal_quality(void) {
-  send_cstr("AT+CSQ\r\n");
+void gsm_send_cstr_ne(const char* data) {
+  gsm_send_str_ne((char*)data, strlen(data));
+}
+
+void gsm_send_cmd_end(void) {
+  send_byte('\r');
 }
 
 ISR(USARTE0_TXC_vect) {
