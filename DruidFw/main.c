@@ -15,7 +15,7 @@
 #include "task_mgr.h"
 #include "telephone.h"
 
-#define STACK_SIZE 200
+#define STACK_SIZE 180
 
 //typedef StaticMessageBuffer_t struct StaticStreamBuffer_t * const
 
@@ -26,6 +26,8 @@ void check_endian(void);
 void vApplicationGetIdleTaskMemory( StaticTask_t **ppxIdleTaskTCBBuffer,
 				    StackType_t **ppxIdleTaskStackBuffer,
 				    uint32_t *pulIdleTaskStackSize );
+void vApplicationStackOverflowHook( TaskHandle_t xTask,
+				    signed char *pcTaskName );
 void vTelTask(void* pvParameters);
 // ~ local functions
 
@@ -40,7 +42,7 @@ static uint8_t kbd_msg_buffer[ 20 ];
 // ===== GSM MessageBuffer data ===========
 MessageBufferHandle_t gsm_msg_buf_handle;
 StaticStreamBuffer_t gsm_msg_buf_struct;
-static uint8_t gsm_msg_buffer[ 50 ];
+static uint8_t gsm_msg_buffer[ 80 ];
 // ========================================
 
 #ifndef DISABLE_LOGS
@@ -227,9 +229,9 @@ void check_endian(void) {
 
   t.d = 1;
   if (t.a[0]) {
-    logcl("little endian\r\n");
+    //logcl("little endian\r\n");
   } else {
-    logcl("big endian\r\n");
+    //logcl("big endian\r\n");
   }
 }
 
@@ -255,3 +257,23 @@ the stack and so not exists after this function exits. */
   *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
 }
 
+void vApplicationStackOverflowHook( TaskHandle_t xTask,
+				    signed char *pcTaskName ) {
+  (void)(xTask);
+  size_t i;
+  static char msg[] = "SOWF";
+
+  for ( i = 0; i < strlen(msg); i++) {
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    USARTE1_DATA = msg[i];
+  }
+  
+  for (i = 0; i < 7; i++) {
+    while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+    USARTE1_DATA = pcTaskName[i];
+  }
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = '\n';
+  
+  while(1);
+}

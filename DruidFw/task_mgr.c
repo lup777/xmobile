@@ -51,15 +51,16 @@ void vTaskMgr(void* pvParameters) {
   tm_msg_buf_handle = xMessageBufferCreateStatic(sizeof(msg_buffer),
 						 msg_buffer,
 						 &msg_buf_struct);
-
   displayInit(display_buffer, dispay_spi_buf);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   ui_init();
+
   GSM_Init();
+
   ui_update();
 
-  active_task = enum_task_mgr;
+  active_task = enum_task_tel;//enum_task_mgr;
   state = 0;
   menu_size = 2;
   
@@ -105,18 +106,17 @@ static void handle_msg(char *buffer, size_t msg_size) {
       case 0:
         active_task = enum_task_mgr; break;
       case 1:
-	      active_task = enum_task_tel; break;
-	      buffer[0] = MSG_HEADER_TM;
-	      xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
+	active_task = enum_task_tel; break;
+	buffer[0] = MSG_HEADER_TM;
+	xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
       default:
-	      CHECK(0);
-	      break;
+	CHECK(0);
+	break;
       }
     }
 
     if (buffer[1] == 26) // key down
       menu_down();
-    
     ui_update();
     //_log("KBD: 0x%02X", buffer[1]);
 

@@ -17,10 +17,11 @@ static void handle_kbd(char key);
 void module_init(void);
 void handle_state_machine(void);
 void answer_call(void);
+void send_cfg(void);
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[11];
+static char te1_buf[12];
 static TextEdit te1;
 
 #define MTE_LINE_LEN 15
@@ -37,10 +38,7 @@ MlineTextEdit mte;
 typedef enum {
   state_cfg_usart,
   state_wait_rdy,
-  state_enable_hf,
-  state_enable_hf_ok,
-  state_enable_hf_failed,
-  state_set_tone_gain_lvl,
+  state_set_params,
   state_ready,
 } State;
 
@@ -70,7 +68,7 @@ void vTelTask(void* pvParameters) {
 
   for(;;) {
     rx_bytes = xMessageBufferReceive(tel_msg_buf_handle, buffer, 
-                                            TEL_MSG_BUFFER_LEN, portMAX_DELAY);
+				     TEL_MSG_BUFFER_LEN, portMAX_DELAY);
     if (rx_bytes < 2) continue;
 
     switch(buffer[0]) {
@@ -84,10 +82,10 @@ void vTelTask(void* pvParameters) {
     case MSG_HEADER_KBD: {
       char ch;
       if (true == kbd_key_to_char( buffer[1], &ch )) {
-	      textEdit_pushc(&te1, ch);
-	      ui_update();
+	textEdit_pushc(&te1, ch);
+	ui_update();
       } else {
-	      handle_kbd(buffer[1]);
+	handle_kbd(buffer[1]);
       }
     } // case MSG_HEADER_KBD
     case MSG_HEADER_TM:
@@ -99,11 +97,14 @@ void vTelTask(void* pvParameters) {
 
 static void ui_init(void) {
   textEdit_init(&te1, te1_buf, 11);
-
+  //textEdit_setcstr(&te1, "79213258124");
   mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, line5, line6, line7);
 }
 
 static void ui_update(void) {
+  if (active_task != enum_task_tel)
+    return;
+  
   displayRenderText(1, 172, "call:+", 6, &display);
   textEdit_render(&te1, 57, 172, &display);
 
@@ -120,13 +121,18 @@ static void handle_kbd(char key) {
 
   case 29: // call
     gsm_send_cstr_ne("ATD+");
-    gsm_send_str_ne(te1.buffer, te1.data_len);
+    //gsm_send_str_ne(te1.buffer, te1.data_len);
+    gsm_send_cstr_ne("79819476135");
     gsm_send_cstr(";");
     break;
 
   case 27: // network status
     _log("get sig quality");
     get_signal_quality();
+    break;
+
+  case 2:
+    //gsm_send_cstr("AT&FZE0+IPR=115200;&W");
     break;
 
   default:
@@ -141,41 +147,21 @@ void handle_state_machine() {
     case state_cfg_usart: 
       configure_usart();
       state = state_wait_rdy;
-      _log("state_wait_rdy");
+      _log("wait_rdy");
+      state = state_ready;
       break;
 
     case state_wait_rdy:
       if (is_cmd_rdy()) {
-        state = state_enable_hf;
-        enable_hands_free();
-        _log("state_enable_hf");
-      }
-      break;
-    case state_enable_hf:
-      if (is_cmd_ok()) {
-        _log("ok");
-        _log("set tone gain lvl");
-        change_side_tone_gain_lvl();
-        state = state_set_tone_gain_lvl;
-      } else if (is_cmd_error()) {
-        _log("failed");
         state = state_ready;
+        send_cfg();
       }
-      break;
-
-    case state_set_tone_gain_lvl:
-      if (is_cmd_ok()) {
-        _log("ok");
-        _log("state_ready");
-        change_side_tone_gain_lvl();
-      } else if (is_cmd_error()) {
-        _log("failed");
-      }
-      _log("state_ready");
-      state = state_ready;
       break;
 
     case state_ready:
+      
+      ui_update();
+      //_log("state_ready");
       break;
 
     default:
@@ -186,48 +172,52 @@ void handle_state_machine() {
 
 
 bool is_cmd_rdy() {
-  if (rx_bytes == 3)
-    if (buffer[0] == 'R')
-      if (buffer[1] == 'D')
-        if (buffer[2] == 'Y')
+  if (rx_bytes >= 3)
+    if (buffer[1] == 'R')
+      if (buffer[2] == 'D')
+        if (buffer[3] == 'Y')
           return true;
   return false;
 }
 
 bool is_cmd_ok() {
-  if (rx_bytes == 2)
-    if (buffer[0] == 'O')
-      if (buffer[1] == 'K')
+  if (rx_bytes >= 2)
+    if (buffer[1] == 'O')
+      if (buffer[2] == 'K')
         return true;
   return false;
 }
 
 bool is_cmd_error() {
-  if (rx_bytes == 5)
-    if (buffer[0] == 'E')
-      if (buffer[1] == 'R')
-        if (buffer[2] == 'R')
-          if (buffer[3] == 'O')
-            if (buffer[4] == 'R')
+  if (rx_bytes >= 5)
+    if (buffer[1] == 'E')
+      if (buffer[2] == 'R')
+        if (buffer[3] == 'R')
+          if (buffer[4] == 'O')
+            if (buffer[5] == 'R')
               return true;
   return false;
 }
 
+void send_cfg(void) {
+static const char cmd[] = "\
+AT\
++CHF=1,0;\
++SIDET=0,16;\
++CRSL=100;\
++CLVL=100;\
++CMIC=0,15\
+&W";
+  gsm_send_cstr(cmd);
+}
 
 inline void answer_call(void) {
   gsm_send_cstr("ATA");
 }
 
 inline void configure_usart(void) {
+  while( gsm_status() == false );
   gsm_send_cstr("AT");
-}
-
-inline void enable_hands_free(void) {
-  gsm_send_cstr("AT+CHF=1,2");
-}
-
-inline void change_side_tone_gain_lvl(void) {
-  gsm_send_cstr("AT+SIDET=2,16");
 }
 
 inline void get_signal_quality(void) {

@@ -49,6 +49,9 @@ bool mlTextEdit_pushstr(MlineTextEdit* mte, char* str, byte len) {
   CHECK(str);
   
   move_lines_back(mte);
+
+  if (len > mte->line_len)
+    len = mte->line_len;
   
   memcpy(mte->buffer[mte->lines_num - 1], str, len);
 

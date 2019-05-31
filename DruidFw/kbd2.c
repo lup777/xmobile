@@ -196,7 +196,7 @@ uint8_t kbd_read_byte(uint8_t addr) {
 
 ISR(PORTA_INT0_vect) {
   BaseType_t need_yeld = pdFALSE;
-  byte buffer[2];
+  static byte buffer[2];
   buffer[1] = kbd_read_byte(MAX7370_REG_FIFO);
 
   //_log("PORTA INT (%d)", key);

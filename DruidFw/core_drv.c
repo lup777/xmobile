@@ -29,9 +29,8 @@ void int_init(void) {
     PMIC.INTPRI = 0x00;
 }
 
-void sram_init(void) __attribute__ ((naked))	\
-  __attribute__ ((section (".init0")));
-
+/*void sram_init(void) __attribute__ ((naked))	\
+  __attribute__ ((section (".init0")));*/
 
 void sram_init(void) {
   /* EXAMPLE
@@ -49,7 +48,17 @@ void sram_init(void) {
   // PF - A8 .. A15
   // PH - A16.. A19, CE1, CE2, OE, WE
   // PJ - D0 .. D7
-  
+  // PH2 - CE1
+  // PH3 - CE2
+
+  PORTK.DIRSET = 0xFF;
+  PORTF.DIRSET = 0xFF;
+  PORTH.DIRSET = 0xFF;
+  PORTH.OUTSET = 0xFF & (~PIN2_bm);
+
+  PORTH.OUTCLR = PIN2_bm; // CE1
+  //PORTH.OUTSET = PIN3_bm; // CE2
+
   EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
     | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
                                  // IFMODE[1:0] = 1 0 (bits)
@@ -58,15 +67,11 @@ void sram_init(void) {
   EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
   EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
 
-  PORTK.DIRSET = 0xFF;
-  PORTF.DIRSET = 0xFF;
-  PORTH.DIRSET = 0xFF;
-  PORTH.OUTSET = 0xFF;
-
+  
   EBI.CS3.CTRLA = EBI_CS_ASPACE_1MB_gc  // size of the block above the base address
     | EBI_CS_MODE_SRAM_gc;              // SRAM mode
 
-  EBI.CS3.CTRLB = EBI_CS_SRWS_2CLK_gc;  // One Clk per 2 cycles wait state
+  EBI.CS3.CTRLB = EBI_CS_SRWS_0CLK_gc;  // One Clk per 2 cycles wait state
 
   EBI.CS3.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
 }
@@ -94,22 +99,25 @@ bool check_sram(void) {
     //return false;
     }*/
 
-  volatile int16_t ptr = 0x4000;
-  volatile int16_t ptr_end = 0x400F;
+  volatile int32_t ptr = 0x4000;
+  volatile int32_t ptr_end = 0x400F;
   
   uint8_t data = 0xAA;
   uint8_t result;
   
   for (ptr = 0x4000; ptr < ptr_end; ptr++, data++) {
-    *(uint8_t*)ptr = data;
+    //*(uint8_t*)ptr = data;
+    WriteEBI(ptr, data);
     _log("write: 0x%02X", data);
   }
 
   for (ptr = 0x4000; ptr < ptr_end + 1; ptr++) {
-    result = *(uint8_t*)ptr;
+    //result = *(uint8_t*)ptr;
+    result = ReadEBI(ptr);
     _log("read: 0x%02X", result);
   }
 
+  CHECK(0);
   return true;
 }
 #endif

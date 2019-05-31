@@ -31,6 +31,7 @@
 #define Y_MERGIN_PIX 2
 
 //#define DISABLE_LOGS
+
 typedef uint8_t byte;
 typedef uint16_t word;
 
