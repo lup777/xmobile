@@ -5,6 +5,7 @@
 #include "ml_text_edit.h"
 #include "kbd2.h"
 #include "gsm.h"
+#include <string.h>
 //#include "fonts_nimbus_12_22.h"
 
 #define TEL_MSG_BUFFER_LEN 50
@@ -18,6 +19,8 @@ void module_init(void);
 void handle_state_machine(void);
 void answer_call(void);
 void send_cfg(void);
+bool cmp(char* s1, const char* s2, size_t len);
+bool is_contain(const char* pat);
 // ========================================
 
 // ======== UI ============================
@@ -50,12 +53,12 @@ void vTelTask(void* pvParameters);
 
 
 void tel_init(void) {
-  state = state_cfg_usart;
+  state = state_wait_rdy;//state_cfg_usart;
   tel_msg_buf_handle = xMessageBufferCreateStatic(sizeof(tel_msg_buffer),
 						  tel_msg_buffer,
 						  &tel_msg_buf_struct);
   ui_init();
-  handle_state_machine();
+  //handle_state_machine();
 }
 
 char buffer[TEL_MSG_BUFFER_LEN];
@@ -147,12 +150,13 @@ void handle_state_machine() {
     case state_cfg_usart: 
       configure_usart();
       state = state_wait_rdy;
-      _log("wait_rdy");
       state = state_ready;
       break;
 
     case state_wait_rdy:
-      if (is_cmd_rdy()) {
+      _log("_wait rdy");
+      if (is_contain("RDY") == true) {
+	_log("send CFG");
         state = state_ready;
         send_cfg();
       }
@@ -161,7 +165,7 @@ void handle_state_machine() {
     case state_ready:
       
       ui_update();
-      //_log("state_ready");
+      _log("_ready");
       break;
 
     default:
@@ -171,12 +175,23 @@ void handle_state_machine() {
 }
 
 
-bool is_cmd_rdy() {
-  if (rx_bytes >= 3)
-    if (buffer[1] == 'R')
-      if (buffer[2] == 'D')
-        if (buffer[3] == 'Y')
-          return true;
+bool cmp(char* s1, const char* s2, size_t len) {
+  for (; len > 0; len--) {
+    if (s1[len] != s2[len]) {
+      _log("%d != %d", s1[len], s2[len]);
+      return false;
+    }
+  }
+  return true;
+}
+
+bool is_contain(const char* pat) {
+  size_t i = 0;
+
+  for (i = 0; i + strlen(pat) < rx_bytes; i++) {
+    if (cmp(buffer + i, &pat[0], strlen(pat)))
+      return true;
+  }
   return false;
 }
 
@@ -202,11 +217,12 @@ bool is_cmd_error() {
 void send_cfg(void) {
 static const char cmd[] = "\
 AT\
-+CHF=1,0;\
++CHF=0,0;\
 +SIDET=0,16;\
 +CRSL=100;\
 +CLVL=100;\
-+CMIC=0,15\
++CMIC=0,15;\
++CMUT=0;\
 &W";
   gsm_send_cstr(cmd);
 }
