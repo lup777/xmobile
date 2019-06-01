@@ -72,7 +72,7 @@ void vTelTask(void* pvParameters) {
   for(;;) {
     rx_bytes = xMessageBufferReceive(tel_msg_buf_handle, buffer, 
 				     TEL_MSG_BUFFER_LEN, portMAX_DELAY);
-    if (rx_bytes < 2) continue;
+    if (rx_bytes < 1) continue;
 
     switch(buffer[0]) {
     case MSG_HEADER_GSM:
@@ -90,7 +90,9 @@ void vTelTask(void* pvParameters) {
       } else {
 	handle_kbd(buffer[1]);
       }
+      break;
     } // case MSG_HEADER_KBD
+      
     case MSG_HEADER_TM:
       ui_update();
       break;
@@ -163,7 +165,6 @@ void handle_state_machine() {
       break;
 
     case state_ready:
-      
       ui_update();
       _log("_ready");
       break;

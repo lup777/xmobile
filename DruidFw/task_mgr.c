@@ -15,6 +15,7 @@ static void handle_msg(char *buffer, size_t msg_size);
 inline void menu_down(void);
 inline void menu_up(void);
 static void task_mgr_hook(char* buffer, size_t msg_size);
+void menu_enter(void);
 
 int8_t state;
 byte menu_size;
@@ -42,7 +43,6 @@ static CheckBox cb2;
 
 enum enum_tasks active_task;
 
-
 void vTaskMgr(void* pvParameters) {
   (void)(pvParameters);
 
@@ -58,12 +58,12 @@ void vTaskMgr(void* pvParameters) {
 
   GSM_Init();
 
-  ui_update();
-
-  active_task = enum_task_tel;//enum_task_mgr;
+  active_task = enum_task_mgr;
   state = 0;
   menu_size = 2;
   
+  ui_update();
+
   CHECK(tm_msg_buf_handle);
   for (;;) {
     size_t msg_size = xMessageBufferReceive(tm_msg_buf_handle, buffer,
@@ -83,14 +83,14 @@ void vTaskMgr(void* pvParameters) {
           break;
 
         case enum_task_clock:
-	        break;
+	  break;
 
         default:
-	      CHECK(0);
-	      break;
+	  CHECK(0);
+	  break;
       }
     }
-  }
+  } // for(;;)
   ui_init();
   ui_update();
 }
@@ -101,22 +101,12 @@ static void handle_msg(char *buffer, size_t msg_size) {
     if (buffer[1] == 17) // key up
       menu_up();
 
-    if (buffer[1] == 9) { // key enter
-      switch (state) {
-      case 0:
-        active_task = enum_task_mgr; break;
-      case 1:
-	active_task = enum_task_tel; break;
-	buffer[0] = MSG_HEADER_TM;
-	xMessageBufferSend(tel_msg_buf_handle, buffer, 1, portMAX_DELAY);
-      default:
-	CHECK(0);
-	break;
-      }
-    }
+    if (buffer[1] == 9)  // key enter
+      menu_enter();
 
     if (buffer[1] == 26) // key down
       menu_down();
+
     ui_update();
     //_log("KBD: 0x%02X", buffer[1]);
 
@@ -125,6 +115,25 @@ static void handle_msg(char *buffer, size_t msg_size) {
 
   case MSG_HEADER_GSM:
     xMessageBufferSend(tel_msg_buf_handle, buffer, msg_size, portMAX_DELAY);
+    break;
+  }
+}
+
+void menu_enter(void) {
+  switch (state) {
+  case 0:
+    active_task = enum_task_mgr;
+    break;
+	
+  case 1: {
+    active_task = enum_task_tel;
+    byte header = MSG_HEADER_TM;
+    xMessageBufferSend(tel_msg_buf_handle, &header, 1, portMAX_DELAY);
+    break;
+  }
+	
+  default:
+    CHECK(0);
     break;
   }
 }
@@ -183,6 +192,8 @@ static void ui_init(void) {
 static void task_mgr_hook(char* buffer, size_t msg_size) {
   (void)(msg_size);
   if (buffer[0] == MSG_HEADER_KBD)
-    if (buffer[1] == 19)
+    if (buffer[1] == 19) {
       active_task = enum_task_mgr;
+      //ui_update();
+    }
 }

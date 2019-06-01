@@ -1,6 +1,5 @@
 // spi.c
 #include "spi.h"
-#include <avr/cpufunc.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
