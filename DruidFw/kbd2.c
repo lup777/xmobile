@@ -69,7 +69,7 @@ void kbd_init(void) {
   PORTA.DIRCLR = PIN0_bm;
   PORTA.OUTCLR = PIN0_bm;
 
-  PORTA.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_BOTHEDGES_gc);
+  PORTA.PIN0CTRL = (PORT_OPC_TOTEM_gc | PORT_ISC_FALLING_gc);
   PORTA.INTCTRL = (PORT_INT1LVL_OFF_gc | PORT_INT0LVL_LO_gc);
   PORTA_INT0MASK = 0x01;
   //  raw_logc("kbd init complete");
@@ -198,14 +198,17 @@ ISR(PORTA_INT0_vect) {
   BaseType_t need_yeld = pdFALSE;
   static byte buffer[2];
   buffer[1] = kbd_read_byte(MAX7370_REG_FIFO);
+  if (buffer[1] != 0x3F) {
+    
+    //_log("PORTA INT (%d)", key);
+    buffer[0] = MSG_HEADER_KBD;
 
-  //_log("PORTA INT (%d)", key);
-  buffer[0] = MSG_HEADER_KBD;
-
-  xMessageBufferSendFromISR(tm_msg_buf_handle,
-			    buffer,
-			    2,
-			    &need_yeld);
+    xMessageBufferSendFromISR(tm_msg_buf_handle,
+			      buffer,
+			      2,
+			      &need_yeld);
+  }
+  
   if (need_yeld == pdTRUE)
     taskYIELD();
 }

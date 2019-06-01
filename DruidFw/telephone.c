@@ -109,7 +109,6 @@ static void ui_init(void) {
 static void ui_update(void) {
   if (active_task != enum_task_tel)
     return;
-  
   displayRenderText(1, 172, "call:+", 6, &display);
   textEdit_render(&te1, 57, 172, &display);
 

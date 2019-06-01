@@ -91,25 +91,26 @@ void vTaskMgr(void* pvParameters) {
       }
     }
   } // for(;;)
-  ui_init();
-  ui_update();
+  //ui_init();
+  //ui_update();
 }
 
 static void handle_msg(char *buffer, size_t msg_size) {
   switch(buffer[0]) {
   case MSG_HEADER_KBD: {
-    if (buffer[1] == 17) // key up
+    if (buffer[1] == 17) {// key up
       menu_up();
+      ui_update();
+    }
 
     if (buffer[1] == 9)  // key enter
       menu_enter();
 
-    if (buffer[1] == 26) // key down
+    if (buffer[1] == 26) {// key down
       menu_down();
-
-    ui_update();
-    //_log("KBD: 0x%02X", buffer[1]);
-
+      ui_update();
+    }
+    
     break;
   } // KBD
 
@@ -160,6 +161,7 @@ inline void menu_up(void) {
   }*/
 
 static void ui_update(void) {
+  _log("task mgr  ui_update");
   textEdit_render(&te1, 18, 10, &display);
   textEdit_render(&te2, 18, 40, &display);
 
@@ -194,6 +196,6 @@ static void task_mgr_hook(char* buffer, size_t msg_size) {
   if (buffer[0] == MSG_HEADER_KBD)
     if (buffer[1] == 19) {
       active_task = enum_task_mgr;
-      //ui_update();
+      ui_update();
     }
 }
