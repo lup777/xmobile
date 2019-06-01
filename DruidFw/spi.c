@@ -1,6 +1,6 @@
 // spi.c
 #include "spi.h"
-
+#include <avr/cpufunc.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <avr/pgmspace.h>
@@ -12,10 +12,6 @@
 
 #include "usart.h"
 
-//static MessageBufferHandle_t g_epd_tx_buffer_handle;
-static uint8_t* g_spi_tx_buffer;
-static size_t g_spi_tx_buffer_size;
-//static SemaphoreHandle_t gh_spi_sem;
 static volatile uint8_t gi;
 
 /*
@@ -33,243 +29,95 @@ static volatile uint8_t gi;
   DIN (data input) - PORTC 5 (MOSI)
 */
 
-// ======== MessageBuffer ==================
-MessageBufferHandle_t tx_buf_handle;
-StaticStreamBuffer_t tx_buf_struct;
-uint8_t msg_tx_buffer[ sizeof(SpiOrder) * 5 ];
-// =========================================
-
-// ======== Semaphore ======================
-SemaphoreHandle_t gh_spi_sem = NULL;
-StaticSemaphore_t xMutexBuffer;
-// =========================================
-
 inline void SPIC_Init(byte* tx_buffer_) {
   CHECK(tx_buffer_);
 
   PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
   EPD_CSHi(); // PIN4_bm
   PORTA.DIRCLR = PIN3_bm;
-  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+  SPIC.INTCTRL = SPI_INTLVL_OFF_gc;
 
-  tx_buf_handle = xMessageBufferCreateStatic(sizeof(msg_tx_buffer),
-					     msg_tx_buffer, &tx_buf_struct);
-
-  gh_spi_sem = xSemaphoreCreateMutexStatic(&xMutexBuffer);
-
-  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm /*| SPI_PRESCALER_DIV4_gc*/
+  SPIC.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm
     | SPI_CLK2X_bm | SPI_MODE_0_gc;
-
-  g_spi_tx_buffer = tx_buffer_;
-  g_spi_tx_buffer_size = 200;//sizeof(tx_buffer_);
-}
-
-ISR(SPIC_INT_vect) {
-  static SpiOrder order = {0};
-  static size_t sent_cnt = 0; // they should be equal on start,
-                                  // even if order is not inited
-  static size_t repeat_cnt = 0;
-  BaseType_t hptw = pdFALSE;
-  BaseType_t hptw2 = pdFALSE;
-  size_t received_bytes;
-
-  if (sent_cnt >= order.length) {
-    repeat_cnt ++;
-
-    if (repeat_cnt < order.repeat) {
-      sent_cnt = 0; // repeat transfering buffer
-      // continue transferring
-    } else {
-      received_bytes = xMessageBufferReceiveFromISR(tx_buf_handle,
-                                                    &order,
-                                                    sizeof(order),
-                                                    &hptw);
-      if (received_bytes != sizeof(order)) { // last order was sent, no more to TX
-        // Stop transfering
-        // sent_cnt EQ order.length, so ...
-      } else { // received new order, starting to tx it
-        sent_cnt = 0; // last order was sent full, ready to start TX the next one
-        repeat_cnt = 0;
-      }
-    }
-  }
-
-  // continue transferring
-  if (sent_cnt < order.length) {
-    EPD_SelectData();
-    if (order.is_pgm) {
-      SPIC.DATA = pgm_read_byte(&(order.buffer[sent_cnt]));
-      //_log("--0x%02X", pgm_read_byte(&(order.buffer[sent_cnt])));
-    } else {
-      SPIC.DATA = order.buffer[sent_cnt];
-      //_log("--0x%02X", order.buffer[sent_cnt]);
-    }
-    sent_cnt ++;
-  } else { // all data from current order was sent
-           // Also it can be if we need to send only one byte.
-           // In this case we need only to drive CS hi.
-    EPD_CSHi(); // Stop transfering
-    SPIC.INTCTRL = SPI_INTLVL_OFF_gc;
-    xSemaphoreGiveFromISR(gh_spi_sem, &hptw2);
-  }
-
-  if ( (hptw != pdFALSE) || (hptw2 != pdFALSE) )
-    taskYIELD();
 }
 
 void EPD_SendFromFlash(uint8_t cmd, const uint8_t* data, size_t data_len) {
-  //_log("EPD_SendFromFlash >>>");
-  size_t bytes_sent;
-  SpiOrder order;
+  taskENTER_CRITICAL();
+  EPD_CSLow();
+  EPD_SelectCommand();
 
-  order.is_pgm = true;
-  order.buffer = (uint8_t*)data;
-  order.length = data_len;
-  order.repeat = 1;
+  SPIC.DATA = cmd;
+  while((SPIC.STATUS & SPI_IF_bm) == 0);
 
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
+  EPD_SelectData();
 
-  if (data_len > 0) {
-    bytes_sent = xMessageBufferSend(tx_buf_handle,
-                                    &order,
-                                    sizeof(order),
-                                    /*pdMS_TO_TICKS(2000)*/0);
-    if (bytes_sent != sizeof(order)) {
-      _log("[ERR] SPI_Send::xMessageBufferSend failed");
-      return;
-    }
-
-    EPD_CSLow();
-    EPD_SelectCommand();
-    SPIC.INTCTRL = SPI_INTLVL_LO_gc;
-    SPIC.DATA = cmd;
+  for (size_t i = 0; i < data_len; i++) {
+    SPIC.DATA = pgm_read_byte(data + i);
+    while((SPIC.STATUS & SPI_IF_bm) == 0);
   }
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
 
-  //_log("EPD_SendFromFlash <<<");
+  EPD_CSHi();
+  taskEXIT_CRITICAL();
 }
 
 void EPD_SendFromGen(uint8_t cmd, uint8_t example, size_t repeat) {// generator
-  //_log("EPD_SendFromGen >>>");
-  size_t bytes_sent;
-  SpiOrder order;
-  order.is_pgm = false;
-  order.buffer = g_spi_tx_buffer;  // first byte will be send from in this func
-  order.length = 1;
-  order.repeat = repeat;
-
-  g_spi_tx_buffer[0] = example;
-
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] EPD_SendFromFlash::xSemaphoreTake failed");
-
-  if (repeat > 0) {
-    bytes_sent = xMessageBufferSend(tx_buf_handle,
-                                    &order,
-                                    sizeof(order),
-                                    /*pdMS_TO_TICKS(2000)*/0);
-    if (bytes_sent != sizeof(order)) {
-      _log("[ERR] SPI_Send::xMessageBufferSend failed");
-      return;
-    }
-  }
+  taskENTER_CRITICAL();
 
   EPD_CSLow();
   EPD_SelectCommand();
-  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+
   SPIC.DATA = cmd;
+  while((SPIC.STATUS & SPI_IF_bm) == 0);
 
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  EPD_SelectData();
 
-  //_log("EPD_SendFromGen <<<");
+  for (size_t i = 0; i < repeat; i++) {
+    SPIC.DATA = example;
+    while((SPIC.STATUS & SPI_IF_bm) == 0);
+  }
+
+  EPD_CSHi();
+  taskEXIT_CRITICAL();
 }
 
 void EPD_SendFromRam(uint8_t cmd, uint8_t* data, size_t data_len) {
-  //_log("EPD_SendFromRam >>>");
-  size_t bytes_sent;
-  SpiOrder order;
-  order.is_pgm = false;
-  order.buffer = g_spi_tx_buffer;  // first byte will be send from in this func
-  order.length = data_len;
-  order.repeat = 1;
-
-  if (data_len > g_spi_tx_buffer_size) {
-    _log("ERR: TOO MUTCH DATA, NOT SUPPORTED");
-    CHECK(0);
-  }
-
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] sendFromRam xSemTake");
-
-  for(size_t i = 0; i < data_len; i++)
-    g_spi_tx_buffer[i] = data[i];
-
-  if (data_len > 0) {
-    bytes_sent = xMessageBufferSend(tx_buf_handle,
-                                    &order,
-                                    sizeof(order),
-                                    /*pdMS_TO_TICKS(2000)*/0);
-    if (bytes_sent != sizeof(SpiOrder)) {
-      _log("[SPI] xMessageBufferSend failed");
-      return;
-    }
-  }
-
+  taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SelectCommand();
-  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+
   SPIC.DATA = cmd;
+  while((SPIC.STATUS & SPI_IF_bm) == 0);
 
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  EPD_SelectData();
+  
+  size_t i = 0;
+  for (i = 0; i < data_len; i++) {
+    SPIC.DATA = data[i];
+    while((SPIC.STATUS & SPI_IF_bm) == 0);
+  }
 
-  //_log("EPD_SendFromRam <<<");
+  EPD_CSHi();
+  taskEXIT_CRITICAL();
 }
 
 void EPD_SendFromDisplayBuf(uint8_t cmd, uint8_t* data,
 			    size_t steps, size_t step) {
-  //_log("EPD_SendFromDisplayBuf >>>");
-  size_t bytes_sent;
-  SpiOrder order;
-  order.is_pgm = false;
-  order.buffer = g_spi_tx_buffer;  // first byte will be send from in this func
-  order.length = steps;
-  order.repeat = 1;
-
-  if (order.length > g_spi_tx_buffer_size) {
-    _log("ERR: TOO MUTCH DATA, NOT SUPPORTED");
-    return;
-  }
-
-  if (xSemaphoreTake(gh_spi_sem, portMAX_DELAY) != pdTRUE)
-    _log("[ERR] sendFromDisp xSemTake");
-
-  for(size_t i = 0; i < order.length; i++)
-    g_spi_tx_buffer[i] = data[i * step];
-
-  if (order.length > 0) {
-    bytes_sent = xMessageBufferSend(tx_buf_handle,
-                                    &order,
-                                    sizeof(order),
-                                    /*pdMS_TO_TICKS(2000)*/0);
-    if (bytes_sent != sizeof(SpiOrder)) {
-      _log("[SPI] xMessageBufferSend failed");
-      return;
-    }
-  }
-
+  taskENTER_CRITICAL();
   EPD_CSLow();
   EPD_SelectCommand();
-  SPIC.INTCTRL = SPI_INTLVL_LO_gc;
+
   SPIC.DATA = cmd;
+  while((SPIC.STATUS & SPI_IF_bm) == 0);
 
-  //while(xMessageBufferIsEmpty(g_epd_tx_buffer_handle) != pdTRUE) {}
-  //while( EPD_IsCsLow() ) {}
+  EPD_SelectData();
+  
+  for (size_t i = 0; i < steps; i++) {
+    SPIC.DATA = data[i * step];
+    while((SPIC.STATUS & SPI_IF_bm) == 0);
+  }
 
-  //_log("EPD_SendFromRam <<<");
+  EPD_CSHi();
+  taskEXIT_CRITICAL();
 }
 
 bool EPD_IsCsLow(void) {
