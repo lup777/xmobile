@@ -85,7 +85,7 @@ void EPD_SetMemoryPointer(int x, int y);
 void EPD_DisplayFrame(void);
 uint8_t SPIC_TransferByte(uint8_t data_out);
 void EPD_Reset(void);
-void SPIC_Init(byte* g_spi_tx_buffer);
+void SPIC_Init(void);
 void EPD_DelayMs(uint16_t time);
 void EPD_SelectData(void);
 void EPD_SelectCommand(void);

@@ -28,9 +28,7 @@ static volatile uint8_t gi;
   DIN (data input) - PORTC 5 (MOSI)
 */
 
-inline void SPIC_Init(byte* tx_buffer_) {
-  CHECK(tx_buffer_);
-
+inline void SPIC_Init() {
   PORTC.DIRSET = PIN5_bm | PIN7_bm | PIN4_bm; // SPI pins
   EPD_CSHi(); // PIN4_bm
   PORTA.DIRCLR = PIN3_bm;
