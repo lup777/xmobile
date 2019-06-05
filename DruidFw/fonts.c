@@ -973,3 +973,27 @@ const uint8_t* FONT_GetPicture(byte code, Font font) {
     break;
   }
 }
+
+byte FONT_GetHeight(Font font) {
+  switch(font) {
+    case nimbus_bold_16:
+      return 24;
+    case nimbus_mono_10:
+      return 13;
+    default:
+      CHECK(0);
+  }
+  return 10;
+}
+
+byte FONT_GetWidth(Font font) {
+  switch(font) {
+    case nimbus_bold_16:
+      return 12;
+    case nimbus_mono_10:
+      return 9;
+    default:
+      CHECK(0);
+  }
+  return 5;
+}

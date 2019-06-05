@@ -5,13 +5,14 @@
 #include "text_edit.h"
 #include "fonts.h"
 
-bool textEdit_init(TextEdit* te, char* buffer_, byte buffer_len_) {
+bool textEdit_init(TextEdit* te, char* buffer_, byte buffer_len_, Font font) {
   CHECK(te);
 
   //te->text = pvPortMalloc(len);
   te->buffer = buffer_;
   CHECK(te->buffer);
 
+  te->font = font;
   te->data_len = 0;
   te->buffer_len = buffer_len_;
   return true;
@@ -73,17 +74,20 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   CHECK(te);
   CHECK(te->buffer);
   CHECK(pdisplay);
+  CHECK(te->font);
 
   byte xm = X_MERGIN_PIX;
   byte ym = Y_MERGIN_PIX;
+  byte font_width = FONT_GetWidth(te->font);
+  byte font_height = FONT_GetHeight(te->font);
 
   (void)x;
   (void)y;
   if (te->data_len > 0) {
     displayRenderText(x + xm, y + ym,
-		      te->buffer, te->data_len, nimbus_mono_10, pdisplay);
+		      te->buffer, te->data_len, te->font, pdisplay);
   }
 
-  displayRenderRectangle(x, y, x + (FONT_max_width * te->buffer_len) + xm + xm,
-  y + FONT_max_height + ym, pdisplay);
+  displayRenderRectangle(x, y, x + (font_width * te->buffer_len) + xm + xm,
+  y + font_height + ym, pdisplay);
 }

@@ -13,5 +13,5 @@ typedef enum {
 //Source image file: "pt-mono-bold-!-8x13.bmp"
 //extern const uint8_t* FONT_nimbus_bold_16_1(uint8_t code);
 const uint8_t* FONT_GetPicture(uint8_t code, Font font);
-extern const byte FONT_max_width;
-extern const byte FONT_max_height;
+byte FONT_GetHeight(Font font);
+byte FONT_GetWidth(Font font);

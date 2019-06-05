@@ -101,9 +101,10 @@ void vTelTask(void* pvParameters) {
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 11);
+  textEdit_init(&te1, te1_buf, 11, nimbus_bold_16);
   //textEdit_setcstr(&te1, "79213258124");
-  mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, line5, line6, line7);
+  mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, 
+                  line5, line6, line7, nimbus_mono_10);
 }
 
 static void ui_update(void) {

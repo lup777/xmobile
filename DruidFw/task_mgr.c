@@ -182,11 +182,11 @@ static void ui_update(void) {
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 12);
-  textEdit_init(&te2, te2_buf, 12);
+  textEdit_init(&te1, te1_buf, 12, nimbus_mono_10);
+  textEdit_init(&te2, te2_buf, 12, nimbus_mono_10);
 
   textEdit_setcstr(&te1, "менеджер задач");
-  textEdit_setcstr(&te2, "толефон");
+  textEdit_setcstr(&te2, "телефон");
 
   checkBox_set_value(&cb1, true);
 }
