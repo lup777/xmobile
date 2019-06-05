@@ -78,7 +78,8 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
 
   x += 3; y += 3;
   for (i = 0; i < mte->lines_num; i++) {
-    displayRenderText(x, y, mte->buffer[i], mte->line_len, pdisplay);
+    displayRenderText(x, y, mte->buffer[i], mte->line_len, nimbus_mono_10, 
+                      pdisplay);
     y += FONT_max_height;
     
   }

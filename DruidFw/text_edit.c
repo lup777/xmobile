@@ -81,7 +81,7 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   (void)y;
   if (te->data_len > 0) {
     displayRenderText(x + xm, y + ym,
-		      te->buffer, te->data_len, pdisplay);
+		      te->buffer, te->data_len, nimbus_mono_10, pdisplay);
   }
 
   displayRenderRectangle(x, y, x + (FONT_max_width * te->buffer_len) + xm + xm,

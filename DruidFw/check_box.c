@@ -10,7 +10,8 @@ void checkBox_render(CheckBox* cb, short x, short y, DispBuf* pdisplay) {
   byte ym = Y_MERGIN_PIX;
 
   if (cb->value == true)
-    displayRenderText(x + xm - 1, y + ym + 1, "*", 1, pdisplay);
+    displayRenderText(x + xm - 1, y + ym + 1, "*", 1, nimbus_bold_16, 
+                      pdisplay);
 
   //byte char_width = 8; // width of char place (to get in font info)
   //byte char_height = 15; // height of char place (to get in font info)

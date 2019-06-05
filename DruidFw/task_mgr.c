@@ -51,7 +51,7 @@ void vTaskMgr(void* pvParameters) {
   tm_msg_buf_handle = xMessageBufferCreateStatic(sizeof(msg_buffer),
 						 msg_buffer,
 						 &msg_buf_struct);
-  displayInit(display_buffer, dispay_spi_buf);
+  displayInit(display_buffer);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   ui_init();

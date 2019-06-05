@@ -7,7 +7,7 @@
 
 DispBuf display;
 
-void displayInit(byte* display_buffer, byte* display_spi_buf) {
+void displayInit(byte* display_buffer) {
   display.buffer = display_buffer;
   CHECK(display.buffer);
 
@@ -20,7 +20,7 @@ void displayInit(byte* display_buffer, byte* display_spi_buf) {
   display.buf_rows = DISPLAY_BUFFER_ROWS_BITS;
   display.buf_cols = DISPLAY_BUFFER_COLS_BYTE;
   display.buf_size = DISPLAY_BUFFER_SIZE;
-  SPIC_Init(display_spi_buf);
+  SPIC_Init();
   EPD_Init();
 }
 
@@ -108,15 +108,15 @@ void displayRenderRectangle(short x, short y, short x1, short y1,
 }
 
 void displayRenderText(short x, short y,
-		       char* text, size_t len,
+		       char* text, size_t len, Font font,
 		       DispBuf* display_) {
   DispBuf pic;
   static uint8_t buffer[80];
   pic.buffer = buffer;
   byte cx =  x;
-
+  
   for (size_t i = 0; i < len; i++) {
-    uint8_t* tmp = (uint8_t*)FONT_GetPicture8x13( (uint8_t)(text[i]) );
+    uint8_t* tmp = (uint8_t*)FONT_GetPicture( (uint8_t)(text[i]), font);
 
     pic.buf_cols = pgm_read_byte(tmp + 0); // bits
     pic.buf_cols = pic.buf_cols / 8; // bytes
@@ -130,8 +130,7 @@ void displayRenderText(short x, short y,
 
     //for (j -= 3; j < 80; j++)
     //  pic.buffer[j] = 0xFF;
-    (void)y;
-    (void)display_;
+
     displayRenderSubBuffer(cx, y, &pic, display_);
     cx += char_w;    
   }

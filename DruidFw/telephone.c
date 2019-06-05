@@ -109,7 +109,7 @@ static void ui_init(void) {
 static void ui_update(void) {
   if (active_task != enum_task_tel)
     return;
-  displayRenderText(1, 172, "call:+", 6, &display);
+  displayRenderText(1, 172, "call:+", 6, nimbus_bold_16, &display);
   textEdit_render(&te1, 57, 172, &display);
 
   mlTextEdit_render(&mte, 7, 3, &display);
