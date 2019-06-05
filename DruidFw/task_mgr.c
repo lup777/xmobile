@@ -27,7 +27,7 @@ static uint8_t msg_buffer[ 50 ];
 
 // ===== DISPLAY DATA =====================
 byte display_buffer[DISPLAY_BUFFER_SIZE];
-byte dispay_spi_buf[DISPLAY_BUFFER_ROWS_BITS];
+//byte dispay_spi_buf[DISPLAY_BUFFER_ROWS_BITS];
 // ========================================
 
 // ======== UI ============================
@@ -51,7 +51,7 @@ void vTaskMgr(void* pvParameters) {
   tm_msg_buf_handle = xMessageBufferCreateStatic(sizeof(msg_buffer),
 						 msg_buffer,
 						 &msg_buf_struct);
-  displayInit(display_buffer, dispay_spi_buf);
+  displayInit(display_buffer);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
   ui_init();

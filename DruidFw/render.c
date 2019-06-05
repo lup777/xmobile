@@ -7,7 +7,7 @@
 
 DispBuf display;
 
-void displayInit(byte* display_buffer, byte* display_spi_buf) {
+void displayInit(byte* display_buffer) {
   display.buffer = display_buffer;
   CHECK(display.buffer);
 
@@ -20,7 +20,7 @@ void displayInit(byte* display_buffer, byte* display_spi_buf) {
   display.buf_rows = DISPLAY_BUFFER_ROWS_BITS;
   display.buf_cols = DISPLAY_BUFFER_COLS_BYTE;
   display.buf_size = DISPLAY_BUFFER_SIZE;
-  SPIC_Init(display_spi_buf);
+  SPIC_Init();
   EPD_Init();
 }
 

@@ -61,7 +61,7 @@ void tel_init(void) {
   //handle_state_machine();
 }
 
-char buffer[TEL_MSG_BUFFER_LEN];
+static char buffer[TEL_MSG_BUFFER_LEN];
 size_t rx_bytes;
 
 void vTelTask(void* pvParameters) {
@@ -137,6 +137,7 @@ static void handle_kbd(char key) {
 
   case 2:
     //gsm_send_cstr("AT&FZE0+IPR=115200;&W");
+    gsm_send_cstr("ATZ&F");
     break;
 
   default:
@@ -176,9 +177,9 @@ void handle_state_machine() {
 
 
 bool cmp(char* s1, const char* s2, size_t len) {
-  for (; len > 0; len--) {
-    if (s1[len] != s2[len]) {
-      _log("%d != %d", s1[len], s2[len]);
+  for (size_t i = 0; i < len; i++) {
+    _log("%d != %d", s1[i], s2[i]);
+    if (s1[i] != s2[i]) {
       return false;
     }
   }
@@ -187,9 +188,8 @@ bool cmp(char* s1, const char* s2, size_t len) {
 
 bool is_contain(const char* pat) {
   size_t i = 0;
-
-  for (i = 0; i + strlen(pat) < rx_bytes; i++) {
-    if (cmp(buffer + i, &pat[0], strlen(pat)))
+  for (i = 0; strlen(pat) < rx_bytes - i; i++) {
+    if (cmp(buffer + i, pat, strlen(pat)))
       return true;
   }
   return false;

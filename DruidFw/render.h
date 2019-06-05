@@ -28,7 +28,7 @@ typedef struct struct_display_buffer {
 
 extern DispBuf display;
 
-void displayInit(byte* display_buffer, byte* display_spi_buf);
+void displayInit(byte* display_buffer);
 void displayFlush(void);
 void displayRenderDot(short x, short y, DispBuf* display_);
 void displayRenderLine(short x, short y, short ex, short ey,

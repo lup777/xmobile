@@ -36,9 +36,11 @@ void GSM_Init(void) {
   // PA2 - status
 
   PORTD.DIRSET = PIN0_bm; // power key
-  PORTD.OUTSET = PIN0_bm; // power key releas//PORTD.OUTCLR = PIN0_bm;
+  PORTD.OUTCLR = PIN0_bm; // power key
 
-  //vTaskDelay((TickType_t)(1000 / portTICK_PERIOD_MS));
+  vTaskDelay((TickType_t)(1000 / portTICK_PERIOD_MS));
+
+  PORTD.OUTSET = PIN0_bm; // power key releas//PORTD.OUTCLR = PIN0_bm;
 
   //gsm_msg_buffer = xMessageBufferCreate( 10 );
 
@@ -93,6 +95,7 @@ void gsm_send_str_ne(char* data, size_t len) {
   }
 }
 void gsm_send_cstr(const char* data) {
+  _log("gsm -> %s", data);
   gsm_send_str((char*)data, strlen(data));
 }
 
