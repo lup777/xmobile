@@ -4,6 +4,7 @@
 #include "global.h"
 
 #include <math.h>
+#include "fonts.h"
 
 #define DISPLAY_BUFFER_COLS_BYTE 25
 #define DISPLAY_BUFFER_ROWS_BITS 200
@@ -39,7 +40,7 @@ void displayRenderRectangle(short x, short y, short x1, short y1,
 void displayRenderSubBuffer(short tar_x, short tar_y,
 			    DispBuf* sub_disp_, DispBuf* display_);
 void displayRenderText(short x, short y,
-		       char* text, size_t len,
+		       char* text, size_t len, Font font,
 		       DispBuf* display_);
 void zoneUpdate(short x, short y, DispBuf* display_);
 void zoneClear(void);

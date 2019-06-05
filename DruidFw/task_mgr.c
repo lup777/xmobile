@@ -1,5 +1,5 @@
 // task_mgr.c
-
+// revert-buffer-with-coding-system koi8-r-unix
 #include "task_mgr.h"
 #include "render.h"
 #include "pgm.h"
@@ -61,7 +61,7 @@ void vTaskMgr(void* pvParameters) {
   active_task = enum_task_mgr;
   state = 0;
   menu_size = 2;
-  
+
   ui_update();
 
   CHECK(tm_msg_buf_handle);
@@ -72,7 +72,7 @@ void vTaskMgr(void* pvParameters) {
     if (msg_size > 0) {
       // received message from KBD, GSM or ...
       task_mgr_hook(buffer, msg_size);
-      
+
       switch(active_task) {
         case enum_task_mgr:
           handle_msg(buffer, msg_size);
@@ -110,7 +110,7 @@ static void handle_msg(char *buffer, size_t msg_size) {
       menu_down();
       ui_update();
     }
-    
+
     break;
   } // KBD
 
@@ -125,14 +125,14 @@ void menu_enter(void) {
   case 0:
     active_task = enum_task_mgr;
     break;
-	
+
   case 1: {
     active_task = enum_task_tel;
     byte header = MSG_HEADER_TM;
     xMessageBufferSend(tel_msg_buf_handle, &header, 1, portMAX_DELAY);
     break;
   }
-	
+
   default:
     CHECK(0);
     break;
@@ -141,7 +141,7 @@ void menu_enter(void) {
 
 inline void menu_down(void) {
   state ++;
-  
+
   if (state >= menu_size)
     state = 0;
 }
@@ -174,19 +174,19 @@ static void ui_update(void) {
     checkBox_set_value(&cb1, false);
     checkBox_set_value(&cb2, true);
   }
-  
+
   checkBox_render(&cb1, 2, 10, &display);
   checkBox_render(&cb2, 2, 40, &display);
-    
+
   displayFlush();
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 12);
-  textEdit_init(&te2, te2_buf, 12);
+  textEdit_init(&te1, te1_buf, 12, nimbus_mono_10);
+  textEdit_init(&te2, te2_buf, 12, nimbus_mono_10);
 
-  textEdit_setcstr(&te1, "task manager");
-  textEdit_setcstr(&te2, "telephone");
+  textEdit_setcstr(&te1, "менеджер задач");
+  textEdit_setcstr(&te2, "телефон");
 
   checkBox_set_value(&cb1, true);
 }

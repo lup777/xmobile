@@ -9,7 +9,7 @@ static void move_lines_back(MlineTextEdit* mte);
 
 bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* line1,
 		     char* line2, char* line3, char* line4, char* line5, char* line6,
-		     char* line7) {
+		     char* line7, Font font) {
   CHECK(mte);
 
   mte->buffer[0] = line1;
@@ -27,7 +27,7 @@ bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* 
     CHECK(mte->buffer[i]);
     memset(mte->buffer[i], ' ', mte->line_len);
   }
-
+  mte->font = font;
   mte->line_len = line_len;
   
   return true;
@@ -71,15 +71,18 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
   CHECK(mte);
   
   int8_t i = 0;
+  byte font_width = FONT_GetWidth(mte->font);
+  byte font_height = FONT_GetWidth(mte->font);
 
   displayRenderRectangle(x, y,
-			 x + (FONT_max_width * mte->line_len),
-			 y + (FONT_max_height * mte->lines_num), pdisplay);
+			 x + (font_width * mte->line_len),
+			 y + (font_height * mte->lines_num), pdisplay);
 
   x += 3; y += 3;
   for (i = 0; i < mte->lines_num; i++) {
-    displayRenderText(x, y, mte->buffer[i], mte->line_len, pdisplay);
-    y += FONT_max_height;
+    displayRenderText(x, y, mte->buffer[i], mte->line_len, mte->font, 
+                      pdisplay);
+    y += font_height;
     
   }
 }
