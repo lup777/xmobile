@@ -25,9 +25,11 @@ bool is_contain(const char* pat);
 
 // ======== UI ============================
 static char te1_buf[12];
+static char label1_buf[7];
 static TextEdit te1;
+static TextEdit label1;
 
-#define MTE_LINE_LEN 15
+#define MTE_LINE_LEN 20
 char line1[MTE_LINE_LEN];
 char line2[MTE_LINE_LEN];
 char line3[MTE_LINE_LEN];
@@ -35,6 +37,10 @@ char line4[MTE_LINE_LEN];
 char line5[MTE_LINE_LEN];
 char line6[MTE_LINE_LEN];
 char line7[MTE_LINE_LEN];
+char line8[MTE_LINE_LEN];
+char line9[MTE_LINE_LEN];
+char line10[MTE_LINE_LEN];
+char line11[MTE_LINE_LEN];
 MlineTextEdit mte;
 // ========================================
 
@@ -102,15 +108,18 @@ void vTelTask(void* pvParameters) {
 
 static void ui_init(void) {
   textEdit_init(&te1, te1_buf, 11, nimbus_bold_16);
+  textEdit_init(&label1, label1_buf, 7, nimbus_bold_16);
+  textEdit_setstr(&label1, "call:", 5);
   //textEdit_setcstr(&te1, "79213258124");
-  mlTextEdit_init(&mte, 7, MTE_LINE_LEN, line1, line2, line3, line4, 
-                  line5, line6, line7, nimbus_mono_10);
+  mlTextEdit_init(&mte, 11, MTE_LINE_LEN, line1, line2, line3, line4, 
+                  line5, line6, line7, line8, line9, line10, line11, nimbus_mono_10);
 }
 
 static void ui_update(void) {
+  _log("tel ui update");
   if (active_task != enum_task_tel)
     return;
-  displayRenderText(1, 172, "call:+", 6, nimbus_bold_16, &display);
+  textEdit_render(&label1, 1, 172, &display);
   textEdit_render(&te1, 57, 172, &display);
 
   mlTextEdit_render(&mte, 7, 3, &display);
@@ -119,6 +128,7 @@ static void ui_update(void) {
 }
 
 static void handle_kbd(char key) {
+  _log("tel h kbd");
   switch(key) {
   case 24: // responce
     gsm_send_cstr("ATA");

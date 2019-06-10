@@ -31,7 +31,7 @@ byte display_buffer[DISPLAY_BUFFER_SIZE];
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[12];
+static char te1_buf[16];
 static TextEdit te1;
 
 static char te2_buf[12];
@@ -182,11 +182,13 @@ static void ui_update(void) {
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 12, nimbus_mono_10);
-  textEdit_init(&te2, te2_buf, 12, nimbus_mono_10);
+  textEdit_init(&te1, te1_buf, 16, nimbus_bold_16);
+  textEdit_init(&te2, te2_buf, 12, nimbus_bold_16);
 
-  textEdit_setcstr(&te1, "менеджер задач");
-  textEdit_setcstr(&te2, "телефон");
+  //textEdit_setstr(&te1, "задачи", 6);
+  //textEdit_setstr(&te2, "телефон", 7);
+  textEdit_setcstr(&te1, "tasks");
+  textEdit_setcstr(&te2, "telefone");
 
   checkBox_set_value(&cb1, true);
 }

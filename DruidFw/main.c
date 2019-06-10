@@ -15,7 +15,7 @@
 #include "task_mgr.h"
 #include "telephone.h"
 
-#define STACK_SIZE 180
+#define STACK_SIZE 240
 
 //typedef StaticMessageBuffer_t struct StaticStreamBuffer_t * const
 

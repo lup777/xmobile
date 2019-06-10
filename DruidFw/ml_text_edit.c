@@ -9,7 +9,8 @@ static void move_lines_back(MlineTextEdit* mte);
 
 bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* line1,
 		     char* line2, char* line3, char* line4, char* line5, char* line6,
-		     char* line7, Font font) {
+		     char* line7, char* line8, char* line9, char* line10, char* line11,
+		     Font font) {
   CHECK(mte);
 
   mte->buffer[0] = line1;
@@ -19,6 +20,10 @@ bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* 
   mte->buffer[4] = line5;
   mte->buffer[5] = line6;
   mte->buffer[6] = line7;
+  mte->buffer[7] = line8;
+  mte->buffer[8] = line9;
+  mte->buffer[9] = line10;
+  mte->buffer[10] = line11;
 
   mte->lines_num = lines_num;
 
@@ -72,13 +77,15 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
   
   int8_t i = 0;
   byte font_width = FONT_GetWidth(mte->font);
-  byte font_height = FONT_GetWidth(mte->font);
+  byte font_height = FONT_GetHeight(mte->font);
+  byte mergin = 3;
 
   displayRenderRectangle(x, y,
 			 x + (font_width * mte->line_len),
-			 y + (font_height * mte->lines_num), pdisplay);
+			 y + ((font_height) * mte->lines_num) + mergin + mergin,
+			 pdisplay);
 
-  x += 3; y += 3;
+  x += mergin; y += mergin;
   for (i = 0; i < mte->lines_num; i++) {
     displayRenderText(x, y, mte->buffer[i], mte->line_len, mte->font, 
                       pdisplay);

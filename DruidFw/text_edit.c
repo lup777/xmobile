@@ -31,7 +31,6 @@ byte textEdit_setstr(TextEdit* te, char* str, byte len) {
   for (i = 0; i < len; i++) {
     textEdit_pushc(te, str[i]);
   }
-  te->data_len = len;
   return i;
 }
 
@@ -78,16 +77,14 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
 
   byte xm = X_MERGIN_PIX;
   byte ym = Y_MERGIN_PIX;
-  byte font_width = FONT_GetWidth(te->font);
   byte font_height = FONT_GetHeight(te->font);
-
-  (void)x;
-  (void)y;
+  byte text_width = 0;
+  
   if (te->data_len > 0) {
-    displayRenderText(x + xm, y + ym,
-		      te->buffer, te->data_len, te->font, pdisplay);
+    text_width = displayRenderText(x + xm, y + ym,
+				   te->buffer, te->data_len, te->font, pdisplay);
   }
 
-  displayRenderRectangle(x, y, x + (font_width * te->buffer_len) + xm + xm,
+  displayRenderRectangle(x, y, x + text_width  + xm,
   y + font_height + ym, pdisplay);
 }

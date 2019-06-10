@@ -12,7 +12,8 @@ typedef struct {
 
 bool mlTextEdit_init(MlineTextEdit* mte, int8_t lines_num, byte line_len, char* line1,
 		     char* line2, char* line3, char* line4, char* line5, char* line6,
-		     char* line7, Font font);
+		     char* line7, char* line8, char* line9, char* line10, char* line11,
+		     Font font);
 bool mlTextEdit_pushc(MlineTextEdit* mte, char c);
 bool mlTextEdit_pushstr(MlineTextEdit* mte, char* str, byte len);
 bool mlTextEdit_pushcstr(MlineTextEdit* mte, const char* str);

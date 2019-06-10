@@ -39,7 +39,7 @@ void displayRenderRectangle(short x, short y, short x1, short y1,
 			    DispBuf* display_);
 void displayRenderSubBuffer(short tar_x, short tar_y,
 			    DispBuf* sub_disp_, DispBuf* display_);
-void displayRenderText(short x, short y,
+byte displayRenderText(short x, short y,
 		       char* text, size_t len, Font font,
 		       DispBuf* display_);
 void zoneUpdate(short x, short y, DispBuf* display_);

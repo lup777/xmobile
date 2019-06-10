@@ -107,33 +107,32 @@ void displayRenderRectangle(short x, short y, short x1, short y1,
   displayRenderLine(x, y1, x, y, display_);
 }
 
-void displayRenderText(short x, short y,
+byte displayRenderText(short x, short y,
 		       char* text, size_t len, Font font,
 		       DispBuf* display_) {
-  DispBuf pic;
-  static uint8_t buffer[80];
-  pic.buffer = buffer;
-  byte cx =  x;
+  static DispBuf pic;
+  static uint8_t buffer[90];
+  pic.buffer = buffer + 3;
+  byte cx =  x; 
   
   for (size_t i = 0; i < len; i++) {
-    uint8_t* tmp = (uint8_t*)FONT_GetPicture( (uint8_t)(text[i]), font);
+    uint8_t* pgm_ptr = (uint8_t*)FONT_GetPicture( text[i], font);
 
-    pic.buf_cols = pgm_read_byte(tmp + 0); // bits
-    pic.buf_cols = pic.buf_cols / 8; // bytes
-    pic.buf_rows = pgm_read_byte(tmp + 1);
-    byte char_w = pgm_read_byte(tmp + 2);
+    // read header
+    strlcpy_P((char*)buffer, (const char*)pgm_ptr, 4); 
+    
+    pic.buf_cols = buffer[0] >> 3; // bytes
+    pic.buf_rows = buffer[1];
+    byte char_w = buffer[2];
 
-    byte j = 3;
-    for (j = 3; j < (pic.buf_cols * pic.buf_rows) + 3; j++) {
-      pic.buffer[j - 3] = pgm_read_byte(tmp + j);
-    }
-
-    //for (j -= 3; j < 80; j++)
-    //  pic.buffer[j] = 0xFF;
-
+    // read picture with header
+    size_t data_len = (pic.buf_cols * pic.buf_rows) + 3 + 1;
+    strlcpy_P((char*)buffer, (const char*)pgm_ptr, data_len);
+    
     displayRenderSubBuffer(cx, y, &pic, display_);
     cx += char_w;    
   }
+  return cx;
 }
 
 void displayRenderSubBuffer(short tar_x, short tar_y,
