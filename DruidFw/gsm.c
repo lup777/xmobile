@@ -63,13 +63,13 @@ void GSM_Init(void) {
     | USART_TXCINTLVL_OFF_gc
     | USART_DREINTLVL_OFF_gc;
 
-  uint16_t bsel = 1079;//68;
-  uint8_t bscale = 5;//0;
+  uint16_t bsel = 1047;// 1079;//68;
+  uint8_t bscale = 6;//0;
   USARTE0.BAUDCTRLA = bsel & 0xff; // 115200  - 32MGz internal osc
   USARTE0.BAUDCTRLB =
     (bsel >> 8) | ((16 - bscale) << 4); // 115200  - 32MGz internal osc
 
-  USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm /*| USART_TXB8_bm*/;
+  USARTE0.CTRLB = USART_TXEN_bm | USART_RXEN_bm /*| USART_CLK2X_bm | USART_TXB8_bm*/;
 
   _log("GSM init completed");
 }
@@ -105,6 +105,7 @@ void gsm_send_cstr_ne(const char* data) {
 
 void gsm_send_cmd_end(void) {
   send_byte('\r');
+  send_byte('\n');
 }
 
 ISR(USARTE0_TXC_vect) {
@@ -118,6 +119,9 @@ ISR(USARTE0_RXC_vect) {
 
   buffer[idx] = USARTE0.DATA;
   data = USARTE0.DATA;
+
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = data;
   
   if (idx >= 50)
     idx = 1;

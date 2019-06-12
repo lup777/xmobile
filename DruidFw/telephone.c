@@ -13,7 +13,7 @@
 // ===== TEL MessageBuffer data ===========
 MessageBufferHandle_t tel_msg_buf_handle;
 StaticStreamBuffer_t tel_msg_buf_struct;
-static uint8_t tel_msg_buffer[ 100 ];
+static uint8_t tel_msg_buffer[ TEL_MSG_BUFFER_LEN ];
 static void handle_kbd(char key);
 void module_init(void);
 void handle_state_machine(void);
@@ -21,13 +21,29 @@ void answer_call(void);
 void send_cfg(void);
 bool cmp(char* s1, const char* s2, size_t len);
 bool is_contain(const char* pat);
+void menu_render(void);
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[12];
-static char label1_buf[7];
-static TextEdit te1;
-static TextEdit label1;
+static char te_call_buf[12];
+static char label_call_buf[5];
+static TextEdit te_call;
+static TextEdit label_call;
+
+static char label_at_buf[2];
+static TextEdit label_at;
+
+static char label_disable_hf_buf[10];
+static TextEdit label_disable_hf;
+
+static char label_mic_gain_lvl_buf[16];
+static TextEdit label_mic_gain_lvl;
+
+static char label_get_imei_buf[8];
+static TextEdit label_get_imei;
+
+static char label_responce_format_buf[18];
+static TextEdit label_responce_format;
 
 #define MTE_LINE_LEN 20
 char line1[MTE_LINE_LEN];
@@ -45,6 +61,17 @@ MlineTextEdit mte;
 // ========================================
 
 typedef enum {
+  menu_call,
+  menu_first = menu_call,
+  menu_at,
+  menu_set_mic_gain_lvl,
+  menu_get_imei,
+  menu_set_responce_format,
+  menu_hf_disable,
+  menu_last = menu_hf_disable
+} MenuState;
+
+typedef enum {
   state_cfg_usart,
   state_wait_rdy,
   state_set_params,
@@ -52,6 +79,7 @@ typedef enum {
 } State;
 
 static State state;
+static MenuState menu_state;
 static void ui_init(void);
 static void ui_update(void);
 void tel_init(void);
@@ -84,14 +112,14 @@ void vTelTask(void* pvParameters) {
     case MSG_HEADER_GSM:
       mlTextEdit_pushstr(&mte, buffer + 1, rx_bytes - 1);
       send_log_str(buffer + 1, rx_bytes - 1);
-      handle_state_machine();
+      //handle_state_machine();
       ui_update();
       break;
 
     case MSG_HEADER_KBD: {
       char ch;
       if (true == kbd_key_to_char( buffer[1], &ch )) {
-	textEdit_pushc(&te1, ch);
+	textEdit_pushc(&te_call, ch);
 	ui_update();
       } else {
 	handle_kbd(buffer[1]);
@@ -107,24 +135,82 @@ void vTelTask(void* pvParameters) {
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 11, nimbus_bold_16);
-  textEdit_init(&label1, label1_buf, 7, nimbus_bold_16);
-  textEdit_setstr(&label1, "call:", 5);
+  // call
+  textEdit_init(&te_call, te_call_buf, 11, nimbus_bold_16);
+  textEdit_init(&label_call, label_call_buf, 5, nimbus_bold_16);
+  textEdit_setcstr(&label_call, "call:");
+
+    // disable HF
+  textEdit_init(&label_at, label_at_buf, 2, nimbus_bold_16);
+  textEdit_setcstr(&label_at, "at");
+
+  // disable HF
+  textEdit_init(&label_disable_hf, label_disable_hf_buf, 10, nimbus_bold_16);
+  textEdit_setcstr(&label_disable_hf, "disable HF");
+
+  // set mic gain lvl
+  textEdit_init(&label_mic_gain_lvl, label_mic_gain_lvl_buf, 16, nimbus_bold_16);
+  textEdit_setcstr(&label_mic_gain_lvl, "set MIC gain lvl");
+
+  // get IMEI
+  textEdit_init(&label_get_imei, label_get_imei_buf, 8, nimbus_bold_16);
+  textEdit_setcstr(&label_get_imei, "get IMEI");
+
+  // reponce format
+  textEdit_init(&label_responce_format, label_responce_format_buf, 18, nimbus_bold_16);
+  textEdit_setcstr(&label_responce_format, "set respoce format");
+  
+
   //textEdit_setcstr(&te1, "79213258124");
   mlTextEdit_init(&mte, 11, MTE_LINE_LEN, line1, line2, line3, line4, 
-                  line5, line6, line7, line8, line9, line10, line11, nimbus_mono_10);
+                  line5, line6, line7, line8, line9, line10, line11,
+		  nimbus_mono_10);
+  menu_state = menu_first;
 }
 
 static void ui_update(void) {
   _log("tel ui update");
   if (active_task != enum_task_tel)
     return;
-  textEdit_render(&label1, 1, 172, &display);
-  textEdit_render(&te1, 57, 172, &display);
 
   mlTextEdit_render(&mte, 7, 3, &display);
 
+  menu_render();
+  
   displayFlush();
+}
+
+void menu_render(void) {
+  switch(menu_state) {
+    
+  case menu_call:
+    textEdit_render(&label_call, 1, 172, &display);
+    textEdit_render(&te_call, 57, 172, &display);
+    break;
+
+  case menu_at:
+    textEdit_render(&label_at, 1, 172, &display);
+    break;
+
+  case menu_hf_disable:
+    textEdit_render(&label_disable_hf, 1, 172, &display);
+    break;
+
+  case menu_get_imei:
+    textEdit_render(&label_get_imei, 1, 172, &display);
+    break;
+    
+  case menu_set_mic_gain_lvl:
+    textEdit_render(&label_mic_gain_lvl, 1, 172, &display);
+    break;
+
+  case menu_set_responce_format:
+    textEdit_render(&label_responce_format, 1, 172, &display);
+    break;
+
+  default:
+    break;
+  }
 }
 
 static void handle_kbd(char key) {
@@ -134,23 +220,86 @@ static void handle_kbd(char key) {
     gsm_send_cstr("ATA");
     break;
 
-  case 29: // call
-    gsm_send_cstr_ne("ATD+");
-    //gsm_send_str_ne(te1.buffer, te1.data_len);
-    gsm_send_cstr_ne("79819476135");
-    gsm_send_cstr(";");
-    break;
+  case 9: // enter
+    switch(menu_state) {
+    case menu_call:
+      gsm_send_cstr_ne("ATD");
+      gsm_send_str_ne(te_call.buffer, te_call.data_len);
+      gsm_send_cstr(";");
+      mlTextEdit_pushcstr(&mte, "calling...");
+      
+      
+      break;
+
+    case menu_at:
+      gsm_send_cstr("AT");
+      mlTextEdit_pushcstr(&mte, "AT");
+      break;
+
+    case menu_hf_disable:
+      gsm_send_cstr("AT+CHF=1,0");
+      mlTextEdit_pushcstr(&mte, "AT+CHF=1,0");
+      break;
+
+    case menu_get_imei:
+      gsm_send_cstr("AT+GSN");
+      mlTextEdit_pushcstr(&mte, "AT+GSN");
+      break;
+
+    case menu_set_mic_gain_lvl:
+      gsm_send_cstr("AT+CMIC=0,7");
+      mlTextEdit_pushcstr(&mte, "AT+CMIC=0,7");
+      break;
+
+    case menu_set_responce_format:
+      gsm_send_cstr("ATV1");
+      mlTextEdit_pushcstr(&mte, "ATV1");
+      break;
+
+    default:
+      CHECK(0);
+      break;
+    }
+    ui_update();
+    break; // case 9: // enter
 
   case 27: // network status
-    _log("get sig quality");
-    get_signal_quality();
+    //_log("get sig quality");
+    //get_signal_quality();
+    gsm_send_cstr("AT+IFC=0,0;+IPR=115200;ATV1&W");
+    mlTextEdit_pushcstr(&mte, "cmd sent");
+    ui_update();
     break;
 
-  case 2:
+  case 2: {
     //gsm_send_cstr("AT&FZE0+IPR=115200;&W");
-    gsm_send_cstr("ATZ&F");
+    char c;
+    if (menu_state == menu_call) {
+      
+      textEdit_pop(&te_call, &c);
+    }
+    ui_update();
+    break;
+  }
+
+  case 26:
+    if (menu_state > menu_first)
+      menu_state --;
+    ui_update();
     break;
 
+  case 17:
+    if (menu_state < menu_last)
+      menu_state ++;
+    ui_update();
+    break;
+
+  case 29:
+    gsm_send_cstr("ATH");
+    mlTextEdit_pushcstr(&mte, "ATH");
+    ui_update();
+    break;
+    
   default:
     break;
 

@@ -95,8 +95,14 @@ inline void log_init(void) {
   USARTE1.CTRLB = USART_TXEN_bm | USART_RXEN_bm | USART_CLK2X_bm |  USART_TXB8_bm;
 }
 
-/*ISR(USARTE1_DRE_vect) {}
-ISR(USARTF0_RXC_vect) {}*/
+/*ISR(USARTE1_DRE_vect) {}*/
+ISR(USARTF0_RXC_vect) {
+  char data = USARTE1_DATA;
+  
+  while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
+  USARTE1_DATA = data;
+
+}
 
 #ifndef DISABLE_LOGS
 void vLogTask(void* pvParameters) {

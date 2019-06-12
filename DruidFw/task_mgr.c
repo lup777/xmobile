@@ -188,7 +188,7 @@ static void ui_init(void) {
   //textEdit_setstr(&te1, "задачи", 6);
   //textEdit_setstr(&te2, "телефон", 7);
   textEdit_setcstr(&te1, "tasks");
-  textEdit_setcstr(&te2, "telefone");
+  textEdit_setcstr(&te2, "telephone");
 
   checkBox_set_value(&cb1, true);
 }
