@@ -56,27 +56,7 @@ PORT_DIR = FreeRTOS/Source/portable/GCC/ATXmega
 
 SRC = \
 main.c \
-usart.c \
-spi.c \
-pgm.c \
-kbd2.c \
-fonts.c \
-util.c \
-epd.c \
-render.c\
-gsm.c \
 core_drv.c \
-text_edit.c \
-ml_text_edit.c \
-task_mgr.c \
-check_box.c \
-telephone.c \
-$(SOURCE_DIR)/tasks.c \
-$(SOURCE_DIR)/list.c \
-$(SOURCE_DIR)/stream_buffer.c \
-$(PORT_DIR)/port.c \
-$(SOURCE_DIR)/queue.c \
-$(SOURCE_DIR)/croutine.c
 
 #fonts_nimbus_12_22.c \
 

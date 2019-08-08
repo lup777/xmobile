@@ -29,8 +29,6 @@ void int_init(void) {
     PMIC.INTPRI = 0x00;
 }
 
-/*void sram_init(void) __attribute__ ((naked))	\
-  __attribute__ ((section (".init0")));*/
 
 void sram_init(void) {
   /* EXAMPLE
@@ -59,6 +57,8 @@ void sram_init(void) {
   PORTH.OUTCLR = PIN2_bm; // CE1
   //PORTH.OUTSET = PIN3_bm; // CE2
 
+  PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
+
   EBI.CTRL = EBI_SRMODE_NOALE_gc // do not use address multiplexing
     | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
                                  // IFMODE[1:0] = 1 0 (bits)
@@ -73,7 +73,7 @@ void sram_init(void) {
 
   EBI.CS3.CTRLB = EBI_CS_SRWS_0CLK_gc;  // One Clk per 2 cycles wait state
 
-  EBI.CS3.BASEADDR = 0x0000; // lowest address in the address space enabled by chip select
+  EBI.CS3.BASEADDR = (uint16_t)((0x100000 >> 8) & 0xFFFFF); // lowest address in the address space enabled by chip select
 }
 
 #ifndef DISABLE_LOGS
@@ -100,24 +100,24 @@ bool check_sram(void) {
     }*/
 
   volatile int32_t ptr = 0x4000;
-  volatile int32_t ptr_end = 0x400F;
+  volatile int32_t ptr_end = 0x10400F;
   
   uint8_t data = 0xAA;
   uint8_t result;
   
-  for (ptr = 0x4000; ptr < ptr_end; ptr++, data++) {
+  for (ptr = 0x104000; ptr < ptr_end; ptr++, data++) {
     //*(uint8_t*)ptr = data;
     WriteEBI(ptr, data);
     _log("write: 0x%02X", data);
   }
 
-  for (ptr = 0x4000; ptr < ptr_end + 1; ptr++) {
+  for (ptr = 0x104000; ptr < ptr_end + 1; ptr++) {
     //result = *(uint8_t*)ptr;
     result = ReadEBI(ptr);
     _log("read: 0x%02X", result);
   }
 
-  CHECK(0);
+  //CHECK(0);
   return true;
 }
 #endif

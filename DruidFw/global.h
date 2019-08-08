@@ -42,6 +42,7 @@ uint8_t _strlen(char * str);
 uint8_t _u8tos(uint8_t value, char* buf, uint8_t buf_size, uint8_t base);
 uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 
+void _log(const char *format, ...);
 
 // CHECK
 // if (X == false) -> show func:line and loop
