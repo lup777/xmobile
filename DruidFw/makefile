@@ -33,7 +33,7 @@
 MCUARCHAVRDUDE_MCU_TYPE = x128a1u
 
 # MCU name
-MCU = avrxmega7
+MCU = atxmega128a1u
 
 # Processor name for "#include <avr/io.h>"
 CPU_TYPE = __AVR_ATxmega128A1U__
