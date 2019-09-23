@@ -7,7 +7,8 @@
 
 void WriteEBI(uint32_t Address, uint8_t Val);
 uint8_t ReadEBI(uint32_t Address);
-
+void sram_read_enable(void);
+void sram_write_enable(void);
 
 inline void clk_init(void) {
     //OSC_PLLCTRL = 0x16;  // 2 * 16 = 32MGz
@@ -29,6 +30,27 @@ void int_init(void) {
     PMIC.INTPRI = 0x00;
 }
 
+inline void sram_write_enable(void) {
+  /*PORTH.OUTSET =
+    //| PIN1_bm   // OE
+    //| PIN0_bm  // WE
+    ;*/
+  PORTH.OUTCLR =
+    //| PIN1_bm   // OE
+    PIN0_bm  // WE
+    ;
+}
+
+inline void sram_read_enable(void) {
+  PORTH.OUTSET =
+    //| PIN1_bm   // OE
+    PIN0_bm  // WE
+    ;
+  PORTH.OUTCLR =
+    PIN1_bm   // OE
+    //PIN0_bm  // WE
+    ;
+}
 
 void sram_init(void) {
   /* EXAMPLE
@@ -56,11 +78,25 @@ void sram_init(void) {
   PORTK.DIRSET = 0xFF; // A0 .. A7
   PORTF.DIRSET = 0xFF; // A8 .. A15
   PORTH.DIRSET = 0xFF; // A16.. A19, CE1, CE2, OE, WE
-  PORTH.OUTSET = 0xFF & (~PIN2_bm); // A16.. A19, CE1, CE2, OE, WE
   PORTJ.DIRCLR = 0xFF; // D0 .. D7
 
-  PORTH.OUTCLR = PIN2_bm; // CE1
-  //PORTH.OUTSET = PIN3_bm; // CE2
+  PORTH.OUTSET =
+    PIN4_bm | PIN6_bm | PIN6_bm | PIN7_bm // A16 - A19
+    | PIN2_bm   // CE1
+    | PIN3_bm   // CE2
+    //| PIN1_bm   // OE
+    //| PIN0_bm  // WE
+    ;
+
+  PORTH.OUTCLR =
+    //PIN4_bm | PIN6_bm | PIN6_bm | PIN7_bm // (in real A18..A21) A16 - A19 
+    //PIN2_bm   // CE1 (in real A16)
+    //| PIN3_bm // CE2 (in real A17)
+    PIN1_bm   // OE
+    | PIN0_bm   // WE
+    ;
+  
+  
 
   PORTCFG.EBIOUT = PORTCFG_EBIADROUT_PF_gc | PORTCFG_EBICSOUT_PH_gc;
 
@@ -68,9 +104,9 @@ void sram_init(void) {
     | EBI_IFMODE_4PORT_gc;       // 4 port mode. This mode reserved
                                  // IFMODE[1:0] = 1 0 (bits)
 
-  EBI.CS0.CTRLA = EBI_CS_MODE_DISABLED_gc;
-  EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
-  EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
+  //EBI.CS0.CTRLA = EBI_CS_MODE_DISABLED_gc;
+  //EBI.CS1.CTRLA = EBI_CS_MODE_DISABLED_gc;
+  //EBI.CS2.CTRLA = EBI_CS_MODE_DISABLED_gc;
 
   
   EBI.CS3.CTRLA = EBI_CS_ASPACE_128KB_gc  // size of the block above the base address
@@ -84,47 +120,110 @@ void sram_init(void) {
   EBI.CS3.BASEADDR = (uint16_t)0x0;
 }
 
+
+// 128KB: 0x0000 - 0x1F400
 #ifndef DISABLE_LOGS
+#if 0
 bool check_sram(void) {
-  uint_farptr_t ptr_start = 0x6000;
-  uint_farptr_t ptr_end = 0x600F;
-  uint_farptr_t ptr;
+  volatile uint32_t ptr_start = 0x4000;
+  volatile uint32_t ptr_end = 0x100000; // 128KB
+  volatile uint32_t ptr;
   
   volatile uint8_t data = 0xAA;
-  volatile uint8_t result;
-  
-  for (ptr = ptr_start; ptr <= ptr_end; ptr++, data++) {
-    WriteEBI(ptr, data);
-    _log("write: 0x%02X", data);
+  uint8_t step = 0xFF;
+  bool result = true;;
+  volatile uint8_t value;
+
+  for (;ptr_start + step < ptr_end; ptr_start += step) {
+
+    sram_write_enable();
+    for (data = 0, ptr = ptr_start;
+	 ptr <= ptr_start + step;
+	 ptr++, data++) {
+      WriteEBI(ptr, data);
+      //_log("write: 0x%02X", data);
+    }
+
+    sram_read_enable();
+    for (data = 0, ptr = ptr_start;
+	 ptr <= ptr_start + step;
+	 ptr++, data ++) {
+      value = ReadEBI(ptr);
+      //_log("read: 0x%02X", value);
+      if (value != data) {
+	uint16_t tmpl = (uint16_t)(ptr & 0xFFFF);
+	uint16_t tmph = (uint16_t)(ptr >> 16) & 0xFFFF;
+	_log("addr: 0x%04X%04X failed", tmph, tmpl);
+	result = false;
+	break;
+      }
+    }
+
+    if (result == false) break;
+
+    if (result == true) {
+      uint16_t tmpl = (uint16_t)(ptr & 0xFFFF);
+      uint16_t tmph = (uint16_t)(ptr >> 16) & 0xFFFF;
+
+      _log("addr: 0x%04X%04X success", tmph, tmpl);
+    }
   }
 
-  for (ptr = ptr_start; ptr < ptr_end; ptr++) {
-    result = ReadEBI(ptr);
-    _log("read: 0x%02X", result);
-  }
-  
-  /*volatile uint16_t* ptr_start = (uint16_t*)0x5000;
-  volatile uint16_t* ptr_end = (uint16_t*)0x500F;
-  volatile uint16_t* ptr;
-  
-  volatile uint8_t data = 0xAA;
-  volatile uint8_t result;
-  
-  for (ptr = ptr_start; ptr <= ptr_end; ptr++, data++) {
-    //WriteEBI(ptr, data);
-    *ptr = data;
-    _log("write: 0x%02X", data);
-  }
-
-  for (ptr = ptr_start; ptr < ptr_end; ptr++) {
-    //result = ReadEBI(ptr);
-    data = *ptr;
-    _log("read: 0x%02X", result);
-  }*/
-  
-  //CHECK(0);
+  _log("test done.");
   return true;
 }
+#else
+bool check_sram(void) {
+  volatile uint16_t ptr_start = 0x4000;
+  volatile uint16_t ptr_end = 0xFFFF; // 128KB
+  volatile uint16_t ptr;
+  
+  volatile uint8_t data = 0xAA;
+  uint8_t step = 0xFF;
+  bool result = true;;
+  volatile uint8_t value;
+
+  for (;ptr_start + step < ptr_end; ptr_start += step) {
+
+    sram_write_enable();
+    for (data = 0, ptr = ptr_start;
+	 ptr <= ptr_start + step;
+	 ptr++, data++) {
+      //WriteEBI(ptr, data);
+      *((uint16_t*)ptr) = data;
+      //_log("write: 0x%02X", data);
+    }
+
+    sram_read_enable();
+    for (data = 0, ptr = ptr_start;
+	 ptr <= ptr_start + step;
+	 ptr++, data ++) {
+      //value = ReadEBI(ptr);
+      value = *((uint16_t*)ptr);
+      //_log("read: 0x%02X", value);
+      if (value != data) {
+	uint16_t tmpl = (uint16_t)(ptr & 0xFFFF);
+	uint16_t tmph = 0;
+	_log("addr: 0x%04X%04X failed", tmph, tmpl);
+	result = false;
+	break;
+      }
+    }
+
+    if (result == false) break;
+
+    if (result == true) {
+      uint16_t tmpl = (uint16_t)(ptr & 0xFFFF);
+      uint16_t tmph = 0;
+
+      _log("addr: 0x%04X%04X success", tmph, tmpl);
+    }
+  }
+
+  _log("test done.");
+  return true;
+}
+#endif
 #endif
 
 uint8_t ReadEBI(uint32_t Address)

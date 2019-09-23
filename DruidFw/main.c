@@ -97,10 +97,6 @@ int main(void) {
     log_init();  // configure debug USART
     int_init();  // enable ints and clear int flags
   }
-  check_sram();
-  while(1) {
-    //raw_logc("hello!");
-  }
   // ======= MAIN TASK ===================
   /*xTaskCreateStatic( vMainTask, "main_task", STACK_SIZE, NULL, 1,
     xMainTStack, &xMainTaskBuffer);*/

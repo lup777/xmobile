@@ -12,7 +12,7 @@
 
 #include "global.h"
 
-#define LOG_BUFFER_LEN 40
+#define LOG_BUFFER_LEN 60
 
 // ======== Semaphore ======================
 SemaphoreHandle_t mutex_handle = NULL;
