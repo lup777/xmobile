@@ -61,9 +61,9 @@ uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
   }
 
 
-#ifndef EBI_CS_ASPACE_gm
-# define EBI_CS_ASPACE_1MB_gc   EBI_CS_ASIZE_1MB_gc
-#endif
+//#ifndef EBI_CS_ASPACE_gm
+//# define EBI_CS_ASPACE_1MB_gc   EBI_CS_ASIZE_1MB_gc
+//#endif
 
 enum enum_tasks {
   enum_task_mgr,

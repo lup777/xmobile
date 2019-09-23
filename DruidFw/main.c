@@ -76,7 +76,6 @@ StackType_t xTelStack[ STACK_SIZE ];
 // ~GLOBAL VARIABLES~
 
 int main(void) {
-  log_init();  // configure debug USART
 
   kbd_msg_buf_handle = xMessageBufferCreateStatic(sizeof(kbd_msg_buffer),
 						  kbd_msg_buffer,
@@ -94,11 +93,14 @@ int main(void) {
 
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
-    //sram_init(); // configure external SRAM .init0
-    kbd_init();  // configure keyboard MAX7370 I2C
+    sram_init(); // configure external SRAM .init0
+    log_init();  // configure debug USART
     int_init();  // enable ints and clear int flags
   }
-
+  check_sram();
+  while(1) {
+    //raw_logc("hello!");
+  }
   // ======= MAIN TASK ===================
   /*xTaskCreateStatic( vMainTask, "main_task", STACK_SIZE, NULL, 1,
     xMainTStack, &xMainTaskBuffer);*/
