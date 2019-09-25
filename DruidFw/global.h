@@ -68,11 +68,14 @@ uint8_t _u16tos(uint16_t value, char* buf, uint8_t buf_size, uint8_t base);
 enum enum_tasks {
   enum_task_mgr,
   enum_task_tel,
+  enum_task_addr_book,
   enum_task_clock
 };
 
+// msg for ....
 #define MSG_HEADER_KBD 0
 #define MSG_HEADER_GSM 1
 #define MSG_HEADER_TM  2
+#define MSG_HEADER_ADDR_BOOK 3
 
 extern enum enum_tasks active_task;

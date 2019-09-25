@@ -71,6 +71,7 @@ ml_text_edit.c \
 task_mgr.c \
 check_box.c \
 telephone.c \
+addr_book.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/stream_buffer.c \

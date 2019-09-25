@@ -8,6 +8,7 @@
 #include "text_edit.h"
 #include "check_box.h"
 #include "telephone.h"
+#include "addr_book.h"
 
 static void ui_init(void);
 static void ui_update(void);
@@ -31,14 +32,18 @@ byte display_buffer[DISPLAY_BUFFER_SIZE];
 // ========================================
 
 // ======== UI ============================
-static char te1_buf[16];
+static char te1_buf[12];
 static TextEdit te1;
 
 static char te2_buf[12];
 static TextEdit te2;
 
+static char te3_buf[12];
+static TextEdit te3;
+
 static CheckBox cb1;
 static CheckBox cb2;
+static CheckBox cb3;
 // ========================================
 
 enum enum_tasks active_task;
@@ -48,9 +53,10 @@ void vTaskMgr(void* pvParameters) {
 
   static char buffer[TASK_MGR_BUFFER_SIZE];
 
-  tm_msg_buf_handle = xMessageBufferCreateStatic(sizeof(msg_buffer),
-						 msg_buffer,
-						 &msg_buf_struct);
+  tm_msg_buf_handle = xMessageBufferCreateStatic(
+			  sizeof(msg_buffer),
+			  msg_buffer,
+			  &msg_buf_struct);
   displayInit(display_buffer);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
@@ -60,27 +66,37 @@ void vTaskMgr(void* pvParameters) {
 
   active_task = enum_task_mgr;
   state = 0;
-  menu_size = 2;
+  menu_size = 3;
 
   ui_update();
 
   CHECK(tm_msg_buf_handle);
   for (;;) {
-    size_t msg_size = xMessageBufferReceive(tm_msg_buf_handle, buffer,
-                                            TASK_MGR_BUFFER_SIZE,
-                                            portMAX_DELAY);
+    size_t msg_size = xMessageBufferReceive(
+			  tm_msg_buf_handle, buffer,
+			  TASK_MGR_BUFFER_SIZE,
+			  portMAX_DELAY);
     if (msg_size > 0) {
       // received message from KBD, GSM or ...
       task_mgr_hook(buffer, msg_size);
-
       switch(active_task) {
         case enum_task_mgr:
           handle_msg(buffer, msg_size);
           break;
 
         case enum_task_tel:
-          xMessageBufferSend(tel_msg_buf_handle, buffer, msg_size, portMAX_DELAY);
+	  
+          xMessageBufferSend(
+	      tel_msg_buf_handle, buffer, msg_size,
+	      portMAX_DELAY);
           break;
+
+        case enum_task_addr_book:
+	  _log("TM: msg for addr book");
+	  xMessageBufferSend(
+	      addr_book_msg_buf_handle, buffer, msg_size,
+	      portMAX_DELAY);
+	  break;
 
         case enum_task_clock:
 	  break;
@@ -115,7 +131,9 @@ static void handle_msg(char *buffer, size_t msg_size) {
   } // KBD
 
   case MSG_HEADER_GSM:
-    xMessageBufferSend(tel_msg_buf_handle, buffer, msg_size, portMAX_DELAY);
+    break;
+    xMessageBufferSend(tel_msg_buf_handle, buffer,
+		       msg_size, portMAX_DELAY);
     break;
   }
 }
@@ -129,7 +147,16 @@ void menu_enter(void) {
   case 1: {
     active_task = enum_task_tel;
     byte header = MSG_HEADER_TM;
-    xMessageBufferSend(tel_msg_buf_handle, &header, 1, portMAX_DELAY);
+    xMessageBufferSend(tel_msg_buf_handle, &header,
+		       1, portMAX_DELAY);
+    break;
+  }
+
+  case 2: {
+    active_task = enum_task_addr_book;
+    byte header = MSG_HEADER_TM;
+    xMessageBufferSend(addr_book_msg_buf_handle, &header,
+		       1, portMAX_DELAY);
     break;
   }
 
@@ -164,32 +191,43 @@ static void ui_update(void) {
   _log("task mgr  ui_update");
   textEdit_render(&te1, 18, 10, &display);
   textEdit_render(&te2, 18, 40, &display);
+  textEdit_render(&te3, 18, 70, &display);
 
-  if (state == 0) {
-    checkBox_set_value(&cb1, true);
-    checkBox_set_value(&cb2, false);
-  }
-
-  if (state == 1) {
     checkBox_set_value(&cb1, false);
+    checkBox_set_value(&cb2, false);
+    checkBox_set_value(&cb3, false);
+  
+  if (state == 0)
+    checkBox_set_value(&cb1, true);
+
+  if (state == 1)
     checkBox_set_value(&cb2, true);
-  }
+
+  if (state == 2)
+    checkBox_set_value(&cb3, true);
 
   checkBox_render(&cb1, 2, 10, &display);
   checkBox_render(&cb2, 2, 40, &display);
+  checkBox_render(&cb3, 2, 70, &display);
 
   displayFlush();
 }
 
 static void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 16, nimbus_bold_16);
+  textEdit_init(&te1, te1_buf, 12, nimbus_bold_16);
   textEdit_init(&te2, te2_buf, 12, nimbus_bold_16);
+  textEdit_init(&te3, te3_buf, 12, nimbus_bold_16);
 
+  textEdit_maximize(&te1);
+  textEdit_maximize(&te2);
+  textEdit_maximize(&te3);
+  
   //textEdit_setstr(&te1, "задачи", 6);
   //textEdit_setstr(&te2, "телефон", 7);
   textEdit_setcstr(&te1, "tasks");
   textEdit_setcstr(&te2, "telephone");
-
+  textEdit_setcstr(&te3, "address book");
+  
   checkBox_set_value(&cb1, true);
 }
 

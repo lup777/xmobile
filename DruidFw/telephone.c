@@ -10,6 +10,13 @@
 
 #define TEL_MSG_BUFFER_LEN 50
 
+void configure_usart(void);
+void get_signal_quality(void);
+
+bool is_cmd_rdy(void);
+bool is_cmd_ok(void);
+bool is_cmd_error(void);
+
 // ===== TEL MessageBuffer data ===========
 MessageBufferHandle_t tel_msg_buf_handle;
 StaticStreamBuffer_t tel_msg_buf_struct;
@@ -87,6 +94,7 @@ void vTelTask(void* pvParameters);
 
 
 void tel_init(void) {
+  _log("tel_init >>");
   state = state_wait_rdy;//state_cfg_usart;
   tel_msg_buf_handle = xMessageBufferCreateStatic(sizeof(tel_msg_buffer),
 						  tel_msg_buffer,
@@ -104,8 +112,9 @@ void vTelTask(void* pvParameters) {
   tel_init();
 
   for(;;) {
-    rx_bytes = xMessageBufferReceive(tel_msg_buf_handle, buffer, 
-				     TEL_MSG_BUFFER_LEN, portMAX_DELAY);
+    rx_bytes = xMessageBufferReceive(
+		   tel_msg_buf_handle, buffer, 
+		   TEL_MSG_BUFFER_LEN, portMAX_DELAY);
     if (rx_bytes < 1) continue;
 
     switch(buffer[0]) {
@@ -113,7 +122,7 @@ void vTelTask(void* pvParameters) {
       mlTextEdit_pushstr(&mte, buffer + 1, rx_bytes - 1);
       send_log_str(buffer + 1, rx_bytes - 1);
       //handle_state_machine();
-      ui_update();
+      //ui_update();
       break;
 
     case MSG_HEADER_KBD: {
@@ -137,6 +146,7 @@ void vTelTask(void* pvParameters) {
 static void ui_init(void) {
   // call
   textEdit_init(&te_call, te_call_buf, 11, nimbus_bold_16);
+  textEdit_maximize(&te_call);
   textEdit_init(&label_call, label_call_buf, 5, nimbus_bold_16);
   textEdit_setcstr(&label_call, "call:");
 
