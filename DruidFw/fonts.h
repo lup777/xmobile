@@ -6,6 +6,7 @@
 // 1 - 70 - ru and simbols
 // 71 - 96 - en
 typedef enum {
+  font_unknown,
   nimbus_mono_10,
   nimbus_bold_16
 } Font;

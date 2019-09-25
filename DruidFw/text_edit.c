@@ -15,12 +15,22 @@ bool textEdit_init(TextEdit* te, char* buffer_, byte buffer_len_, Font font) {
   te->font = font;
   te->data_len = 0;
   te->buffer_len = buffer_len_;
-  te->fixed_size = 0;
+  te->fixed_size = false;
   return true;
 }
 
 void textEdit_maximize(TextEdit* te) {
-  te->fixed_size = te->buffer_len;
+  if (te)
+    te->fixed_size = true;
+}
+
+void textEdit_select(TextEdit* te) {
+  if (te)
+    te->selected = true;
+}
+
+void textEdit_deselect(TextEdit* te) {
+  te->selected = false;
 }
 
 void textEdit_clear(TextEdit* te) {
@@ -87,12 +97,21 @@ void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay) {
   
   if (te->data_len > 0) {
     text_width = displayRenderText(x + xm, y + ym,
-				   te->buffer, te->data_len, te->font, pdisplay);
+		     te->buffer, te->data_len, te->font, pdisplay);
   }
 
   if (te->fixed_size)
-    text_width = te->fixed_size * FONT_GetWidth(te->font);
+    text_width = te->buffer_len * FONT_GetWidth(te->font);
+  else
+    text_width = te->data_len * FONT_GetWidth(te->font);
   
-  displayRenderRectangle(x, y, x + text_width  + xm,
-  y + font_height + ym, pdisplay);
+  uint8_t width = x + text_width + xm + xm;
+  uint8_t height = y + font_height + ym + ym;
+  
+  displayRenderRectangle(x, y, width, height, pdisplay);
+  
+  if (te->selected) {
+    displayRenderRectangle(x+1, y+1, width+1, height+1, pdisplay);
+    displayRenderRectangle(x-1, y-1, width-1, height-1, pdisplay);
+  }
 }

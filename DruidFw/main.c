@@ -18,7 +18,7 @@
 #include "telephone.h"
 #include "addr_book.h"
 
-#define STACK_SIZE 240
+#define STACK_SIZE 300
 
 void check_endian(void);
 void vApplicationGetIdleTaskMemory(
@@ -33,22 +33,18 @@ void vApplicationStackOverflowHook(
 // GLOBAL VARIABLES
 
 // ===== KBD MessageBuffer data ===========
-MessageBufferHandle_t kbd_msg_buf_handle;
+MessageBufferHandle_t kbd_msg_buf_handle = NULL;
 StaticStreamBuffer_t kbd_msg_buf_struct;
 static uint8_t kbd_msg_buffer[ 20 ];
 // ========================================
 
 // ===== GSM MessageBuffer data ===========
-MessageBufferHandle_t gsm_msg_buf_handle;
+MessageBufferHandle_t gsm_msg_buf_handle = NULL;
 StaticStreamBuffer_t gsm_msg_buf_struct;
 static uint8_t gsm_msg_buffer[ 80 ];
 // ========================================
 
 // ====== TASK DATA =======================
-// Main
-StaticTask_t xMainTaskBuffer;
-StackType_t xMainTStack[ STACK_SIZE ];
-
 // Addr Book
 StaticTask_t xAddrBookTaskBuffer;
 StackType_t xAddrBookTStack[ STACK_SIZE ];
@@ -88,27 +84,26 @@ int main(void) {
     int_init();  // enable ints and clear int flags
   }
 
+  // ======= ADDRESS BOOK TASK ================
+  xTaskCreateStatic( addrBook_task, "addrbook", STACK_SIZE,
+		     NULL, 1, xAddrBookTStack,
+		     &xAddrBookTaskBuffer);
+  // ==========================================
+  
   // ======= TELEPHONE TASK ===================
   xTaskCreateStatic( vTelTask, "tel_task", STACK_SIZE, NULL, 1,
 		     xTelStack, &xTelTaskBuffer);
   // ==========================================
 
-  // ======= ADDRESS BOOK TASK ================
-  xTaskCreateStatic( addrBook_task, "addr book", STACK_SIZE,
-		     NULL, 1, xAddrBookTStack,
-		     &xAddrBookTaskBuffer);
-  // ==========================================
-  
   // ======= TASK MANAGER  TASK ===============
-  xTaskCreateStatic( vTaskMgr, "task mgr", STACK_SIZE, NULL, 2,
-		     xTaskMgrTStack, &xMainTaskBuffer);
+  xTaskCreateStatic( vTaskMgr, "task mgr", STACK_SIZE, NULL, 3,
+		     xTaskMgrTStack, &xTaskMgrBuffer);
   // ==========================================
 
   raw_logc("start_scheduler");
   
   vTaskStartScheduler();
 
-  vTelTask(NULL);
   return 0;
 }
 

@@ -11,9 +11,12 @@ typedef struct {
   byte buffer_len;
   Font font;
   char* buffer;
-  byte fixed_size;
+  bool fixed_size;
+  bool selected;
 } TextEdit;
 
+void textEdit_select(TextEdit* te);
+void textEdit_deselect(TextEdit* te);
 void textEdit_maximize(TextEdit* te);
 void textEdit_clear (TextEdit* te);
 bool textEdit_init  (TextEdit* te, char* buffer, byte len, Font font);

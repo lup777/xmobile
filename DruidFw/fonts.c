@@ -1615,7 +1615,7 @@ byte FONT_GetHeight(Font font) {
     case nimbus_bold_16:
       return 24;
     case nimbus_mono_10:
-      return 13;
+      return 16;
     default:
       CHECK(0);
   }

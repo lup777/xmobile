@@ -69,9 +69,13 @@ void vTaskMgr(void* pvParameters) {
   menu_size = 3;
 
   ui_update();
-
+  
+  tel_init();
+  addrBook_init();
+  
   CHECK(tm_msg_buf_handle);
   for (;;) {
+    _log("TM ...");
     size_t msg_size = xMessageBufferReceive(
 			  tm_msg_buf_handle, buffer,
 			  TASK_MGR_BUFFER_SIZE,
@@ -79,13 +83,13 @@ void vTaskMgr(void* pvParameters) {
     if (msg_size > 0) {
       // received message from KBD, GSM or ...
       task_mgr_hook(buffer, msg_size);
+
       switch(active_task) {
         case enum_task_mgr:
           handle_msg(buffer, msg_size);
           break;
 
-        case enum_task_tel:
-	  
+        case enum_task_tel:	  
           xMessageBufferSend(
 	      tel_msg_buf_handle, buffer, msg_size,
 	      portMAX_DELAY);

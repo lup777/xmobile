@@ -18,7 +18,7 @@ bool is_cmd_ok(void);
 bool is_cmd_error(void);
 
 // ===== TEL MessageBuffer data ===========
-MessageBufferHandle_t tel_msg_buf_handle;
+MessageBufferHandle_t tel_msg_buf_handle = NULL;
 StaticStreamBuffer_t tel_msg_buf_struct;
 static uint8_t tel_msg_buffer[ TEL_MSG_BUFFER_LEN ];
 static void handle_kbd(char key);
@@ -94,13 +94,22 @@ void vTelTask(void* pvParameters);
 
 
 void tel_init(void) {
-  _log("tel_init >>");
-  state = state_wait_rdy;//state_cfg_usart;
-  tel_msg_buf_handle = xMessageBufferCreateStatic(sizeof(tel_msg_buffer),
-						  tel_msg_buffer,
-						  &tel_msg_buf_struct);
+  raw_logc("tel_init? >>>");
+  
+  static bool inited = false;
+
+  if (inited)
+    return;
+
+  raw_logc("tel_init. >>>");
+  
+  state = state_wait_rdy;
+  tel_msg_buf_handle = xMessageBufferCreateStatic(
+			   sizeof(tel_msg_buffer),
+			   tel_msg_buffer,
+			   &tel_msg_buf_struct);
   ui_init();
-  //handle_state_machine();
+  inited = true;
 }
 
 static char buffer[TEL_MSG_BUFFER_LEN];
@@ -115,6 +124,7 @@ void vTelTask(void* pvParameters) {
     rx_bytes = xMessageBufferReceive(
 		   tel_msg_buf_handle, buffer, 
 		   TEL_MSG_BUFFER_LEN, portMAX_DELAY);
+    raw_logc("TEL...");
     if (rx_bytes < 1) continue;
 
     switch(buffer[0]) {
@@ -147,6 +157,7 @@ static void ui_init(void) {
   // call
   textEdit_init(&te_call, te_call_buf, 11, nimbus_bold_16);
   textEdit_maximize(&te_call);
+
   textEdit_init(&label_call, label_call_buf, 5, nimbus_bold_16);
   textEdit_setcstr(&label_call, "call:");
 
