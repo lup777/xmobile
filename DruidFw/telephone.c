@@ -149,6 +149,10 @@ void vTelTask(void* pvParameters) {
     case MSG_HEADER_TM:
       ui_update();
       break;
+
+    case MSG_HEADER_CALL:
+      _log("call:");
+      break;
     } // switch
   }
 }

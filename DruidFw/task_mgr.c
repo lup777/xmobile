@@ -97,9 +97,13 @@ void vTaskMgr(void* pvParameters) {
 
         case enum_task_addr_book:
 	  _log("TM: msg for addr book");
-	  xMessageBufferSend(
-	      addr_book_msg_buf_handle, buffer, msg_size,
-	      portMAX_DELAY);
+
+	  if (buffer[0] == MSG_HEADER_CALL)
+	    handle_msg(buffer, msg_size);
+	  else
+	    xMessageBufferSend(
+		addr_book_msg_buf_handle, buffer, msg_size,
+		portMAX_DELAY);
 	  break;
 
         case enum_task_clock:
@@ -135,11 +139,24 @@ static void handle_msg(char *buffer, size_t msg_size) {
   } // KBD
 
   case MSG_HEADER_GSM:
-    break;
     xMessageBufferSend(tel_msg_buf_handle, buffer,
 		       msg_size, portMAX_DELAY);
     break;
-  }
+
+  case MSG_HEADER_CALL:
+    _log("TM MSG_HEADER_CALL");
+    active_task = enum_task_tel;
+    byte header = MSG_HEADER_TM;
+    xMessageBufferSend(tel_msg_buf_handle, &header,
+		       1, portMAX_DELAY);
+
+    xMessageBufferSend(tel_msg_buf_handle, buffer,
+		       msg_size, portMAX_DELAY);
+    
+    break;
+
+  } // switch
+  
 }
 
 void menu_enter(void) {

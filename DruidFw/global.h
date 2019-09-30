@@ -26,6 +26,7 @@
 #define MSG_DRAW 1
 #define MSG_CLOSE 2
 #define MSG_GSM_INPUT 3
+#define MSG_CALL 4
 
 #define X_MERGIN_PIX 2
 #define Y_MERGIN_PIX 2
@@ -77,5 +78,6 @@ enum enum_tasks {
 #define MSG_HEADER_GSM 1
 #define MSG_HEADER_TM  2
 #define MSG_HEADER_ADDR_BOOK 3
+#define MSG_HEADER_CALL 4
 
 extern enum enum_tasks active_task;
