@@ -9,7 +9,7 @@
 #include "task.h"
 #include "semphr.h"
 
-#define MENU_SIZE 5
+//#define MENU_SIZE 5
 
 #define KBD_RX_BUFFER_SIZE 10
 #define TASK_MGR_BUFFER_SIZE 50

@@ -33,7 +33,11 @@ static TextEdit tes[MENU_SIZE];
 Entry book[] = {
   INIT_ENTRY("mother", "+79213258124", "-"),
   INIT_ENTRY("futher", "+79213258134", "+79213258144"),
-  INIT_ENTRY("markovka", "+79213258154", "+79213258164")
+  INIT_ENTRY("markovka", "+79213258154", "+79213258164"),
+  INIT_ENTRY("mother1", "+79213258124", "-"),
+  INIT_ENTRY("futher1", "+79213258134", "+79213258144"),
+  INIT_ENTRY("markovka1", "+79213258154", "+79213258164"),
+  INIT_ENTRY("markovka2", "+79213258154", "+79213258164")
 };
 #define ADDR_BOOK_LEN (sizeof(book) / sizeof(Entry))
 
@@ -120,7 +124,8 @@ void ui_update(void) {
 
 void menu_update(void) {
   for(uint8_t i = 0; i < MENU_SIZE; i++) {
-    if (menu.book_index + i < ADDR_BOOK_LEN)
+    if (menu.book_index + i < (int8_t)ADDR_BOOK_LEN
+	&& menu.book_index + i >= 0)
       menu.entries[i] = &(book[menu.book_index + i].data);
     else
       menu.entries[i] = NULL;
@@ -134,7 +139,7 @@ void menu_show(void) {
   for(uint8_t i = 0; i < MENU_SIZE; i++, y += 25) {
     if (menu.entries[i] != NULL) {
       textEdit_setstr(tes + i, menu.entries[i]->name.str, menu.entries[i]->name.len);
-      textEdit_render(tes + i, 22, y, &display);
+      textEdit_render(tes + i, 3, y, &display);
     } else {
     }
   }
@@ -143,18 +148,21 @@ void menu_show(void) {
 void handle_kbd(char key) {
   switch(key) {
   case 17: // key up
-    if (menu.book_index > 0)
+    if (menu.book_index > 0 - (MENU_SIZE >> 1))
       menu.book_index --;
     break;
 
   case 26: // key down
-    menu.book_index ++;
+    if (menu.book_index <
+	(int8_t)(ADDR_BOOK_LEN - (MENU_SIZE >> 1) - 1))
+      menu.book_index ++;
     break;
 
   case 9: // enter
     call();
     return;
   }
+  _log("menu.book_index = %d", menu.book_index);
 /*
 #error AAAAAAAAAAAAAAAAa
   for (uint8_t i = 0; i < MENU_SIZE; i++) {
@@ -172,8 +180,8 @@ void call(void) {
 
   uint8_t entry_index = menu.book_index + (MENU_SIZE >> 1);
 
-  size = menu.entries[entry_index]->phone1.len;
-  memcpy(buf + 1, menu.entries[entry_index]->phone1.str, size);
+  size = book[entry_index].data.phone1.len;
+  memcpy(buf + 1, book[entry_index].data.phone1.str, size);
 
   _log("AB call %d", entry_index);
 

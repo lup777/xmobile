@@ -15,7 +15,7 @@ void addrBook_init(void);
 #define NAME_LEN 24
 #define PHONE_LEN 12
 #define ENTRY_FIELD_LEN 24
-#define LINE_BUF_LEN NAME_LEN
+#define LINE_BUF_LEN 21
 
 typedef unsigned char uint8_t;
 
@@ -49,13 +49,13 @@ typedef union union_Entry {
       .data.phone2.len = strlen(ENTRY_PHONE2)              \
   }
 
-#define MENU_SIZE 5
+#define MENU_SIZE 6
 
 typedef struct Menu {
   EntryStruct* entries[MENU_SIZE];
   uint8_t menu_index;
   Entry* book;
-  uint8_t book_index;
+  int8_t book_index;
 } Menu;
 
 #define INIT_MENU(BOOK_PTR)                     \

@@ -151,7 +151,7 @@ void vTelTask(void* pvParameters) {
       break;
 
     case MSG_HEADER_CALL:
-      _log("call:");
+      _log("call: %s", &buffer[1]);
       break;
     } // switch
   }

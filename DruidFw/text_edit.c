@@ -39,6 +39,7 @@ void textEdit_clear(TextEdit* te) {
 }
 
 byte textEdit_setstr(TextEdit* te, char* str, byte len) {
+  textEdit_clear(te);
   byte i = 0;
   CHECK(te);
   CHECK(str);
