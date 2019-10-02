@@ -29,7 +29,7 @@
 #define MSG_CALL 4
 
 #define X_MERGIN_PIX 2
-#define Y_MERGIN_PIX 2
+#define Y_MERGIN_PIX 1
 
 //#define DISABLE_LOGS
 

@@ -81,15 +81,14 @@ void mlTextEdit_render(MlineTextEdit* mte, short x, short y, DispBuf* pdisplay) 
   byte mergin = 3;
 
   displayRenderRectangle(x, y,
-			 x + (font_width * mte->line_len),
-			 y + ((font_height) * mte->lines_num) + mergin + mergin,
-			 pdisplay);
+      x + (font_width * mte->line_len),
+      y + ((font_height) * mte->lines_num) + mergin + mergin,
+      pdisplay);
 
   x += mergin; y += mergin;
   for (i = 0; i < mte->lines_num; i++) {
-    displayRenderText(x, y, mte->buffer[i], mte->line_len, mte->font, 
-                      pdisplay);
+    displayRenderText(x, y, mte->buffer[i], mte->line_len,
+		      mte->font, pdisplay);
     y += font_height;
-    
   }
 }

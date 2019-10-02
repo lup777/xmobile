@@ -31,13 +31,13 @@ static TextEdit tes[MENU_SIZE];
 // ===========
 
 Entry book[] = {
-  INIT_ENTRY("mother", "+79213258124", "-"),
+  INIT_ENTRY("mother", "+79213258134", "-"),
   INIT_ENTRY("futher", "+79213258134", "+79213258144"),
   INIT_ENTRY("markovka", "+79213258154", "+79213258164"),
   INIT_ENTRY("mother1", "+79213258124", "-"),
   INIT_ENTRY("futher1", "+79213258134", "+79213258144"),
   INIT_ENTRY("markovka1", "+79213258154", "+79213258164"),
-  INIT_ENTRY("markovka2", "+79213258154", "+79213258164")
+  INIT_ENTRY("lup", "+79213258124", "+79213258164")
 };
 #define ADDR_BOOK_LEN (sizeof(book) / sizeof(Entry))
 
@@ -174,16 +174,17 @@ void handle_kbd(char key) {
 }
 
 void call(void) {
-  static char buf[LINE_BUF_LEN];
-  uint8_t size;
+  static char buf[PHONE_LEN + 1];
   buf[0] = MSG_HEADER_CALL;
 
   uint8_t entry_index = menu.book_index + (MENU_SIZE >> 1);
+  uint8_t size = book[entry_index].data.phone1.len;
+  
+  CHECK(sizeof(buf) == size + 1);
 
-  size = book[entry_index].data.phone1.len;
   memcpy(buf + 1, book[entry_index].data.phone1.str, size);
 
-  _log("AB call %d", entry_index);
+  _log("AB call %d (size = %d)", entry_index, size);
 
   xMessageBufferSend(tm_msg_buf_handle, buf,
 		     size + 1,
