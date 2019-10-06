@@ -2,6 +2,7 @@
 #include "addr_book.h"
 #include "text_edit.h"
 #include "task_mgr.h"
+#include "sd.h"
 #include <string.h>
 
 #define ADDRESS_BOOK_MSG_BUFFER_LEN 50

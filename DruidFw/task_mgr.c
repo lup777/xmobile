@@ -9,6 +9,7 @@
 #include "check_box.h"
 #include "telephone.h"
 #include "addr_book.h"
+#include "sd.h"
 
 static void ui_init(void);
 static void ui_update(void);
@@ -71,6 +72,7 @@ void vTaskMgr(void* pvParameters) {
   ui_update();
   
   tel_init();
+
   addrBook_init();
   
   CHECK(tm_msg_buf_handle);
