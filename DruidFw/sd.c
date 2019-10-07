@@ -16,6 +16,7 @@
 #define SD_CMD_READ_SINGLE_BLOCK 17 // CMD17 R1
 #define SD_CMD_READ_CSD 9 // CMD9 R1
 #define SD_CMD_SEND_OP_COND 1 // CMD1 R1
+#define SD_READ_SINGLE_BLOCK 17 // CMD 17
 
 typedef uint8_t u8;
 typedef uint32_t u32;
@@ -28,7 +29,8 @@ static uint8_t send_byte(uint8_t);
 static uint8_t read_byte(void);
 static u8 send_cmd_r1(u8 cmd, u32 param);
 static u8 wait_byte(void);
-
+void sd_read_buffer(u8* buffer, u16 size);
+  
 static void spid_init(void) {
   PORTD.DIRSET = PIN5_bm | PIN7_bm; // MOSI, SCK
   PORTD.DIRCLR = PIN6_bm; // MISO
@@ -89,7 +91,7 @@ bool sd_init(void) {
 
     raw_logc("send ACMD 41");
     // CMD 41
-    for (u8 i = 0; i < 0x80; i++) {
+    for (u8 i = 0; i < 0x1; i++) {
       u8 r = 0xFF;
       if (0x01 == send_cmd_r1(55, 0x65)) { // CMD 55
 	send_byte(0x40 + 41); // CMD 41
@@ -100,56 +102,44 @@ bool sd_init(void) {
 	  
 	send_byte(0x17); // crc
 	send_byte(0xFF); // dummy
-	//send_byte(0xFF); // dummy
 	
 	CS_DISABLE;
 	send_byte(0xFF); // dummy
 	CS_ENABLE;
 	
-	//for (u8 j = 0; j < 0x80; j ++) {
-	  r = send_byte(0xFF); // resp
-	  if (r == 0) {
-	    raw_logc("SD init OK");
-	    break;
-	  } else {
-	    //_log("ACMD 41 resp 0x%02X", r);
-	    //_log("ACMD 41 resp xxx");
-	    //raw_logc("ACMD 41 resp xxx");
-	    //for (u32 k = 0; k < 0xFFFF; k++) {}
-	  }
-	  //}
+	r = send_byte(0xFF); // resp
+	if (r == 0) {
+	  _log("SD init OK (%d)", i);
+	  break;
+	} else {
+	  _sleep(300);
+	}
       } // for
     } // if CMD 55
   }
   CS_DISABLE;
 	
   for (u8 i = 0; i < 50; i++) {
+    
     u8 r = 0xFF;
 
     CS_ENABLE;
     r = send_cmd_r1(SD_CMD_SEND_OP_COND, 0);
     CS_DISABLE;
-    if (r == 0) break;
+    if (r == 0) {
+      _log("SD init success (%d)", i);
+      return true;
+    }
   }
-    
-  return true;
+  raw_logc("SD init failed");
+  return false;
 }
-
-/*static void wait_idle(void) {
-  u8 i = 0;
-
-  for (i = 0; i < 0xFF; i++) {
-    if (read_byte() < 0x80)
-      return;
-  }
-  raw_logc("SD wait_idle failed");
-  }*/
 
 static uint8_t send_byte(uint8_t b) {
   SPID.DATA = b;
-  raw_logc("wait flag");
+  //raw_logc("wait flag");
   while((SPID.STATUS & SPI_IF_bm) == 0);
-  raw_logc("sent");
+  //raw_logc("sent");
   return SPID.DATA;
 }
 
@@ -168,8 +158,6 @@ static uint8_t read_byte(void) {
   while((SPID.STATUS & SPI_IF_bm) == 0);
   return SPID.DATA;
 }
-
-
 
 static u8 send_cmd_r1(u8 cmd, u32 param) {  
   //wait_byte();
@@ -190,7 +178,7 @@ static u8 send_cmd_r1(u8 cmd, u32 param) {
 
   u8 r = wait_byte();
 
-  _log("SD CMD%02d resp 0x%02X", cmd, r);
+  //_log("SD CMD%02d resp 0x%02X", cmd, r);
   return r;
 }
 #define SINGLE_DATA_TOKEN 0xFE
@@ -205,14 +193,7 @@ void sd_read_csd(uint8_t* buffer) {
   }
 
   r = wait_byte();
-  //if (r != SINGLE_DATA_TOKEN)
   _log("waiting token 0x%02X", r);
-  //do {
-    
-    //_log("waiting token 0x%02X", r);
-    //raw_loc("waiting token");
-  //} while(r != SINGLE_DATA_TOKEN); // data token
-
   for (u8 i = 0; i < 16; i++) {
     buffer[i] = wait_byte();
     _log("SD CSD: 0x%02X", buffer[i]);
@@ -223,6 +204,32 @@ void sd_read_csd(uint8_t* buffer) {
   CS_DISABLE;
 }
 
-/*bool sd_read_block(char block, u32 addr) {
+void sd_read_buffer(u8* buffer, u16 size) {
+  for (u16 i = 0; i < size; i++) {
+    buffer[i] = read_byte();
+    //_log("read 0x%02X", buffer[i]);
+  }
+}
+
+bool sd_read_block_512b(u8* buffer, u32 addr) {
+  CS_ENABLE;
   //SD_CMD_READ_SINGLE_BLOCK
+  if ( 0x00 == send_cmd_r1(SD_READ_SINGLE_BLOCK, addr)) {
+    raw_logc("SD_READ_SINGLE_BLOCK success");
+
+    for (u8 i = 0; i < 10; i++) {
+      if (SINGLE_DATA_TOKEN == wait_byte()) {
+	sd_read_buffer(buffer, 512);
+	CS_DISABLE;
+	return true;
+      }
+    }
+  }
+  CS_DISABLE;
+  return false;
+}
+
+
+/*bool sd_write_block_512b() {
+  //http://we.easyelectronics.ru/AVR/mmcsd-i-avr-chast-2-rabota-s-kartoy.html
   }*/

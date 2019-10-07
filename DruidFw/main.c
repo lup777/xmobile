@@ -83,14 +83,6 @@ int main(void) {
     //check_sram();
     kbd_init();  // configure keyboard MAX7370 I2C
     int_init();  // enable ints and clear int flags
-
-    _log("start SD init");
-    
-  sd_init();   // init SD memory card
-  uint8_t buf[16];
-  sd_read_csd(buf);
-
-
   }
 
   // ======= ADDRESS BOOK TASK ================
