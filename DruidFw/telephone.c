@@ -132,7 +132,16 @@ void vTelTask(void* pvParameters) {
       mlTextEdit_pushstr(&mte, buffer + 1, rx_bytes - 1);
       send_log_str(buffer + 1, rx_bytes - 1);
       //handle_state_machine();
-      //ui_update();
+      
+      // _________________________________________________
+      // TODO make timeout and update display
+      // if timer expired. If other message received
+      // before timer expired - restart timer
+      // Check if there is RTOS API for timedout messaging
+      // or timedout threads
+      // ui_update();
+      // -------------------------------------------------
+      
       break;
 
     case MSG_HEADER_KBD: {
@@ -152,6 +161,8 @@ void vTelTask(void* pvParameters) {
 
     case MSG_HEADER_CALL:
       _log("call: %s", &buffer[1]);
+      textEdit_setstr(&te_call, &buffer[1], rx_bytes - 1);
+      ui_update();
       break;
     } // switch
   }
@@ -159,11 +170,13 @@ void vTelTask(void* pvParameters) {
 
 static void ui_init(void) {
   // call
-  textEdit_init(&te_call, te_call_buf, 11, nimbus_bold_16);
+  textEdit_init(&te_call, te_call_buf, 12, nimbus_bold_16);
   textEdit_maximize(&te_call);
 
   textEdit_init(&label_call, label_call_buf, 5, nimbus_bold_16);
   textEdit_setcstr(&label_call, "call:");
+  textEdit_render_rect(&label_call, false);
+  textEdit_render_rect(&te_call, false);
 
     // disable HF
   textEdit_init(&label_at, label_at_buf, 2, nimbus_bold_16);
@@ -198,7 +211,7 @@ static void ui_update(void) {
   if (active_task != enum_task_tel)
     return;
 
-  mlTextEdit_render(&mte, 7, 3, &display);
+  mlTextEdit_render(&mte, 7, 1, &display);
 
   menu_render();
   
@@ -209,8 +222,8 @@ void menu_render(void) {
   switch(menu_state) {
     
   case menu_call:
-    textEdit_render(&label_call, 1, 172, &display);
-    textEdit_render(&te_call, 57, 172, &display);
+    textEdit_render(&label_call, 1, 173, &display);
+    textEdit_render(&te_call, 57, 173, &display);
     break;
 
   case menu_at:

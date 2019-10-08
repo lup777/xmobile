@@ -13,11 +13,13 @@ typedef struct {
   char* buffer;
   bool fixed_size;
   bool selected;
+  bool render_rect;
 } TextEdit;
 
 void textEdit_select(TextEdit* te);
 void textEdit_deselect(TextEdit* te);
 void textEdit_maximize(TextEdit* te);
+void textEdit_render_rect(TextEdit* te, bool render);
 void textEdit_clear (TextEdit* te);
 bool textEdit_init  (TextEdit* te, char* buffer, byte len, Font font);
 bool textEdit_pushc (TextEdit* te, char c);

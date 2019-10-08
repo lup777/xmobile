@@ -17,6 +17,7 @@
 #include "task_mgr.h"
 #include "telephone.h"
 #include "addr_book.h"
+#include "sd.h"
 
 #define STACK_SIZE 300
 

@@ -9,6 +9,7 @@
 #include "check_box.h"
 #include "telephone.h"
 #include "addr_book.h"
+#include "sd.h"
 
 static void ui_init(void);
 static void ui_update(void);
@@ -57,6 +58,7 @@ void vTaskMgr(void* pvParameters) {
 			  sizeof(msg_buffer),
 			  msg_buffer,
 			  &msg_buf_struct);
+
   displayInit(display_buffer);
   EPD_ShowFullScreenImage(ucDisplayFullLupImage, 200, 200);
 
@@ -71,6 +73,13 @@ void vTaskMgr(void* pvParameters) {
   ui_update();
   
   tel_init();
+
+  sd_init();   // init SD memory card
+  static uint8_t buf[512];
+  sd_read_csd(buf);
+  
+  sd_read_block_512b(buf, 0);
+
   addrBook_init();
   
   CHECK(tm_msg_buf_handle);

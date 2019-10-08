@@ -57,6 +57,7 @@ PORT_DIR = FreeRTOS/Source/portable/GCC/ATXmega
 SRC = \
 main.c \
 usart.c \
+sd.c \
 spi.c \
 pgm.c \
 kbd2.c \
