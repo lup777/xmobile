@@ -3,76 +3,13 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "fs.h"
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-
-typedef uint32_t __u32;
-typedef uint16_t __u16;
-typedef int32_t __s32;
-typedef int16_t __s16;
-typedef uint8_t __u8;
-
-typedef struct ext2_super_block {
-  __u32   s_inodes_count;        /*  Количество индексных дескрипторов в ФС */
-  __u32   s_blocks_count;        /*  Количество блоков в ФС */
-  __u32   s_r_blocks_count;      /*  Количество зарезервированых блоков */
-  __u32   s_free_blocks_count;   /*  Количество свободных блоков */
-  __u32   s_free_inodes_count;   /*  Количество свободных индексных дескрипторов */
-  __u32   s_first_data_block;    /*  Номер данного блока */
-  __u32   s_log_block_size;      /*  log2(размер блока)-10 */
-  __s32   s_log_frag_size;       /*  log2(размер фрагмента)-10 */
-  __u32   s_blocks_per_group;    /*  #  Кол-во блоков в группе */
-  __u32   s_frags_per_group;     /*  #  Кол-во фрагментов в группе */
-  __u32   s_inodes_per_group;    /*  #  Кол-во индексных дескрипторов в группе */
-  __u32   s_mtime;               /*  Время последнего монтирования в POSIX времени */
-  __u32   s_wtime;               /*  Время последней записи в POSIX времени */
-  __u16   s_mnt_count;
-  __s16   s_max_mnt_count;
-  __u16   s_errors;              /*  Код ошибки(см.ниже) */
-  __u16   s_pad;
-  __u32   s_lastcheck;           /*  POSIX время последней проверки */
-  __u32   s_checkinterval;       /*  POSIX время между принудительными проверками */
-  __u32   s_creator_os;          /*  ID ОС (см. ниже)  */
-  __u32   s_rev_level;           /*  Версия */
-  __u16   s_def_resuid;          /*  UserID, могущий использовать зар. блоки */
-  __u16   s_def_resgid;          /*  GroupID, могущий использовать зар. блоки */
-  __u32   s_reserved[235];       /*  Зарезервировано */
-} ext2_super_block;
-
-#define _log printf
-
-#pragma pack(push,1)
-typedef struct Partition {
-  u8 is_active; // 00h
-  u8 start_chs[3]; // head, sector and cylinder 01h..03h
-  u8 part_type; // 04h
-  u8 end_chs[3]; // end head, sector, cylinder 05h ..07h
-  u32 abs_start_sector; // 08h..0Bh (LBA)
-  u32 sectors_in_part; // 0Ch..0Fh (num of sectors in part LBA)
-} Partition;
-
-typedef struct Mbr {
-  u8 code[139];        // 0000..008A
-  u8 err_msgs[80];     // 008B..00DA
-  u8 padding[227];     // 00DB..01BD    zeros (or NT drive serial number)
-  union {
-    u8 part_table[64];   // 01BE..01FD
-    struct {
-      struct Partition p1;
-      struct Partition p2;
-      struct Partition p3;
-      struct Partition p4;
-    };
-  };
-  u16 mbr_signature; // 01FE..01FF    0xAA55h [55, AA]
-} Mbr;
-#pragma pack(pop)
 
 void show_mbr_info(Partition* p);
-bool img_read(FILE* fi,long int addr, size_t size, u8* buffer);
+bool img_read(long int addr, size_t size, u8* buffer);
 void show_super_block_info(ext2_super_block* sb);
+bool read_mbr(u8* buffer);
 
 //u8 buffer[sizeof(Mbr)];
 
@@ -100,9 +37,12 @@ u8 get_end_sector(Partition* p) {
   return (p->end_chs[1] >> 2) && 0x3F;
 }
 
+static u8 buffer[1024];
+
+static FILE* fi;
+
 int main(void) {
-  FILE* fi;
-  fi = fopen("/home/alexander/tmp/image.img", "r");
+  fi = fopen("image.img", "r");
 
   if (fi == NULL) {
     printf("open failed");
@@ -111,27 +51,82 @@ int main(void) {
 
   printf("sizeof MBR 0x%04lX\n", sizeof(Mbr));
 
-  static Mbr mbr;
-  img_read(fi, 0x0, sizeof(Mbr), (u8*)(&mbr));
-
-  _log("MBR signature: 0x%04X\n", mbr.mbr_signature);
-
+  read_mbr(buffer);
+  _log("MBR signature: 0x%04X\n", ((Mbr*)buffer)->mbr_signature);
   _log(" \n PART 1: ");
-  show_mbr_info(&(mbr.p1));
+  show_mbr_info(&(((Mbr*)buffer)->p1));
 
-  static ext2_super_block sb;
+  Mbr* mbr = (Mbr*)buffer;
+    
+  u32 part_start_addr = (mbr->p1.abs_start_sector + 1) * SECTOR_SIZE;
+  _log("part_start_addr = %d", part_start_addr);
+  
+  u32 super_block_addr =
+    ((mbr->p1.abs_start_sector + 2) * SECTOR_SIZE);
+  _log("super block addr: 0x%04X\n", super_block_addr);
 
-  u16 sector_size = 512;
-  u32 super_block_addr = (mbr.p1.abs_start_sector * sector_size) + 0x400;
-  img_read(fi, super_block_addr, sizeof(ext2_super_block), (u8*)(&sb));
+  img_read(super_block_addr, sizeof(ext2_super_block), buffer);
 
-  show_super_block_info(&sb);
+  static ext2_super_block* sb = (ext2_super_block*)buffer;
+  show_super_block_info(sb);
+  
+  u32 block_groups_number = sb->s_blocks_count
+    / sb->s_blocks_per_group;
+  printf("block_groups_number = %d\n", block_groups_number);
 
+
+  //which block group contains first non reserved inode
+  u32 block_group = (FIRST_NON_RESERVERD_INOD - 1)
+    / sb->s_inodes_per_group;
+  printf("block_group = %d\n", block_group);
+
+  printf("s_blocks_per_group = %d\n", sb->s_blocks_per_group);
+
+  // inode index in block group
+  u32 index = (FIRST_NON_RESERVERD_INOD - 1)
+    % sb->s_inodes_per_group;
+  printf("inode index = %d\n", index);
+
+  // which block contains our inode
+  u32 containing_block = (index * INODE_SIZE) /
+    (1024 << sb->s_log_block_size);
+  printf("containing_block = %d\n", containing_block);
+
+  
+  u32 inode_addr = part_start_addr
+    + (containing_block * (1024 << sb->s_log_block_size))
+    + ((index + 1) * INODE_SIZE);
+
+  printf("inode_addr = 0x%08X\n", inode_addr);
+
+  for (u8 i = 0; i < 16; i++) {
+    if (img_read(inode_addr + (i * INODE_SIZE),
+		 INODE_SIZE,
+		 buffer)) {
+      _log("INODE %d\n", i + index);
+      
+      for (u8 j = 0; j < INODE_SIZE / 8; j+=8) {
+	_log("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+	     buffer[j+0], buffer[j+1], buffer[j+2], buffer[j+3],
+	     buffer[j+4], buffer[j+5], buffer[j+6], buffer[j+7]);
+      }
+      ext2_inode* in = (ext2_inode*)buffer;
+      printf("in->i_mode = 0x%02X\n", in->i_mode);
+    }
+  }
+
+  // https://wiki.osdev.org/Ext2
+  
+  
   fclose(fi);
   return 0;
 }
 
-bool img_read(FILE* fi,long int addr, size_t size, u8* buffer) {
+bool read_mbr(u8* buffer) {
+  return img_read(0, 512, buffer);
+}
+
+bool img_read(long int addr, size_t size, u8* buffer) {
   int result = fseek(fi, addr, SEEK_SET);
   int i = 0;
 
@@ -143,7 +138,6 @@ bool img_read(FILE* fi,long int addr, size_t size, u8* buffer) {
     buffer[i++] = fgetc(fi);
     //printf("0x%02X\n", buffer[i-1]);
   }
-  return true;
 }
 
 void show_super_block_info(ext2_super_block* sb) {
@@ -152,7 +146,8 @@ void show_super_block_info(ext2_super_block* sb) {
   printf("s_free_blocks_count = %d\n", sb->s_free_blocks_count);
   printf("s_first_data_block = %d\n", sb->s_first_data_block);
   printf("s_rev_level = %d\n", sb->s_rev_level);
-
+  printf("s_log_block_size = %d\n", 1024 << sb->s_log_block_size);
+  printf("s_log_frag_size = %d\n", 1024 << sb->s_log_frag_size);
 }
 
 void show_mbr_info(Partition* p) {
