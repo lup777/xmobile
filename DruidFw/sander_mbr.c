@@ -10,7 +10,8 @@ void show_mbr_info(Partition* p);
 bool img_read(long int addr, size_t size, u8* buffer);
 void show_super_block_info(ext2_super_block* sb);
 bool read_mbr(u8* buffer);
-
+bool read_sector_in_block(u32 block_group_ind, u32 block_ind, u32 sector_in_block);
+void show_hex(u32 start, u32 num, u32);
 //u8 buffer[sizeof(Mbr)];
 
 u8 get_start_head(Partition* p) {
@@ -41,6 +42,14 @@ static u8 buffer[1024];
 
 static FILE* fi;
 
+// context
+static u32 part_start_addr;
+static u32 super_block_addr;
+static u32 block_groups_number;
+static u32 block_size;
+static u32 blocks_per_group;
+
+// end of context
 int main(void) {
   fi = fopen("image.img", "r");
 
@@ -57,69 +66,105 @@ int main(void) {
   show_mbr_info(&(((Mbr*)buffer)->p1));
 
   Mbr* mbr = (Mbr*)buffer;
-    
-  u32 part_start_addr = (mbr->p1.abs_start_sector + 1) * SECTOR_SIZE;
-  _log("part_start_addr = %d", part_start_addr);
-  
-  u32 super_block_addr =
+
+  part_start_addr = ((mbr->p1.abs_start_sector + 2) * SECTOR_SIZE) - 1024;
+  _log("part_start_addr = 0x%08X\n", part_start_addr);
+
+  super_block_addr =
     ((mbr->p1.abs_start_sector + 2) * SECTOR_SIZE);
-  _log("super block addr: 0x%04X\n", super_block_addr);
+  _log("super block addr: 0x%08X\n", super_block_addr);
 
-  img_read(super_block_addr, sizeof(ext2_super_block), buffer);
+  {
+    img_read(super_block_addr, sizeof(ext2_super_block), buffer);
 
-  static ext2_super_block* sb = (ext2_super_block*)buffer;
-  show_super_block_info(sb);
-  
-  u32 block_groups_number = sb->s_blocks_count
-    / sb->s_blocks_per_group;
-  printf("block_groups_number = %d\n", block_groups_number);
+    static ext2_super_block* sb = (ext2_super_block*)buffer;
+    show_super_block_info(sb);
+    block_size = 1024 << sb->s_log_block_size;
+    blocks_per_group = sb->s_blocks_per_group;
+
+    block_groups_number = sb->s_blocks_count
+      / sb->s_blocks_per_group;
+    printf("block_groups_number = %d\n", block_groups_number);
 
 
-  //which block group contains first non reserved inode
-  u32 block_group = (FIRST_NON_RESERVERD_INOD - 1)
-    / sb->s_inodes_per_group;
-  printf("block_group = %d\n", block_group);
+    //which block group contains first non reserved inode
+    u32 block_group = (FIRST_NON_RESERVERD_INOD - 1)
+      / sb->s_inodes_per_group;
+    printf("block_group = %d\n", block_group);
 
-  printf("s_blocks_per_group = %d\n", sb->s_blocks_per_group);
+    printf("s_blocks_per_group = %d\n", sb->s_blocks_per_group);
 
-  // inode index in block group
-  u32 index = (FIRST_NON_RESERVERD_INOD - 1)
-    % sb->s_inodes_per_group;
-  printf("inode index = %d\n", index);
+    // inode index in block group
+    u32 index = (FIRST_NON_RESERVERD_INOD - 1)
+      % sb->s_inodes_per_group;
+    printf("inode index = %d\n", index);
 
-  // which block contains our inode
-  u32 containing_block = (index * INODE_SIZE) /
-    (1024 << sb->s_log_block_size);
-  printf("containing_block = %d\n", containing_block);
+    // which block contains our inode
+    u32 containing_block = (index * INODE_SIZE) /
+      (1024 << sb->s_log_block_size);
+    printf("containing_block = %d\n", containing_block);
 
-  
-  u32 inode_addr = part_start_addr
-    + (containing_block * (1024 << sb->s_log_block_size))
-    + ((index + 1) * INODE_SIZE);
+    u32 inode_addr = part_start_addr
+      + (containing_block * (1024 << sb->s_log_block_size))
+      + ((index + 1) * INODE_SIZE);
 
-  printf("inode_addr = 0x%08X\n", inode_addr);
+    printf("inode_addr = 0x%08X\n", inode_addr);
 
-  for (u8 i = 0; i < 16; i++) {
-    if (img_read(inode_addr + (i * INODE_SIZE),
-		 INODE_SIZE,
-		 buffer)) {
-      _log("INODE %d\n", i + index);
-      
-      for (u8 j = 0; j < INODE_SIZE / 8; j+=8) {
-	_log("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-	     buffer[j+0], buffer[j+1], buffer[j+2], buffer[j+3],
-	     buffer[j+4], buffer[j+5], buffer[j+6], buffer[j+7]);
-      }
-      ext2_inode* in = (ext2_inode*)buffer;
-      printf("in->i_mode = 0x%02X\n", in->i_mode);
-    }
+    _log("s_inodes_per_group = %d\n", sb->s_inodes_per_group);
+    u32 inodes_per_block = sb->s_inodes_per_group / sb->s_blocks_per_group;
+    printf("inodes_per_block = %d\n", inodes_per_block);
+    _log("mount point: %s\n", sb->s_last_munted);
+
+    _log("inodes count: %d\n", sb->s_inodes_per_group * sb->s_blocks_per_group);
+  }
+  // https://wiki.osdev.org/Ext2
+
+  // read block group descriptor table
+  read_sector_in_block(0, 2, 0);
+  ext2_group_desc_table* gt = (ext2_group_desc_table*)buffer;
+  _log("bg_inode_table = %d\n", gt->bg_inode_table);
+
+  u32 bg_inode_table = gt->bg_inode_table;
+  u32 bg_inode_bitmap = gt->bg_inode_bitmap;
+
+  // read inode bitmap
+  read_sector_in_block(0, bg_inode_bitmap, 0);
+  //show_hex(0, 512, 0);
+
+  // read inode table
+  read_sector_in_block(0, bg_inode_table, 0);
+  ext2_inode* in = (ext2_inode*)buffer;
+
+  for (u16 i = 11; i < 14; i++) {
+    _log("INODE %d", i);
+    _log("  i_mode = 0x%04X\n", in->i_mode);
+    //show_hex(i * INODE_SIZE, INODE_SIZE, 0);
   }
 
-  // https://wiki.osdev.org/Ext2
-  
-  
   fclose(fi);
   return 0;
+}
+
+void show_hex(u32 start, u32 num, u32 display_offset) {
+
+  for (u32 i = start; i < start + num; i+=16 ) {
+    _log ("%08X: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X\n",
+          display_offset + i,
+          buffer[i + 0], buffer[i + 1], buffer[i + 2], buffer[i + 3], buffer[i + 4],
+          buffer[i + 5], buffer[i + 6], buffer[i + 7], buffer[i + 8], buffer[i + 9],
+          buffer[i + 10], buffer[i + 11], buffer[i + 12], buffer[i + 13],
+          buffer[i + 14], buffer[i + 15]);
+  }
+}
+
+bool read_sector_in_block(u32 block_group_ind, u32 block_ind, u32 sector_in_block) {
+  u32 addr = part_start_addr
+    + (block_group_ind * blocks_per_group * block_size)
+    + (block_ind * block_size)
+    + (sector_in_block * SECTOR_SIZE);
+
+  _log("read_sector_in_block adr: 0x%08X\n", addr);
+  return img_read(addr, SECTOR_SIZE, buffer);
 }
 
 bool read_mbr(u8* buffer) {
@@ -138,6 +183,12 @@ bool img_read(long int addr, size_t size, u8* buffer) {
     buffer[i++] = fgetc(fi);
     //printf("0x%02X\n", buffer[i-1]);
   }
+
+  if (i < size) {
+    _log("!! read failed !!");
+    return false;
+  }
+  return true;
 }
 
 void show_super_block_info(ext2_super_block* sb) {

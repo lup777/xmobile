@@ -38,6 +38,8 @@ typedef struct ext2_super_block {
   __u32   s_wtime;               /*  Время последней записи в POSIX времени */
   __u16   s_mnt_count;
   __s16   s_max_mnt_count;
+  __u16   s_magic;
+  __u16   s_state;
   __u16   s_errors;              /*  Код ошибки(см.ниже) */
   __u16   s_pad;
   __u32   s_lastcheck;           /*  POSIX время последней проверки */
@@ -46,7 +48,17 @@ typedef struct ext2_super_block {
   __u32   s_rev_level;           /*  Версия */
   __u16   s_def_resuid;          /*  UserID, могущий использовать зар. блоки */
   __u16   s_def_resgid;          /*  GroupID, могущий использовать зар. блоки */
-  __u32   s_reserved[235];       /*  Зарезервировано */
+  __u32   s_first_ino;
+  __u16   s_inode_size;
+  __u16   s_block_group_nr;
+  __u32   s_feature_compat;
+  __u32   s_feature_incompat;
+  __u32   s_feature_ro_compat;
+  __u8    s_uuid[16];
+  __u8    s_volume_name[16];
+  char    s_last_munted[64];
+  __u32   s_algo_bitmap;
+  __u32   s_reserved[67];       /*  Зарезервировано */
 } ext2_super_block;
 
 #define _log printf
@@ -130,6 +142,18 @@ typedef struct ext2_inode {
     } masix2;
   } osd2;				/* OS dependent 2 */
 } ext2_inode;
+
+typedef struct ext2_group_desc_table {
+  u32 bg_block_bitmap; // block id of the first block of the block bitmap in cur group
+  u32 bg_inode_bitmap; // block id of the first block of the inode bitmap
+  u32 bg_inode_table;
+  u16 bg_free_blocks_count;
+  u16 bg_free_inodes_count;
+  u16 bg_used_dirs_count;
+  u16 bg_pad;
+  u8  bg_reerved[12];
+} ext2_group_desc_table;
+
 #pragma pack(pop)
 
 #define SECTOR_SIZE 512
