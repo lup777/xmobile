@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <string.h>
 #include "fs.h"
 
 
@@ -12,6 +13,10 @@ void show_super_block_info(ext2_super_block* sb);
 bool read_mbr(u8* buffer);
 bool read_sector_in_block(u32 block_group_ind, u32 block_ind, u32 sector_in_block);
 void show_hex(u32 start, u32 num, u32);
+void read_inode(u32 id, ext2_inode* inode, u8* grp_desc_table);
+void read_iblock(ext2_inode* inode, u32 blk_num);
+void get_root_dir(void);
+void read_directory(void);
 //u8 buffer[sizeof(Mbr)];
 
 u8 get_start_head(Partition* p) {
@@ -48,6 +53,7 @@ static u32 super_block_addr;
 static u32 block_groups_number;
 static u32 block_size;
 static u32 blocks_per_group;
+static u32 inodes_per_group;
 
 // end of context
 int main(void) {
@@ -81,6 +87,7 @@ int main(void) {
     show_super_block_info(sb);
     block_size = 1024 << sb->s_log_block_size;
     blocks_per_group = sb->s_blocks_per_group;
+    inodes_per_group = sb->s_inodes_per_group;
 
     block_groups_number = sb->s_blocks_count
       / sb->s_blocks_per_group;
@@ -141,9 +148,86 @@ int main(void) {
     //show_hex(i * INODE_SIZE, INODE_SIZE, 0);
   }
 
+  get_root_dir();
+  
   fclose(fi);
   return 0;
 }
+
+void read_iblock(ext2_inode* inode, u32 blk_num) {
+  // data block number
+  u32 pos = inode->i_block[0] * block_size;
+  _log("iblock pos = %d (0x%08X)\n", pos, pos);
+  read_sector_in_block(0, inode->i_block[0], 0);
+}
+
+void get_root_dir(void) {
+  
+  {
+    static ext2_inode inode;
+
+    read_inode(2, &inode, NULL);
+    _log("root i_mode = 0x%04X\n", inode.i_mode);
+    _log("root i_size = 0x%04X\n", inode.i_size);
+    _log("root i_blocks = 0x%04X\n", inode.i_blocks);
+    _log("root i_faddr = 0x%04X\n", inode.i_faddr);
+
+    if (inode.i_mode & 0x4000)
+      _log("it is directory\n ");
+
+      read_iblock(&inode, 0); // in buffer
+  }
+
+  read_directory();
+}
+
+void read_directory(void) {
+  ext2_dir_entry* e =  (ext2_dir_entry*)buffer;
+  u16 offset = 0;
+
+  for (u8 i = 0; offset < block_size ; i ++) {
+    _log("%2d | %4d | name: %s\n",
+	 e->inode, e->entry_size, e->name);
+    //e = (ext2_dir_entry*)((u8*)e + e->entry_size);
+    offset += e->entry_size;
+    e = (ext2_dir_entry*)((u8*)buffer + offset);
+  }
+
+}
+
+
+// if grp_desc_table is NULL -> read it from SD
+// else it allready in buffer
+void read_inode(u32 id, ext2_inode* inode, u8* grp_desc_table) {
+  _log("====== read inode %d ========\n", id);
+  u32 group = (id - 1) / inodes_per_group;
+  _log("group = %d\n", group);
+  // read group descriptors table
+  if (grp_desc_table == NULL)
+    read_sector_in_block(0, 2, 0);
+  grp_desc gd;
+  memcpy((u8*)&gd, buffer + (group * sizeof(grp_desc)),
+	 sizeof(grp_desc));
+  // calc indode index in inode grp
+  __u32 index = (id - 1) % inodes_per_group;
+  __u32 addr = (gd.bg_inode_table * block_size)
+    + (index * INODE_SIZE);
+
+  //part_start_addr
+  read_sector_in_block(0, gd.bg_inode_table, 0);
+  u32 pos = index * INODE_SIZE;
+  _log("inode addr offet (pos) 0x%08X\n", pos);
+
+  memcpy(inode, buffer + pos, INODE_SIZE);
+  show_hex(pos, INODE_SIZE, pos);
+  
+  _log("gd.bg_inode_table block= %d\n", gd.bg_inode_table);
+  _log("inode index = %d\n", index);
+  _log("inodex addr = 0x%08X\n", addr);
+  _log("====== ============ ========\n");
+}
+
+
 
 void show_hex(u32 start, u32 num, u32 display_offset) {
 

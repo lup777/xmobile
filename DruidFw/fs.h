@@ -154,6 +154,24 @@ typedef struct ext2_group_desc_table {
   u8  bg_reerved[12];
 } ext2_group_desc_table;
 
+typedef struct grp_desc {
+  __u32 bg_block_bitmap;
+  __u32 bg_inode_bitmap;
+  __u32 bg_inode_table;
+} grp_desc;
+
+typedef struct ext2_dir_entry {
+  union {
+    struct {
+    __u32 inode;
+    __u16 entry_size;
+    __u8 name_len;
+    __u8 enum_type;
+    char* name[];
+    };
+    __u8* b[0x80];
+  };
+} ext2_dir_entry;
 #pragma pack(pop)
 
 #define SECTOR_SIZE 512
