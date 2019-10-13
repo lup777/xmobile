@@ -174,6 +174,19 @@ typedef struct ext2_dir_entry {
 } ext2_dir_entry;
 #pragma pack(pop)
 
+#define ROOT_INODE_INDEX 2
 #define SECTOR_SIZE 512
 #define INODE_SIZE 128
 #define FIRST_NON_RESERVERD_INOD 11
+
+typedef struct File {
+  u32 group;
+  u32 block;
+  u32 sector;
+  ext2_inode inode;
+} File;
+
+//bool open_root(File* file);
+//enum_fs();
+
+#define CHECK {}

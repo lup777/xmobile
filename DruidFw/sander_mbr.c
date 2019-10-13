@@ -17,6 +17,10 @@ void read_inode(u32 id, ext2_inode* inode, u8* grp_desc_table);
 void read_iblock(ext2_inode* inode, u32 blk_num);
 void get_root_dir(void);
 void read_directory(void);
+bool open_root(File* file);
+bool get_dir_entry(File* in, ext2_dir_entry* out, u32 id);
+bool open_file(File* file, u32 inode_id);
+void read_file(File* inode);
 //u8 buffer[sizeof(Mbr)];
 
 u8 get_start_head(Partition* p) {
@@ -54,7 +58,7 @@ static u32 block_groups_number;
 static u32 block_size;
 static u32 blocks_per_group;
 static u32 inodes_per_group;
-
+ext2_inode root_inode;
 // end of context
 int main(void) {
   fi = fopen("image.img", "r");
@@ -154,6 +158,107 @@ int main(void) {
   return 0;
 }
 
+bool open_root(File* file) {
+  CHECK(file);
+  // for root partition:
+  // group = 0, section = 0, inode id = 2
+  file->group = 0;
+  file->sector = 0;
+  file->block = 2;
+
+  // read group descriptor table (sector 0)
+  read_sector_in_block(0, 2, 0);
+
+  // inode table block number in current group
+  u32 inode_table_block = ((grp_desc*)buffer)->bg_inode_table;
+  _log("inode_table_block %d\n", inode_table_block);
+  
+  // read inode table (sector 0)
+  read_sector_in_block(0, inode_table_block, 0);
+
+  // copy root dir inode for out (root dir inode id = 2)
+  // inode indexes starts fom 1, so we need second in sequence
+  memcpy(&file->inode, buffer + INODE_SIZE, INODE_SIZE);
+}
+
+bool open_file(File* file, u32 inode_id) {
+  _log("OPEN FILE\n");
+  CHECK(file);
+  // for root partition:
+  // group = 0, section = 0, inode id = 2
+  file->group = (inode_id - 1) / inodes_per_group;;
+  //file->block = (inode_id - 1) % inodes_per_group;
+  file->sector = 0;
+  _log("=== group %d\n", file->group);
+  //_log("=== block %d\n", file->block);
+  
+  // read group descriptor table (sector 0)
+  read_sector_in_block(file->group, 2, 0);
+
+  // inode table block number in current group
+  u32 inode_table_block = ((grp_desc*)buffer)->bg_inode_table;
+  _log("inode_table_block %d\n", inode_table_block);
+  
+  // read inode table (sector 0)
+  read_sector_in_block(file->group, inode_table_block, 0);
+
+  u32 block_offset = (inode_id - 1) / (block_size / INODE_SIZE);
+  u32 sector_offset = 0;
+  
+  // inode address offset in block
+  u32 inode_addr_offset = INODE_SIZE * (inode_id -  1);
+
+  if (inode_addr_offset - (block_offset * block_size)
+      >= SECTOR_SIZE) {
+    sector_offset = 1;
+  }
+  _log("block %d\n", block_offset + inode_table_block);
+  _log("sector %d\n", sector_offset);
+  
+  // if offset greater then sector size, read next sector
+  read_sector_in_block(file->group,
+		       inode_table_block + block_offset,
+		       sector_offset);
+
+  // copy entry inode for out
+  // inode indexes starts fom 1, so we need second in sequence
+  memcpy(&file->inode,
+	 buffer/* + (INODE_SIZE * (inode_id -  1))*/,
+	 INODE_SIZE);
+  _log("file inode struct: (%d)\n", inode_id);
+  show_hex((INODE_SIZE * (inode_id -  1)), 128,
+	   (INODE_SIZE * (inode_id -  1)));
+}
+
+bool open_dir(File* file) {
+  // read data block (sector 0) of the directory
+  // direct block pinter 0
+  return read_sector_in_block(file->group,
+			      file->inode.i_block[0], 0);
+}
+
+bool get_dir_entry(File* in, ext2_dir_entry* out, u32 id) {
+  ext2_dir_entry* e =  (ext2_dir_entry*)buffer;
+  u16 offset = 0;
+
+  // enum enties to find one with given id
+  for (u32 i = 0; offset < block_size ; i ++) {
+    //_log("%2d | %4d | name: %s\n",
+    //e->inode, e->entry_size, e->name);
+    
+    if (i == id) {
+      // copy found entry to out
+      memcpy(out, e, sizeof(ext2_dir_entry));
+      return true;
+    }
+      
+    offset += e->entry_size;
+    e = (ext2_dir_entry*)((u8*)buffer + offset);
+  }
+  _log("read directory failed");
+  return false;
+}
+
 void read_iblock(ext2_inode* inode, u32 blk_num) {
   // data block number
   u32 pos = inode->i_block[0] * block_size;
@@ -162,23 +267,36 @@ void read_iblock(ext2_inode* inode, u32 blk_num) {
 }
 
 void get_root_dir(void) {
+  static File file;
+
+  // read root dir inode
+  //open_root(&file);
+  open_file(&file, 2);
+
+  // read data block of the folder
+  open_dir(&file);
+
+  ext2_dir_entry e;
+  // read dir enry
+  get_dir_entry(&file, &e, 3);
+
+  _log("%2d | %4d | name: %s\n",
+       e.inode, e.entry_size, e.name);
+
   
-  {
-    static ext2_inode inode;
+  File f1;
+  // open enty file with inode id
+  open_file(&f1, e.inode);
+  
+  read_file(&f1);
+}
 
-    read_inode(2, &inode, NULL);
-    _log("root i_mode = 0x%04X\n", inode.i_mode);
-    _log("root i_size = 0x%04X\n", inode.i_size);
-    _log("root i_blocks = 0x%04X\n", inode.i_blocks);
-    _log("root i_faddr = 0x%04X\n", inode.i_faddr);
+void read_file(File* file) {
+  _log("file imod 0x%04X\n", file->inode.i_mode);
+  _log("---- read block %d\n", file->inode.i_block[0]);
 
-    if (inode.i_mode & 0x4000)
-      _log("it is directory\n ");
-
-      read_iblock(&inode, 0); // in buffer
-  }
-
-  read_directory();
+  read_sector_in_block(0, file->inode.i_block[0], 0);
+  show_hex(0, 128, 0);
 }
 
 void read_directory(void) {
@@ -188,11 +306,9 @@ void read_directory(void) {
   for (u8 i = 0; offset < block_size ; i ++) {
     _log("%2d | %4d | name: %s\n",
 	 e->inode, e->entry_size, e->name);
-    //e = (ext2_dir_entry*)((u8*)e + e->entry_size);
     offset += e->entry_size;
     e = (ext2_dir_entry*)((u8*)buffer + offset);
   }
-
 }
 
 
@@ -202,9 +318,11 @@ void read_inode(u32 id, ext2_inode* inode, u8* grp_desc_table) {
   _log("====== read inode %d ========\n", id);
   u32 group = (id - 1) / inodes_per_group;
   _log("group = %d\n", group);
+
   // read group descriptors table
   if (grp_desc_table == NULL)
     read_sector_in_block(0, 2, 0);
+  
   grp_desc gd;
   memcpy((u8*)&gd, buffer + (group * sizeof(grp_desc)),
 	 sizeof(grp_desc));
