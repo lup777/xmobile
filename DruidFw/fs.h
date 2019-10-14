@@ -1,4 +1,12 @@
 // fs.h
+#pragma once
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+typedef unsigned int uint32_t;
+
+typedef signed char int8_t;
+typedef signed short int int16_t;
+typedef signed int int32_t;
 
 typedef uint8_t u8;
 typedef uint16_t u16;
@@ -167,7 +175,7 @@ typedef struct ext2_dir_entry {
     __u16 entry_size;
     __u8 name_len;
     __u8 enum_type;
-    char* name[];
+    char name[];
     };
     __u8* b[0x80];
   };
@@ -180,11 +188,20 @@ typedef struct ext2_dir_entry {
 #define FIRST_NON_RESERVERD_INOD 11
 
 typedef struct File {
-  u32 group;
-  u32 block;
-  u32 sector;
+  ext2_dir_entry dir_entry;
   ext2_inode inode;
 } File;
+
+typedef enum entry_type {
+  fifo = 0x1000,
+  character_device = 0x2000,
+  directory = 0x4000,
+  block_device = 0x6000,
+  file = 0x8000,
+  symbolic_link = 0xA000,
+  unix_socket = 0xC000,
+  unkown,
+} entry_type;
 
 //bool open_root(File* file);
 //enum_fs();
