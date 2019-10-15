@@ -11,8 +11,8 @@ static u8 buffer[1024]; // block size
 static ext2_inode iroot;
 static ext2_dir_entry tmp_entry;
 
-void raw_log(char* path, u8 len) {
-  for (u8 i = 0; i < len; i++) {
+void raw_log(char* path, u16 len) {
+  for (u16 i = 0; i <= len; i++) {
     putchar(path[i]);
   }
 }
@@ -103,10 +103,10 @@ void parse_super_block(void) {
   block_size = 1024 << sb->s_log_block_size;
   blocks_per_group = sb->s_blocks_per_group;
   inodes_per_group = sb->s_inodes_per_group;
-  _log("----------------- super block info ----------------------\n");
+  /*_log("----------------- super block info ----------------------\n");
   _log("blk size: %d | blocks_per_group %d | inodes_per_group %d\n",
        block_size, blocks_per_group, inodes_per_group);
-  _log("---------------------------------------------------------\n");
+  _log("---------------------------------------------------------\n");*/
 }
 
 void parse_grp_descr_table(void) {
@@ -158,12 +158,12 @@ void show_inode(ext2_inode* inode) {
 }
 
 bool read_inode(ext2_inode* pinode, u32 inode_num) {
-  _log("read_inode >>> ");
+  //_log("read_inode >>> ");
   u16 group = (inode_num - 1) / inodes_per_group;
   u16 inode = (inode_num - 1) - (group * inodes_per_group);
 
-  _log("| group: %d | ", group);
-  _log("inode: %4d | \n", inode);
+  //_log("| group: %d | ", group);
+  //_log("inode: %4d | \n", inode);
   u32 inode_table_block = get_inode_table_block_for_group(group);
 
   u8 inodes_per_block = block_size / INODE_SIZE;
@@ -173,8 +173,8 @@ bool read_inode(ext2_inode* pinode, u32 inode_num) {
   // read inode table
   u32 block = inode_table_block + PART_START_BLOCK +
                                   inode_table_block_offset;
-  _log("               read_inode: inode table block %d | \n",
-       block);
+  //_log("               read_inode: inode table block %d | \n",
+  //     block);
 
   if (true != read_block(block))
     return false;
@@ -232,8 +232,8 @@ u8 u8min(u8 first, u8 second) {
 
 bool get_inode_child_by_name(ext2_inode* parent, char* name,
                              u8 len, ext2_dir_entry* entry_out) {
-  _log("get_inode_child_by_name >>> ");
-  raw_log(name, len);
+  //_log("get_inode_child_by_name >>> ");
+  //raw_log(name, len);
   static ext2_dir_entry entry;
   u16 i = 0;
 
@@ -242,10 +242,10 @@ bool get_inode_child_by_name(ext2_inode* parent, char* name,
     if (0 == memcmp(name, entry.name,
                     u8min(entry.name_len, len))) {
       memcpy(entry_out, &entry, sizeof(ext2_dir_entry));
-      _log(" -- found! | ");
+      /*_log(" -- found! | ");
       _log("entry name: | "); raw_log(entry.name, entry.name_len);
       _log(" | entry inode: %d | ", entry.inode);
-      _log("entry entry size: %d |\n", entry.entry_size);
+      _log("entry entry size: %d |\n", entry.entry_size);*/
       return true;
     }
   }
@@ -273,7 +273,7 @@ bool get_entry_child_by_name(ext2_dir_entry* parent, char* name,
     return false;
   }
 
-  show_inode(&inode);
+  //show_inode(&inode);
 
   if (true != is_dir(&inode)) {
     _log("it is not directory\n");
@@ -288,20 +288,24 @@ bool get_entry_child_by_cname(ext2_dir_entry* parent, const char* name,
                                  strlen(name), child);
 }
 
+inode_type get_inode_type(ext2_inode* e) {
+  if (e->i_mode & idirectory) return idirectory;
+  if (e->i_mode & ifile) return ifile;
+  if (e->i_mode & isymbolic_link) return isymbolic_link;
+
+  if (e->i_mode & ififo) return ififo;
+  if (e->i_mode & icharacter_device) return icharacter_device;
+  if (e->i_mode & iblock_device) return iblock_device;
+  if (e->i_mode & iunix_socket) return iunix_socket;
+
+  return iunkown;
+}
+
 entry_type get_entry_type(ext2_dir_entry* e) {
-  switch((entry_type)e->enum_type) {
-    case fifo:
-    case character_device:
-    case directory:
-    case block_device:
-    case file:
-    case symbolic_link:
-    case unix_socket:
-      return (entry_type)e->enum_type;
-    default:
-      break;
-  }
-  return unkown;
+  if (e->enum_type <= esymbolic_link)
+    return (entry_type)e->enum_type;
+
+  return eunknown;
 }
 
 void show_dir_entry(ext2_dir_entry* e) {
@@ -350,25 +354,22 @@ bool open_file(char* name, size_t name_len, ext2_dir_entry* parent_entry) {
       return false;
   }
 
-  /*if (get_entry_type(&e) != file) {
+  if (get_entry_type(&e) != efile) {
     show_dir_entry(&e);
     _log("it is not regular file\n");
-    //return false;
-  }*/
-
-
-
+    return false;
+  }
 
   static ext2_inode i;
   if (!read_inode(&i, e.inode))
     return false;
-  show_inode(&i);
+  //show_inode(&i);
 
   _log("file content: (%d), size: %d bytes\n", i.i_block[0], i.i_size);
   if (!read_block(i.i_block[0] + PART_START_BLOCK))
     return false;
 
-  raw_log((char*)buffer, i.i_size);
+  raw_log((char*)buffer, 1024);
   return true;
 }
 
@@ -430,8 +431,8 @@ int main(void) {
 
   ext2_init();
 
-  //open_cpath("/frai-chuzhak.fb2");
-  open_cpath("/file1.txt");
+  open_cpath("/frai-chuzhak.fb2");
+  //open_cpath("/file1.txt");
   //open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt");
 
   fclose(fi);

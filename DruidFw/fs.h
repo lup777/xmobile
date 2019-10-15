@@ -192,15 +192,26 @@ typedef struct File {
   ext2_inode inode;
 } File;
 
+typedef enum inode_type {
+  ififo = 0x1000,
+  icharacter_device = 0x2000,
+  idirectory = 0x4000,
+  iblock_device = 0x6000,
+  ifile = 0x8000,
+  isymbolic_link = 0xA000,
+  iunix_socket = 0xC000,
+  iunkown,
+} inode_type;
+
 typedef enum entry_type {
-  fifo = 0x1000,
-  character_device = 0x2000,
-  directory = 0x4000,
-  block_device = 0x6000,
-  file = 0x8000,
-  symbolic_link = 0xA000,
-  unix_socket = 0xC000,
-  unkown,
+  eunknown = 0,
+  efile = 1,
+  edirectory = 2,
+  echaracter_device = 3,
+  eblock_device = 4,
+  efifo = 5,
+  esocket = 6,
+  esymbolic_link = 7,
 } entry_type;
 
 //bool open_root(File* file);
