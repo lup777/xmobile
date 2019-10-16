@@ -189,11 +189,15 @@ typedef struct ext2_dir_entry {
 #define DIRECT_BLOCK_POINTERS_NUM 12
 #define SINGLE_INDERECT_BLOCK_ID 12
 
+#define INVALID_BLOCK_POINT 0xFF
+
 typedef struct File {
   ext2_dir_entry entry;
   ext2_inode inode;
+  u32 first_inderect_block_point;
   u32 block_point;
   u32 buffer_point;
+  u32 internal_seek_address;
 } File;
 
 typedef enum inode_type {

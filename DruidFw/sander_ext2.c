@@ -367,6 +367,7 @@ bool open_file(char* name, size_t name_len, File* file) {
 
   file->block_point = 0;
   file->buffer_point = 0;
+  file->internal_seek_address = 0;
   return true;
 }
 
@@ -420,32 +421,73 @@ bool open_cpath(const char* path, File* file) {
   return true;
 }
 
-u32 read_file(File* file, char* out, u32 out_len) {
-  u32 requested_len = umin(out_len, file->inode.i_size);
+/* bool read_block_of_data_blocks(u32 block_id, char* out, u32 offset, u32 out_len)
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * block_id - id of block contained data blocks ids
+ * out      - output buffer
+ * offset   - related offset (bytes) in data to read. Startd from the beggining
+ *            of the forst data block
+ * out_len  - how many (bytes) needs to read
+*/
+bool read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len) {
+  u32 points_per_block = block_size / 4; // data blocks pointers in block
+  u32 block_point = offset / block_size; // current data block position number in root_block
+  u32 buffer_point = offset % block_size; // byte offset in buffer
+  u32* p_root = (u32*)buffer;
+
+  // got through all data blocks
+  for (; block_point < points_per_block; block_point++, buffer_point = 0) {
+    if (read_block( root_block_id + PART_START_BLOCK )) { // read root block
+      if (read_block( p_root[block_point++] )) { // read data plock pointed by block_point
+        u32 copy_len = umin(block_size - buffer_point, out_len); // how many data to read
+        memcpy(out, buffer + buffer_point, copy_len); // read data
+        out_len -= copy_len; // data needed to read
+        if (out_len != 0) { // if more data needed to read
+          continue; // read a new data block
+        } else { // nothing else to read
+          return true;
+        }
+      } // if read data block
+    } // if read root block
+    return false;
+  } // for block_point
+  return true;
+}
+
+u32 read_file2(File* file, char* out, u32 out_len) {
+  u32 requested_len = umin(out_len, file->inode.i_size); // data len needed to read
   out_len = requested_len;
-  u32 buffer_point = file->buffer_point;
+  u32 buffer_point = file->internal_seek_address % block_size;
+  u32 block_point = file->internal_seek_address / block_size;
+
 
   //_log("read_file  out_len %d | \n", out_len);
 
-  for(;file->block_point < DIRECT_BLOCK_POINTERS_NUM; file->block_point++, file->buffer_point = 0) {
+  for(;block_point < DIRECT_BLOCK_POINTERS_NUM; block_point++, buffer_point = 0) {
     //_log("#### read_file: file->inode.i_block[%d] = %d\n",
     //  file->block_point, file->inode.i_block[file->block_point]);
     if (file->inode.i_block[file->block_point] == 0) // no data in this block
       break;
 
-    if (read_block(file->inode.i_block[file->block_point] + PART_START_BLOCK)) {
-      u32 copy_len = umin(out_len, block_size);
-      memcpy(out, buffer + file->buffer_point, copy_len);
-      out += copy_len;
-      out_len -= copy_len;
-      file->buffer_point += copy_len;
+    if (read_block(file->inode.i_block[block_point] + PART_START_BLOCK)) {
+      u32 copy_len = umin(out_len, block_size - buffer_point);
+      memcpy(out, buffer + buffer_point, copy_len);
+      out += copy_len; // out buffer pointer
+      out_len -= copy_len; // data len needed to read
+      buffer_point += copy_len;
 
-      if (out_len == 0) // no more need to read
+      if (out_len == 0) {// no more need to read
+        file->internal_seek_address += requested_len - out_len;
         break;
+      }
     }
+  } // for
+  if (out_len != 0) { // more data needed from singly inderect block
+    read_block_of_data_blocks(file->inode.i_block[block_point], out, /*offset !! TODO !!*/0, out_len);
   }
+
   _log("return %d\n", requested_len - out_len);
-  return requested_len - out_len;
+  return requested_len - out_len; // successfully read data
 }
 
 int main(void) {
@@ -458,10 +500,9 @@ int main(void) {
     _log("data:\n");
 
     static char buf[4096];
-    u32 result = read_file(&file, buf, 2248);
-    result += read_file(&file, buf + result, 10);
-    result += read_file(&file, buf + result, 10);
-    result += read_file(&file, buf + result, 20);
+    read_file2(&file, buf, 4000);
+    u32 result = read_file2(&file, buf, 1000);
+    result += read_file2(&file, buf + result, 1024);
     raw_log(buf, result);
 
 
