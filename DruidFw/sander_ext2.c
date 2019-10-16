@@ -21,7 +21,7 @@ bool open_image(void) {
   fi = fopen("/home/alexander/tmp/image.img", "r");
 
   if (fi == NULL) {
-    printf("open failed");
+    printf("open failed\n");
     return false;
   }
   return true;
@@ -258,15 +258,13 @@ bool get_inode_child_by_cname(ext2_inode* parent, const char* name,
   return get_inode_child_by_name(parent, (char*)name, strlen(name), entry_out);
 }
 
-bool get_entry_child_by_name(ext2_dir_entry* parent, char* name,
-                             u8 name_len, ext2_dir_entry* child) {
-  ext2_dir_entry tmp_out;
+bool get_entry_child_by_name(ext2_dir_entry* in_out, char* name, u8 name_len) {
   _log("get_entry_child_by_name >>> ");
   raw_log(name, name_len); _log("\n");
   static ext2_inode inode; // TODO: use buffer for this
 
-  _log("### inode %d\n", parent->inode);
-  if(true != read_inode(&inode, parent->inode)) {
+  _log("### inode %d\n", in_out->inode);
+  if(true != read_inode(&inode, in_out->inode)) {
     _log("get_entry_child_by_name: ");
     raw_log(name, name_len);
     _log(" read_inode failed\n");
@@ -279,13 +277,11 @@ bool get_entry_child_by_name(ext2_dir_entry* parent, char* name,
     _log("it is not directory\n");
     return false;
   }
-  return get_inode_child_by_name(&inode, name, name_len, child);
+  return get_inode_child_by_name(&inode, name, name_len, in_out);
 }
 
-bool get_entry_child_by_cname(ext2_dir_entry* parent, const char* name,
-                              ext2_dir_entry* child) {
-  return get_entry_child_by_name(parent, (char*)name,
-                                 strlen(name), child);
+bool get_entry_child_by_cname(ext2_dir_entry* in_out, const char* name) {
+  return get_entry_child_by_name(in_out, (char*)name, strlen(name));
 }
 
 inode_type get_inode_type(ext2_inode* e) {
@@ -343,37 +339,34 @@ bool ext2_init() {
   return true;
 }
 
-bool open_file(char* name, size_t name_len, ext2_dir_entry* parent_entry) {
-  static ext2_dir_entry e;
+bool open_file(char* name, size_t name_len, File* file) {
   // read file
-  if (parent_entry != NULL) {
-    if (!get_entry_child_by_name(parent_entry, name, name_len, &e))
+  if (file->entry.inode != 0) {
+    if (!get_entry_child_by_name(&file->entry, name, name_len))
       return false;
   } else {
-    if (!get_inode_child_by_name(&iroot, name, name_len, &e))
+    if (!get_inode_child_by_name(&iroot, name, name_len, &file->entry))
       return false;
   }
 
-  if (get_entry_type(&e) != efile) {
-    show_dir_entry(&e);
+  if (get_entry_type(&file->entry) != efile) {
+    show_dir_entry(&file->entry);
     _log("it is not regular file\n");
     return false;
   }
 
-  static ext2_inode i;
-  if (!read_inode(&i, e.inode))
+  if (!read_inode(&file->inode, file->entry.inode))
     return false;
   //show_inode(&i);
 
-  _log("file content: (%d), size: %d bytes\n", i.i_block[0], i.i_size);
-  if (!read_block(i.i_block[0] + PART_START_BLOCK))
+  _log("file content: (%d), size: %d bytes\n", file->inode.i_block[0], file->inode.i_size);
+  if (!read_block(file->inode.i_block[0] + PART_START_BLOCK))
     return false;
 
-  raw_log((char*)buffer, 1024);
   return true;
 }
 
-bool open_cpath(const char* path) {
+bool open_cpath(const char* path, File* file) {
   _log("open_cfile: %s\n", path);
   size_t str_len = strlen(path);
   bool once_happend = false;
@@ -383,6 +376,7 @@ bool open_cpath(const char* path) {
     return false;
   }
 
+  memset(file, 0, sizeof(File));
   size_t start = 0; // position of first / char
   size_t end = start; // position of next / char
 
@@ -394,14 +388,14 @@ bool open_cpath(const char* path) {
 
         if (!once_happend) {
           if (!get_inode_child_by_name(&iroot, (char*)(path + start + 1),
-                                       end - start - 1, &tmp_entry))
+                                       end - start - 1, &file->entry))
             return false;
 
           once_happend = true;
         } else {
-          if (!get_entry_child_by_name(&tmp_entry,
+          if (!get_entry_child_by_name(&file->entry,
                                       (char*)(path + start + 1),
-                                      end - start - 1, &tmp_entry))
+                                      end - start - 1))
             return false;
         } // } else {
         start = end;
@@ -413,11 +407,7 @@ bool open_cpath(const char* path) {
     _log("last entry: ");
     raw_log((char*)(path + start + 1), end - start);  _log("\n");
 
-    ext2_dir_entry* parent_entry = NULL;
-    if (once_happend)
-      parent_entry = &tmp_entry;
-
-    if (!open_file((char*)(path + start + 1), end - start, parent_entry))
+    if (!open_file((char*)(path + start + 1), end - start, file))
       return false;
   } else {
     _log("file not found\n");
@@ -430,8 +420,14 @@ bool open_cpath(const char* path) {
 int main(void) {
 
   ext2_init();
+  File file;
+  //if (open_cpath("/frai-chuzhak.fb2", &file)) {
+  if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
 
-  open_cpath("/frai-chuzhak.fb2");
+    raw_log((char*)buffer, file.inode.i_size);
+    _log("\n--\n");
+  }
+
   //open_cpath("/file1.txt");
   //open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt");
 

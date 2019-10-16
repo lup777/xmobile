@@ -188,7 +188,7 @@ typedef struct ext2_dir_entry {
 #define FIRST_NON_RESERVERD_INOD 11
 
 typedef struct File {
-  ext2_dir_entry dir_entry;
+  ext2_dir_entry entry;
   ext2_inode inode;
 } File;
 
