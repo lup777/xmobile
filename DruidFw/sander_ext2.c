@@ -11,8 +11,8 @@ static u8 buffer[1024]; // block size
 static ext2_inode iroot;
 static ext2_dir_entry tmp_entry;
 
-void raw_log(char* path, u16 len) {
-  for (u16 i = 0; i <= len; i++) {
+void raw_log(char* path, u32 len) {
+  for (u32 i = 0; i <= len; i++) {
     putchar(path[i]);
   }
 }
@@ -224,11 +224,13 @@ bool get_directory_entry(ext2_inode* pinode, u32 entry_num,
   return false;
 }
 
-u8 u8min(u8 first, u8 second) {
+u32 umin(u32 first, u32 second) {
   if(first < second)
     return first;
   return second;
 }
+
+
 
 bool get_inode_child_by_name(ext2_inode* parent, char* name,
                              u8 len, ext2_dir_entry* entry_out) {
@@ -240,7 +242,7 @@ bool get_inode_child_by_name(ext2_inode* parent, char* name,
   while(get_directory_entry(parent, i++, &entry) == true) {
     //_log("entry: "); raw_log(entry.name, entry.name_len); _log("\n");
     if (0 == memcmp(name, entry.name,
-                    u8min(entry.name_len, len))) {
+                    umin(entry.name_len, len))) {
       memcpy(entry_out, &entry, sizeof(ext2_dir_entry));
       /*_log(" -- found! | ");
       _log("entry name: | "); raw_log(entry.name, entry.name_len);
@@ -359,10 +361,12 @@ bool open_file(char* name, size_t name_len, File* file) {
     return false;
   //show_inode(&i);
 
-  _log("file content: (%d), size: %d bytes\n", file->inode.i_block[0], file->inode.i_size);
+/*  _log("file content: (%d), size: %d bytes\n", file->inode.i_block[0], file->inode.i_size);
   if (!read_block(file->inode.i_block[0] + PART_START_BLOCK))
-    return false;
+    return false;*/
 
+  file->block_point = 0;
+  file->buffer_point = 0;
   return true;
 }
 
@@ -393,9 +397,8 @@ bool open_cpath(const char* path, File* file) {
 
           once_happend = true;
         } else {
-          if (!get_entry_child_by_name(&file->entry,
-                                      (char*)(path + start + 1),
-                                      end - start - 1))
+          if (!get_entry_child_by_name(&file->entry, (char*)(path + start + 1),
+                                       end - start - 1))
             return false;
         } // } else {
         start = end;
@@ -417,14 +420,53 @@ bool open_cpath(const char* path, File* file) {
   return true;
 }
 
+u32 read_file(File* file, char* out, u32 out_len) {
+  u32 requested_len = umin(out_len, file->inode.i_size);
+  out_len = requested_len;
+  u32 buffer_point = file->buffer_point;
+
+  //_log("read_file  out_len %d | \n", out_len);
+
+  for(;file->block_point < DIRECT_BLOCK_POINTERS_NUM; file->block_point++, file->buffer_point = 0) {
+    //_log("#### read_file: file->inode.i_block[%d] = %d\n",
+    //  file->block_point, file->inode.i_block[file->block_point]);
+    if (file->inode.i_block[file->block_point] == 0) // no data in this block
+      break;
+
+    if (read_block(file->inode.i_block[file->block_point] + PART_START_BLOCK)) {
+      u32 copy_len = umin(out_len, block_size);
+      memcpy(out, buffer + file->buffer_point, copy_len);
+      out += copy_len;
+      out_len -= copy_len;
+      file->buffer_point += copy_len;
+
+      if (out_len == 0) // no more need to read
+        break;
+    }
+  }
+  _log("return %d\n", requested_len - out_len);
+  return requested_len - out_len;
+}
+
 int main(void) {
-
   ext2_init();
-  File file;
-  //if (open_cpath("/frai-chuzhak.fb2", &file)) {
-  if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
 
-    raw_log((char*)buffer, file.inode.i_size);
+  File file;
+  if (open_cpath("/frai-chuzhak.fb2", &file)) {
+  //if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
+
+    _log("data:\n");
+
+    static char buf[4096];
+    u32 result = read_file(&file, buf, 2248);
+    result += read_file(&file, buf + result, 10);
+    result += read_file(&file, buf + result, 10);
+    result += read_file(&file, buf + result, 20);
+    raw_log(buf, result);
+
+
+
+
     _log("\n--\n");
   }
 

@@ -186,10 +186,14 @@ typedef struct ext2_dir_entry {
 #define SECTOR_SIZE 512
 #define INODE_SIZE 128
 #define FIRST_NON_RESERVERD_INOD 11
+#define DIRECT_BLOCK_POINTERS_NUM 12
+#define SINGLE_INDERECT_BLOCK_ID 12
 
 typedef struct File {
   ext2_dir_entry entry;
   ext2_inode inode;
+  u32 block_point;
+  u32 buffer_point;
 } File;
 
 typedef enum inode_type {
