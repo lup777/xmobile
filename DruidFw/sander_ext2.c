@@ -18,8 +18,8 @@ void raw_log(char* path, u32 len) {
 }
 
 bool open_image(void) {
-  //fi = fopen("/home/alexander/tmp/image.img", "r");
-  fi = fopen("image.img", "r");
+  fi = fopen("/home/alexander/tmp/image.img", "r");
+  //fi = fopen("image.img", "r");
 
   if (fi == NULL) {
     printf("open failed\n");
@@ -155,6 +155,9 @@ void show_inode(ext2_inode* inode) {
     _log("directory\n");
   else
     _log("file\n");
+  for (u8 i = 0; i < 15; i++) {
+    _log("i_block[%d] = %d\n", i, inode->i_block[i]);
+  }
   _log("----------------------------------\n");
 }
 
@@ -422,7 +425,8 @@ bool open_cpath(const char* path, File* file) {
   return true;
 }
 
-/* bool read_block_of_data_blocks(u32 block_id, char* out, u32 offset, u32 out_len)
+/* bool read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len)
+ * Read data blocks pointed by root_block_id
  * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
  * root_block_id - id of block contained data blocks ids
  * out           - output buffer
@@ -465,6 +469,18 @@ u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_
   return requested_len - out_len;
 }
 
+/*
+ * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ * root_block_id - id of block contained data blocks ids
+ * out           - output buffer
+ * offset        - related offset (bytes) in data to read. Started from the beggining
+ *                 of the first data block
+ * out_len       - how many (bytes) needs to read
+*/
+u32 read_blk_of_data_blks_2lvl(u32 root_block_id, char* out, u32 data_offset, u32 out_len) {
+
+}
+
 u32 read_file2(File* file, char* out, u32 out_len) {
   u32 requested_len = umin(out_len, file->inode.i_size); // data len needed to read
   out_len = requested_len;
@@ -499,7 +515,7 @@ u32 read_file2(File* file, char* out, u32 out_len) {
 
   /* IN:
    * internal_seek_address
-   * 
+   *
    */
   if (out_len != 0) { // more data needed from singly inderect block
     file->internal_seek_address += requested_len - out_len;
@@ -509,7 +525,7 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       _log("file->internal_seek_address = %d\n", file->internal_seek_address);
       _log("next block to read %d(%d). pos: %d \n", file->inode.i_block[block_point], block_point,
            file->internal_seek_address - (DIRECT_BLOCK_POINTERS_NUM * block_size));
-      
+
       u32 data_len = read_block_of_data_blocks(file->inode.i_block[SINGLE_INDERECT_BLOCK_ID], out,
                        // address related to start of singly inderect block
                        file->internal_seek_address - (DIRECT_BLOCK_POINTERS_NUM * block_size),
@@ -519,39 +535,109 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       out_len -= data_len;
     }
   }
+
   _log("file->internal_seek_address %d\n", file->internal_seek_address);
   // if we to read doule inderect block pointers
   if (out_len != 0) { // need more data
+    _log("out_len = %d\n", out_len);
+    u16 ptr_blk_size = block_size / 4;
 
     u32 first_doubly_inderect_point = (block_size / 4) * block_size
       + (DIRECT_BLOCK_POINTERS_NUM * block_size); // address of first byte addressed ...
-	
-    u32 last_doubly_inderect_point = first_doubly_inderect_point + // amount of byte from the beginning of file til the end
-      (block_size / 4) * (block_size / 2) * block_size; // of doubly inderect block pointer
 
-                                                 
+    // amount of byte from the beginning of file til the end
+    u32 last_doubly_inderect_point = first_doubly_inderect_point +
+      ptr_blk_size * ptr_blk_size * block_size; // of doubly inderect block pointer
+
+
     _log("last_doubly_inderect_point %d\n", last_doubly_inderect_point);
-         
     _log("first_doubly_inderect_point %d\n", first_doubly_inderect_point);
 
+    // need to read from doubly inderrect block pointer
     if (file->internal_seek_address >= first_doubly_inderect_point &&
-	file->internal_seek_address < last_doubly_inderect_point) { // need to read from doubly inderrect block pointer
-      
+        file->internal_seek_address < last_doubly_inderect_point) {
+
       // Till now for simpicity we will think that addresses of doubly.... started from zero
       u32 point = file->internal_seek_address - first_doubly_inderect_point;
       _log("point %d\n", point);
 
-      // point / block_size; // full amount of data blocks
-      u32 _2lvl_block_id = (point / block_size) / (block_size / 4);
-      u32 _1lvl_block_id = _2lvl_block_id / (block_size / 4); // amount of address block 2 lvl
-      _log("2lvl_block_id %d\n", _2lvl_block_id);
-      _log("1lvl_block_id %d\n", _1lvl_block_id);
-    }
-      
-  }
-  
-  if (out_len != 0) { // more data needed from doubly inderect block
-  }
+      u16 blk_size_0lvl = 1;
+      u32 blk_size_1lvl = block_size;
+      u32 blk_size_2lvl = blk_size_1lvl * 255;
+
+      // current block id on 2lvl
+      u32 _2lvl_block_point = point / blk_size_2lvl; // amount of address block 3 lvl
+
+      // current block id on 1lvl
+      u32 _1lvl_buffer_point = (point % blk_size_2lvl) / blk_size_1lvl;
+
+       // current position in data block
+      u32 _0lvl_data_point = (point % blk_size_2lvl) % blk_size_1lvl;
+
+      //_log("_3lvl_block_point %d\n", _3lvl_block_point); // deepest, contains data block pointers
+      _log("_2lvl_block_point %d\n", _2lvl_block_point); // contains poiners to 2lvl
+      _log("_1lvl_buffer_point %d\n", _1lvl_buffer_point); // data buffer num
+      _log("_0lvl_data_point %d\n", _0lvl_data_point); // point in data buffer
+
+      // read block with 3lvl pointers
+      _log("pointer to 2 lvl %d\n", file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID]);
+
+      // now 3lvl blocks are in buffer
+
+      // go thought 2lvl (syngly ptr block pointers)
+      for (;_2lvl_block_point < ptr_blk_size; _2lvl_block_point++, _1lvl_buffer_point = 0) {
+        read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK);
+
+        u32* pblockptr_id = ((u32*)buffer) + _2lvl_block_point;
+        _log("+ 2lvl block id 0x%08X\n", *pblockptr_id);
+
+        if (*pblockptr_id == 0)
+          break;
+
+        // go though 1lvl (data ptr block pointers)
+        for (; _1lvl_buffer_point < ptr_blk_size;
+             _1lvl_buffer_point++, _0lvl_data_point = 0) {
+
+          read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK);
+          read_block((*pblockptr_id) +  PART_START_BLOCK);
+
+          u32* pblock_id = ((u32*)buffer) + _1lvl_buffer_point;
+          _log("+ 1lvl block id 0x%08X\n", *pblock_id);
+
+          if (*pblock_id == 0)
+            break;
+
+
+          if (read_block((*pblock_id) + PART_START_BLOCK)) {
+            // now we are on data buffer (on 0lvl)
+
+            // copy data
+            u16 copy_len = umin(block_size - _0lvl_data_point, out_len);
+            _log("copy %d bytes from %d:%d:%d\n", copy_len,
+                 _2lvl_block_point, _1lvl_buffer_point,
+                 _0lvl_data_point);
+            memcpy(out, buffer + _0lvl_data_point, copy_len);
+            //raw_log(out, copy_len); _log("\n");
+            out += copy_len;
+            _0lvl_data_point += copy_len;
+            out_len -= copy_len;
+
+            // no need to read more
+            if (out_len == 0) {
+              _log("no more data needed\n");
+              _2lvl_block_point = ptr_blk_size;
+              _1lvl_buffer_point = ptr_blk_size;
+              _0lvl_data_point = block_size;
+            }
+          } // if read data block
+        } // for go though 1 lvl
+      } // for go through 2lvl
+      file->internal_seek_address += requested_len - out_len;
+    } // if need to read doubly inderect pointers
+
+  } // if need more data (doubly inderect)
+
+  // TODO handle triply inderect block pointers
 
   _log("return %d\n", requested_len - out_len);
   return requested_len - out_len; // successfully read data
@@ -561,17 +647,18 @@ int main(void) {
   ext2_init();
 
   File file;
-  if (open_cpath("/debut-v-echo.fb2", &file)) {
+  //if (open_cpath("/debut-v-echo.fb2", &file)) {
   //if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
-
+  if (open_cpath("/frai-chuzhak.fb2", &file)) {
     _log("data:\n");
 
-    static char buf[600000];
+    static char buf[6000000];
     //read_file2(&file, buf, 2000);
-    u32 result = read_file2(&file, buf, 590000);
-    result += read_file2(&file, buf + result, 1024);
-    //raw_log(buf, result);
-
+    //u32 result = read_file2(&file, buf, 590000);
+    //file.internal_seek_address +=   590005;
+    u32 result = read_file2(&file, buf, 5900000);
+    //raw_log(buf, result); _log("\n");
+    show_inode(&file.inode);
 
 
 
