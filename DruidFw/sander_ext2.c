@@ -444,14 +444,14 @@ u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_
   //     root_block_id);
   // got through all data blocks
   for (; block_point < points_per_block; block_point++, buffer_point = 0) {
-    _log("block_point %d\n", block_point);
+    //_log("block_point %d\n", block_point);
     if (read_block( root_block_id + PART_START_BLOCK )) { // read root block
       // read data plock pointed by block_point
       if (read_block( p_root[block_point] + PART_START_BLOCK )) {
         u32 copy_len = umin(block_size - buffer_point, out_len); // how many data to read
-        _log("read ... copy_len %d\n", copy_len);
+        //_log("read ... copy_len %d\n", copy_len);
         memcpy(out, buffer + buffer_point, copy_len); // read data
-        raw_log(out, copy_len); _log("\n");
+        //raw_log(out, copy_len); _log("\n");
         out += copy_len;
         buffer_point += copy_len;
         out_len -= copy_len; // data needed to read
@@ -492,33 +492,35 @@ u32 read_file2(File* file, char* out, u32 out_len) {
   _log("file->internal_seek_address = %d\n", file->internal_seek_address);
 
   for(;block_point < DIRECT_BLOCK_POINTERS_NUM; block_point++, buffer_point = 0) {
-    _log("#### read_file: file->inode.i_block[%d] = %d\n",
-         block_point, file->inode.i_block[block_point]);
+    /*_log("#### read_file: file->inode.i_block[%d] = %d\n",
+         block_point, file->inode.i_block[block_point]);*/
     if (file->inode.i_block[file->block_point] == 0) // no data in this block
       break;
 
     if (read_block(file->inode.i_block[block_point] + PART_START_BLOCK)) {
       u32 copy_len = umin(out_len, block_size - buffer_point);
-      _log("read ...copy_len %d\n", copy_len);
+      //_log("read ...copy_len %d\n", copy_len);
       memcpy(out, buffer + buffer_point, copy_len);
-      raw_log(out, copy_len); _log("\n");
+      //raw_log(out, copy_len); _log("\n");
       out += copy_len; // out buffer pointer
       out_len -= copy_len; // remain data to send
       buffer_point += copy_len;
-      _log("out_len = %d\n", out_len);
+      //_log("out_len = %d\n", out_len);
       if (out_len == 0) {// no more need to read
-        file->internal_seek_address += requested_len - out_len;
+        //file->internal_seek_address += requested_len - out_len;
         break;
       }
     }
   } // for
-
+  file->internal_seek_address += requested_len - out_len;
+  _log("return %d\n", requested_len - out_len);
+  //return requested_len - out_len;
   /* IN:
    * internal_seek_address
    *
    */
   if (out_len != 0) { // more data needed from singly inderect block
-    file->internal_seek_address += requested_len - out_len;
+    //file->internal_seek_address += requested_len - out_len;
     u32 last_single_inderect_block_point = DIRECT_BLOCK_POINTERS_NUM + (block_size / 4);
     if (block_point >= SINGLE_INDERECT_BLOCK_ID // eq or gt then pointed by single inderect buffer
         && block_point < last_single_inderect_block_point) { // less then last ponted by single ..
@@ -535,7 +537,6 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       out_len -= data_len;
     }
   }
-
   _log("file->internal_seek_address %d\n", file->internal_seek_address);
   // if we to read doule inderect block pointers
   if (out_len != 0) { // need more data
@@ -561,7 +562,6 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       u32 point = file->internal_seek_address - first_doubly_inderect_point;
       _log("point %d\n", point);
 
-      u16 blk_size_0lvl = 1;
       u32 blk_size_1lvl = block_size;
       u32 blk_size_2lvl = blk_size_1lvl * 255;
 
@@ -589,10 +589,12 @@ u32 read_file2(File* file, char* out, u32 out_len) {
         read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK);
 
         u32* pblockptr_id = ((u32*)buffer) + _2lvl_block_point;
-        _log("+ 2lvl block id 0x%08X\n", *pblockptr_id);
+        //_log("+ 2lvl block id 0x%08X\n", *pblockptr_id);
 
-        if (*pblockptr_id == 0)
+        if (*pblockptr_id == 0) {
+          _log("pblockptr_id == 0\n");
           break;
+        }
 
         // go though 1lvl (data ptr block pointers)
         for (; _1lvl_buffer_point < ptr_blk_size;
@@ -602,20 +604,19 @@ u32 read_file2(File* file, char* out, u32 out_len) {
           read_block((*pblockptr_id) +  PART_START_BLOCK);
 
           u32* pblock_id = ((u32*)buffer) + _1lvl_buffer_point;
-          _log("+ 1lvl block id 0x%08X\n", *pblock_id);
+          //_log("+ 1lvl block id 0x%08X\n", *pblock_id);
 
           if (*pblock_id == 0)
             break;
-
 
           if (read_block((*pblock_id) + PART_START_BLOCK)) {
             // now we are on data buffer (on 0lvl)
 
             // copy data
             u16 copy_len = umin(block_size - _0lvl_data_point, out_len);
-            _log("copy %d bytes from %d:%d:%d\n", copy_len,
+            /*_log("copy %d bytes from %d:%d:%d\n", copy_len,
                  _2lvl_block_point, _1lvl_buffer_point,
-                 _0lvl_data_point);
+                 _0lvl_data_point);*/
             memcpy(out, buffer + _0lvl_data_point, copy_len);
             //raw_log(out, copy_len); _log("\n");
             out += copy_len;
@@ -634,7 +635,6 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       } // for go through 2lvl
       file->internal_seek_address += requested_len - out_len;
     } // if need to read doubly inderect pointers
-
   } // if need more data (doubly inderect)
 
   // TODO handle triply inderect block pointers
@@ -655,10 +655,11 @@ int main(void) {
     static char buf[6000000];
     //read_file2(&file, buf, 2000);
     //u32 result = read_file2(&file, buf, 590000);
-    //file.internal_seek_address +=   590005;
-    u32 result = read_file2(&file, buf, 5900000);
-    //raw_log(buf, result); _log("\n");
-    show_inode(&file.inode);
+    //file.internal_seek_address = 2150718 - 7190;
+    file.internal_seek_address = 0;
+    u32 result = read_file2(&file, buf, 12900);
+    raw_log(buf, result); _log("\n");
+    //show_inode(&file.inode);
 
 
 
