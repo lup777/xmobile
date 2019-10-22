@@ -156,6 +156,7 @@ $(patsubst %,-I%,$(EXTRAINCDIRS))
 #CFLAGS += -std=gnu89
 #CFLAGS += -std=c99
 CFLAGS += -std=gnu99 -Werror
+#CFLAGS += -Werror
 
 
 
@@ -359,6 +360,9 @@ program: $(TARGET).hex $(TARGET).eep
 
 sander_menu:
 	gcc -Wall -Wextra menu.c sander_menu.c -D SANDER -o a
+
+sander_ext2:
+	gcc -Wall -Wextra sander_ext2.c ext2.c -D SANDER -o a
 
 
 # Create final output files (.hex, .eep) from ELF output file.

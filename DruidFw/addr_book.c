@@ -1,21 +1,29 @@
 // addr_book.c
-#include "addr_book.h"
-#include "text_edit.h"
-#include "task_mgr.h"
-#include "sd.h"
 #include <string.h>
 
+#include "addr_book.h"
+#include "menu.h"
+#include "sd.h"
+#include "text_edit.h"
+#include "task_mgr.h"
+
 #define ADDRESS_BOOK_MSG_BUFFER_LEN 50
+#define MENU_LINES_NUM 7
+#define MENU_LINE_LEN 16
+#define TITLE_BUF_LEN 14
 
 void addrBook_init(void);
 void ui_init(void);
 void ui_update(void);
 void handle_kbd(char key);
 void call(void);
-void menu_update(void);
-void menu_up(void);
-void menu_down(void);
-static void menu_show(void);
+void enter_callback(i8 entry_num);
+
+String get_text_callback(u8 max_len, i8 entry_num);
+//void menu_update(void);
+//void menu_up(void);
+//void menu_down(void);
+//static void menu_show(void);
 
 MessageBufferHandle_t addr_book_msg_buf_handle = NULL;
 static StaticStreamBuffer_t msg_buf_struct;
@@ -24,11 +32,10 @@ static char buffer[ADDRESS_BOOK_MSG_BUFFER_LEN];
 size_t rx_bytes;
 
 // === UI ====
-static char te1_buf[12];
+static char te1_buf[TITLE_BUF_LEN];
 static TextEdit te1;
 
-static char tes_buf[LINE_BUF_LEN * MENU_SIZE];
-static TextEdit tes[MENU_SIZE];
+MENU(MENU_LINES_NUM, MENU_LINE_LEN, ab_menu, enter_callback);
 // ===========
 
 Entry book[] = {
@@ -42,7 +49,25 @@ Entry book[] = {
 };
 #define ADDR_BOOK_LEN (sizeof(book) / sizeof(Entry))
 
-MenuAB menu = INIT_MENU(book);
+void enter_callback(i8 entry_num) {
+  _log("menu enter (%d)>>>", entry_num);
+}
+
+String get_text_callback(u8 max_len, i8 entry_num) {
+  u8 len = max_len;
+  if (book[entry_num].data.name.len < max_len)
+    len = book[entry_num].data.name.len;
+  
+  if (entry_num < (i8)ADDR_BOOK_LEN && entry_num > 0)
+    return (String){
+      .str = book[entry_num].data.name.str,
+      .len = len
+    };
+
+  return (String){"--------", 8};
+}
+
+//MenuAB menu = INIT_MENU(book);
 
 void addrBook_init(void) {
   raw_logc("addrBook_init? >>>");
@@ -53,6 +78,8 @@ void addrBook_init(void) {
     return;
 
   raw_logc("addrBook_init >>>");
+
+  menu_init(&ab_menu, get_text_callback);
 
   addr_book_msg_buf_handle = xMessageBufferCreateStatic(
       sizeof(msg_buffer),
@@ -91,112 +118,39 @@ void addrBook_task(void* pvParameters) {
 }
 
 void ui_init(void) {
-  textEdit_init(&te1, te1_buf, 12, nimbus_bold_16);
-  textEdit_setcstr(&te1, "ADDRESS BOOK");
-
-  uint8_t i;
-  for (i = 0; i < MENU_SIZE; i++) {
-    char* buff = tes_buf + (LINE_BUF_LEN * i);
-    textEdit_init(tes + i, buff, LINE_BUF_LEN, nimbus_mono_10);
-  }
-
-  textEdit_select(tes + (MENU_SIZE >> 1));
-
-  for (i = 0; i < MENU_SIZE; i++) {
-    textEdit_maximize(tes + i);
-  }
+  textEdit_init(&te1, te1_buf, TITLE_BUF_LEN, nimbus_bold_16);
+  textEdit_clear(&te1);
+  textEdit_setcstr(&te1, "-ADDRESS BOOK-");
 }
 
 void ui_update(void) {
   raw_logc("addr book ui update");
+
+  textEdit_render(&te1, 2, 3, &display);
+  
   if (active_task != enum_task_addr_book)
     return;
 
-  textEdit_render(&te1, 22, 3, &display);
-
-  /*for (i = 0; i < LINES; i++, y += 25) {
-    textEdit_render(tes + i, 22, y, &display);
-  }*/
-
-  menu_show();
+  menu_render(&ab_menu, 3, 35);
 
   displayFlush();
-}
-
-void menu_update(void) {
-  for(uint8_t i = 0; i < MENU_SIZE; i++) {
-    if (menu.book_index + i < (int8_t)ADDR_BOOK_LEN
-	&& menu.book_index + i >= 0)
-      menu.entries[i] = &(book[menu.book_index + i].data);
-    else
-      menu.entries[i] = NULL;
-  }
-}
-
-void menu_show(void) {
-  uint8_t y = 40;
-
-  menu_update();
-  for(uint8_t i = 0; i < MENU_SIZE; i++, y += 25) {
-    if (menu.entries[i] != NULL) {
-      textEdit_setstr(tes + i, menu.entries[i]->name.str, menu.entries[i]->name.len);
-      textEdit_render(tes + i, 3, y, &display);
-    } else {
-    }
-  }
 }
 
 void handle_kbd(char key) {
   switch(key) {
   case 17: // key up
-    if (menu.book_index > 0 - (MENU_SIZE >> 1))
-      menu.book_index --;
+    menu_prev(&ab_menu);
     break;
 
   case 26: // key down
-    if (menu.book_index <
-	(int8_t)(ADDR_BOOK_LEN - (MENU_SIZE >> 1) - 1))
-      menu.book_index ++;
+    menu_next(&ab_menu);
     break;
 
   case 9: // enter
     call();
     return;
   }
-  _log("menu.book_index = %d", menu.book_index);
-/*
-#error AAAAAAAAAAAAAAAAa
-  for (uint8_t i = 0; i < MENU_SIZE; i++) {
-    if (i == menu_index)
-      textEdit_select(tes + i);
-    else
-      textEdit_deselect(tes + i);
-  }*/
 }
 
 void call(void) {
-  static char buf[PHONE_LEN + 1];
-  buf[0] = MSG_HEADER_CALL;
-
-  uint8_t entry_index = menu.book_index + (MENU_SIZE >> 1);
-  uint8_t size = book[entry_index].data.phone1.len;
-
-  CHECK(sizeof(buf) == size + 1);
-
-  memcpy(buf + 1, book[entry_index].data.phone1.str, size);
-
-  _log("AB call %d (size = %d)", entry_index, size);
-
-  xMessageBufferSend(tm_msg_buf_handle, buf,
-		     size + 1,
-		     portMAX_DELAY);
-}
-
-void menu_up() {
-  menu.book_index ++;
-}
-
-void menu_down() {
-  if (menu.book_index > 0)
-    menu.book_index --;
 }

@@ -28,7 +28,7 @@ void answer_call(void);
 void send_cfg(void);
 bool cmp(char* s1, const char* s2, size_t len);
 bool is_contain(const char* pat);
-void menu_render(void);
+static void menu_render(void);
 // ========================================
 
 // ======== UI ============================

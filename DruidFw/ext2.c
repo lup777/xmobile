@@ -5,39 +5,13 @@
 #include <stdbool.h>
 #include <string.h>
 
-#include "ext2.h"
-//#include "ext2.proto.h"
-#include "sd.h"
-/*
-#ifdef SANDER
-bool read_image(long int addr, size_t size);
-bool open_image(void);
-#endif
 
-bool read_sector(u32 sector_num);
-bool read_block(u32 block_num);
-void parse_mbr(void);
-void parse_super_block(void);
-void parse_grp_descr_table(void);
-u32 get_inode_table_block_for_group(u32 group);
-bool is_dir(ext2_inode* pinode);
-void show_inode(ext2_inode* inode);
-bool read_inode(ext2_inode* pinode, u32 inode_num);
-bool get_directory_entry(ext2_inode* pinode, u32 entry_num,
-                         ext2_dir_entry* pentry_out);
-u32 umin(u32 first, u32 second);
-bool get_inode_child_by_name(ext2_inode* parent, char* name,
-                             u8 len, ext2_dir_entry* entry_out);
-bool get_inode_child_by_cname(ext2_inode* parent, const char* name,
-                              ext2_dir_entry* entry_out);
-bool get_entry_child_by_name(ext2_dir_entry* in_out, char* name, u8 name_len);
-bool get_entry_child_by_cname(ext2_dir_entry* in_out, const char* name);
-inode_type get_inode_type(ext2_inode* e);
-entry_type get_entry_type(ext2_dir_entry* e);
-void show_dir_entry(ext2_dir_entry* e);
-bool open_file(char* name, size_t name_len, File* file);
-u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len);
-*/
+#include "ext2.h"
+#include "ext2.proto.h"
+#include "sd.h"
+#ifndef SANDER
+#  include "usart.h"
+#endif
 
 #define MBR_SECTOR 0
 #define PART_START_BLOCK (part_start_addr / block_size)
@@ -50,7 +24,7 @@ static u32 part_start_addr = 0;
 static u16 block_size = 1024;
 static u32 blocks_per_group = 0;
 static u32 inodes_per_group = 0;
-static u32 inode_table_block = 0;
+//static u32 inode_table_block = 0;
 static u8 buffer[1024]; // block size
 static ext2_inode iroot;
 
@@ -96,7 +70,7 @@ bool open_image(void) {
 
 bool read_sector(u32 sector_num) {
 #ifndef SANDER
-  if (sd_read_block_512b(buffer, sector_num * SECTOR_SIZE)) {
+  if (sd_read_block_512b(buffer, sector_num * SECTOR_SIZE))
 #else
   if (read_image(sector_num * SECTOR_SIZE, SECTOR_SIZE))
 #endif
@@ -145,13 +119,13 @@ void parse_super_block(void) {
   _log("---------------------------------------------------------\n");*/
 }
 
-void parse_grp_descr_table(void) {
+/*void parse_grp_descr_table(void) {
   ext2_group_desc_table* gt = (ext2_group_desc_table*)buffer;
   _log("----------------- grp descr table info ----------------------\n");
   inode_table_block = gt->bg_inode_table;
   _log("inode table block = %d\n", inode_table_block);
   _log("-------------------------------------------------------------\n");
-}
+  }*/
 
 u32 get_inode_table_block_for_group(u32 group) {
   //_log("get_inode_table_block_for_group (%d)>>>\n", group);
@@ -225,7 +199,6 @@ bool read_inode(ext2_inode* pinode, u32 inode_num) {
 bool get_directory_entry(ext2_inode* pinode, u32 entry_num,
                          ext2_dir_entry* pentry_out) {
   //_log("get_directory_entry >>>\n");
-  bool result = true;
 
 #if 1
   static u8 local_buf[1024];
@@ -271,17 +244,17 @@ u32 umin(u32 first, u32 second) {
 bool get_inode_child_by_name(ext2_inode* parent, char* name,
                              u8 len, ext2_dir_entry* entry_out) {
   //_log("get_inode_child_by_name >>> ");
-  //raw_log(name, len);
+  //send_log_str(name, len);
   static ext2_dir_entry entry;
   u16 i = 0;
 
   while(get_directory_entry(parent, i++, &entry) == true) {
-    //_log("entry: "); raw_log(entry.name, entry.name_len); _log("\n");
+    //_log("entry: "); send_log_str(entry.name, entry.name_len); _log("\n");
     if (0 == memcmp(name, entry.name,
                     umin(entry.name_len, len))) {
       memcpy(entry_out, &entry, sizeof(ext2_dir_entry));
       /*_log(" -- found! | ");
-      _log("entry name: | "); raw_log(entry.name, entry.name_len);
+      _log("entry name: | "); send_log_str(entry.name, entry.name_len);
       _log(" | entry inode: %d | ", entry.inode);
       _log("entry entry size: %d |\n", entry.entry_size);*/
       return true;
@@ -298,13 +271,13 @@ bool get_inode_child_by_cname(ext2_inode* parent, const char* name,
 
 bool get_entry_child_by_name(ext2_dir_entry* in_out, char* name, u8 name_len) {
   _log("get_entry_child_by_name >>> ");
-  raw_log(name, name_len); _log("\n");
+  send_log_str(name, name_len); _log("\n");
   static ext2_inode inode; // TODO: use buffer for this
 
   _log("### inode %d\n", in_out->inode);
   if(true != read_inode(&inode, in_out->inode)) {
     _log("get_entry_child_by_name: ");
-    raw_log(name, name_len);
+    send_log_str(name, name_len);
     _log(" read_inode failed\n");
     return false;
   }
@@ -349,16 +322,21 @@ void show_dir_entry(ext2_dir_entry* e) {
 
   _log("-------- dir entry ---------------\n");
   _log("name: ");
-  raw_log(e->name, e->name_len);
+  send_log_str(e->name, e->name_len);
   _log(" | type: %s | mode: 0x%04X (0x%02X) | inode %d | size: %d\n",
        is_dir(&inode) ? "directory" : "file", inode.i_mode,  e->enum_type,
        e->inode, e->entry_size);
   _log("----------------------------------\n");
 }
 
-bool ext2_init() {
+bool ext2_init(void) {
+#ifdef SANDER
   if (!open_image())
     return false;
+#else
+  if (!sd_init())
+    return false;
+#endif
 
   // read MBR
   if (!read_sector(0))
@@ -425,7 +403,7 @@ bool open_cpath(const char* path, File* file) {
     if (path[end] == '/') {
       if (end - start > 1) {// at leas 1 char /x/
         _log("entry: ");
-        raw_log((char*)(path + start + 1), end - start - 1); _log("\n");
+        send_log_str((char*)(path + start + 1), end - start - 1); _log("\n");
 
         if (!once_happend) {
           if (!get_inode_child_by_name(&iroot, (char*)(path + start + 1),
@@ -445,7 +423,7 @@ bool open_cpath(const char* path, File* file) {
 
   if (end - start > 1) {
     _log("last entry: ");
-    raw_log((char*)(path + start + 1), end - start);  _log("\n");
+    send_log_str((char*)(path + start + 1), end - start);  _log("\n");
 
     if (!open_file((char*)(path + start + 1), end - start, file))
       return false;
@@ -483,7 +461,7 @@ u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_
         u32 copy_len = umin(block_size - buffer_point, out_len); // how many data to read
         //_log("read ... copy_len %d\n", copy_len);
         memcpy(out, buffer + buffer_point, copy_len); // read data
-        //raw_log(out, copy_len); _log("\n");
+        //send_log_str(out, copy_len); _log("\n");
         out += copy_len;
         buffer_point += copy_len;
         out_len -= copy_len; // data needed to read
@@ -521,7 +499,7 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       u32 copy_len = umin(out_len, block_size - buffer_point);
       //_log("read ...copy_len %d\n", copy_len);
       memcpy(out, buffer + buffer_point, copy_len);
-      //raw_log(out, copy_len); _log("\n");
+      //send_log_str(out, copy_len); _log("\n");
       out += copy_len; // out buffer pointer
       out_len -= copy_len; // remain data to send
       buffer_point += copy_len;
@@ -638,7 +616,7 @@ u32 read_file2(File* file, char* out, u32 out_len) {
                  _2lvl_block_point, _1lvl_buffer_point,
                  _0lvl_data_point);*/
             memcpy(out, buffer + _0lvl_data_point, copy_len);
-            //raw_log(out, copy_len); _log("\n");
+            //send_log_str(out, copy_len); _log("\n");
             out += copy_len;
             _0lvl_data_point += copy_len;
             out_len -= copy_len;

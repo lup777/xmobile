@@ -1,5 +1,5 @@
 // ext2.proto.h
-/*#pragma once
+#pragma once
 
 #ifdef SANDER
 bool read_image(long int addr, size_t size);
@@ -29,4 +29,4 @@ entry_type get_entry_type(ext2_dir_entry* e);
 void show_dir_entry(ext2_dir_entry* e);
 bool open_file(char* name, size_t name_len, File* file);
 u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len);
-*/
+

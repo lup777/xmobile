@@ -1,4 +1,6 @@
 // menu.c
+#include "text_edit.h"
+
 #include "menu.h"
 
 #ifdef SANDER
@@ -17,9 +19,12 @@ void menu_init(Menu* pmenu, GetTextFptr get_text_fptr) {
   // TODO: Add UI elements init
 }
 
-void menu_show(Menu* pmenu) {
+void menu_render(Menu* pmenu, short x, short y) {
+  short x0 = x;
+  short y0 = y;
   i8 line_start = pmenu->selected - (pmenu->lines_num / 2);
   i8 line_end = line_start + pmenu->lines_num;
+  Font font = nimbus_bold_16;
 
   for (i8 line_num = line_start; line_num < line_end; line_num++) {
     String str = pmenu->get_text(pmenu->line_len, line_num);
@@ -37,9 +42,26 @@ void menu_show(Menu* pmenu) {
     }
 #else
     // TODO: Fill and show UI elements
-    (void)(str);
+
+    u8 text_width = displayRenderText(x, y, str.str, str.len,
+                                      nimbus_bold_16, &display);
+    u8 font_height = FONT_GetHeight(font);
+    
+    if (pmenu->selected == line_num) {
+      displayRenderRectangle(x - 1, y - 1,
+                             text_width,
+                             y + font_height, &display);
+    }
+    
+    y += font_height;
+
 #endif
   } // for
+
+  displayRenderRectangle(x0 - 2, y0 - 1,
+                         pmenu->line_len * FONT_GetWidth(font),
+                         pmenu->lines_num* FONT_GetHeight(font) + y0 + 2,
+                         &display);
 }
 
 void menu_prev(Menu* pmenu) {

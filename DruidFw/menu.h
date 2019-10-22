@@ -9,7 +9,7 @@ typedef signed short i8;
 #  include "global.h"
 #else
 #  include "sander.h"
-#  endif
+#endif
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -19,9 +19,6 @@ typedef struct String {
   char* str;
   size_t len;
 } String;
-
-typedef String (*GetTextFptr)(u8 max_len, i8);
-typedef void (*EnterFptr)(i8 entry_num);
 
 typedef String (*GetTextFptr)(u8 max_len, i8);
 typedef void (*EnterFptr)(i8 entry_num);
@@ -40,7 +37,7 @@ typedef struct Menu {
 /*
  * __LINES_NUM__ nomber of lines
  * __LINES_LEN__ len of lines
- * __MENU_HANDLE__ menu handle name
+ * __MENU_HANDLE__ menu handle name (will be defined)
  */
 #define MENU(__LINES_NUM__, __LINES_LEN__, __MENU_HANDLE__, __ENTER_CALLBACK__) \
   static char menu_buffer[__LINES_NUM__ * __LINES_LEN__];               \
@@ -56,7 +53,7 @@ typedef struct Menu {
 */
 
 void menu_init(Menu* pmenu, GetTextFptr get_text_fptr);
-void menu_show(Menu* pmenu);
+void menu_render(Menu* pmenu, short x, short y);
 void menu_prev(Menu* pmenu);
 void menu_next(Menu* pmenu);
 void menu_enter(Menu* pmenu);

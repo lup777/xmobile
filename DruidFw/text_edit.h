@@ -27,3 +27,10 @@ byte textEdit_setstr(TextEdit* te, char* str, byte len);
 byte textEdit_setcstr(TextEdit* te, const char* str);
 bool textEdit_pop   (TextEdit* te, char* c);
 void textEdit_render(TextEdit* te, short x, short y, DispBuf* pdisplay);
+
+/*TEXT_EDIT(__BUFFER_SIZE__, __HANDLE__)            \
+{                                                   \
+  static char __HANDLE__##buffer [__BUFFER_SIZE__]; \
+  TextEdit __HANDLE__;                              \
+}
+*/
