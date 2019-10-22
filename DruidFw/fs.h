@@ -1,5 +1,6 @@
 // fs.h
 #pragma once
+#ifdef SANDER
 typedef unsigned char uint8_t;
 typedef unsigned short int uint16_t;
 typedef unsigned int uint32_t;
@@ -7,7 +8,7 @@ typedef unsigned int uint32_t;
 typedef signed char int8_t;
 typedef signed short int int16_t;
 typedef signed int int32_t;
-
+#endif
 typedef uint8_t u8;
 typedef uint16_t u16;
 typedef uint32_t u32;
@@ -69,9 +70,9 @@ typedef struct ext2_super_block {
   __u32   s_reserved[67];       /*  Зарезервировано */
 } ext2_super_block;
 
-#define _log printf
-
-#pragma pack(push,1)
+#ifdef SANDER
+#  pragma pack(push,1)
+#endif
 typedef struct Partition {
   u8 is_active; // 00h
   u8 start_chs[3]; // head, sector and cylinder 01h..03h
@@ -180,7 +181,9 @@ typedef struct ext2_dir_entry {
     __u8* b[0x80];
   };
 } ext2_dir_entry;
-#pragma pack(pop)
+#ifdef SANDER
+#  pragma pack(pop)
+#endif
 
 #define ROOT_INODE_INDEX 2
 #define SECTOR_SIZE 512
@@ -225,5 +228,3 @@ typedef enum entry_type {
 
 //bool open_root(File* file);
 //enum_fs();
-
-#define CHECK {}

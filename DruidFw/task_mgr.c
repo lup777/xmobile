@@ -17,7 +17,7 @@ static void handle_msg(char *buffer, size_t msg_size);
 inline void menu_down(void);
 inline void menu_up(void);
 static void task_mgr_hook(char* buffer, size_t msg_size);
-void menu_enter(void);
+static void menu_enter(void);
 
 int8_t state;
 byte menu_size;
@@ -71,17 +71,17 @@ void vTaskMgr(void* pvParameters) {
   menu_size = 3;
 
   ui_update();
-  
+
   tel_init();
 
   sd_init();   // init SD memory card
   static uint8_t buf[512];
   sd_read_csd(buf);
-  
+
   sd_read_block_512b(buf, 0);
 
   addrBook_init();
-  
+
   CHECK(tm_msg_buf_handle);
   for (;;) {
     _log("TM ...");
@@ -98,7 +98,7 @@ void vTaskMgr(void* pvParameters) {
           handle_msg(buffer, msg_size);
           break;
 
-        case enum_task_tel:	  
+        case enum_task_tel:
           xMessageBufferSend(
 	      tel_msg_buf_handle, buffer, msg_size,
 	      portMAX_DELAY);
@@ -161,11 +161,11 @@ static void handle_msg(char *buffer, size_t msg_size) {
 
     xMessageBufferSend(tel_msg_buf_handle, buffer,
 		       msg_size, portMAX_DELAY);
-    
+
     break;
 
   } // switch
-  
+
 }
 
 void menu_enter(void) {
@@ -226,7 +226,7 @@ static void ui_update(void) {
     checkBox_set_value(&cb1, false);
     checkBox_set_value(&cb2, false);
     checkBox_set_value(&cb3, false);
-  
+
   if (state == 0)
     checkBox_set_value(&cb1, true);
 
@@ -251,13 +251,13 @@ static void ui_init(void) {
   textEdit_maximize(&te1);
   textEdit_maximize(&te2);
   textEdit_maximize(&te3);
-  
+
   //textEdit_setstr(&te1, "задачи", 6);
   //textEdit_setstr(&te2, "телефон", 7);
   textEdit_setcstr(&te1, "tasks");
   textEdit_setcstr(&te2, "telephone");
   textEdit_setcstr(&te3, "address book");
-  
+
   checkBox_set_value(&cb1, true);
 }
 

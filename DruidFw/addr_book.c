@@ -15,7 +15,7 @@ void call(void);
 void menu_update(void);
 void menu_up(void);
 void menu_down(void);
-void menu_show(void);
+static void menu_show(void);
 
 MessageBufferHandle_t addr_book_msg_buf_handle = NULL;
 static StaticStreamBuffer_t msg_buf_struct;
@@ -42,7 +42,7 @@ Entry book[] = {
 };
 #define ADDR_BOOK_LEN (sizeof(book) / sizeof(Entry))
 
-Menu menu = INIT_MENU(book);
+MenuAB menu = INIT_MENU(book);
 
 void addrBook_init(void) {
   raw_logc("addrBook_init? >>>");
@@ -180,7 +180,7 @@ void call(void) {
 
   uint8_t entry_index = menu.book_index + (MENU_SIZE >> 1);
   uint8_t size = book[entry_index].data.phone1.len;
-  
+
   CHECK(sizeof(buf) == size + 1);
 
   memcpy(buf + 1, book[entry_index].data.phone1.str, size);

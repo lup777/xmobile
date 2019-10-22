@@ -55,24 +55,26 @@ SOURCE_DIR = FreeRTOS/Source
 PORT_DIR = FreeRTOS/Source/portable/GCC/ATXmega
 
 SRC = \
+addr_book.c \
+core_drv.c \
+check_box.c \
+epd.c \
+ext2.c \
+fonts.c \
+gsm.c \
+kbd2.c \
+pgm.c \
 main.c \
-usart.c \
+menu.c \
+ml_text_edit.c \
+render.c\
 sd.c \
 spi.c \
-pgm.c \
-kbd2.c \
-fonts.c \
-util.c \
-epd.c \
-render.c\
-gsm.c \
-core_drv.c \
-text_edit.c \
-ml_text_edit.c \
 task_mgr.c \
-check_box.c \
 telephone.c \
-addr_book.c \
+text_edit.c \
+usart.c \
+util.c \
 $(SOURCE_DIR)/tasks.c \
 $(SOURCE_DIR)/list.c \
 $(SOURCE_DIR)/stream_buffer.c \
@@ -134,10 +136,10 @@ EXTRAINCDIRS =
 #  -Wall...:  warning level
 #  -Wa,...:   tell GCC to pass this to the assembler.
 #    -ahlms:  create assembler listing
-
+# 	-Waggregate-return
 DEBUG_LEVEL=-g
 WARNINGS=-Wall -Wextra -Wshadow -Wpointer-arith -Wbad-function-cast -Wcast-align -Wsign-compare \
-		-Waggregate-return -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused
+	 -Wstrict-prototypes -Wmissing-prototypes -Wmissing-declarations -Wunused
 
 CFLAGS = -D GCC_XMEGA_AVR -D $(CPU_TYPE) -I. -IFreeRTOS/Source/include -ICommon/include  \
 $(DEBUG_LEVEL) -O$(OPT) \
@@ -172,7 +174,7 @@ ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 #  -Wl,...:   tell GCC to pass this to linker.
 #  -Map:      create map file
 #  --cref:    add cross reference to  map file
-LDFLAGS = -Wl,-Map=$(TARGET).map,--cref 
+LDFLAGS = -Wl,-Map=$(TARGET).map,--cref
 
 
 
@@ -355,7 +357,8 @@ extcoff: $(TARGET).elf
 program: $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
-
+sander_menu:
+	gcc -Wall -Wextra menu.c sander_menu.c -D SANDER -o a
 
 
 # Create final output files (.hex, .eep) from ELF output file.

@@ -51,12 +51,12 @@ typedef union union_Entry {
 
 #define MENU_SIZE 6
 
-typedef struct Menu {
+typedef struct MenuAB {
   EntryStruct* entries[MENU_SIZE];
   uint8_t menu_index;
   Entry* book;
   int8_t book_index;
-} Menu;
+} MenuAB;
 
 #define INIT_MENU(BOOK_PTR)                     \
   { .menu_index = 0,                            \

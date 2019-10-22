@@ -30,24 +30,24 @@ static uint8_t read_byte(void);
 static u8 send_cmd_r1(u8 cmd, u32 param);
 static u8 wait_byte(void);
 void sd_read_buffer(u8* buffer, u16 size);
-  
+
 static void spid_init(void) {
   PORTD.DIRSET = PIN5_bm | PIN7_bm; // MOSI, SCK
   PORTD.DIRCLR = PIN6_bm; // MISO
   PORTE.DIRSET = PIN1_bm; //CS
-  
+
   SPID.INTCTRL = SPI_INTLVL_OFF_gc;
 
   SPID.CTRL = SPI_MASTER_bm | SPI_ENABLE_bm
     /*| SPI_CLK2X_bm
     | SPI_PRESCALER0_bm // 250 KGz (for 32MGz)
     | SPI_PRESCALER1_bm // 250 KGz (for 32MGz)*/
-    | SPI_MODE_0_gc; 
+    | SPI_MODE_0_gc;
 }
 
 static bool sd_reset(void) {
   u8 r = send_cmd_r1(SD_CMD_GO_IDLE_STATE, 0);
-  
+
   if (r != R1_IDLE) {
     _log("SD reset failed 0x%02X", r);
     return false;
@@ -55,13 +55,13 @@ static bool sd_reset(void) {
   return true;
 }
 
-bool sd_init(void) {  
+bool sd_init(void) {
   PORTD.DIRSET = PIN5_bm; // MOSI (DI)
   PORTD.OUTSET = PIN5_bm; // MOSI (DI)
   PORTE.DIRSET = PIN1_bm; //CS
   PORTE.OUTSET = PIN1_bm; //CS
   CS_DISABLE;
-  
+
   spid_init();
 
   raw_logc("send CMD 0");
@@ -69,11 +69,11 @@ bool sd_init(void) {
   for (u8 j = 0; j < 0xFF; j++) {
     CS_DISABLE;
     // 80 clock impulses
-    for (u8 i = 0; i < 10; i++) { 
+    for (u8 i = 0; i < 10; i++) {
       send_byte(0xFF);
     }
     CS_ENABLE;
-    
+
     if (sd_reset() == true)
       break;
   }
@@ -99,14 +99,14 @@ bool sd_init(void) {
 	send_byte(0x00); // data 2
 	send_byte(0x00); // data 3
 	send_byte(0x00); // data 4
-	  
+
 	send_byte(0x17); // crc
 	send_byte(0xFF); // dummy
-	
+
 	CS_DISABLE;
 	send_byte(0xFF); // dummy
 	CS_ENABLE;
-	
+
 	r = send_byte(0xFF); // resp
 	if (r == 0) {
 	  _log("SD init OK (%d)", i);
@@ -118,9 +118,9 @@ bool sd_init(void) {
     } // if CMD 55
   }
   CS_DISABLE;
-	
+
   for (u8 i = 0; i < 50; i++) {
-    
+
     u8 r = 0xFF;
 
     CS_ENABLE;
@@ -159,7 +159,7 @@ static uint8_t read_byte(void) {
   return SPID.DATA;
 }
 
-static u8 send_cmd_r1(u8 cmd, u32 param) {  
+static u8 send_cmd_r1(u8 cmd, u32 param) {
   //wait_byte();
   send_byte(0xFF);
   send_byte(cmd | 0x40);
@@ -219,9 +219,9 @@ bool sd_read_block_512b(u8* buffer, u32 addr) {
 
     for (u8 i = 0; i < 10; i++) {
       if (SINGLE_DATA_TOKEN == wait_byte()) {
-	sd_read_buffer(buffer, 512);
-	CS_DISABLE;
-	return true;
+        sd_read_buffer(buffer, 512);
+        CS_DISABLE;
+        return true;
       }
     }
   }
