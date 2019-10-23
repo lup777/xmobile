@@ -483,6 +483,8 @@ u32 read_file2(File* file, char* out, u32 out_len) {
   u32 buffer_point = file->internal_seek_address % block_size;
   u32 block_point = file->internal_seek_address / block_size;
 
+  if (file->internal_seek_address >= file->inode.i_size)
+    return 0;
 
   //_log("read_file  out_len %d | \n", out_len);
   _log("file->internal_seek_address = %d\n", file->internal_seek_address);

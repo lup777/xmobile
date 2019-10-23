@@ -81,20 +81,22 @@ int main(void) {
 
   if (open_cpath("/address_book.ab", &file)) {
     file.internal_seek_address = 0;
-    u32 result = read_file2(&file, buf, 12900);
+    u32 result;
+    size_t size = sizeof(Entry);
+    while( (result = read_file2(&file, buf, size)) == size) {
+      Entry* e = (Entry*)buf;
+      printf("name: ");
+      send_log_str(e->data.name.str, e->data.name.len);
+      printf("\n");
 
-    Entry* e = (Entry*)buf;
-    printf("name: ");
-    send_log_str(e->data.name.str, e->data.name.len);
-    printf("\n");
+      printf("phone1: ");
+      send_log_str(e->data.phone1.str, e->data.phone1.len);
+      printf("\n");
 
-    printf("phone1: ");
-    send_log_str(e->data.phone1.str, e->data.phone1.len);
-    printf("\n");
-
-    printf("phone2: ");
-    send_log_str(e->data.phone2.str, e->data.phone2.len);
-    printf("\n");
+      printf("phone2: ");
+      send_log_str(e->data.phone2.str, e->data.phone2.len);
+      printf("\n");
+    }
   }
 
 
