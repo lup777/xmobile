@@ -66,7 +66,7 @@ StackType_t xTelStack[ STACK_SIZE ];
 int main(void) {
   _delay_ms(1000);
   log_init();  // configure debug USART
-    
+
   kbd_msg_buf_handle = xMessageBufferCreateStatic(
       sizeof(kbd_msg_buffer),
       kbd_msg_buffer,
@@ -76,7 +76,7 @@ int main(void) {
       sizeof(gsm_msg_buffer),
       gsm_msg_buffer,
       &gsm_msg_buf_struct);
-    
+
   {  // init modules (order is significant)
     clk_init();  // set sys clock to internal 32 MGz
     sram_init(); // configure external SRAM .init0
@@ -90,7 +90,7 @@ int main(void) {
 		     NULL, 1, xAddrBookTStack,
 		     &xAddrBookTaskBuffer);
   // ==========================================
-  
+
   // ======= TELEPHONE TASK ===================
   xTaskCreateStatic( vTelTask, "tel_task", STACK_SIZE, NULL, 1,
 		     xTelStack, &xTelTaskBuffer);
@@ -102,10 +102,16 @@ int main(void) {
   // ==========================================
 
   raw_logc("start_scheduler");
-  
+
   vTaskStartScheduler();
 
   return 0;
+}
+
+uint8_t u8min(uint8_t x, uint8_t y) {
+  if (x < y)
+    return x;
+  return y;
 }
 
 void _sleep(uint16_t time_ms) {
@@ -159,13 +165,13 @@ void vApplicationStackOverflowHook( TaskHandle_t xTask,
     while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
     USARTE1_DATA = msg[i];
   }
-  
+
   for (i = 0; i < 7; i++) {
     while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
     USARTE1_DATA = pcTaskName[i];
   }
   while((USARTE1.STATUS & USART_DREIF_bm) == 0) {};
   USARTE1_DATA = '\n';
-  
+
   while(1);
 }

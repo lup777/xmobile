@@ -8,6 +8,8 @@ typedef unsigned int uint32_t;
 typedef signed char int8_t;
 typedef signed short int int16_t;
 typedef signed int int32_t;
+#else
+#include "global.h"
 #endif
 typedef uint8_t u8;
 typedef uint16_t u16;

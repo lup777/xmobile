@@ -1,11 +1,12 @@
 // addr_book.c
 #include <string.h>
 
-#include "addr_book.h"
+#include "ext2.h"
 #include "menu.h"
-#include "sd.h"
 #include "text_edit.h"
 #include "task_mgr.h"
+
+#include "addr_book.h"
 
 #define ADDRESS_BOOK_MSG_BUFFER_LEN 50
 #define MENU_LINES_NUM 7
@@ -30,6 +31,8 @@ static StaticStreamBuffer_t msg_buf_struct;
 static uint8_t msg_buffer[ ADDRESS_BOOK_MSG_BUFFER_LEN ];
 static char buffer[ADDRESS_BOOK_MSG_BUFFER_LEN];
 size_t rx_bytes;
+static File ab_file;
+bool ab_opened = false;
 
 // === UI ====
 static char te1_buf[TITLE_BUF_LEN];
@@ -51,18 +54,42 @@ Entry book[] = {
 
 void enter_callback(i8 entry_num) {
   _log("menu enter (%d)>>>", entry_num);
+  static char buf[PHONE_LEN + 1];
+
+  buf[0] = MSG_HEADER_CALL;
+  u8 len = u8min(PHONE_LEN, book[entry_num].data.phone1.len);
+
+  memcpy(buf + 1, book[entry_num].data.phone1.str, len);
+
+  _log("AB call %d (size = %d)", entry_num, len);
+  xMessageBufferSend(tm_msg_buf_handle, buf,
+                     len + 1,
+                     portMAX_DELAY);
 }
 
 String get_text_callback(u8 max_len, i8 entry_num) {
-  u8 len = max_len;
-  if (book[entry_num].data.name.len < max_len)
-    len = book[entry_num].data.name.len;
-  
-  if (entry_num < (i8)ADDR_BOOK_LEN && entry_num > 0)
-    return (String){
-      .str = book[entry_num].data.name.str,
-      .len = len
-    };
+  static Entry e;
+
+  if (ab_opened) {
+    ab_file.internal_seek_address = entry_num * sizeof(Entry);
+
+    if (sizeof(Entry) == read_file2(&ab_file, (char*)(&e), sizeof(Entry))) {
+      return (String){
+        .str = e.data.name.str,
+        .len = e.data.name.len
+      };
+    }
+  } else {
+    Entry* entry = book + entry_num;
+
+    u8 len = u8min(entry->data.name.len, max_len);
+
+    if (entry_num < (i8)ADDR_BOOK_LEN && entry_num > 0)
+      return (String){
+        .str = entry->data.name.str,
+        .len = len
+      };
+  }
 
   return (String){"--------", 8};
 }
@@ -86,6 +113,9 @@ void addrBook_init(void) {
       msg_buffer,
       &msg_buf_struct);
   ui_init();
+
+  ab_opened = open_cpath("/address_book.ab", &ab_file);
+
   inited = true;
 }
 
@@ -127,7 +157,7 @@ void ui_update(void) {
   raw_logc("addr book ui update");
 
   textEdit_render(&te1, 2, 3, &display);
-  
+
   if (active_task != enum_task_addr_book)
     return;
 
@@ -147,10 +177,7 @@ void handle_kbd(char key) {
     break;
 
   case 9: // enter
-    call();
+    menu_enter(&ab_menu);
     return;
   }
-}
-
-void call(void) {
 }
