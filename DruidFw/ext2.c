@@ -38,16 +38,12 @@ FILE* fi;
 
 void show_hex(u8* buffer_, long int display_offset, u32 start, u32 num) {
   for (u32 i = start; i < start + num; i+=16 ) {
-    _log ("%08lX: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+    _log ("%08lX: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X \n",
           display_offset + i,
-          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3], buffer_[i + 4],
-          buffer_[i + 5], buffer_[i + 6], buffer_[i + 7], buffer_[i + 8], buffer_[i + 9],
-          buffer_[i + 10], buffer_[i + 11], buffer_[i + 12], buffer_[i + 13],
-          buffer_[i + 14], buffer_[i + 15],
-          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3], buffer_[i + 4],
-          buffer_[i + 5], buffer_[i + 6], buffer_[i + 7], buffer_[i + 8], buffer_[i + 9],
-          buffer_[i + 10], buffer_[i + 11], buffer_[i + 12], buffer_[i + 13],
-          buffer_[i + 14], buffer_[i + 15]);
+          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3],
+          buffer_[i + 4], buffer_[i + 5], buffer_[i + 6], buffer_[i + 7],
+          buffer_[i + 8], buffer_[i + 9], buffer_[i + 10], buffer_[i + 11],
+          buffer_[i + 12], buffer_[i + 13], buffer_[i + 14], buffer_[i + 15]);
   }
 }
 
@@ -83,7 +79,7 @@ bool read_block(u32 block_num) { // block num related to partition start
     }
 
   } // for
-  //show_hex(buffer, addr - 512, 0, 512);
+  show_hex(buffer, addr - 512, 0, 512);
   return true;
 }
 
@@ -98,7 +94,7 @@ void parse_super_block(void) {
 
   if (sb->s_magic != 0xef53) {
     _log("ERROR: wrong Super Block signature\n");
-    show_hex(buffer, 0x0,0, 512);
+    //show_hex(buffer, 0x0,0, 512);
   }
 
 
@@ -327,6 +323,7 @@ void show_dir_entry(ext2_dir_entry* e) {
 }
 
 bool ext2_init(void) {
+  raw_logc("ext2_init >>>");
 #ifdef SANDER
   if (!open_image(&fi))
     return false;
@@ -335,9 +332,13 @@ bool ext2_init(void) {
     return false;
 #endif
 
+  sd_read_csd(buffer);
+  
   // read MBR
+  raw_logc("read MBR");
   if (!read_sector(0))
     return false;
+  show_hex(buffer, 0, 0, 512);
   parse_mbr();
 
   _log("read Super Block\n");

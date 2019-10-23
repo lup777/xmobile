@@ -104,6 +104,9 @@ void addrBook_init(void) {
   if (inited)
     return;
 
+  if (ext2_init())
+    ab_opened = open_cpath("/address_book.ab", &ab_file);
+
   raw_logc("addrBook_init >>>");
 
   menu_init(&ab_menu, get_text_callback);
@@ -113,8 +116,6 @@ void addrBook_init(void) {
       msg_buffer,
       &msg_buf_struct);
   ui_init();
-
-  ab_opened = open_cpath("/address_book.ab", &ab_file);
 
   inited = true;
 }
