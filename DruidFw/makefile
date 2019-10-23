@@ -364,6 +364,8 @@ sander_menu:
 sander_ext2:
 	gcc -Wall -Wextra sander_ext2.c ext2.c -D SANDER -o a
 
+sander_addr_book:
+	gcc -Wall -Wextra sander_addr_book.c ext2.c -D SANDER -o a
 
 # Create final output files (.hex, .eep) from ELF output file.
 %.hex: %.elf

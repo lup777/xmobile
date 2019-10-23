@@ -4,10 +4,13 @@
 
 #include <string.h>
 
+#ifndef SANDER
 #include "global.h"
-
-
 extern MessageBufferHandle_t addr_book_msg_buf_handle;
+#else
+#include <inttypes.h>
+#endif
+
 
 void addrBook_task(void* pvParameters);
 void addrBook_init(void);
