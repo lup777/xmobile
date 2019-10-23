@@ -35,10 +35,10 @@ bool read_image(FILE** fi, u8* buffer_, long int addr, size_t size) {
 
 
 bool open_image(FILE** fi) {
-  *fi = fopen("/home/alexander/tmp/image.img", "r");
-  //fi = fopen("image.img", "r");
+  //*fi = fopen("/home/alexander/tmp/image.img", "r");
+  *fi = fopen("image.img", "r");
 
-  if (fi == NULL) {
+  if (*fi == NULL) {
     printf("open failed\n");
     return false;
   }
@@ -54,6 +54,7 @@ void send_log_str(char* path, u32 len) {
 Entry book[] = {
   INIT_ENTRY("mother", "+79213258134", "-"),
   INIT_ENTRY("futher", "+79213258134", "+79213258144"),
+  INIT_ENTRY("Dave Mustain", "+79213258134", "+79213258144"),
   INIT_ENTRY("markovka", "+79213258154", "+79213258164"),
   INIT_ENTRY("mother1", "+79213258124", "-"),
   INIT_ENTRY("futher1", "+79213258134", "+79213258144"),
