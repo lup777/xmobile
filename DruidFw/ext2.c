@@ -5,11 +5,12 @@
 #include <stdbool.h>
 #include <string.h>
 
-
 #include "ext2.h"
 #include "ext2.proto.h"
-#include "sd.h"
+
 #ifndef SANDER
+#  include "global.h"
+#  include "sd.h"
 #  include "usart.h"
 #endif
 
@@ -29,50 +30,32 @@ static u8 buffer[1024]; // block size
 static ext2_inode iroot;
 
 #ifdef SANDER
-static FILE* fi;
+FILE* fi;
 
 #define _log printf
 #define CHECK {}
-
-bool read_image(long int addr, size_t size) {
-  size_t i = 0;
-  if (fseek(fi, addr, SEEK_SET) != 0) {
-    _log("seek 0x%08lX failed", addr);
-    return false;
-  }
-
-  while (!feof(fi) && i < size) {
-    buffer[i++] = fgetc(fi);
-    //printf("0x%02X\n", buffer[i-1]);
-  }
-
-  if (i < size) {
-    //_log("!! read 0x%08lX failed !!\n", addr);
-    return false;
-  }
-
-  //show_hex(addr, 0, /*size*/256);
-  return true;
-}
-
-bool open_image(void) {
-  fi = fopen("/home/alexander/tmp/image.img", "r");
-  //fi = fopen("image.img", "r");
-
-  if (fi == NULL) {
-    printf("open failed\n");
-    return false;
-  }
-  return true;
-}
-
 #endif
+
+void show_hex(u8* buffer_, long int display_offset, u32 start, u32 num) {
+  for (u32 i = start; i < start + num; i+=16 ) {
+    _log ("%08lX: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
+          display_offset + i,
+          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3], buffer_[i + 4],
+          buffer_[i + 5], buffer_[i + 6], buffer_[i + 7], buffer_[i + 8], buffer_[i + 9],
+          buffer_[i + 10], buffer_[i + 11], buffer_[i + 12], buffer_[i + 13],
+          buffer_[i + 14], buffer_[i + 15],
+          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3], buffer_[i + 4],
+          buffer_[i + 5], buffer_[i + 6], buffer_[i + 7], buffer_[i + 8], buffer_[i + 9],
+          buffer_[i + 10], buffer_[i + 11], buffer_[i + 12], buffer_[i + 13],
+          buffer_[i + 14], buffer_[i + 15]);
+  }
+}
 
 bool read_sector(u32 sector_num) {
 #ifndef SANDER
   if (sd_read_block_512b(buffer, sector_num * SECTOR_SIZE))
 #else
-  if (read_image(sector_num * SECTOR_SIZE, SECTOR_SIZE))
+  if (read_image(&fi, buffer, sector_num * SECTOR_SIZE, SECTOR_SIZE))
 #endif
     return true;
 
@@ -84,21 +67,23 @@ bool read_sector(u32 sector_num) {
 bool read_block(u32 block_num) { // block num related to partition start
   /*if (read_image(block_num * block_size, block_size))
     return true;*/
-  uint8_t steps = block_num / 512;
+  uint8_t steps = block_size / SECTOR_SIZE;
   u32 addr = block_num * block_size;
 
-  for (u8 i = 0; i < steps; i++, addr += 512) {
+  for (u8 i = 0; i < steps; i++, addr += SECTOR_SIZE) {
 #ifndef SANDER
-    if (!sd_read_block_512b(buffer, addr)) {
+    if (!sd_read_block_512b(buffer, addr))
 #else
-    if (!read_image(addr, 512)) {
+    if (!read_image(&fi, buffer + (i * SECTOR_SIZE), addr, SECTOR_SIZE))
 #endif
+    {
       _log("read_block: failed 0x%04X%04X", (u16)block_num,
            (u16)(block_num >> 16));
       return false;
     }
-  }
 
+  } // for
+  //show_hex(buffer, addr - 512, 0, 512);
   return true;
 }
 
@@ -110,13 +95,21 @@ void parse_mbr(void) {
 
 void parse_super_block(void) {
   static ext2_super_block* sb = (ext2_super_block*)buffer;
+
+  if (sb->s_magic != 0xef53) {
+    _log("ERROR: wrong Super Block signature\n");
+    show_hex(buffer, 0x0,0, 512);
+  }
+
+
   block_size = 1024 << sb->s_log_block_size;
   blocks_per_group = sb->s_blocks_per_group;
   inodes_per_group = sb->s_inodes_per_group;
-  /*_log("----------------- super block info ----------------------\n");
+
+  _log("----------------- super block info ----------------------\n");
   _log("blk size: %d | blocks_per_group %d | inodes_per_group %d\n",
        block_size, blocks_per_group, inodes_per_group);
-  _log("---------------------------------------------------------\n");*/
+  _log("---------------------------------------------------------\n");
 }
 
 /*void parse_grp_descr_table(void) {
@@ -168,12 +161,16 @@ void show_inode(ext2_inode* inode) {
 }
 
 bool read_inode(ext2_inode* pinode, u32 inode_num) {
-  //_log("read_inode >>> ");
+  _log("read_inode >>> ");
+  if (inodes_per_group == 0) {
+    _log("inodes_per_group == 0 !! failed\n");
+    return false;
+  }
   u16 group = (inode_num - 1) / inodes_per_group;
   u16 inode = (inode_num - 1) - (group * inodes_per_group);
 
-  //_log("| group: %d | ", group);
-  //_log("inode: %4d | \n", inode);
+  _log("| group: %d | ", group);
+  _log("inode: %4d | \n", inode);
   u32 inode_table_block = get_inode_table_block_for_group(group);
 
   u8 inodes_per_block = block_size / INODE_SIZE;
@@ -183,8 +180,8 @@ bool read_inode(ext2_inode* pinode, u32 inode_num) {
   // read inode table
   u32 block = inode_table_block + PART_START_BLOCK +
                                   inode_table_block_offset;
-  //_log("               read_inode: inode table block %d | \n",
-  //     block);
+  _log("               read_inode: inode table block %d | \n",
+       block);
 
   if (true != read_block(block))
     return false;
@@ -331,7 +328,7 @@ void show_dir_entry(ext2_dir_entry* e) {
 
 bool ext2_init(void) {
 #ifdef SANDER
-  if (!open_image())
+  if (!open_image(&fi))
     return false;
 #else
   if (!sd_init())
@@ -343,6 +340,7 @@ bool ext2_init(void) {
     return false;
   parse_mbr();
 
+  _log("read Super Block\n");
   // read Super Block
   if (!read_block(SUPER_BLOCK_NUM))
     return false;

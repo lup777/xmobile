@@ -2,10 +2,13 @@
 #pragma once
 
 #ifdef SANDER
-bool read_image(long int addr, size_t size);
-bool open_image(void);
+bool read_image(FILE** fi, u8* buffer, long int addr, size_t size);
+bool open_image(FILE** fi);
+void send_log_str(char* path, u32 len);
+extern FILE* fi;
 #endif
 
+void show_hex(u8* buffer_, long int display_offset, u32 start, u32 num);
 bool read_sector(u32 sector_num);
 bool read_block(u32 block_num);
 void parse_mbr(void);
@@ -29,4 +32,3 @@ entry_type get_entry_type(ext2_dir_entry* e);
 void show_dir_entry(ext2_dir_entry* e);
 bool open_file(char* name, size_t name_len, File* file);
 u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len);
-

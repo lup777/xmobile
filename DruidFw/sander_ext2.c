@@ -4,41 +4,56 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
-#include "fs.h"
 
-static FILE* fi;
-static ext2_dir_entry tmp_entry;
+#include "ext2.h"
+#include "ext2.proto.h"
 
-void raw_log(char* path, u32 len) {
+#define _log printf
+
+bool read_image(FILE** fi, u8* buffer_, long int addr, size_t size) {
+  size_t i = 0;
+  if (fseek(*fi, addr, SEEK_SET) != 0) {
+    _log("seek 0x%08lX failed", addr);
+    return false;
+  }
+
+  while (!feof(*fi) && i < size) {
+    buffer_[i++] = fgetc(*fi);
+    //printf("0x%02X\n", buffer[i-1]);
+  }
+
+  if (i < size) {
+    _log("!! read 0x%08lX failed !!\n", addr);
+    return false;
+  }
+
+  //show_hex(buffer_, addr, 0, 256);
+  return true;
+}
+
+
+bool open_image(FILE** fi) {
+  *fi = fopen("/home/alexander/tmp/image.img", "r");
+  //fi = fopen("image.img", "r");
+
+  if (fi == NULL) {
+    printf("open failed\n");
+    return false;
+  }
+  return true;
+}
+
+void send_log_str(char* path, u32 len) {
   for (u32 i = 0; i <= len; i++) {
     putchar(path[i]);
   }
 }
 
-
-void show_hex(long int display_offset, u32 start, u32 num) {
-  for (u32 i = start; i < start + num; i+=16 ) {
-    _log ("%08lX: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %c%c%c%c%c%c%c%c%c%c%c%c%c%c%c%c\n",
-          display_offset + i,
-          buffer[i + 0], buffer[i + 1], buffer[i + 2], buffer[i + 3], buffer[i + 4],
-          buffer[i + 5], buffer[i + 6], buffer[i + 7], buffer[i + 8], buffer[i + 9],
-          buffer[i + 10], buffer[i + 11], buffer[i + 12], buffer[i + 13],
-          buffer[i + 14], buffer[i + 15],
-          buffer[i + 0], buffer[i + 1], buffer[i + 2], buffer[i + 3], buffer[i + 4],
-          buffer[i + 5], buffer[i + 6], buffer[i + 7], buffer[i + 8], buffer[i + 9],
-          buffer[i + 10], buffer[i + 11], buffer[i + 12], buffer[i + 13],
-          buffer[i + 14], buffer[i + 15]);
-  }
-}
-
-
-
-
-
-
+#define _log printf
 
 int main(void) {
-  ext2_init();
+  if (!ext2_init())
+    return false;
 
   File file;
   //if (open_cpath("/debut-v-echo.fb2", &file)) {
@@ -52,10 +67,8 @@ int main(void) {
     //file.internal_seek_address = 2150718 - 7190;
     file.internal_seek_address = 0;
     u32 result = read_file2(&file, buf, 12900);
-    raw_log(buf, result); _log("\n");
+    send_log_str(buf, result); _log("\n");
     //show_inode(&file.inode);
-
-
 
     _log("\n--\n");
   }
