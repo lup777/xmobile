@@ -20,13 +20,18 @@
 #define GROUP_DESCR_TABLE_BLOCK (SUPER_BLOCK_NUM + 1)
 #define ROOT_INODE 2
 #define ROOT_GROUP 0
-
+#define BUFFER_SIZE 1024
+#define NUM_PER_LINE 32
 static u32 part_start_addr = 0;
 static u16 block_size = 1024;
 static u32 blocks_per_group = 0;
 static u32 inodes_per_group = 0;
 //static u32 inode_table_block = 0;
-static u8 buffer[1024]; // block size
+#ifdef SANDER
+u8 buffer[BUFFER_SIZE]; // block size
+#else
+static u8 buffer[BUFFER_SIZE]; // block size
+#endif
 static ext2_inode iroot;
 
 #ifdef SANDER
@@ -34,16 +39,22 @@ FILE* fi;
 
 #define _log printf
 #define CHECK {}
+
 #endif
 
 void show_hex(u8* buffer_, long int display_offset, u32 start, u32 num) {
-  for (u32 i = start; i < start + num; i+=16 ) {
-    _log ("%08lX: %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X  %02X %02X %02X %02X \n",
-          display_offset + i,
-          buffer_[i + 0], buffer_[i + 1], buffer_[i + 2], buffer_[i + 3],
-          buffer_[i + 4], buffer_[i + 5], buffer_[i + 6], buffer_[i + 7],
-          buffer_[i + 8], buffer_[i + 9], buffer_[i + 10], buffer_[i + 11],
-          buffer_[i + 12], buffer_[i + 13], buffer_[i + 14], buffer_[i + 15]);
+  _log("show_hex(buffer, 0x%08X, 0x%08X, %d\)\n", display_offset, start, num);
+
+  _log("buffer addr = 0x%08lX\n", buffer);
+  for (u32 i = start; i < start + num
+         && i + NUM_PER_LINE < BUFFER_SIZE; i+=NUM_PER_LINE ) {
+
+    _log("%08lX:", display_offset + i);
+    for (u8 j = 0; j < NUM_PER_LINE; j ++) {
+      if (!(j % 4)) _log(" ");
+      _log(" %02X", buffer_[i + j]);
+    }
+    _log("\n");
   }
 }
 

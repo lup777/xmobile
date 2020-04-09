@@ -33,7 +33,7 @@ bool read_image(FILE** fi, u8* buffer_, long int addr, size_t size) {
 
 
 bool open_image(FILE** fi) {
-  *fi = fopen("/home/alexander/tmp/image.img", "r");
+  *fi = fopen("image.img", "r");
   //fi = fopen("image.img", "r");
 
   if (fi == NULL) {
@@ -49,12 +49,36 @@ void send_log_str(char* path, u32 len) {
   }
 }
 
+void sd_read_csd(uint8_t* buffer) {
+
+}
+
+void raw_logc(const char* str) {
+  printf("%s\n", str);
+}
+
 #define _log printf
 
+
+
 int main(void) {
+  
+  // TESTS
   if (!ext2_init())
     return false;
+  _log("INIT COMPLETED\n");
 
+  read_block(0);
+  show_hex(buffer, 0, 0, 1024);
+
+  return;
+
+  // END OF TESTS
+  
+  if (!ext2_init())
+    return false;
+  _log("ext2 inited");
+ 
   File file;
   //if (open_cpath("/debut-v-echo.fb2", &file)) {
   //if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
@@ -71,6 +95,8 @@ int main(void) {
     //show_inode(&file.inode);
 
     _log("\n--\n");
+  } else {
+    _log("open cpath failed");
   }
 
   //open_cpath("/file1.txt");
