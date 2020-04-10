@@ -30,7 +30,7 @@ static u32 inodes_per_group = 0;
 #ifdef SANDER
 u8 buffer[BUFFER_SIZE]; // block size
 #else
-static u8 buffer[BUFFER_SIZE]; // block size
+staticu8 buffer[BUFFER_SIZE]; // block size
 #endif
 static ext2_inode iroot;
 
@@ -43,9 +43,8 @@ FILE* fi;
 #endif
 
 void show_hex(u8* buffer_, long int display_offset, u32 start, u32 num) {
-  _log("show_hex(buffer, 0x%08X, 0x%08X, %d\)\n", display_offset, start, num);
+  _log("show_hex(buffer, 0x%08lX, 0x%08X, %d)\n", display_offset, start, num);
 
-  _log("buffer addr = 0x%08lX\n", buffer);
   for (u32 i = start; i < start + num
          && i + NUM_PER_LINE < BUFFER_SIZE; i+=NUM_PER_LINE ) {
 
@@ -90,7 +89,7 @@ bool read_block(u32 block_num) { // block num related to partition start
     }
 
   } // for
-  show_hex(buffer, addr - 512, 0, 512);
+  //show_hex(buffer, addr - 512, 0, 512);
   return true;
 }
 
@@ -98,6 +97,7 @@ void parse_mbr(void) {
   Mbr* mbr = (Mbr*)buffer;
 
   part_start_addr = mbr->p1.abs_start_sector * SECTOR_SIZE;
+  _log("part_start_addr : 0x%08X\n", part_start_addr);
 }
 
 void parse_super_block(void) {
@@ -469,7 +469,7 @@ u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_
       // read data plock pointed by block_point
       if (read_block( p_root[block_point] + PART_START_BLOCK )) {
         u32 copy_len = umin(block_size - buffer_point, out_len); // how many data to read
-        //_log("read ... copy_len %d\n", copy_len);
+        //_log("read block[%d] ... copy_len %d\n", block_point, copy_len);
         memcpy(out, buffer + buffer_point, copy_len); // read data
         //send_log_str(out, copy_len); _log("\n");
         out += copy_len;
@@ -489,6 +489,179 @@ u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_
   return requested_len - out_len;
 }
 
+/* *** read_data_block_by_id ***
+ * IN: 
+ *     copy_len - how many bytes need to read
+ *     block_id - block id from inode (related to partition start)
+ *     block_offset - offset in data block
+ * return:
+ *         how many bytes has readed
+*/
+u16 read_data_block_by_id(u32 block_id, u16 block_offset, char* out, u32 copy_len) {
+  if (block_offset > block_size) {// bad block offset
+    _log("ERR: bad block offset");
+    return 0;
+  }
+
+  copy_len = umin(copy_len, block_size);
+  copy_len = umin(block_size - block_offset, copy_len);
+    
+  if (read_block(block_id + PART_START_BLOCK)) {
+    _log("read_data_block_by_id[%d]: read %d bytes\n", block_id, copy_len);
+    memcpy(out, buffer + block_offset, copy_len);
+    return copy_len;
+  }
+  return 0;
+}
+
+/* *** read_direct_data_blocks ***
+ * IN:
+ *     file - pointer to File struct
+ *     data_block_serial_number - serial number of first data block to read 
+ *      in range[0 .. 11]
+ *     first_data_block_offset - start position in first data block
+ *     out - out buffer
+ *     out_len - how many byte need to read
+ * return: 
+ *         how many files was read
+*/
+u32 read_direct_data_blocks(File* file,
+                            u32 data_block_serial_number,
+                            u16 first_data_block_offset,
+                            char* out,
+                            u32 out_len) {
+  u32 result_len = 0;
+  for(; data_block_serial_number < DIRECT_BLOCK_POINTERS_NUM
+        ;data_block_serial_number++) {
+    u32 read_len = 0;
+
+    u32 data_block_id = file->inode.i_block[data_block_serial_number];
+    read_len = read_data_block_by_id(data_block_id,
+                                     first_data_block_offset,
+                                     out,
+                                     out_len - result_len);
+    if (read_len == 0)
+      break;
+
+    _log("read data block[%d] [%d .. %d]\n",
+         data_block_serial_number,
+         first_data_block_offset,
+         block_size);
+
+    first_data_block_offset = 0;
+    out += read_len;
+    result_len += read_len;
+  }
+  return result_len;
+}
+
+/* *** read_singly_indirect_data_blocks ***
+ * IN: 
+ *     file - pointer to File struct
+ *     data_block_serial_number - serial number of first data block to read 
+ *      in range[12 .. (255 + 12)]
+ *     first_data_block_offset - start position in first data block
+ *     out - out buffer
+ *     out_len - how many byte need to read
+ * return: 
+ *         how many files was read
+ *     
+*/
+u32 read_singly_indirect_data_blocks(File* file,
+                                     u32 data_block_serial_number,
+                                     u16 first_data_block_offset,
+                                     char* out,
+                                     u32 out_len) {
+  u32 ready_len = 0;
+  // related to first singly indirect data block
+  data_block_serial_number -= 12;
+
+  // single indirect block pointer
+  u32 si_block_point = (data_block_serial_number / 255); 
+  
+  for(; si_block_point < 255; si_block_point ++) {
+    u32 si_block_id = file->inode.i_block[SINGLE_INDERECT_BLOCK_ID];
+    
+    if (read_block(si_block_id + PART_START_BLOCK)) {
+      // now i_block[12] with pointers to data blocks is in buffer
+      u32 data_block_id = ((u32*)buffer)[si_block_point];
+      u32 read_len = read_data_block_by_id(data_block_id,
+                                           first_data_block_offset,
+                                           out,
+                                           out_len - ready_len);
+      if (read_len == 0)
+        break;
+      
+      first_data_block_offset = 0;
+      ready_len += read_len;
+      out += read_len;
+      
+    } // if
+  } // for
+  
+  return ready_len;
+}
+
+
+/* *** read_file3 ***
+ * IN: 
+ *     out - pointer to output buffer
+ *     out_len - how many byte need to read
+ * return:
+ *         how many bytes was read
+*/
+u32 read_file3(File* file, char* out, u32 out_len) {
+  u32 ready_len = 0;
+
+  if (file->internal_seek_address >= file->inode.i_size)
+    return 0;
+
+  _log("file->internal_seek_address = %d\n", file->internal_seek_address);
+
+
+
+  for (u32 read_len = 0; ready_len != out_len; ) {
+    read_len = 0;
+
+    u32 current_seek_address = ready_len + file->internal_seek_address;
+    
+    // how may data blocks left behind
+    u32 data_block_serial_number = current_seek_address / block_size;
+    
+    u32 data_block_offset = current_seek_address % block_size;
+
+    if (data_block_serial_number < 11 ) {
+      _log("read direct blocks [%d .. 11]\n", data_block_serial_number);
+
+      read_len = read_direct_data_blocks(file,
+                                         data_block_serial_number,
+                                         data_block_offset,
+                                         out,
+                                         out_len - ready_len);
+      _log("read %d bytes from direct data blocks\n", read_len);
+    } else if (data_block_serial_number < 11 + 255) {
+      _log("read singly indirect blocks\n");
+      
+      read_len = read_singly_indirect_data_blocks(file,
+                                                  data_block_serial_number,
+                                                  data_block_offset,
+                                                  out + ready_len,
+                                                  out_len - ready_len);
+      
+    } else if (data_block_serial_number < 11 + 255 + (255 * 255)) {
+      // doubly idirect blocks
+    } else {
+      // triply indirect blocks
+    }
+
+    if (read_len == 0)
+      break;
+    ready_len += read_len;
+  } // for
+  
+  return ready_len;
+}
+
 u32 read_file2(File* file, char* out, u32 out_len) {
   u32 requested_len = umin(out_len, file->inode.i_size); // data len needed to read
   out_len = requested_len;
@@ -502,8 +675,8 @@ u32 read_file2(File* file, char* out, u32 out_len) {
   _log("file->internal_seek_address = %d\n", file->internal_seek_address);
 
   for(;block_point < DIRECT_BLOCK_POINTERS_NUM; block_point++, buffer_point = 0) {
-    /*_log("#### read_file: file->inode.i_block[%d] = %d\n",
-         block_point, file->inode.i_block[block_point]);*/
+    //_log("#### read_file: file->inode.i_block[%d] = %d\n",
+    //block_point, file->inode.i_block[block_point]);
     if (file->inode.i_block[file->block_point] == 0) // no data in this block
       break;
 
@@ -572,8 +745,8 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       u32 point = file->internal_seek_address - first_doubly_inderect_point;
       _log("point %d\n", point);
 
-      u32 blk_size_1lvl = block_size;
-      u32 blk_size_2lvl = blk_size_1lvl * 255;
+      u32 blk_size_1lvl = block_size; // 1024
+      u32 blk_size_2lvl = blk_size_1lvl * 255; // 261120
 
       // current block id on 2lvl
       u32 _2lvl_block_point = point / blk_size_2lvl; // amount of address block 3 lvl
@@ -589,17 +762,14 @@ u32 read_file2(File* file, char* out, u32 out_len) {
       _log("_1lvl_buffer_point %d\n", _1lvl_buffer_point); // data buffer num
       _log("_0lvl_data_point %d\n", _0lvl_data_point); // point in data buffer
 
-      // read block with 3lvl pointers
       _log("pointer to 2 lvl %d\n", file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID]);
-
-      // now 3lvl blocks are in buffer
 
       // go thought 2lvl (syngly ptr block pointers)
       for (;_2lvl_block_point < ptr_blk_size; _2lvl_block_point++, _1lvl_buffer_point = 0) {
         read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK);
-
+        // 2 lvl block is in buffer
         u32* pblockptr_id = ((u32*)buffer) + _2lvl_block_point;
-        //_log("+ 2lvl block id 0x%08X\n", *pblockptr_id);
+        _log("+ 2lvl block id 0x%08X (%d)\n", *pblockptr_id, *pblockptr_id);
 
         if (*pblockptr_id == 0) {
           _log("pblockptr_id == 0\n");
@@ -610,23 +780,25 @@ u32 read_file2(File* file, char* out, u32 out_len) {
         for (; _1lvl_buffer_point < ptr_blk_size;
              _1lvl_buffer_point++, _0lvl_data_point = 0) {
 
-          read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK);
-          read_block((*pblockptr_id) +  PART_START_BLOCK);
-
+          read_block(file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID] + PART_START_BLOCK); // read 2 lvl block
+          read_block((*pblockptr_id) +  PART_START_BLOCK); // read 1 lvl block
+          // 1 lvl block is in buffer
+          
           u32* pblock_id = ((u32*)buffer) + _1lvl_buffer_point;
-          //_log("+ 1lvl block id 0x%08X\n", *pblock_id);
+          _log("+ 1lvl block id 0x%08X(%d)\n", *pblock_id, *pblock_id);
 
           if (*pblock_id == 0)
             break;
 
-          if (read_block((*pblock_id) + PART_START_BLOCK)) {
+          if (read_block((*pblock_id) + PART_START_BLOCK)) { // read data lvl block
             // now we are on data buffer (on 0lvl)
-
+            //show_hex(buffer, 0, 0, 1024);
+          
             // copy data
             u16 copy_len = umin(block_size - _0lvl_data_point, out_len);
-            /*_log("copy %d bytes from %d:%d:%d\n", copy_len,
+            _log("copy %d bytes from %d:%d:%d\n", copy_len,
                  _2lvl_block_point, _1lvl_buffer_point,
-                 _0lvl_data_point);*/
+                 _0lvl_data_point);
             memcpy(out, buffer + _0lvl_data_point, copy_len);
             //send_log_str(out, copy_len); _log("\n");
             out += copy_len;
