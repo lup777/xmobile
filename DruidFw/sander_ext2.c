@@ -114,12 +114,18 @@ return 0;  */
     file.internal_seek_address = 0;
 
     // max success bytes amount = 274432 (0x43000)
-    int bytes_to_read = 274432 + 10025;
-    u32 result = read_file3(&file, buf, bytes_to_read);
-    compare_with_ref_file("frai-chuzhak.fb2", buf, 0, bytes_to_read);
-    //send_log_str(buf, 12288); _log("\n");
+
+    u32 result = read_file3(&file, buf, 14000);
+    compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
+
+    result += read_file3(&file, buf + result, 200000);
+compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
+
+    result += read_file3(&file, buf + result,  0x42C00 - result + 100);
+    compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
+
+send_log_str(buf, result); _log("\n");
     //show_inode(&file.inode);
-    _log("file inode: (0x%08X)%d\n", file.inode, file.inode);
 
     _log("\n--\n");
   } else {
@@ -139,14 +145,14 @@ bool compare_with_ref_file(char* fname, char* buffer, int start, int count) {
     _log("failed to open refference file");
     return false;
   }
-  
+
   if (fseek(reff, start, SEEK_SET) != 0) {
     _log("ref seek 0x%08X failed", start);
     fclose(reff);
     return false;
   }
-
-  for (int i = 0; i < count; i++) {
+  int i = 0;
+  for (; i < count; i++) {
     //putchar(buffer[i]);
     char c;
     char result = fread(&c, 1, 1, reff);
@@ -160,9 +166,9 @@ bool compare_with_ref_file(char* fname, char* buffer, int start, int count) {
       fclose(reff);
       return false;
     }
-    putchar(buffer[i]);
+    //putchar(buffer[i]);
   }
-  _log("\ncompare with ref file success\n");
+  _log("\ncompare with ref file success (0x%08X)\n", i);
   fclose(reff);
   return true;
 }

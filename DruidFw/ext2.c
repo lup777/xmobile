@@ -572,19 +572,37 @@ u32 read_singly_indirect_data_blocks(File* file,
                                      u16 first_data_block_offset,
                                      char* out,
                                      u32 out_len) {
+  // direct pointers: 0 - 11
+  // single idirect pointer: 12
+  //            [Inode Double Indirect Pointer (13)]
+  /*                           |
+         [PP             P              PP]       //  0 lvl (pointers to next lvl)
+          |              |              |         
+     [PP  P  PP]    [PP  P  PP]     [PP  PP PP]   //  1 lvl (pointers to data blocks)
+      /   |   \      /   |   \       /   |   \
+    [DD] [D] [DD]  [DD] [D]  [DD]  [DD] [D]  [DD] //  2 lvl (data blocks)
+  */
+
   u32 ready_len = 0;
   // related to first singly indirect data block
   data_block_serial_number -= 12;
 
   // single indirect block pointer
-  u32 si_block_point = (data_block_serial_number / 255); 
+  u32 si_block_point = (data_block_serial_number / 255);
+
+  _log("SI: data_block_serial_number = 0x%08X (%d)\n",
+       data_block_serial_number, data_block_serial_number);
+  _log("SI: si_block_point = 0x%08X (%d)\n", si_block_point, si_block_point);
   
-  for(; si_block_point < 255; si_block_point ++) {
+  for(; data_block_serial_number < 255; data_block_serial_number ++) {
+    if ((out_len - ready_len) == 0)
+      break; // nothing to read more
+    
     u32 si_block_id = file->inode.i_block[SINGLE_INDERECT_BLOCK_ID];
     
     if (read_block(si_block_id + PART_START_BLOCK)) {
       // now i_block[12] with pointers to data blocks is in buffer
-      u32 data_block_id = ((u32*)buffer)[si_block_point];
+      u32 data_block_id = ((u32*)buffer)[data_block_serial_number];
       u32 read_len = read_data_block_by_id(data_block_id,
                                            first_data_block_offset,
                                            out,
@@ -602,6 +620,77 @@ u32 read_singly_indirect_data_blocks(File* file,
   return ready_len;
 }
 
+/* *** read_singly_indirect_data_blocks ***
+ * IN: 
+ *     file - pointer to File struct
+ *     data_block_serial_number - serial number of first data block to read 
+ *      in range[12 .. (255 + 12)]
+ *     first_data_block_offset - start position in first data block
+ *     out - out buffer
+ *     out_len - how many byte need to read
+ * return: 
+ *         how many files was read
+ *     
+*/
+u32 read_doubly_indirect_data_blocks(File* file,
+                                     u32 data_block_serial_number_,
+                                     u16 first_data_block_offset,
+                                     char* out,
+                                     u32 out_len) {
+  // direct pointers: 0 - 11
+  // single idirect pointer: 12
+  //            [Inode Double Indirect Pointer (13)]
+  /*                           |
+         [PP             P              PP]       //  0 lvl (pointers to next lvl)
+          |              |              |         
+     [PP  P  PP]    [PP  P  PP]     [PP  PP PP]   //  1 lvl (pointers to data blocks)
+      /   |   \      /   |   \       /   |   \
+    [DD] [D] [DD]  [DD] [D]  [DD]  [DD] [D]  [DD] //  2 lvl (data blocks)
+  */
+
+  u32 ready_len = 0;
+  // current point on 2 lvl
+  // related to first singly indirect block (with pointers to data blocks)
+  //data_block_serial_number -= data_block_serial_number - 255;
+
+  // data bock index related to start of doubly indirect i_block
+  u32 data_block_serial_number = data_block_serial_number_ - 12 - 255;
+
+  // current point on 1 lvl
+  u32 si_block_serial_point = (data_block_serial_number / 255); 
+
+  // current point on 0 lvl
+  u32 di_block_serial_point = si_block_serial_point / 255; 
+
+  for(; di_block_serial_point < 255; di_block_serial_point ++) {
+
+    u32 di_block_id = file->inode.i_block[DOUBLY_INDERECT_BLOCK_ID];
+    
+    if (read_block(di_block_id + PART_START_BLOCK)) {
+      // now i_block[12] with pointers to data blocks is in buffer
+      // current block from 0 lvl
+      u32 si_block_id = ((u32*)buffer)[di_block_serial_point];
+
+      // data_block_serial_number
+      // offset in block from si 
+
+      u32 read_len = read_singly_indirect_data_blocks(file,
+                                                      si_block_serial_point * block_size,
+                                                      first_data_block_offset,
+                                                      out + ready_len,
+                                                      out_len - ready_len);
+      if (read_len == 0)
+        break;
+      
+      first_data_block_offset = 0;
+      ready_len += read_len;
+      out += read_len;
+      
+    } // if
+  } // for
+  
+  return ready_len;
+}
 
 /* *** read_file3 ***
  * IN: 
@@ -630,6 +719,12 @@ u32 read_file3(File* file, char* out, u32 out_len) {
     
     u32 data_block_offset = current_seek_address % block_size;
 
+    _log("current_seek_address = 0x%08X (%d)\n", current_seek_address,
+         current_seek_address);
+    _log("data_block_serial_number = 0x%08X (%d)\n", data_block_serial_number,
+         data_block_serial_number);
+    _log("data_block_offset = 0x%08X (%d)\n", data_block_offset, data_block_offset);
+    
     if (data_block_serial_number < 11 ) {
       _log("read direct blocks [%d .. 11]\n", data_block_serial_number);
 
@@ -649,7 +744,13 @@ u32 read_file3(File* file, char* out, u32 out_len) {
                                                   out_len - ready_len);
       
     } else if (data_block_serial_number < 11 + 255 + (255 * 255)) {
-      // doubly idirect blocks
+      _log("read doubly idirect blocks\n");
+
+      read_len = read_doubly_indirect_data_blocks(file,
+                                                  data_block_serial_number,
+                                                  data_block_offset,
+                                                  out + ready_len,
+                                                  out_len - ready_len);
     } else {
       // triply indirect blocks
     }
@@ -658,7 +759,8 @@ u32 read_file3(File* file, char* out, u32 out_len) {
       break;
     ready_len += read_len;
   } // for
-  
+
+  file->internal_seek_address += ready_len;
   return ready_len;
 }
 
