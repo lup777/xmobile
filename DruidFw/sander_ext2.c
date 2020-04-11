@@ -64,8 +64,10 @@ void send_log_str(char* path, u32 len) {
 #define _log printf
 
 void test_fs_read(File* file, char* buf, u32 step, u32 length);
-
+File* open_path(char* path);
+  
 int main(void) {
+
   /*calc_addr_test(1);
   calc_addr_test(8);
   calc_addr_test(20);
@@ -88,8 +90,14 @@ int main(void) {
   
   if (!ext2_init())
     return false;
-  _log("ext2 inited");
- 
+  _log("ext2 inited\n");
+
+
+  open_path("/");  
+  
+
+  return 0;
+  
   File file;
   //if (open_cpath("/debut-v-echo.fb2", &file)) {
   //if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {

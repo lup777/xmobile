@@ -157,6 +157,10 @@ bool is_dir(ext2_inode* pinode) {
   return (pinode->i_mode & 0x4000) != 0;
 }
 
+bool is_file(ext2_inode* pinode) {
+  return (pinode->i_mode & 0x8000) != 0;
+}
+
 void show_inode(ext2_inode* inode) {
   _log("-------------- inode -------------\n");
   _log("i_mode 0x%04X | size 0x%08X | blocks %d\n",
@@ -781,4 +785,92 @@ u32 read_file3(File* file, char* out, u32 out_len) {
   } // for
 
   return ready_len;
+}
+
+typedef struct {
+  u16 i_entry_index_bytes;
+  u8 i_block_index;
+  u32 i_block[12];
+} DirEnumHandle;
+
+/* *** eum_dir_start ***
+   IN: 
+      handle - where store intermediate data for enumeratin
+      iout - where to copy inode first found entry inode
+      inode - we will eum this enode (directory)
+   RET:
+      true - if success
+*/
+bool eum_dir_start(DirEnumHandle* handle, ext2_dir_entry* out, u32 inode) {
+  static ext2_inode root;
+  handle->i_block_index = 0;
+  handle->i_entry_index_bytes = 0;
+
+  if (read_inode(&root, inode)) {
+    for(u8 i = 0; i < 12; i++)
+      handle->i_block[i] = root.i_block[i];
+    
+    if (read_block(handle->i_block[handle->i_block_index] + PART_START_BLOCK)) {
+      ext2_dir_entry* dir_entry = (ext2_dir_entry*)buffer;
+      handle->i_entry_index_bytes += dir_entry->entry_size;
+
+      memcpy(out, dir_entry, dir_entry->entry_size);
+
+      return true;
+    } // if ( read_block
+  } // if ( read inode
+  return false;
+}
+
+bool enum_dir_next(DirEnumHandle* handle, ext2_dir_entry* out) {
+  //_log("enum_dir_next: handle->i_entry_index_bytes = %d\n", handle->i_entry_index_bytes);
+  //_log("enum_dir_next: handle->i_block_index = %d\n", handle->i_block_index);
+
+  if (handle->i_entry_index_bytes >= block_size) {
+    handle->i_block_index ++;
+    handle->i_entry_index_bytes = 0;
+  }
+  
+  if (handle->i_block[handle->i_block_index] == 0)
+    return false;
+  
+  if (handle->i_block_index > DIRECT_BLOCK_POINTERS_NUM) {
+    _log("max of entries with direct pointers. Indirect pointers are not supported \n");
+    return false;
+  }
+  //_log("enum_dir_next: block: %d", handle->i_block[handle->i_block_index]);
+  if (read_block(handle->i_block[handle->i_block_index] + PART_START_BLOCK)) {
+    ext2_dir_entry* dir_entry = (ext2_dir_entry*)(buffer + handle->i_entry_index_bytes);
+
+    handle->i_entry_index_bytes += dir_entry->entry_size;
+
+    memcpy(out, dir_entry, dir_entry->entry_size);
+
+    return true;
+  } // if ( read_block
+  return false;
+}
+
+File* open_path(char* path) {
+
+  DirEnumHandle enum_handle;
+  ext2_dir_entry entry;
+
+  if (!eum_dir_start(&enum_handle, &entry, ROOT_INODE)) {
+    _log("start_eum_dir failed\n");
+  }
+
+  int i = 0;
+    
+  while (enum_dir_next(&enum_handle, &entry)) {
+    _log("/ entry name: ");
+    send_log_str(entry.name, entry.name_len); _log("\n");
+    //    _log("/ entry inode: %d\n", entry.inode);
+    //_log("/ entry size: %d\n", entry.entry_size);
+    i++;
+    if (i > 30)
+      break;
+  }  
+
+  return NULL;
 }
