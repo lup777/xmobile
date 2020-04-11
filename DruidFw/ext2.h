@@ -12,12 +12,7 @@ bool ext2_init(void);
 */
 bool open_cpath(const char* path, File* file);
 
-/* read_file2
+/* read_file3
  * Read out_len bytes from file in current seek position
 */
-u32 read_file2(File* file, char* out, u32 out_len);
-
-#ifdef SADER
-#else
-extern u8 buffer[];
-#endif
+u32 read_file3(File* file, char* out, u32 out_len);

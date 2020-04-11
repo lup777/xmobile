@@ -15,6 +15,12 @@ typedef unsigned int u32;
 bool compare_with_ref_file(char* fname, char* buffer, int start, int count);
 void calc_double_indirect_addr(u32 byte_index);
 
+u32 min(u32 x, u32 y) {
+  if (x < y)
+    return x;
+  return y;
+}
+
 bool read_image(FILE** fi, u8* buffer_, long int addr, size_t size) {
   size_t i = 0;
   if (fseek(*fi, addr, SEEK_SET) != 0) {
@@ -55,39 +61,30 @@ void send_log_str(char* path, u32 len) {
   }
 }
 
-void sd_read_csd(uint8_t* buffer) {
-
-}
-
-void raw_logc(const char* str) {
-  printf("%s\n", str);
-}
-
 #define _log printf
 
-
+void test_fs_read(File* file, char* buf, u32 step, u32 length);
 
 int main(void) {
-
-  /*  calc_double_indirect_addr(1023);
-  calc_double_indirect_addr(1024);
-  calc_double_indirect_addr(1025);  
-  calc_double_indirect_addr(1026);
-  calc_double_indirect_addr(1024 * 20);
-  calc_double_indirect_addr(1024 * 150);
-  calc_double_indirect_addr((255 * 1024) - 4);
-  calc_double_indirect_addr((255 * 1024) - 3);
-  calc_double_indirect_addr((255 * 1024) - 2);
-  calc_double_indirect_addr((255 * 1024) - 1);
-  calc_double_indirect_addr((255 * 1024));
-  calc_double_indirect_addr((255 * 1024) + 1);
-  calc_double_indirect_addr((255 * 1024) + 2);
-  calc_double_indirect_addr((255 * 1024) + 3);
-  calc_double_indirect_addr((255 * 1024) + 4);
-  calc_double_indirect_addr(255 * 1024 * 255);
-
+  /*calc_addr_test(1);
+  calc_addr_test(8);
+  calc_addr_test(20);
+  _log("singly: "); calc_addr_test(11 +
+                                  128);
+  _log("doubly: "); calc_addr_test(11 + 255 +
+                                   (255 * 215) + 2); // singly
+  _log("doubly: "); calc_addr_test(11 + 255 +
+                                   (255 * 2) + 215); // singly
+  _log("doubly: "); calc_addr_test(11 + 255 +
+                                   (255 * 102) + 101); // singly
+  _log("doubly: "); calc_addr_test(11 + 255 +
+                                   (255 * 202) + 201); // singly
+  _log("triply: "); calc_addr_test(11 + 255 + (255 * 255) +
+                                   (255 * 255 * 100) + (255 * 5) + 7); // doubly
+  _log("triply: "); calc_addr_test(11 + 255 + (255 * 255) +
+                                   (255 * 255 * 3) + (255 * 215) + 207); // doubly
   
-return 0;  */
+                                   return 0;  */
   
   if (!ext2_init())
     return false;
@@ -108,23 +105,8 @@ return 0;  */
     _log("]\n");
 
     static char buf[6000000];
-    //read_file2(&file, buf, 2000);
-    //u32 result = read_file2(&file, buf, 590000);
-    //file.internal_seek_address = 2150718 - 7190;
-    file.internal_seek_address = 0;
-
-    // max success bytes amount = 274432 (0x43000)
-
-    u32 result = read_file3(&file, buf, 14000);
-    compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
-
-    result += read_file3(&file, buf + result, 200000);
-compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
-
-    result += read_file3(&file, buf + result,  0x42C00 - result + 100);
-    compare_with_ref_file("frai-chuzhak.fb2", buf, 0, result);
-
-send_log_str(buf, result); _log("\n");
+    test_fs_read(&file, buf, 1024, 1024);
+    //send_log_str(buf, result); _log("\n");
     //show_inode(&file.inode);
 
     _log("\n--\n");
@@ -136,6 +118,46 @@ send_log_str(buf, result); _log("\n");
   //open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt");
 
   fclose(fi);
+}
+/* *** test_fs_read ***
+   IN:
+      step - size of increase if seek address for next step
+      length - how many byte need to read on each step
+      buf - buffer to read
+*/
+void test_fs_read(File* file, char* buf, u32 step, u32 length) {
+    file->internal_seek_address = 0;
+
+    if (step < length) {
+      _log("shoud be step >= length. it is needed for correctly cmp with ref file\n");
+    }
+    // 274432 + 1024
+    for (u32 start_point = 0; start_point < file->inode.i_size;) {
+      u32 r = read_file3(file, buf + start_point, length);
+
+      /*_log("_____________________\n");
+      send_log_str(buf+start_point, r); _log("\n");
+      _log("^^^^^^^^^^^^^^^^^^^^^\n");*/
+
+      if (r != length) {
+        _log("TEST: read wrong amount of bytes (%d != %d) on offset 0x%08X (%d)\n",
+             r, length, start_point, start_point);
+        break;
+      }
+
+      
+      if (false == compare_with_ref_file("frai-chuzhak.fb2", buf,
+                                         0, min(start_point + length, file->inode.i_size)))
+        break;
+
+      if (r == 0)
+        break;
+
+      file->internal_seek_address -= length;
+      file->internal_seek_address += step;
+
+      start_point += step;
+    }
 }
 
 bool compare_with_ref_file(char* fname, char* buffer, int start, int count) {
@@ -154,8 +176,10 @@ bool compare_with_ref_file(char* fname, char* buffer, int start, int count) {
   int i = 0;
   for (; i < count; i++) {
     //putchar(buffer[i]);
+   
     char c;
     char result = fread(&c, 1, 1, reff);
+
     if (result != 1) {
       _log("fread failed\n");
       return false;
@@ -173,36 +197,3 @@ bool compare_with_ref_file(char* fname, char* buffer, int start, int count) {
   return true;
 }
 
-void calc_double_indirect_addr(u32 point) {
-  // direct pointers: 0 - 11
-  // single idirect pointer: 12
-  //            [Inode Double Indirect Pointer (13)]
-  /*                           |
-         [PP             P              PP]       //  0 lvl (pointers to next lvl)
-          |              |              |         
-     [PP  P  PP]    [PP  P  PP]     [PP  PP PP]   //  1 lvl (pointers to data blocks)
-      /   |   \      /   |   \       /   |   \
-    [DD] [D] [DD]  [DD] [D]  [DD]  [DD] [D]  [DD] //  2 lvl (data blocks)
-  */
-
-  u32 block_size = 1024;
-
-  u32 blk_size_1lvl = block_size; // 1024
-  u32 blk_size_2lvl = blk_size_1lvl * 255; // 261120
-
-  // current block id on 2lvl
-  u32 _2lvl_block_point = point / blk_size_2lvl; // amount of address block 3 lvl
-
-  // current block id on 1lvl
-  u32 _1lvl_buffer_point = (point % blk_size_2lvl) / blk_size_1lvl;
-
-  // current position in data block
-  u32 _0lvl_data_point = (point % blk_size_2lvl) % blk_size_1lvl;
-
-  _log("byte 0x%8X: |##|  0lvl: %4X    |##|     1lvl: %4X     |##|     2lvl: %4X      |##|\n",
-       point,
-       _0lvl_data_point,
-       _1lvl_buffer_point,
-       _2lvl_block_point);
-
-}

@@ -73,7 +73,7 @@ String get_text_callback(u8 max_len, i8 entry_num) {
   if (ab_opened) {
     ab_file.internal_seek_address = entry_num * sizeof(Entry);
 
-    if (sizeof(Entry) == read_file2(&ab_file, (char*)(&e), sizeof(Entry))) {
+    if (sizeof(Entry) == read_file3(&ab_file, (char*)(&e), sizeof(Entry))) {
       return (String){
         .str = e.data.name.str,
         .len = e.data.name.len

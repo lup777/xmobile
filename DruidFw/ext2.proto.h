@@ -32,3 +32,20 @@ entry_type get_entry_type(ext2_dir_entry* e);
 void show_dir_entry(ext2_dir_entry* e);
 bool open_file(char* name, size_t name_len, File* file);
 u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len);
+u16 read_data_block_by_id(u32 block_id, u16 block_offset, char* out, u32 copy_len);
+u32 read_direct_data_blocks(File* file,
+                            u32 data_block_serial_number,
+                            u16 first_data_block_offset,
+                            char* out,
+                            u32 out_len);
+u32 read_singly_indirect_data_blocks(File* file,
+                                     u32 data_block_serial_number,
+                                     u16 first_data_block_offset,
+                                     char* out,
+                                     u32 out_len);
+u32 get_indirect_subblock_id(u32 block_id, u16 index);
+u32 read_doubly_indirect_data_blocks(File* file,
+                                     u32 data_block_serial_number,
+                                     u16 data_block_offset,
+                                     char* out,
+                                     u32 out_len);
