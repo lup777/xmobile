@@ -30,7 +30,7 @@ bool get_entry_child_by_cname(ext2_dir_entry* in_out, const char* name);
 inode_type get_inode_type(ext2_inode* e);
 entry_type get_entry_type(ext2_dir_entry* e);
 void show_dir_entry(ext2_dir_entry* e);
-bool open_file(char* name, size_t name_len, File* file);
+bool open_file(u32 inode, File* file);
 u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len);
 u16 read_data_block_by_id(u32 block_id, u16 block_offset, char* out, u32 copy_len);
 u32 read_direct_data_blocks(File* file,

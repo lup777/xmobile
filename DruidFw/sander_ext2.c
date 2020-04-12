@@ -55,7 +55,7 @@ bool open_image(FILE** fi) {
 }
 
 void send_log_str(char* path, u32 len) {
-  for (u32 i = 0; i <= len; i++) {
+  for (u32 i = 0; i < len; i++) {
     putchar(path[i]);
     //printf("%d", path[i]);
   }
@@ -64,7 +64,7 @@ void send_log_str(char* path, u32 len) {
 #define _log printf
 
 void test_fs_read(File* file, char* buf, u32 step, u32 length);
-File* open_path(char* path);
+bool open_path(char* path, u8 len, File* file);
   
 int main(void) {
 
@@ -92,32 +92,29 @@ int main(void) {
     return false;
   _log("ext2 inited\n");
 
-
-  open_path("/");  
-  
-
-  return 0;
-  
   File file;
+  /*const char* path = "/lup_test_dir/druidFolderLevel2/Level3/readme.txt";
+  open_path(path, strlen(path), &file);  
+  
+  return 0;*/
+  
   //if (open_cpath("/debut-v-echo.fb2", &file)) {
   //if (open_cpath("/lup_test_dir/druidFolderLevel2/Level3/readme.txt", &file)) {
-  if (open_cpath("/frai-chuzhak.fb2", &file)) {
+  
+  //const char* file_name = "/frai-chuzhak.fb2";
+  const char* file_name = "/lup_test_dir/druidFolderLevel2/Level3/readme.txt";
+  
+  if (open_path(file_name, strlen(file_name), &file)) {
+
     _log("data:\n");
 
-    _log("file inode i_block: [");
-    for (int i = 0; i < 11; i++) {
-      _log("%d ", file.inode.i_block[i]);
-    }
-    _log("%d(I) ", file.inode.i_block[12]);
-    _log("%d(II)", file.inode.i_block[13]);
-    _log("]\n");
 
     static char buf[6000000];
-    test_fs_read(&file, buf, 1024, 1024);
-    //send_log_str(buf, result); _log("\n");
-    //show_inode(&file.inode);
+    //test_fs_read(&file, buf, 1024, 1024);
 
-    _log("\n--\n");
+    u32 result = read_file3(&file, buf, 6000000);
+    send_log_str(buf, result); _log("\n");
+
   } else {
     _log("open cpath failed");
   }

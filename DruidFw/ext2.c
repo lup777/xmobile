@@ -161,6 +161,10 @@ bool is_file(ext2_inode* pinode) {
   return (pinode->i_mode & 0x8000) != 0;
 }
 
+bool dir_entry_is_dir(ext2_dir_entry* entry) {
+  return entry->enum_type == 2;
+}
+
 void show_inode(ext2_inode* inode) {
   _log("-------------- inode -------------\n");
   _log("i_mode 0x%04X | size 0x%08X | blocks %d\n",
@@ -176,7 +180,7 @@ void show_inode(ext2_inode* inode) {
 }
 
 bool read_inode(ext2_inode* pinode, u32 inode_num) {
-  _log("read_inode >>> ");
+  //_log("read_inode >>> ");
   if (inodes_per_group == 0) {
     _log("inodes_per_group == 0 !! failed\n");
     return false;
@@ -184,8 +188,8 @@ bool read_inode(ext2_inode* pinode, u32 inode_num) {
   u16 group = (inode_num - 1) / inodes_per_group;
   u16 inode = (inode_num - 1) - (group * inodes_per_group);
 
-  _log("| group: %d | ", group);
-  _log("inode: %4d | \n", inode);
+  //_log("| group: %d | ", group);
+  //_log("inode: %4d | \n", inode);
   u32 inode_table_block = get_inode_table_block_for_group(group);
 
   u8 inodes_per_block = block_size / INODE_SIZE;
@@ -195,8 +199,8 @@ bool read_inode(ext2_inode* pinode, u32 inode_num) {
   // read inode table
   u32 block = inode_table_block + PART_START_BLOCK +
                                   inode_table_block_offset;
-  _log("               read_inode: inode table block %d | \n",
-       block);
+  /*_log("               read_inode: inode table block %d | \n",
+    block);*/
 
   if (true != read_block(block))
     return false;
@@ -373,7 +377,16 @@ bool ext2_init(void) {
   return true;
 }
 
-bool open_file(char* name, size_t name_len, File* file) {
+/* *** open_file2 ***
+   open file by inode num
+*/
+bool open_file(u32 inode, File* file) {
+  file->internal_seek_address = 0;
+  
+  return read_inode(&(file->inode), inode);
+}
+
+/*bool open_file(char* name, size_t name_len, File* file) {
   // read file
   if (file->entry.inode != 0) {
     if (!get_entry_child_by_name(&file->entry, name, name_len))
@@ -393,17 +406,17 @@ bool open_file(char* name, size_t name_len, File* file) {
     return false;
   //show_inode(&i);
 
-/*  _log("file content: (%d), size: %d bytes\n", file->inode.i_block[0], file->inode.i_size);
-  if (!read_block(file->inode.i_block[0] + PART_START_BLOCK))
-    return false;*/
+//  _log("file content: (%d), size: %d bytes\n", file->inode.i_block[0], file->inode.i_size);
+  //if (!read_block(file->inode.i_block[0] + PART_START_BLOCK))
+  //  return false;
 
   file->block_point = 0;
   file->buffer_point = 0;
   file->internal_seek_address = 0;
   return true;
-}
+}*/
 
-bool open_cpath(const char* path, File* file) {
+/*bool open_cpath(const char* path, File* file) {
   _log("open_cfile: %s\n", path);
   size_t str_len = strlen(path);
   bool once_happend = false;
@@ -452,51 +465,7 @@ bool open_cpath(const char* path, File* file) {
 
   return true;
 }
-
-/* bool read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len)
- * Read data blocks pointed by root_block_id
- * - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
- * root_block_id - id of block contained data blocks ids
- * out           - output buffer
- * offset        - related offset (bytes) in data to read. Started from the beggining
- *                 of the first data block
- * out_len       - how many (bytes) needs to read
 */
-u32 read_block_of_data_blocks(u32 root_block_id, char* out, u32 offset, u32 out_len) {
-  u32 requested_len = out_len;
-  u32 points_per_block = block_size / 4; // data blocks pointers in block
-  u32 block_point = offset / block_size; // current data block position number in root_block
-  u32 buffer_point = offset % block_size; // byte offset in buffer
-  u32* p_root = (u32*)buffer;
-  //_log("block_point %d | buffer_point %d | root_block_id %d\n", block_point, buffer_point,
-  //     root_block_id);
-  // got through all data blocks
-  for (; block_point < points_per_block; block_point++, buffer_point = 0) {
-    //_log("block_point %d\n", block_point);
-    if (read_block( root_block_id + PART_START_BLOCK )) { // read root block
-      // read data plock pointed by block_point
-      if (read_block( p_root[block_point] + PART_START_BLOCK )) {
-        u32 copy_len = umin(block_size - buffer_point, out_len); // how many data to read
-        //_log("read block[%d] ... copy_len %d\n", block_point, copy_len);
-        memcpy(out, buffer + buffer_point, copy_len); // read data
-        //send_log_str(out, copy_len); _log("\n");
-        out += copy_len;
-        buffer_point += copy_len;
-        out_len -= copy_len; // data needed to read
-        if (out_len != 0) { // if more data needed to read
-          continue; // read a new data block
-        } else { // nothing else to read
-          _log("nothing else read\n");
-          return requested_len - out_len;
-        }
-      } // if read data block
-    } // if read root block
-    _log("read block of data block error\n");
-    return requested_len - out_len;
-  } // for block_point
-  return requested_len - out_len;
-}
-
 /* *** read_data_block_by_id ***
  * IN: 
  *     copy_len - how many bytes need to read
@@ -551,10 +520,10 @@ u32 read_direct_data_blocks(File* file,
     if (read_len == 0)
       break;
 
-    _log("read data block[%d] [%d .. %d]\n",
+    /*_log("read data block[%d] [%d .. %d] out_len = %d\n",
          data_block_serial_number,
          first_data_block_offset,
-         block_size);
+         block_size, out_len);*/
 
     first_data_block_offset = 0;
     out += read_len;
@@ -726,7 +695,7 @@ u32 read_file3(File* file, char* out, u32 out_len) {
          file->inode.i_size);
     return 0;
   }
-
+  out_len = umin(out_len, file->inode.i_size - file->internal_seek_address);
   //_log("R3: file->internal_seek_address = %d\n", file->internal_seek_address);
 
 
@@ -787,45 +756,49 @@ u32 read_file3(File* file, char* out, u32 out_len) {
   return ready_len;
 }
 
-typedef struct {
-  u16 i_entry_index_bytes;
-  u8 i_block_index;
-  u32 i_block[12];
-} DirEnumHandle;
-
 /* *** eum_dir_start ***
    IN: 
       handle - where store intermediate data for enumeratin
-      iout - where to copy inode first found entry inode
       inode - we will eum this enode (directory)
    RET:
       true - if success
 */
-bool eum_dir_start(DirEnumHandle* handle, ext2_dir_entry* out, u32 inode) {
+bool eum_dir_start(DirEnumHandle* handle, u32 inode) {
   static ext2_inode root;
   handle->i_block_index = 0;
   handle->i_entry_index_bytes = 0;
+  handle->first_inode = inode;
 
-  if (read_inode(&root, inode)) {
-    for(u8 i = 0; i < 12; i++)
-      handle->i_block[i] = root.i_block[i];
-    
-    if (read_block(handle->i_block[handle->i_block_index] + PART_START_BLOCK)) {
-      ext2_dir_entry* dir_entry = (ext2_dir_entry*)buffer;
-      handle->i_entry_index_bytes += dir_entry->entry_size;
+  //_log("eum_dir_start: inode = %d\n", inode);
+  if (inode < 2)
+    return false;
 
-      memcpy(out, dir_entry, dir_entry->entry_size);
-
-      return true;
-    } // if ( read_block
-  } // if ( read inode
-  return false;
+  for(u8 i = 0; i < 12; i++)
+    handle->i_block[i] = 0;
+ 
+  return true;
 }
 
+/* *** eum_dir_next ***
+   IN: 
+      handle - where store intermediate data for enumeratin
+      out - where to copy netx found dir entry struct
+   RET:
+      true - if success
+*/
 bool enum_dir_next(DirEnumHandle* handle, ext2_dir_entry* out) {
   //_log("enum_dir_next: handle->i_entry_index_bytes = %d\n", handle->i_entry_index_bytes);
   //_log("enum_dir_next: handle->i_block_index = %d\n", handle->i_block_index);
+  if (handle->i_block[0] == 0) {
+    // first call
+    static ext2_inode root;
+    if (read_inode(&root, handle->first_inode)) {
+      for(u8 i = 0; i < 12; i++)
+        handle->i_block[i] = root.i_block[i];
+    }
+  }
 
+  
   if (handle->i_entry_index_bytes >= block_size) {
     handle->i_block_index ++;
     handle->i_entry_index_bytes = 0;
@@ -845,32 +818,145 @@ bool enum_dir_next(DirEnumHandle* handle, ext2_dir_entry* out) {
     handle->i_entry_index_bytes += dir_entry->entry_size;
 
     memcpy(out, dir_entry, dir_entry->entry_size);
+    _log("  entry: ");
+    send_log_str(dir_entry->name, dir_entry->name_len); _log("\n");
 
     return true;
   } // if ( read_block
+  _log("something failed during enum_dir_next\n");
   return false;
 }
 
-File* open_path(char* path) {
+bool string_find_char(char* str, u8 len, char c, u8* index_out) {
+  for (u8 i = 0; i < len; i ++) {
+    if(str[i] == c) {
+      *index_out = i;
+      return true;
+    }
+  }
+  return false;
+}
+ 
+bool enum_path_string_start(PathEnumHandle* handle, char* path, u8 path_len) {
+  u8 point = 0;
+  handle->offset = 0;
+  handle->len = 0;
+  handle->path = path;
+  handle->path_len = path_len;
+
+  _log(" start: path: ");
+  send_log_str(handle->path + point, handle->path_len - point); _log("\n");
+
+
+  if (handle->path[point] != '/') {
+    _log("next: invalid path, should start from, or maybe end of path /\n");
+    _log(" path: ");
+    send_log_str(handle->path[point], handle->path_len - point); _log("\n");
+    return false;
+  }
+
+  /*point ++; // go to next char after '/'
+
+  u8 index;
+  if (string_find_char(path + point,
+                       handle->path_len - point, '/', &index)) {
+    // it is next (not last) entry
+    handle->offset = point;
+    handle->len = index - 1;
+  } else { // it is last entry
+    handle->offset = point;
+    handle->len = handle->path_len - point;
+    }*/
+  
+  return true;
+}
+
+bool str_cmp(char* str1, char* str2, u8 len) {
+  for (u8 i = 0; i < len; i++) {
+    if (str1[i] != str2[i])
+      return false;
+  }
+  return true;
+}
+
+bool enum_path_string_next(PathEnumHandle* handle) {
+  /*_log("path next: offset: %d\n", handle->offset);
+    _log("path next: len: %d\n", handle->len);*/
+  u8 point = handle->offset + handle->len;
+
+  if (point >= handle->path_len)
+    return false;
+    
+  if (handle->path[point] != '/') {
+    _log("next: invalid path, should start from /, or maybe end of path \\n");
+    _log(" path: ");
+    //send_log_str(handle->path[point], handle->path_len - point); _log("\n");
+    return false;
+  }
+
+  point += 1; // go to next char after '/'
+
+  u8 index;
+  if (string_find_char(handle->path + point, handle->path_len - point,
+                       '/', &index)) {
+    // it is next (not last) entry
+    handle->offset = point;
+    handle->len = index;
+  } else { // it is last entry
+    handle->offset = point;
+    handle->len = handle->path_len - point;
+  }
+
+  return true;
+}
+
+bool open_path(char* path, u8 path_len, File* file) {
 
   DirEnumHandle enum_handle;
   ext2_dir_entry entry;
+  PathEnumHandle h;
 
-  if (!eum_dir_start(&enum_handle, &entry, ROOT_INODE)) {
-    _log("start_eum_dir failed\n");
+  if (!eum_dir_start(&enum_handle, ROOT_INODE)) {
+    _log("start_eum_dir failed\n"); return NULL;
   }
 
+  if (!enum_path_string_start(&h, path, path_len)) {
+    _log("failed to enum path string"); return NULL;
+  }
+    
   int i = 0;
+
+  if (!enum_path_string_next(&h)) return NULL;
     
   while (enum_dir_next(&enum_handle, &entry)) {
-    _log("/ entry name: ");
-    send_log_str(entry.name, entry.name_len); _log("\n");
-    //    _log("/ entry inode: %d\n", entry.inode);
-    //_log("/ entry size: %d\n", entry.entry_size);
+    if (entry.name_len == h.len) {
+      if (str_cmp(entry.name, path + h.offset, h.len)) {
+        _log("- --> found entry from path: ");
+        send_log_str(entry.name, entry.name_len); _log("\n");
+
+        if (!dir_entry_is_dir(&entry))
+          break; // it is a file
+        
+        if (eum_dir_start(&enum_handle, entry.inode)) {
+          if (!enum_path_string_next(&h))
+            break;
+          continue;
+        } else {
+          _log("eum_dir_start failed\n");
+          return NULL;
+        }
+      }
+    }
+
     i++;
     if (i > 30)
       break;
-  }  
+  } // while
 
-  return NULL;
+  if (!dir_entry_is_dir(&entry)) {
+    return open_file(entry.inode, file);
+  }
+  
+  return false;
 }
+

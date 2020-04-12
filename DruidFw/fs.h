@@ -198,11 +198,11 @@ typedef struct ext2_dir_entry {
 #define INVALID_BLOCK_POINT 0xFF
 
 typedef struct File {
-  ext2_dir_entry entry;
   ext2_inode inode;
+  /* ext2_dir_entry entry;
   u32 first_inderect_block_point;
   u32 block_point;
-  u32 buffer_point;
+  u32 buffer_point;*/
   u32 internal_seek_address;
 } File;
 
